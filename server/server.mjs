@@ -1,9 +1,13 @@
 import express from "express";
 import session from "express-session";
+
+import nunjucks from "nunjucks";
 import SQLiteStore from "connect-sqlite3";
 import passport from "passport";
 import cors from "cors";
 import { nanoid } from "nanoid";
+
+import routes from "./src/user/routes.mjs";
 
 const hostname = "127.0.0.1";
 const port = 3500;
@@ -31,6 +35,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+nunjucks.configure("views", {
+  express: app,
+  autoescape: true,
+});
+
+app.use(routes);
+
 // Usage of cors middleware
 app.use(
   cors({
@@ -46,7 +57,8 @@ const tryText = {
 
 // First route CHECK
 app.get("/", (req, res) => {
-  res.json(tryText);
+  //res.json(tryText);
+  res.render("Home.njk")
 });
 
 app.listen(port, hostname, () => {

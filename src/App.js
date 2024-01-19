@@ -1,24 +1,19 @@
-import logo from './logo.svg';
+import Editor from './views/Editor';
+import { ChakraProvider } from '@chakra-ui/react';
+import { ReactFlowProvider } from 'reactflow';
 import './App.css';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <ReactFlowProvider>
+        <div className="App" style={{ height: 800 }}>
+          <Editor />
+        </div>
+      </ReactFlowProvider>
+    </ChakraProvider>
+
   );
 }
 

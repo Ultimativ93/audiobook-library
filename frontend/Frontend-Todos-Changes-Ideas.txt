@@ -1,12 +1,29 @@
-TODOS:
+TODOS: X : erledigt, O : offen
 
-16.01.2024  - React Flow einarbeiten, Startknoten für den Editor erstellen
-            - App.js Div hat inline Stile, das holen wir noch raus und packen es in eine seperate style datei
-            - MultipleChoiceNode, inline Style rausholen
+ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal grundlegende Funktionen auf funktionalität prüfen.                                                       O
+
+16.01.2024  - React Flow einarbeiten, Startknoten für den Editor erstellen                                                                                                              X
+            
+            - App.js Div hat inline Stile, das holen wir noch raus und packen es in eine seperate style datei. Gillt für alle Datein                                                    O
+                - MultipleChoiceNode, inline Style rausholen                                                                                                                            O
+                - DataUpload: Inline style rausholen,                                                                                                                                   O    
            
-17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird
-            - NodeTypeDataFormat: Wir müssen irgendwie Daten Formate vorgeben, also das MuChoi z.B. 3 Antworten hat mindestens etc.
-                vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden
+17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird                                                                           O
+          
+            - NodeTypeDataFormat: Wir müssen irgendwie Daten Formate vorgeben, also das MuChoi z.B. 3 Antworten hat mindestens etc.                                                     X
+                vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden                                            X
 
-20.01.2024 -DataUpload: Inline style rausholen, habe ich jetzt erstmal schnell gebastellt: für Konsistenz rausholen, macht es übersichtlicher
-                - Managae Files: Select File, delete files, add files, validate Files (no empty), 
+20.01.2024  -DataUpload: 
+                - Managae Files: Select File, delete files, add files, validate Files (no empty), doppelte File benennungen abfangen, vieles mehr..                                     O
+                    - Abfangen, wenn ein file rejected wurde und Button Upload gedrückt wird, das nichts hochgeladen wird (im Moment passiert das noch)                                 O
+                    Im Moment sind die möglichen Files die auf einmal hochgeladen werdena auf 50 begrenzt, Rücksprache halten, ob wir das so machen wollen/sollen/dürfen.               O
+                - Style: Alles so ziemlich, aber auf jeden Fall, dass wenn man über den Drag'n'Drop bereich geht, das der Cursor sich zu Pointer ändert                                 O
+                - Sicherheit: hier später noch eine antiviren library benutzen                                                                                                          O
+
+21.01.2024  - LayoutDrawerFormatProvider: braucht eine Verbindung zum Backend, oder eher eine weitere Component die darauf zugreift -> hier nochmal gucken  (wurde FetchAudio)          X
+                wo wir das reinschmeißen, ich denke nicht dass das Sinn macht, das in Components zu haben und auch nicht umbedingt das manche Datein dann .jsx sein müssen.             O
+                - Daten vom Backend in Select einfügen, je nachdem wie viele daten gekommen sind auch options + abfangen von default = null / nachricht, whatever.                      O
+                    brauchen wir öfter, daher component.
+            
+            - FetchAudio: Es werden bisher nur beim ersten Upload die Daten angezeigt, die UseEffect wird aber immer aufgerufen wenn der Drawer geöffnet wird, angucken !!!             O
+

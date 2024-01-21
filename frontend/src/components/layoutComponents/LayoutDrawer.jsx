@@ -10,45 +10,29 @@ import {
     DrawerCloseButton,
 } from '@chakra-ui/react'
 
+import LayoutDrawerFormatProvider from './LayoutDrawerFormatProvider';
+
 function LayoutDrawer({ isOpen, onClose, nodeData, updateNodeLabel }) {
     const btnRef = React.useRef();
 
-    console.log("Node Data in Drawer: " + JSON.stringify(nodeData))
-
-    const handleInputChange = (event) => {
-        const newLabel = event.target.value;
-        updateNodeLabel(nodeData.id, newLabel)
-    }
-
-    if (nodeData && nodeData.data) {
-        return (
-            <>
-                <Drawer
-                    isOpen={isOpen}
-                    placement='right'
-                    onClose={onClose}
-                    finalFocusRef={btnRef}
-                >
-                    <DrawerOverlay />
-                    <DrawerContent>
-                        <DrawerCloseButton />
-                        <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
-    
-                        <DrawerBody>
-                            <Input placeholder='Node name..' onChange={handleInputChange}/>
-                        </DrawerBody>
-    
-                        <DrawerFooter>
-                            {/* ... */}
-                        </DrawerFooter>
-                    </DrawerContent>
-                </Drawer>
-            </>
-        );
-    } else {
-        // If nodeData is null or its data property is null, you can decide what to render in this case
+    if (!nodeData || !nodeData.data) {
+        // If nodeData is null or its data property is null, we can decide what to render in this case !!!!!!
         return null;
     }
+
+    return (
+        <>
+            <Drawer
+                isOpen={isOpen}
+                placement='right'
+                onClose={onClose}
+                finalFocusRef={btnRef}
+            >
+                <DrawerOverlay />
+                <LayoutDrawerFormatProvider nodeData={nodeData} updateNodeLabel={updateNodeLabel}/>
+            </Drawer>
+        </>
+    );
 }
 
 export default LayoutDrawer;

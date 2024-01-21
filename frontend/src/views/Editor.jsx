@@ -57,7 +57,7 @@ const Editor = () => {
         restoreFlow();
     }, [setNodes, setViewport]);
 
-    // Adding nodes
+    // Adding MuChoi Nodes -> will change it to accept all nodetypes !!!!!!!!
     const onAdd = useCallback(() => {
         const newNode = NodeTypesDataFormat('muChoi', nodes.length);
         // Use the callback version of setNodes to ensure you have the latest state
@@ -66,12 +66,11 @@ const Editor = () => {
 
     // Opens Drawer
     const onOpenDrawer = (node) => {
-        console.log('Node clicked. Data:', node);
         setSelectedNodeData(node);
         setIsDrawerOpen(true);
     };
 
-    // Updates nodeslabel, after drawer is opened
+    // Updates nodeslabel, after drawer is opened -> has to go somewhere else, to LayoutDrawerFormatProvider maybe.. !!!!!!!!
     const updateNodeLabel = (nodeId, newLabel) => {
         setNodes((prevNodes) => {
             return prevNodes.map((node) => {
@@ -108,7 +107,7 @@ const Editor = () => {
                 <Panel position="top-left">
                     <button onClick={onSave} style={{ margin: 5 }}>Save</button>
                     <button onClick={onRestore} style={{ margin: 5 }}>Restore</button>
-                    <button onClick={onAdd} style={{ margin: 5 }}>Add Node</button>
+                    <button onClick={onAdd} style={{ margin: 5 }}>MuChoi</button>
                 </Panel>
 
                 <Panel position='top-right'>

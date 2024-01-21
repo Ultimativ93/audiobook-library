@@ -1,9 +1,8 @@
 const Koa = require('koa');
-const multer = require('@koa/multer');
 const Router = require('koa-router');
 const cors = require('@koa/cors');
 const Database = require('./tasks/Database');
-const bodyParser = require('koa-bodyparser');
+const { koaBody } = require('koa-body');
 const path = require('path');
 
 const app = new Koa();
@@ -16,72 +15,40 @@ app.use(cors({
 }));
 
 // Middleware für den Dateiupload
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'uploads'));
+app.use(koaBody({
+    multipart: true,
+    formidable: {
+        uploadDir: path.join(__dirname, 'uploads'),
+        keepExtensions: true,
+        multiples: true, 
+        binary: true,
     },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}_${file.originalname}`);
-    },
-});
+}));
 
-const upload = multer({ storage });
-
-router.post('/upload', upload.array('files'), async (ctx) => {
+router.post('/upload', async (ctx) => {
     console.log('Upload route hit');
-    console.log('Request body:', ctx.request.body);  // Logge den Request-Body
-    ctx.status = 200;
-    ctx.body = { message: 'Test success' };
-});
+    console.log('Uploaded files:', ctx.request.files);
 
-// Route für den Fall, dass du auch andere Anfragen auf der Wurzel verarbeiten möchtest
-router.post('/', async (ctx) => {
-    console.log('Habe POST-Anfrage auf der Wurzel erhalten ;)');
-    ctx.status = 200;
-    ctx.body = { message: 'Test success for root' };
-});
+    const files = ctx.request.files && ctx.request.files.files;
 
-// Weitere Routen und Middleware hier hinzufügen...
-
-// Routen
-app.use(async (ctx) => {
-    const filePath = '/pfad/zu/meiner/datei.txt';
-    // zum Löschen der Dateipfade, später für Benutzer/Admin zum Löschen seiner Geschichte
-    // await db.removeAllFilePaths();
-    // Hinzufügen eines Dateipfads zur Datenbank
-    // await db.addFilePath(filePath);
-
-    const allFilePaths = await db.getAllFilePaths();
-    console.log('Alle Dateipfade aus der Datenbank:', allFilePaths);
-
-    ctx.body = 'Hallo, Koa!';
-});
-
-app.use(bodyParser());
-app.use(router.routes()).use(router.allowedMethods());
-
-const PORT = 3001;
-
-app.listen(PORT, () => {
-    console.log(`Server hört auf http://localhost:${PORT}`);
-});
-
-
-/* router.post('/', upload.array('files'), async (ctx) => {
-    console.log('habe post bekommen ;)')
-    const files = ctx.req.files;
-
-    if (files.length > 0) {
-        const filePath = path.join('uploads', files[0].filename);
-
+    if (files && files.length > 0) {
         try {
-            console.log('in try')
-            await db.addFilePath(filePath);
+            const databaseResponses = [];
 
-            console.log('Files successfully uploaded and path to audio saved in the database.');
+            // Schleife durch alle Dateien und füge jeden Dateipfad in die Datenbank ein
+            for (const file of files) {
+                console.log('File:', file);
+
+                // Extrahiere den Dateinamen aus der newFilename-Eigenschaft
+                const fileName = file.originalFilename;
+
+                const databaseResponse = await db.addFilePath(file.filepath, fileName);
+                databaseResponses.push(databaseResponse);
+            }
+
+            console.log('Files successfully uploaded and paths saved in the database.');
             ctx.status = 200;
-            ctx.body = { message: 'Files uploaded successfully' };
-
+            ctx.body = { message: 'Files uploaded successfully', databaseResponses };
         } catch (error) {
             console.error('Error:', error);
             ctx.status = 500;
@@ -93,4 +60,27 @@ app.listen(PORT, () => {
     }
 });
 
-*/
+
+router.get('/audioPaths', async (ctx) => {
+    try {
+        const allFilePaths = await db.getAllFilePaths();
+        ctx.status = 200;
+        ctx.body = allFilePaths;
+    } catch (error) {
+        console.error('Error getting audio paths:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+});
+
+router.get('/', async (ctx) => {
+    ctx.body = 'Hallo Welt von Koa';
+});
+
+const PORT = 3001;
+
+app.use(router.routes());
+
+app.listen(PORT, () => {
+    console.log(`Server hört auf http://localhost:${PORT}`);
+});

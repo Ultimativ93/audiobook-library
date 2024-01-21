@@ -19,7 +19,7 @@ class Database {
     // Initializing database and creating a table "audioPaths" if doesnt exist
     initialize() {
         this.db.serialize(() => {
-            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT)', (err) =>{
+            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) =>{
                 if (err) {
                     console.log(`Error while creating table: ${err}`)
                 } else {
@@ -29,13 +29,18 @@ class Database {
         });
     }
 
-    // Adding an audioPath into audioPaths in the database
-    addFilePath(filePath) {
+    // Adding an audioPath and audioName into audioPaths in the database
+    addFilePath(filePath, audioName) {
+        console.log('Adding file path to database:', filePath);
+        console.log('Adding audio name to database:', audioName);
+    
         return new Promise((resolve, reject) => {
-            this.db.run('INSERT INTO audioPaths (audioPath) VALUES (?)', [filePath], function (err) {
+            this.db.run('INSERT INTO audioPaths (audioPath, audioName) VALUES (?, ?)', [filePath, audioName], function (err) {
                 if (err) {
                     reject(err.message);
                 } else {
+                    console.log('File path successfully added to the database:', filePath);
+                    console.log('Audio name successfully added to the database:', audioName);
                     resolve(this.lastID);
                 }
             });
@@ -59,11 +64,11 @@ class Database {
     // Get all audioPath from audioPaths
     getAllFilePaths() {
         return new Promise((resolve, reject) => {
-            this.db.all('SELECT audioPath FROM audioPaths', [], (err, rows) => {
+            this.db.all('SELECT audioPath, audioName FROM audioPaths', [], (err, rows) => {
                 if (err) {
                     reject(err.message);
                 } else {
-                    resolve(rows.map(row => row.audioPath));
+                    resolve(rows);
                 }
             });
         });

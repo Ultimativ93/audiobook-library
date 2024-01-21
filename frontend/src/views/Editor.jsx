@@ -1,17 +1,13 @@
 import React, { useState, useCallback } from 'react';
-import ReactFlow, {
-    useNodesState,
-    useEdgesState,
-    addEdge,
-    useReactFlow,
-    Panel,
-} from 'reactflow';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Panel, Background } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import NodeTypesDataFormat from '../components/nodeTypes/nodeTypesDataFormat/NodeTypesDataFormat';
 import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
 
 import LayoutDrawer from '../components/layoutComponents/LayoutDrawer';
+import DataUpload from './DataUpload';
 
 // Name of the Flow stored in localstorage, will later on be saved in the databank
 const flowKey = 'First-trys';
@@ -23,7 +19,7 @@ const nodeTypes = {
 
 const initialNodes = [
     { id: '1', data: { label: 'Start' }, position: { x: 100, y: 100 } },
-    { id: '2', data: { label: 'Node 2' }, nodeType: "muChoi", position: { x: 100, y: 200 } },  
+    { id: '2', data: { label: 'Node 2' }, nodeType: "muChoi", position: { x: 100, y: 200 } },
 ];
 
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
@@ -64,7 +60,6 @@ const Editor = () => {
     // Adding nodes
     const onAdd = useCallback(() => {
         const newNode = NodeTypesDataFormat('muChoi', nodes.length);
-
         // Use the callback version of setNodes to ensure you have the latest state
         setNodes((prevNodes) => prevNodes.concat(newNode));
     }, [setNodes, nodes.length]);
@@ -94,29 +89,34 @@ const Editor = () => {
         });
     };
 
-    console.log("nodes: #################" + JSON.stringify(nodes))
-
     return (
-        <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={setRfInstance}
-            nodeTypes={nodeTypes}
-            onNodeClick={(event, node) => onOpenDrawer(node)}
-        >
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onInit={setRfInstance}
+                nodeTypes={nodeTypes}
+                onNodeClick={(event, node) => onOpenDrawer(node)}
+            >
 
-            <Panel position="right">
-                <LayoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} updateNodeLabel={updateNodeLabel} />
-            </Panel>
-            <Panel position="top-left">
-                <button onClick={onSave} style={{ margin: 5 }}>Save</button>
-                <button onClick={onRestore} style={{ margin: 5 }}>Restore</button>
-                <button onClick={onAdd} style={{ margin: 5 }}>Add Node</button>
-            </Panel>
-        </ReactFlow>
+                <Panel position="right">
+                    <LayoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} updateNodeLabel={updateNodeLabel} />
+                </Panel>
+
+                <Panel position="top-left">
+                    <button onClick={onSave} style={{ margin: 5 }}>Save</button>
+                    <button onClick={onRestore} style={{ margin: 5 }}>Restore</button>
+                    <button onClick={onAdd} style={{ margin: 5 }}>Add Node</button>
+                </Panel>
+
+                <Panel position='top-right'>
+                    <Link to="/data-upload">Upload Audio</Link>
+                </Panel>
+
+                <Background />
+            </ReactFlow>
     );
 };
 

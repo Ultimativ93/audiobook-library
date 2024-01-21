@@ -7,3 +7,6 @@ TODOS:
 17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird
             - NodeTypeDataFormat: Wir müssen irgendwie Daten Formate vorgeben, also das MuChoi z.B. 3 Antworten hat mindestens etc.
                 vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden
+
+20.01.2024 -DataUpload: Inline style rausholen, habe ich jetzt erstmal schnell gebastellt: für Konsistenz rausholen, macht es übersichtlicher
+                - Managae Files: Select File, delete files, add files, validate Files (no empty), 

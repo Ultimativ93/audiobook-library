@@ -1,0 +1,33 @@
+{
+  "name": "audiobook-library-server",
+  "version": "1.0.0",
+  "description": "The backend server to the audiobook-library-frontend, here we will manage the databank, users and other server related stuff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "audiobook-sever",
+    "audiobook",
+    "interactive",
+    "interactivity",
+    "react-flow",
+    "react"
+  ],
+  "author": "Norman Jauchen, Nele Woelk",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@koa/multer": "^3.0.2",
+    "busboy": "1.6.0",
+    "koa": "2.15.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "12.0.1",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.7"
+  }
+}

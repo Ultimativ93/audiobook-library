@@ -10,10 +10,11 @@ import {
 import FetchAudio from '../tasks/FetchAudio';
 import SelectStoryAudio from './SelectStoryAudio';
 
-const LayoutDrawerFormatProvider = (nodeData, updateNodeLabel) => {
+const LayoutDrawerFormatProvider = (nodeData) => {
 
     const audioData = FetchAudio();
     console.log('AudioData in Layout..Provider: ', audioData);
+    console.log('NodeData in Layout..Provider: ', nodeData);
 
     const handleInputChange = (event) => {
         const newLabel = event.target.value;

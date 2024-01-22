@@ -7,7 +7,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
     }
 
     const commonAttributes = {
-        label: '', audioStory: '', onClick: `onOpenDrawer`
+        label: '', audioStory: '', isEnd: '',
     }
 
     const generateNodeTypeData = (type, customData = {}) => {

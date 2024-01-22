@@ -1,18 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Panel, Background } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import NodeTypesDataFormat from '../components/nodeTypes/nodeTypesDataFormat/NodeTypesDataFormat';
 import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
 
-import LayoutDrawer from '../components/layoutComponents/LayoutDrawer';
-import DataUpload from './DataUpload';
+import LayoutDrawer from '../components/layoutComponents/layoutDrawer/LayoutDrawer';
 
-// Name of the Flow stored in localstorage, will later on be saved in the databank
 const flowKey = 'First-trys';
 
-// Node Types
 const nodeTypes = {
     muChoi: MultipleChoiceNode,
 };
@@ -34,7 +31,6 @@ const Editor = () => {
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
-    // Saving nodes
     const onSave = useCallback(() => {
         if (rfInstance) {
             const flow = rfInstance.toObject();
@@ -42,7 +38,6 @@ const Editor = () => {
         }
     }, [rfInstance]);
 
-    // Restoring Data from localstorage
     const onRestore = useCallback(() => {
         const restoreFlow = async () => {
             const flow = JSON.parse(localStorage.getItem(flowKey));
@@ -57,65 +52,43 @@ const Editor = () => {
         restoreFlow();
     }, [setNodes, setViewport]);
 
-    // Adding MuChoi Nodes -> will change it to accept all nodetypes !!!!!!!!
     const onAdd = useCallback(() => {
         const newNode = NodeTypesDataFormat('muChoi', nodes.length);
-        // Use the callback version of setNodes to ensure you have the latest state
         setNodes((prevNodes) => prevNodes.concat(newNode));
     }, [setNodes, nodes.length]);
 
-    // Opens Drawer
     const onOpenDrawer = (node) => {
         setSelectedNodeData(node);
         setIsDrawerOpen(true);
     };
 
-    // Updates nodeslabel, after drawer is opened -> has to go somewhere else, to LayoutDrawerFormatProvider maybe.. !!!!!!!!
-    const updateNodeLabel = (nodeId, newLabel) => {
-        setNodes((prevNodes) => {
-            return prevNodes.map((node) => {
-                if (node.id === nodeId) {
-                    return {
-                        ...node,
-                        data: {
-                            ...node.data,
-                            label: newLabel,
-                        },
-                    };
-                }
-                return node;
-            });
-        });
-    };
-
     return (
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onInit={setRfInstance}
-                nodeTypes={nodeTypes}
-                onNodeClick={(event, node) => onOpenDrawer(node)}
-            >
+        <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onInit={setRfInstance}
+            nodeTypes={nodeTypes}
+            onNodeClick={(event, node) => onOpenDrawer(node)}
+        >
+            <Panel position="right">
+                <LayoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes}/>
+            </Panel>
 
-                <Panel position="right">
-                    <LayoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} updateNodeLabel={updateNodeLabel} />
-                </Panel>
+            <Panel position="top-left">
+                <button onClick={onSave} style={{ margin: 5 }}>Save</button>
+                <button onClick={onRestore} style={{ margin: 5 }}>Restore</button>
+                <button onClick={onAdd} style={{ margin: 5 }}>MuChoi</button>
+            </Panel>
 
-                <Panel position="top-left">
-                    <button onClick={onSave} style={{ margin: 5 }}>Save</button>
-                    <button onClick={onRestore} style={{ margin: 5 }}>Restore</button>
-                    <button onClick={onAdd} style={{ margin: 5 }}>MuChoi</button>
-                </Panel>
+            <Panel position='top-right'>
+                <Link to="/data-upload">Upload Audio</Link>
+            </Panel>
 
-                <Panel position='top-right'>
-                    <Link to="/data-upload">Upload Audio</Link>
-                </Panel>
-
-                <Background />
-            </ReactFlow>
+            <Background />
+        </ReactFlow>
     );
 };
 

@@ -3,7 +3,7 @@ This project aims to establish an interactive audiobook portal, focusing on empo
 
 As the project evolves, there are plans to incorporate community-centric features, fostering an environment where users can share, discover, and engage with each other's creative works. This multifaceted platform aspires to redefine the audiobook experience, combining user-generated content with interactive storytelling elements.
 
-### Instalation
+### Installation
 To set up the project, dependencies need to be installed in two separate directories. Eventually, this process will be streamlined in a startup script. Currently, run npm install in both the "frontend" and "backend" directories. The project is currently developed using Node.js version 21.6.0. Compatibility with older Node.js versions is under evaluation.
 
 ### Start

@@ -10,7 +10,7 @@ const router = new Router();
 const db = new Database();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3001',
     credentials: true,
 }));
 
@@ -29,17 +29,16 @@ router.post('/upload', async (ctx) => {
     console.log('Upload route hit');
     console.log('Uploaded files:', ctx.request.files);
 
-    const files = ctx.request.files && ctx.request.files.files;
+    const files = ctx.request.files && (Array.isArray(ctx.request.files.files) ? ctx.request.files.files : [ctx.request.files.files]);
 
     if (files && files.length > 0) {
         try {
             const databaseResponses = [];
 
-            // Schleife durch alle Dateien und füge jeden Dateipfad in die Datenbank ein
+            // Loop through all files and insert each file path into the database
             for (const file of files) {
                 console.log('File:', file);
 
-                // Extrahiere den Dateinamen aus der newFilename-Eigenschaft
                 const fileName = file.originalFilename;
 
                 const databaseResponse = await db.addFilePath(file.filepath, fileName);
@@ -48,18 +47,20 @@ router.post('/upload', async (ctx) => {
 
             console.log('Files successfully uploaded and paths saved in the database.');
             ctx.status = 200;
-            ctx.body = { message: 'Files uploaded successfully', databaseResponses };
+            ctx.type = 'application/json';
+            ctx.body = { success: true, message: 'Files uploaded successfully', databaseResponses };
         } catch (error) {
             console.error('Error:', error);
             ctx.status = 500;
-            ctx.body = 'Internal Server Error';
+            ctx.type = 'application/json';
+            ctx.body = { success: false, message: 'Internal Server Error' };
         }
     } else {
         ctx.status = 400;
-        ctx.body = 'Bad Request: No files provided';
+        ctx.type = 'application/json';
+        ctx.body = { success: false, message: 'Bad Request: No files provided' };
     }
 });
-
 
 router.get('/audioPaths', async (ctx) => {
     try {

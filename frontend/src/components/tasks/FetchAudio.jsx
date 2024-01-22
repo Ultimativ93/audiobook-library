@@ -9,7 +9,7 @@ const FetchAudio = () => {
         console.log("Fetch Audio useEffect")
         const fetchAudioPaths = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/audioPaths');
+                const response = await axios.get('http://localhost:3005/audioPaths');
                 console.log('Response data:', response.data);
                 setAudioPaths(response.data);
             } catch (error) {

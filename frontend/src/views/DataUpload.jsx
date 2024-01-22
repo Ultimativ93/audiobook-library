@@ -3,17 +3,17 @@ import { useDropzone } from 'react-dropzone';
 
 function DataUpload(props) {
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
-        accept: [
-          'image/jpeg',
-          'image/png',
-          'audio/mp3',
-          'audio/aac',
-          'audio/wav',
-          'audio/wave',
-        ],
+        accept: {
+            'image/png': ['.png'],
+            'image/jpg': ['.jpg'],
+            'image/jpeg': ['.jpeg'],
+            'audio/mpeg': ['.mpeg'],
+            'audio/mp3': ['.mp3'],
+            'audio/aac': ['.aac'],
+            'audio/wav': ['.wav'],
+          },
         maxFiles: 50,
-        maxSize: 838860800, // 100mb in bytes - 256mb in default
-      });
+    });
 
     const [uploadSuccess, setUploadSuccess] = useState(false);
 
@@ -25,14 +25,14 @@ function DataUpload(props) {
 
     const fileRejectionItems = fileRejections.map(({ file, errors }) => (
         <li key={file.path}>
-          {file.path} - {file.size} bytes
-          <ul>
-            {errors.map(e => (
-              <li key={e.code}>{e.message}</li>
-            ))}
-          </ul>
+            {file.path} - {file.size} bytes
+            <ul>
+                {errors.map(e => (
+                    <li key={e.code}>{e.message}</li>
+                ))}
+            </ul>
         </li>
-      ));
+    ));
 
     const handleUpload = async () => {
         try {
@@ -43,7 +43,7 @@ function DataUpload(props) {
 
             //console.log('FormData:', Array.from(formData.entries()));
 
-            const response = await fetch('http://localhost:3001/upload', {
+            const response = await fetch('http://localhost:3005/upload', {
                 method: 'POST',
                 body: formData,
             });

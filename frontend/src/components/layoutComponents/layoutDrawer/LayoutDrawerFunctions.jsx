@@ -1,5 +1,9 @@
 // Updates label of a node, after it gets changed in the drawer
-const updateNodeLabel = (setNodes, nodeId, newLabel) => {
+const updateNodeLabel = (setNodes, nodeId, event) => {
+    console.log("Event in updateNodeLabel", event.target.value)
+    const newLabel = event.target.value;
+    console.log("NewLabel:", newLabel)
+
     setNodes((prevNodes) => {
         return prevNodes.map((node) => {
             if (node.id === nodeId) {
@@ -16,15 +20,8 @@ const updateNodeLabel = (setNodes, nodeId, newLabel) => {
     });
 };
 
-// Lets put this into updateNodeLabel, like we do in updateAudioStory
-const updateNodeLabelWrapper = (setNodes, nodeData, event) => {
-    console.log("Event in updateNodeLabelWrapper", event.target.value)
-    const newLabel = event.target.value;
-    updateNodeLabel(setNodes, nodeData.id, newLabel);
-};
-
 // Updates audioStory of a node, after it gets changed in the drawer
-const updateAudioStory = (setNodes, nodeData, event) => {
+const updateStoryAudio = (setNodes, nodeData, event) => {
     const newAudioStory = event.target.value;
 
     setNodes((prevNodes) => {
@@ -64,4 +61,93 @@ const updateIsEnd = (setNodes, nodeData, event) => {
     });
 };
 
-export { updateNodeLabel, updateNodeLabelWrapper, updateAudioStory, updateIsEnd };
+// Updates question of a node, after it gets changed in the drawer
+const updateQuestion = (setNodes, nodeData, event) => {
+    const newQuestion = event.target.value;
+    console.log("newQuestion: ", newQuestion);
+
+    setNodes((prevNodes) => {
+        return prevNodes.map((node) => {
+            if (node.id === nodeData.id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        question: newQuestion,
+                    },
+                };
+            }
+            return node;
+        });
+    });
+};
+
+// Updates questionAudio of a node, after it gets changed in the drawer
+const updateQuestionAudio = (setNodes, nodeData, event) => {
+    const newQuestionAudio = event.target.value;
+    console.log("newQuestioNAudio: ", newQuestionAudio);
+
+    setNodes((prevNodes) => {
+        return prevNodes.map((node) => {
+            if (node.id === nodeData.id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        questionAudio: newQuestionAudio,
+                    },
+                };
+            }
+            return node;
+        });
+    });
+};
+
+// Updates repearQuestionAudio of a node, after it gets changed in the drawer
+const updateRepeatQuestion = (setNodes, nodeData, event) => {
+    const newRepeatQuestion = event.target.checked;
+    console.log("newRepeatQuestion: ", newRepeatQuestion);
+
+    setNodes((prevNodes) => {
+        return prevNodes.map((node) => {
+            if (node.id === nodeData.id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        repeatQuestionAudio: `${newRepeatQuestion}`,
+                    },
+                };
+            }
+            return node;
+        });
+    });
+};
+
+// Updated nodeproperties - we should change all the functions to updateNodeProperty, much less code !!!!!
+const updateNodeProperty = (setNode, nodeData, property, value) => {
+    setNode((prevNodes) => {
+        return prevNodes.map((node) => {
+            if (node.id === nodeData.id) {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        [property]: value,
+                    },
+                };
+            }
+            return node;
+        });
+    });
+};
+
+export {
+    updateNodeLabel,
+    updateStoryAudio,
+    updateIsEnd,
+    updateQuestion,
+    updateQuestionAudio,
+    updateRepeatQuestion,
+    updateNodeProperty,
+};

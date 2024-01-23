@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Switch } from '@chakra-ui/react';
+
 import { updateIsEnd } from '../LayoutDrawerFunctions';
 
 const SelectEnd = ({ nodeData, setNodes }) => {

@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from '@chakra-ui/react';
+
 import FetchAudio from '../../../tasks/FetchAudio';
-import { updateAudioStory } from '../LayoutDrawerFunctions';
+import { updateStoryAudio } from '../LayoutDrawerFunctions';
 
 const SelectStoryAudio = ({ nodeData, setNodes }) => {
     // Call fetchAudio to get audio-status
     const audioPaths = FetchAudio();
-    const [selectedAudioStory, setSelectedAudioStory] = useState(nodeData.data.audioStory || ''); 
+    const [selectedStoryAudio, setSelectedAudioStory] = useState(nodeData.data.audioStory || '');
 
     useEffect(() => {
-        setSelectedAudioStory(nodeData.data.audioStory || ''); 
+        setSelectedAudioStory(nodeData.data.audioStory || '');
     }, [nodeData.data.audioStory]);
 
     return (
-        <div>
+        <>
             <h4>Select Audio Story</h4>
             <Select
-                placeholder='Select Audio Story ...'
-                value={selectedAudioStory}
+                placeholder='Select Story Audio ...'
+                value={selectedStoryAudio}
                 onChange={(event) => {
                     setSelectedAudioStory(event.target.value);
-                    updateAudioStory(setNodes, nodeData, event);
+                    updateStoryAudio(setNodes, nodeData, event);
                 }}
             >
                 {/* Using audiopaths to create options */}
@@ -30,7 +31,7 @@ const SelectStoryAudio = ({ nodeData, setNodes }) => {
                     </option>
                 ))}
             </Select>
-        </div>
+        </>
     );
 };
 

@@ -32,6 +32,11 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...customData,
                         inputSelections,
                         label: 'Multiple Choice added',
+                        question: '',
+                        questionAudio: '',
+                        randomAudio: '',
+                        repeatQuestionAudio: '',
+                        answers: ["", ""],
                     }
                 };
             case 'bridge':

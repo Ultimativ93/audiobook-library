@@ -1,11 +1,10 @@
-import { useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
 import '../multipleChoiceNode/multiple-choice-node.css'
 
 function MultipleChoiceNode({ data, isConnectable }) {
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value);
-  }, []);
+  console.log("Data in MuChoiNode: ", data);
+  console.log("data.answers: ", data.answers)
+  console.log("data.answers.id: ", data.answers[1]);
 
   return (
     <div className="multiple-choice-node">
@@ -14,8 +13,20 @@ function MultipleChoiceNode({ data, isConnectable }) {
         <label htmlFor="text">{data.label}</label>
       </div>
       <div className='multiple-choice-node-source-handles'>
-        <Handle type="source" position={Position.Bottom} id="a" style={{left: '33%'}} isConnectable={isConnectable} />
-        <Handle type="source" position={Position.Bottom} id="b" style={{ left: '66%'}} isConnectable={isConnectable} />
+        {data.answers.map((answer, index) => {
+          console.log("Answer in answers:", answer);
+          return (
+            
+            <Handle
+              key={index}
+              type="source"
+              position={Position.Bottom}
+              id={answer.id}
+              style={{ left: `${(index + 1) * 33}%` }}
+              isConnectable={isConnectable}
+            />
+          )
+        })}
       </div>
     </div>
   );

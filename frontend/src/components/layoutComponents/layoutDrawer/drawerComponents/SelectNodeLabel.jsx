@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input } from '@chakra-ui/react';
-import { updateNodeLabelWrapper } from '../LayoutDrawerFunctions';
+
+import { updateNodeLabel } from '../LayoutDrawerFunctions';
 
 const SelectNodeLabel = ({ nodeData, setNodes }) => {
     return (
@@ -9,7 +10,7 @@ const SelectNodeLabel = ({ nodeData, setNodes }) => {
             <Input
                 placeholder='Node name..'
                 defaultValue={nodeData.data.label}
-                onChange={(event) => updateNodeLabelWrapper(setNodes, nodeData, event)}
+                onChange={(event) => updateNodeLabel(setNodes, nodeData.id, event)}
             />
         </>
     );

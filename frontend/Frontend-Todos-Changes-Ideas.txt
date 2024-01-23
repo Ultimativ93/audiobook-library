@@ -33,9 +33,10 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
 22.01.2024  - SelectStoryAudio: Das ist eigentlich auch eine Task und könnte in LayoutDrawerFunctions ausgelagert werden.                                                               O
                 - Verwendete Audios könnten markiert werden, das könnte die übersichtlichkeit erhöhen + doppelt benutzte Audios z.B. rot                                                O
             
-            - LayoutDrawerFunctions: Hier sollten wir noch die updateNodeLabelWrapper in updateNodeLabel einarbeiten, sowie in updateAudioStory. Dazu dann functions aufgerufe          0
+            - LayoutDrawerFunctions: Hier sollten wir noch die updateNodeLabelWrapper in updateNodeLabel einarbeiten, sowie in updateAudioStory. Dazu dann functions aufgerufe          O
                 überprüfen.
+                - Außerdem könnten wir hier nochmal gucken, das die Funktionen generisch eingefügt werden, dann sparen wir uns einigeZeilen Code. Wie es in updateNodeProperty passiert O
 
-
+23.01.2024  - SelectQuestionAudio: Hier und auch in SelectStoryAudio sollte gezeigt werden, ob die ausgewählte Datei schon benutzt wird. Sonst könnte Question auch Answer sein etc.    O
 
 

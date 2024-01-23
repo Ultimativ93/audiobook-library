@@ -3,7 +3,6 @@ import React from 'react';
 import MuChoiFormatGeneral from './MuChoiFormatGeneral';
 
 const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
-    console.log("Node Data in DFPG", nodeData);
 
     switch (nodeData.type) {
         case 'start':

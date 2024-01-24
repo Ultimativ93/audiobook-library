@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-function DataUpload(props) {
+const DataUpload = (props) => {
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
         accept: {
             'image/png': ['.png'],

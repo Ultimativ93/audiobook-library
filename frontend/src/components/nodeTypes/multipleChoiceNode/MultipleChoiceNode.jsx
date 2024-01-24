@@ -1,35 +1,47 @@
-import { Handle, Position } from 'reactflow';
-import '../multipleChoiceNode/multiple-choice-node.css'
+import React, { useEffect, useRef } from 'react';
+import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
-function MultipleChoiceNode({ data, isConnectable }) {
-  console.log("Data in MuChoiNode: ", data);
-  console.log("data.answers: ", data.answers)
-  console.log("data.answers.id: ", data.answers[1]);
+import '../multipleChoiceNode/multiple-choice-node.css';
+
+const MultipleChoiceNode = ({ data, isConnectable }) => {
+  const updateNodeInternals = useUpdateNodeInternals();
+  const nodeRef = useRef();
+
+  useEffect(() => {
+    updateNodeInternals(data.id);
+  }, [data.answers, data.id, updateNodeInternals]);
+
+  // Filtern Sie leere Strings aus den Antworten
+  const nonEmptyAnswers = data.answers.filter(answer => answer !== '');
 
   return (
-    <div className="multiple-choice-node">
+    <div className="multiple-choice-node" ref={nodeRef}>
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+
       <div>
         <label htmlFor="text">{data.label}</label>
       </div>
+
       <div className='multiple-choice-node-source-handles'>
-        {data.answers.map((answer, index) => {
-          console.log("Answer in answers:", answer);
+        {nonEmptyAnswers.map((answer, index) => {
+          const handleId = `${data.id}-handle-${index}`;
+          const totalWidth = 200; // Anpassen Sie dies an die Breite Ihrer Node
+          const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
+
           return (
-            
             <Handle
-              key={index}
+              key={handleId}
               type="source"
               position={Position.Bottom}
-              id={answer.id}
-              style={{ left: `${(index + 1) * 33}%` }}
+              id={handleId}
               isConnectable={isConnectable}
+              style={{ left: `${leftPosition}px` }}
             />
-          )
+          );
         })}
       </div>
     </div>
   );
-}
+};
 
 export default MultipleChoiceNode;

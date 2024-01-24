@@ -39,4 +39,11 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
 
 23.01.2024  - SelectQuestionAudio: Hier und auch in SelectStoryAudio sollte gezeigt werden, ob die ausgewählte Datei schon benutzt wird. Sonst könnte Question auch Answer sein etc.    O
 
+24.01.2024  - EndNode: Man könnte den Endknoten mit einem Haken zu einer Bridge machen, damit man Abhängigkeiten so darstellen kann. Zum Beispiel wird oben nein gesagt,                O
+                darauf ist es kein Endknoten mehr und man kann woanders hin, ermöglicht mehr interaktivität. Kann man auch händisch bauen, ist aber umständlich.
+
+
+
+
+
 

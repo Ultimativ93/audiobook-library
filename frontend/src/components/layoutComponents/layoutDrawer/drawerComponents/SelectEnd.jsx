@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Switch } from '@chakra-ui/react';
 
 import { updateIsEnd } from '../LayoutDrawerFunctions';

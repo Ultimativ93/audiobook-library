@@ -12,16 +12,6 @@ const NodeTypesDataFormat = (nodeType, ids) => {
 
     const generateNodeTypeData = (type, customData = {}) => {
         switch (type) {
-            case 'start':
-                return {
-                    type: 'start',
-                    label: 'Start',
-                    position: { x: 100, y: 100 },
-                    data: {
-                        ...commonAttributes,
-                        ...customData,
-                    }
-                }
             case 'muChoi':
                 return {
                     id: String(asignId),
@@ -36,11 +26,12 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         questionAudio: '',
                         randomAudio: '',
                         repeatQuestionAudio: '',
-                        answers: ["", ""],
+                        answers: ["Answer 1", "Answer 2"],
+                        id: String(asignId),
                     }
                 };
             case 'bridge':
-                console.log('in der bridge')
+                console.log('in bridge')
                 return {
                     type: 'bridge',
                     position: { x: 300, y: 100 },
@@ -49,6 +40,19 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...customData,
                     }
                 };
+            case 'endNode':
+                console.log('in endNode')
+                return {
+                    id: String(asignId),
+                    type: 'endNode',
+                    position: {x: 100, y: 500},
+                    data: {
+                        ...commonAttributes,
+                        label: 'End Added',
+                        id: String(asignId),
+                        isEnd: 'true',
+                    }
+                }
             default:
                 return null;
         }

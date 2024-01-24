@@ -7,17 +7,19 @@ const SelectAnswers = ({ nodeData, setNodes }) => {
     const [answers, setAnswers] = useState(nodeData.data.answers);
   
     const handleAddAnswer = () => {
-      setAnswers([...answers, {id: ''}]);
+      const lastAnswer = answers[answers.length - 1];
+      if (lastAnswer !== '') {
+        setAnswers([...answers, '']);
+      }
+      
     };
 
     const handleInputChange = (index, value) => {
         const newAnswers = [...answers];
         if (newAnswers[index] === undefined) {
-          newAnswers[index] = { id: '' };
-        } else if (typeof newAnswers[index] === 'string') {
-          newAnswers[index] = { id: newAnswers[index] };
-        }
-        newAnswers[index].id = value;
+          newAnswers[index] = '';
+        } 
+        newAnswers[index] = value;
         setAnswers(newAnswers);
         updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
       };
@@ -29,7 +31,7 @@ const SelectAnswers = ({ nodeData, setNodes }) => {
           <Input
             key={index}
             placeholder='Answer .. '
-            defaultValue={answer.id}
+            defaultValue={answer}
             onChange={(e) => handleInputChange(index, e.target.value)}
           />
         ))}

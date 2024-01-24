@@ -1,6 +1,7 @@
 import React from 'react';
 
 import MuChoiFormatGeneral from './MuChoiFormatGeneral';
+import EndNodeFormatGeneral from './EndNodeFormatGeneral';
 
 const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
 
@@ -11,12 +12,16 @@ const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
             }
         case 'muChoi':
             return (
-                <MuChoiFormatGeneral nodeData={nodeData} setNodes={setNodes}/>
+                <MuChoiFormatGeneral nodeData={nodeData} setNodes={setNodes} />
             )
         case 'bridge':
             return {
                 // ...
             }
+        case 'endNode':
+            return (
+                <EndNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} />
+            )
         default:
             console.log("Default in LayoutFormatProvider, check it!");
             // create default functionality

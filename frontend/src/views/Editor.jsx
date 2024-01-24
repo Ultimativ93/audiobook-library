@@ -7,16 +7,17 @@ import NodeTypesDataFormat from '../components/nodeTypes/nodeTypesDataFormat/Nod
 import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
 
 import LayoutDrawer from '../components/layoutComponents/layoutDrawer/LayoutDrawer';
+import EndNode from '../components/nodeTypes/endNode/EndNode';
 
 const flowKey = 'First-trys';
 
 const nodeTypes = {
     muChoi: MultipleChoiceNode,
+    endNode: EndNode,
 };
 
 const initialNodes = [
     { id: '1', data: { label: 'Start' }, position: { x: 100, y: 100 } },
-    { id: '2', data: { label: 'Node 2' }, nodeType: "muChoi", position: { x: 100, y: 200 } },
 ];
 
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
@@ -52,8 +53,8 @@ const Editor = () => {
         restoreFlow();
     }, [setNodes, setViewport]);
 
-    const onAdd = useCallback(() => {
-        const newNode = NodeTypesDataFormat('muChoi', nodes.length);
+    const onAdd = useCallback((nodeType) => {
+        const newNode = NodeTypesDataFormat(nodeType, nodes.length);
         setNodes((prevNodes) => prevNodes.concat(newNode));
     }, [setNodes, nodes.length]);
 
@@ -74,19 +75,20 @@ const Editor = () => {
             onNodeClick={(event, node) => onOpenDrawer(node)}
         >
             <Panel position="right">
-                <LayoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes}/>
+                <LayoutDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} />
             </Panel>
 
             <Panel position="top-left">
                 <button onClick={onSave} style={{ margin: 5 }}>Save</button>
                 <button onClick={onRestore} style={{ margin: 5 }}>Restore</button>
-                <button onClick={onAdd} style={{ margin: 5 }}>MuChoi</button>
+                <button onClick={() => onAdd('muChoi')} style={{ margin: 5 }}>MuChoi</button>
+                <button onClick={() => onAdd('endNode')} style={{ margin: 5 }}>End</button>
             </Panel>
 
             <Panel position='top-right'>
-                <Link to="/data-upload">Upload Audio</Link>
+                <Link to="/data-upload" style={{ margin: 5 }}>Upload Audio</Link>
+                <Link to="/player" style={{ margin: 5 }}>Player</Link>
             </Panel>
-
             <Background />
         </ReactFlow>
     );

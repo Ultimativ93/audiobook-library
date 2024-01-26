@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
-import 'reactflow/dist/style.css';
+import axios from 'axios';import 'reactflow/dist/style.css';
 
 import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorDrawer';
 import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorButtons';
@@ -44,16 +44,14 @@ const Editor = () => {
     const onSave = useCallback(async () => {
         if (rfInstance) {
             const flow = rfInstance.toObject();
-
+    
             try {
-                const response = await fetch('http://localhost:3005/saveFlow', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ flow, flowKey }),
+                const response = await axios.post('http://localhost:3005/saveFlow', {
+                    flow,
+                    flowKey: flowKey, // or whatever is the correct flowKey
                 });
-                if (response.ok) {
+    
+                if (response.status === 200) {
                     console.log('Flow successfully sent to the server.');
                 } else {
                     console.error('Error sending flow to the server.');
@@ -63,21 +61,14 @@ const Editor = () => {
             }
             localStorage.setItem(flowKey, JSON.stringify(flow));
         }
-    }, [rfInstance]);
-
-
-    // Function to restore the flow from local storage
+    }, [rfInstance, flowKey]);
+    
     const onRestore = useCallback(async () => {
         try {
-            const response = await fetch(`http://localhost:3005/getFlow?flowKey=${flowKey}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
+            const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${flowKey}`);
     
-            if (response.ok) {
-                const flow = await response.json();
+            if (response.status === 200) {
+                const flow = response.data;
                 const { x = 0, y = 0, zoom = 1 } = flow.viewport || {};
                 setNodes(flow.nodes || []);
                 setEdges(flow.edges || []);
@@ -88,26 +79,8 @@ const Editor = () => {
         } catch (error) {
             console.error('Error restoring flow from the database:', error);
         }
-    }, [setNodes, setViewport, setEdges]);
+    }, [setNodes, setViewport, setEdges, flowKey]);
     
-
-
-    /*
-        // Function to restore the flow from local storage
-        const onRestore = useCallback(async () => {
-            const restoreFlow = async () => {
-                const flow = JSON.parse(localStorage.getItem(flowKey));
-    
-                if (flow) {
-                    const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-                    setNodes(flow.nodes || []);
-                    setEdges(flow.edges || []);
-                    setViewport({ x, y, zoom });
-                }
-            };
-            restoreFlow();
-        }, [setNodes, setViewport]);
-        */
 
     // Function to add a new node to the viewport based on the specified node type
     const onAdd = useCallback((nodeType) => {

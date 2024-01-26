@@ -11,6 +11,7 @@ const DataUpload = (props) => {
             'audio/mp3': ['.mp3'],
             'audio/aac': ['.aac'],
             'audio/wav': ['.wav'],
+            'audio/ogg' : ['.ogg'],
           },
         maxFiles: 50,
     });

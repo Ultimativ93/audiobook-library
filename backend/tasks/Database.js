@@ -20,7 +20,7 @@ class Database {
     initialize() {
         this.db.serialize(() => {
             // Creating table audioPaths
-            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) => {
+            this.db.run('CREATE TABLE IF NOT EXISTS audioFiles (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) => {
                 if (err) {
                     console.log('Error while creating table: ', err);
                 } else {
@@ -79,6 +79,19 @@ class Database {
                     reject(err.message);
                 } else {
                     resolve(rows);
+                }
+            });
+        });
+    }
+
+    getFilePath(audioName) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT audioPath FROM audioPaths WHERE audioName = ?', [audioName], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    const audioPath = row ? row.audioPath : null;
+                    resolve(audioPath);
                 }
             });
         });

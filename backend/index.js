@@ -4,6 +4,7 @@ const cors = require('@koa/cors');
 const Database = require('./tasks/Database');
 const { koaBody } = require('koa-body');
 const path = require('path');
+const fs = require('fs');
 
 const app = new Koa();
 const router = new Router();
@@ -107,6 +108,47 @@ router.get('/getFlow', async (ctx) => {
         ctx.body = 'Internal Server Error';
     }
 });
+
+router.get('/getAudioName', async (ctx) => {
+    const { audioName } = ctx.request.query;
+
+    try {
+        const audioNameFromPath = await db.getFilePath(audioName);
+        if (audioNameFromPath) {
+            ctx.status = 200;
+            ctx.body = audioNameFromPath;
+        } else {
+            console.warn('No audio from path found in the database');
+            ctx.status = 404;
+            ctx.body = 'No audio from path found in the database';
+        } 
+    } catch (error) {
+        console.error('Error getting audio with path from the database:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+    
+})
+
+router.get('/getAudio', async (ctx) => {
+    const { audioPath } = ctx.request.query;
+
+    try {
+        const stat = fs.statSync(audioPath);
+
+        ctx.response.status = 200;
+        ctx.response.type = 'audio/ogg';
+        ctx.response.length = stat.size;
+        ctx.body = fs.createReadStream(audioPath);  // Use audioPath instead of filePath
+
+    } catch (error) {
+        console.error(`Error getting audio with path ${audioPath} from the server`, error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+});
+
+
 
 router.get('/', async (ctx) => {
     ctx.body = 'Hallo Welt von Koa';

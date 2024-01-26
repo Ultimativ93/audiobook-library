@@ -2,6 +2,7 @@ import React from 'react'
 import ReactAudioPlayer from 'react-audio-player';
 
 import './player.css';
+import FetchFlow from '../../components/tasks/FetchFlow';
 
 const Player = () => {
   return (
@@ -12,6 +13,7 @@ const Player = () => {
           autoPlay
           controls
         />
+        {/*<FetchFlow flowKey={'First-trys'}/>*/}
       </div>
     </div>
   )

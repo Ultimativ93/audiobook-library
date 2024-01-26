@@ -19,13 +19,23 @@ class Database {
     // Initializing database and creating a table "audioPaths" if doesnt exist
     initialize() {
         this.db.serialize(() => {
-            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) =>{
+            // Creating table audioPaths
+            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) => {
                 if (err) {
-                    console.log(`Error while creating table: ${err}`)
+                    console.log('Error while creating table: ', err);
                 } else {
                     console.log('Created table "audioFiles" or it already excists');
                 }
             });
+
+            // Creating table flows
+            this.db.run('CREATE TABLE IF NOT EXISTS flows (id INTEGER PRIMARY KEY, flowData TEXT, flowKey TEXT)', (err) => {
+                if (err) {
+                    console.log('Error while creating table: ', err);
+                } else {
+                    console.log('Created table "flows" or it already exists');
+                }
+            })
         });
     }
 
@@ -33,7 +43,7 @@ class Database {
     addFilePath(filePath, audioName) {
         console.log('Adding file path to database:', filePath);
         console.log('Adding audio name to database:', audioName);
-    
+
         return new Promise((resolve, reject) => {
             this.db.run('INSERT INTO audioPaths (audioPath, audioName) VALUES (?, ?)', [filePath, audioName], function (err) {
                 if (err) {
@@ -69,6 +79,54 @@ class Database {
                     reject(err.message);
                 } else {
                     resolve(rows);
+                }
+            });
+        });
+    }
+
+    // Saving flow in the table flows
+    saveFlow(flow, flowKey) {
+        console.log('Saving flow to database:', flow);
+    
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT id FROM flows WHERE flowKey = ?', [flowKey], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                }
+    
+                if (row) {
+                    this.db.run('UPDATE flows SET flowData = ? WHERE flowKey = ?', [JSON.stringify(flow), flowKey], (updateErr) => {
+                        if (updateErr) {
+                            reject(updateErr.message);
+                        } else {
+                            console.log('Flow successfully updated in the database:', flow);
+                            resolve(row.id);
+                        }
+                    });
+                } else {
+                    this.db.run('INSERT INTO flows (flowData, flowKey) VALUES (?, ?)', [JSON.stringify(flow), flowKey], (insertErr) => {
+                        if (insertErr) {
+                            reject(insertErr.message);
+                        } else {
+                            console.log('Flow successfully added to the database:', flow);
+                            resolve(this.lastID);
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    // Gets flow with from the table flow
+    getFlow(flowKey) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT flowData FROM flows WHERE flowKey = ?', [flowKey], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    const flow = row ? JSON.parse(row.flowData) : null;
+                    resolve(flow);
                 }
             });
         });

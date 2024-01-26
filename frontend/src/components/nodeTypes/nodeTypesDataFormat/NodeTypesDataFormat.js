@@ -30,14 +30,17 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         id: String(asignId),
                     }
                 };
-            case 'bridge':
-                console.log('in bridge')
+            case 'bridgeNode':
+                console.log('in bridge');
                 return {
-                    type: 'bridge',
-                    position: { x: 300, y: 100 },
+                    id: String(asignId),
+                    type: 'bridgeNode',
+                    position: { x: 100, y: 300 },
                     data: {
                         ...commonAttributes,
                         ...customData,
+                        label: 'Bridge Added',
+                        id: String(asignId),
                     }
                 };
             case 'endNode':

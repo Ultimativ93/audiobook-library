@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 import { DrawerBody, DrawerFooter, DrawerHeader } from '@chakra-ui/react';
 
 import SelectNodeLabel from '../../drawerComponents/SelectNodeLabel';
 import SelectStoryAudio from '../../drawerComponents/SelectStoryAudio';
 
-const MuChoiFormatGeneral = ({ nodeData, setNodes }) => {
+const BridgeNodeFormatGeneral = ({ nodeData, setNodes }) => {
 
-    console.log("NodeData in MuChoiFormat", nodeData);
+    console.log("NodeData in BridgeNode:", nodeData);
 
     return (
-        <>
+        <div>
             <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
             <DrawerBody>
                 <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
@@ -17,8 +17,8 @@ const MuChoiFormatGeneral = ({ nodeData, setNodes }) => {
             </DrawerBody>
             <DrawerFooter>
             </DrawerFooter>
-        </>
+        </div>
     )
 }
 
-export default MuChoiFormatGeneral;
+export default BridgeNodeFormatGeneral

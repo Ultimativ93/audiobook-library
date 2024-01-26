@@ -62,6 +62,19 @@ router.post('/upload', async (ctx) => {
     }
 });
 
+router.post('/saveFlow', async(ctx) => {
+    const { flow, flowKey } = ctx.request.body;
+    try {
+        const savedFlowId = await db.saveFlow(flow, flowKey);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Flow saved successfully', savedFlowId};
+    } catch (error) {
+        console.error('Error saving flow on server: ', error);
+        ctx.status = 500;
+        ctx.body = {success: false, message: 'Internal Server Error'};
+    }
+});
+
 router.get('/audioPaths', async (ctx) => {
     try {
         const allFilePaths = await db.getAllFilePaths();
@@ -69,6 +82,27 @@ router.get('/audioPaths', async (ctx) => {
         ctx.body = allFilePaths;
     } catch (error) {
         console.error('Error getting audio paths:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+});
+
+router.get('/getFlow', async (ctx) => {
+    const { flowKey } = ctx.request.query;
+
+    try {
+        const flow = await db.getFlow(flowKey);
+
+        if (flow) {
+            ctx.status = 200;
+            ctx.body = flow;
+        } else {
+            console.warn('No flow found in the database');
+            ctx.status = 404;
+            ctx.body = 'No flow found in the database';
+        }
+    } catch (error) {
+        console.error('Error getting flow from the database:', error);
         ctx.status = 500;
         ctx.body = 'Internal Server Error';
     }

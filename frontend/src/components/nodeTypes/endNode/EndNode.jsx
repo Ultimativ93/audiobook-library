@@ -4,7 +4,6 @@ import { Handle, Position } from 'reactflow';
 import '../endNode/end-node.css';
 
 const EndNode = (data, isConnectable) => {
-    console.log("data in end",data)
     return (
         <div className="end-node">
 

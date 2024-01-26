@@ -1,4 +1,4 @@
-TODOS: X : erledigt, O : offen
+TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,
 
 ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal grundlegende Funktionen auf funktionalität prüfen.                                                       O
 
@@ -41,9 +41,14 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
 
 24.01.2024  - EndNode: Man könnte den Endknoten mit einem Haken zu einer Bridge machen, damit man Abhängigkeiten so darstellen kann. Zum Beispiel wird oben nein gesagt,                O
                 darauf ist es kein Endknoten mehr und man kann woanders hin, ermöglicht mehr interaktivität. Kann man auch händisch bauen, ist aber umständlich.
+            
+            - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.
 
-
-
+25.01.204   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später  O
+                abgleichen.
+                - Abfangen das wenn STRG geklickt ist, um mehrere Node auszuwählen, das der Drawer sich nicht öffnet.                                                                   O
+                - Geklickte Nodes hervorheben                                                                                                                                           O
+                - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!                                                                           O
 
 
 

@@ -11,7 +11,6 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
     updateNodeInternals(data.id);
   }, [data.answers, data.id, updateNodeInternals]);
 
-  // Filtern Sie leere Strings aus den Antworten
   const nonEmptyAnswers = data.answers.filter(answer => answer !== '');
 
   return (
@@ -25,7 +24,7 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
       <div className='multiple-choice-node-source-handles'>
         {nonEmptyAnswers.map((answer, index) => {
           const handleId = `${data.id}-handle-${index}`;
-          const totalWidth = 200; // Anpassen Sie dies an die Breite Ihrer Node
+          const totalWidth = 200;
           const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
 
           return (

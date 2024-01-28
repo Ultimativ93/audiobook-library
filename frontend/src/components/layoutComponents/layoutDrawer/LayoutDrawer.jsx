@@ -3,7 +3,7 @@ import { Drawer, DrawerContent, DrawerOverlay, Tabs, TabList, TabPanels, Tab, Ta
 import DrawerFormatProviderGeneral from './layoutDrawerFormats/drawerFormatProviderGeneral/DrawerFormatProviderGeneral';
 import DrawerFormatProviderQuestions from './layoutDrawerFormats/drawerFormatProviderQuestions/DrawerFormatProviderQuestions';
 
-const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes }) => {
+const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) => {
     const btnRef = React.useRef();
 
     if (!nodeData || !nodeData.data) {
@@ -27,10 +27,10 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes }) => {
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} />
+                            <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes}/>
                         </TabPanel>
                         <TabPanel>
-                            <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes}/>
+                            <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges}/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

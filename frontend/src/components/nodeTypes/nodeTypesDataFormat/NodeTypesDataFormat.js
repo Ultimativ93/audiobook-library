@@ -1,5 +1,6 @@
 const NodeTypesDataFormat = (nodeType, ids) => {
 
+    console.log("In nodeTypeDataFormat ids: ",ids)
     const asignId = ids+1;
     
     const inputSelections = {

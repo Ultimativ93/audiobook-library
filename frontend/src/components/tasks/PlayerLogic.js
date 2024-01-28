@@ -27,7 +27,6 @@ const getAudioFromPath = async (audioPath) => {
             return audioUrl;
         } else {
             console.warn(`Unexpected status code ${response.status} while fetching audio for path ${audioPath} in the database, PlayerLogic`);
-            console.error(response.data); // Log the error response for debugging
             return null;
         }
     } catch (error) {
@@ -36,10 +35,26 @@ const getAudioFromPath = async (audioPath) => {
     }
 };
 
-
-
+const handleButtonClickLogic = (index, flow, currentNodeProps, setCurrentNode) => {
+    const outgoingEdges = flow.edges.filter((edge) => edge.source === currentNodeProps.id);
+    console.log("Outgoing Edges: ", outgoingEdges);
+  
+    // Find the edge with the matching sourceHandle (using the last value in the sourceHandles array).
+    const targetEdge = outgoingEdges.find((edge) => edge.sourceHandle === `${currentNodeProps.id}-handle-${index}`);
+    console.log("targetEdge: ", targetEdge);
+  
+    if (targetEdge) {
+      const targetNodeIndex = flow.nodes.findIndex((node) => node.id === targetEdge.target);
+  
+      if (targetNodeIndex !== -1) {
+        console.log("TargetNode: ", targetNodeIndex);
+        setCurrentNode(targetNodeIndex);
+      }
+    }
+  };
 
 export {
     getAudioPathFromName,
     getAudioFromPath,
+    handleButtonClickLogic
 }; 

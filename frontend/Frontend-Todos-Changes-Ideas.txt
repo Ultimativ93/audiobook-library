@@ -44,11 +44,12 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
             
             - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.
 
-25.01.204   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später  O
+25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später  O
                 abgleichen.
                 - Abfangen das wenn STRG geklickt ist, um mehrere Node auszuwählen, das der Drawer sich nicht öffnet.                                                                   O
                 - Geklickte Nodes hervorheben                                                                                                                                           O
                 - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!                                                                           O
+                - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!
 
-
+28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                 O
 

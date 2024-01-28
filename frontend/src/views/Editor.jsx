@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
-import axios from 'axios';import 'reactflow/dist/style.css';
+import axios from 'axios'; import 'reactflow/dist/style.css';
 
 import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorDrawer';
 import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorButtons';
@@ -44,13 +44,13 @@ const Editor = () => {
     const onSave = useCallback(async () => {
         if (rfInstance) {
             const flow = rfInstance.toObject();
-    
+
             try {
                 const response = await axios.post('http://localhost:3005/saveFlow', {
                     flow,
                     flowKey: flowKey, // or whatever is the correct flowKey
                 });
-    
+
                 if (response.status === 200) {
                     console.log('Flow successfully sent to the server.');
                 } else {
@@ -62,11 +62,11 @@ const Editor = () => {
             localStorage.setItem(flowKey, JSON.stringify(flow));
         }
     }, [rfInstance, flowKey]);
-    
+
     const onRestore = useCallback(async () => {
         try {
             const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${flowKey}`);
-    
+
             if (response.status === 200) {
                 const flow = response.data;
                 const { x = 0, y = 0, zoom = 1 } = flow.viewport || {};
@@ -80,11 +80,15 @@ const Editor = () => {
             console.error('Error restoring flow from the database:', error);
         }
     }, [setNodes, setViewport, setEdges, flowKey]);
-    
+
+    console.log("Nodes im Editor: ", nodes);
+
+    console.log("Edges im Editor: ", edges);
 
     // Function to add a new node to the viewport based on the specified node type
     const onAdd = useCallback((nodeType) => {
-        const newNode = NodeTypesDataFormat(nodeType, nodes.length);
+        const lastNodeId = nodes.length > 0 ? nodes[nodes.length - 1].id : 0;
+        const newNode = NodeTypesDataFormat(nodeType, lastNodeId);
         setNodes((prevNodes) => prevNodes.concat(newNode));
     }, [setNodes, nodes.length]);
 
@@ -95,23 +99,24 @@ const Editor = () => {
     };
 
     return (
-        <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={setRfInstance}
-            nodeTypes={nodeTypes}
-            onNodeClick={(event, node) => onOpenDrawer(node)}
-        >
-
-            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} />
+        <>
+            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
             <LayoutEditorButtons onSave={onSave} onRestore={onRestore} onAdd={onAdd} />
             <LayoutEditorLinks />
 
-            <Background />
-        </ReactFlow>
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onInit={setRfInstance}
+                nodeTypes={nodeTypes}
+                onNodeClick={(event, node) => onOpenDrawer(node)}
+            >
+                <Background />
+            </ReactFlow>
+        </>
     );
 };
 

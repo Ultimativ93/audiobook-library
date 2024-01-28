@@ -7,7 +7,7 @@ import SelectRepeatQuestionAudio from '../../drawerComponents/SelectRepeatQuesti
 import SelectInputSelections from '../../drawerComponents/SelectInputSelections';
 import SelectAnswers from '../../drawerComponents/SelectAnswers';
 
-const MuChoiFormatQuestions = ({ nodeData, setNodes }) => {
+const MuChoiFormatQuestions = ({ nodeData, setNodes, setEdges, edges }) => {
 
   return (
     <>
@@ -17,7 +17,7 @@ const MuChoiFormatQuestions = ({ nodeData, setNodes }) => {
         <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} />
         <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
         <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
-        <SelectAnswers nodeData={nodeData} setNodes={setNodes} />
+        <SelectAnswers nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges}/>
       </DrawerBody>
       <DrawerFooter>
         {/* */}

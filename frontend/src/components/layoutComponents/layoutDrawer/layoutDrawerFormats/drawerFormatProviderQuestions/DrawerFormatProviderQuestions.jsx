@@ -2,7 +2,7 @@ import React from 'react';
 
 import MuChoiFormatQuestions from './MuChoiFormatQuestions';
 
-const DrawerFormatProviderQuestions = ({ nodeData, setNodes }) => {
+const DrawerFormatProviderQuestions = ({ nodeData, setNodes, setEdges, edges }) => {
 
     switch (nodeData.type) {
         case 'start':
@@ -11,7 +11,7 @@ const DrawerFormatProviderQuestions = ({ nodeData, setNodes }) => {
             }
         case 'muChoi':
             return (
-                <MuChoiFormatQuestions nodeData={nodeData} setNodes={setNodes}/>
+                <MuChoiFormatQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges}/>
             )
         case 'bridge':
             return {

@@ -10,6 +10,8 @@ import NodeTypesDataFormat from '../components/nodeTypes/nodeTypesDataFormat/Nod
 import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
 import EndNode from '../components/nodeTypes/endNode/EndNode';
 import BridgeNode from '../components/nodeTypes/bridgeNode/BridgeNode';
+import TimeNode from '../components/nodeTypes/timeNode/TimeNode';
+import MultipleAnswerNode from '../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
 
 // We will change this later to user id + label of audiobook
 const flowKey = 'First-trys';
@@ -19,6 +21,8 @@ const nodeTypes = {
     muChoi: MultipleChoiceNode,
     endNode: EndNode,
     bridgeNode: BridgeNode,
+    timeNode: TimeNode,
+    muAns: MultipleAnswerNode,
 };
 
 // Array with initial nodes
@@ -80,10 +84,6 @@ const Editor = () => {
             console.error('Error restoring flow from the database:', error);
         }
     }, [setNodes, setViewport, setEdges, flowKey]);
-
-    console.log("Nodes im Editor: ", nodes);
-
-    console.log("Edges im Editor: ", edges);
 
     // Function to add a new node to the viewport based on the specified node type
     const onAdd = useCallback((nodeType) => {

@@ -1,0 +1,16 @@
+.time-node {
+    height: 50px;
+    width: 200px;
+    border: 1px solid #000;
+    padding: 5px;
+    border-radius: 5px;
+    background: white;
+    background-color: green;
+  }
+  
+  .multiple-choice-node label {
+    display: block;
+    color: #000;
+    font-size: 16px;
+  }
+  

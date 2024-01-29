@@ -21,7 +21,7 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
         <label htmlFor="text">{data.label}</label>
       </div>
 
-      <div className='multiple-choice-node-source-handles'>
+      <div className="multiple-choice-node-source-handles">
         {nonEmptyAnswers.map((answer, index) => {
           const handleId = `${data.id}-handle-${index}`;
           const totalWidth = 200;

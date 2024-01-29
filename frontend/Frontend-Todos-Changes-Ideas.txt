@@ -9,7 +9,8 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
                 - DataUpload: Inline style rausholen,                                                                                                                                   O    
            
 17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird                                                                           O
-                - Umbennen, nur ein Teil davon wird wirklich der LayoutDrawer sein, alle anderen sind Drawer.., das verwirrt nur.
+                - Umbennen, nur ein Teil davon wird wirklich der LayoutDrawer sein, alle anderen sind Drawer.., das verwirrt nur.                                                       O
+                - EndNode, Bridge brauchen keine weiteren Tabs "QUestion und Kombination" abfangen im Drawer wie bei MuAns.                                                             O
 
             - NodeTypeDataFormat: Wir müssen irgendwie Daten Formate vorgeben, also das MuChoi z.B. 3 Antworten hat mindestens etc.                                                     X
                 vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden                                            X
@@ -24,10 +25,11 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
 
 21.01.2024  - DrawerFormatProviderGeneral: braucht eine Verbindung zum Backend, oder eher eine weitere Component die darauf zugreift -> hier nochmal gucken  (wurde FetchAudio)         X
                 wo wir das reinschmeißen, ich denke nicht dass das Sinn macht, das in Components zu haben und auch nicht umbedingt das manche Datein dann .jsx sein müssen.             O
-                - Daten vom Backend in Select einfügen, je nachdem wie viele daten gekommen sind auch options + abfangen von default = null / nachricht, whatever.                      O
+                - Daten vom Backend in Select einfügen, je nachdem wie viele daten gekommen sind auch options + abfangen von default = null / nachricht, whatever.                      X
                     brauchen wir öfter, daher component.
-                - Der Name sollte direkt geändert werden, wenn das Label in der Eingabe Zeile geändert wird.                                                                            O
-            
+                - Der Name sollte direkt geändert werden, wenn das Label in der Eingabe Zeile geändert wird.                                                                            X
+                - Bisher sind alle cases ziemlich gleich, zu default umändern um code zu sparen und die, die anders sind mit der case abfangen                                          O
+
             - FetchAudio: Es werden bisher nur beim ersten Upload die Daten angezeigt, die UseEffect wird aber immer aufgerufen wenn der Drawer geöffnet wird, angucken !!!             O
 
 22.01.2024  - SelectStoryAudio: Das ist eigentlich auch eine Task und könnte in LayoutDrawerFunctions ausgelagert werden.                                                               O
@@ -43,13 +45,22 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
                 darauf ist es kein Endknoten mehr und man kann woanders hin, ermöglicht mehr interaktivität. Kann man auch händisch bauen, ist aber umständlich.
             
             - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.
+                - Interaktions Signal Logic implementieren                                                                                                                              O
+                - Repeat Question Logic implementieren                                                                                                                                  O
 
-25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später  O
+25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
                 - Abfangen das wenn STRG geklickt ist, um mehrere Node auszuwählen, das der Drawer sich nicht öffnet.                                                                   O
                 - Geklickte Nodes hervorheben                                                                                                                                           O
                 - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!                                                                           O
                 - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!
 
-28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                 O
+28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
+
+29.01.2024  - SelectInteractionsSignalAudio && SelectQuestionAudio && SelectStoryAudio: Sind alle ziemlic gleich, bis auf das die Propertys unterschiedlich sind,                       O
+                wenn Zeit ist, sollte das noch auf eine Komponente zusammengefügt werden.
+
+            - DrawerFormatProviderQuestions: Für Nodes die keine Questions haben, eine Möglichkeit suchen, dass Questions im Drawer nicht angezeigt werden (Bridge, EndNode)            O
+
+            - MuAnsFormatCombination: Wenn neue Antworten hinzugefügt werden, werden nicht direkt die Antwortmöglichkeit in Combination Options hinzugefügt.                               O
 

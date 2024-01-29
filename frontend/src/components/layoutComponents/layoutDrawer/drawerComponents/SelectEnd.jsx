@@ -4,7 +4,7 @@ import { Switch } from '@chakra-ui/react';
 import { updateIsEnd } from '../LayoutDrawerFunctions';
 
 const SelectEnd = ({ nodeData, setNodes }) => {
-    const isEndValue = nodeData.data.isEnd === 'true'; // Convert string to boolean
+    const isEndValue = nodeData.data.isEnd === 'true';
 
     return (
         <>

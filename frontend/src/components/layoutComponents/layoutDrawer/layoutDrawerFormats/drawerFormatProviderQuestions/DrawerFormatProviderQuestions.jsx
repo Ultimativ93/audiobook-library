@@ -1,6 +1,8 @@
 import React from 'react';
 
 import MuChoiFormatQuestions from './MuChoiFormatQuestions';
+import TimeNodeFormatQuestions from './TimeNodeFormatQuestions';
+import MuAnsFormatQuestions from './MuAnsFormatQuestions';
 
 const DrawerFormatProviderQuestions = ({ nodeData, setNodes, setEdges, edges }) => {
 
@@ -13,10 +15,14 @@ const DrawerFormatProviderQuestions = ({ nodeData, setNodes, setEdges, edges }) 
             return (
                 <MuChoiFormatQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges}/>
             )
-        case 'bridge':
-            return {
-                // ...
-            }
+        case 'timeNode':
+            return (
+                <TimeNodeFormatQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
+            )
+            case 'muAns':
+                return (
+                    <MuAnsFormatQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
+                )
         default:
             console.log("Default in LayoutFormatProvider, check it!");
             // create default functionality

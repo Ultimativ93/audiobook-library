@@ -3,6 +3,8 @@ import React from 'react';
 import MuChoiFormatGeneral from './MuChoiFormatGeneral';
 import EndNodeFormatGeneral from './EndNodeFormatGeneral';
 import BridgeNodeFormatGeneral from './BridgeNodeFormatGeneral';
+import TimeNodeFormatGeneral from './TimeNodeFormatGeneral';
+import MuAnsFormatGeneral from './MuAnsFormatGeneral';
 
 const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
 
@@ -18,7 +20,15 @@ const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
         case 'bridgeNode':
             return (
                 <BridgeNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} />
-                )
+            )
+        case 'timeNode':
+            return (
+                <TimeNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} />
+            )
+        case 'muAns':
+            return (
+                <MuAnsFormatGeneral nodeData={nodeData} setNodes={setNodes} />
+            )
         case 'endNode':
             return (
                 <EndNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} />

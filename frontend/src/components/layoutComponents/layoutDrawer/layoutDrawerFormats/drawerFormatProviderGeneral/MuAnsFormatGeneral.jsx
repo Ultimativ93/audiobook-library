@@ -8,7 +8,7 @@ import SelectInteraktionSignal from '../../drawerComponents/SelectInteractionSig
 const MuAnsFormatGeneral = ({ nodeData, setNodes }) => {
     return (
         <>
-<DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
+            <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
             <DrawerBody>
                 <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
                 <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} />
@@ -20,4 +20,4 @@ const MuAnsFormatGeneral = ({ nodeData, setNodes }) => {
     )
 }
 
-export default MuAnsFormatGeneral
+export default MuAnsFormatGeneral;

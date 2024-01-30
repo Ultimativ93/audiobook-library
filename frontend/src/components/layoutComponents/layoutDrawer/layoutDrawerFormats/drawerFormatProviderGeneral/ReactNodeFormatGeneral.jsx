@@ -5,7 +5,7 @@ import SelectNodeLabel from '../../drawerComponents/SelectNodeLabel';
 import SelectStoryAudio from '../../drawerComponents/SelectStoryAudio';
 import SelectInteraktionSignal from '../../drawerComponents/SelectInteractionSignal';
 
-const TimeNodeFormatGeneral = ({ nodeData, setNodes }) => {
+const ReactNodeFormatGeneral = ({ nodeData, setNodes }) => {
     return (
         <>
             <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
@@ -20,4 +20,4 @@ const TimeNodeFormatGeneral = ({ nodeData, setNodes }) => {
     )
 }
 
-export default TimeNodeFormatGeneral
+export default ReactNodeFormatGeneral

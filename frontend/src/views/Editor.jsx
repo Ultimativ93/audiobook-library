@@ -12,6 +12,9 @@ import EndNode from '../components/nodeTypes/endNode/EndNode';
 import BridgeNode from '../components/nodeTypes/bridgeNode/BridgeNode';
 import TimeNode from '../components/nodeTypes/timeNode/TimeNode';
 import MultipleAnswerNode from '../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
+import ReactionNode from '../components/nodeTypes/reactionNode/ReactionNode';
+import InputNode from '../components/nodeTypes/inputNode/InputNode';
+import DialogNode from '../components/nodeTypes/dialogNode/DialogNode';
 
 // We will change this later to user id + label of audiobook
 const flowKey = 'First-trys';
@@ -23,6 +26,9 @@ const nodeTypes = {
     bridgeNode: BridgeNode,
     timeNode: TimeNode,
     muAns: MultipleAnswerNode,
+    reactNode: ReactionNode,
+    inputNode: InputNode,
+    dialogNode: DialogNode,
 };
 
 // Array with initial nodes
@@ -87,6 +93,7 @@ const Editor = () => {
 
     // Function to add a new node to the viewport based on the specified node type
     const onAdd = useCallback((nodeType) => {
+        console.log("NodeType Edi:",nodeType)
         const lastNodeId = nodes.length > 0 ? nodes[nodes.length - 1].id : 0;
         const newNode = NodeTypesDataFormat(nodeType, lastNodeId);
         setNodes((prevNodes) => prevNodes.concat(newNode));

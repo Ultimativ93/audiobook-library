@@ -52,7 +52,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         answers: [
                             { answer: "Answer 1", time: "Time 1" },
                             { answer: "Answer 2", time: "Time 2" }
-                          ],
+                        ],
                         id: String(asignId),
                     }
                 }
@@ -61,12 +61,54 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                 return {
                     id: String(asignId),
                     type: 'muAns',
-                    position: { x: 100, y:350},
+                    position: { x: 100, y: 350 },
                     data: {
                         ...commonAttributes,
                         label: 'Multiple Answers Added',
                         answers: ["Answer 1", "Answer 2"],
                         answerCombinations: [],
+                        id: String(asignId),
+                    }
+                };
+            case 'reactNode':
+                console.log('in reactNode');
+                return {
+                    id: String(asignId),
+                    type: 'reactNode',
+                    position: { x: 100, y: 375 },
+                    data: {
+                        ...commonAttributes,
+                        label: 'Reaction Added',
+                        answerPeriods: [
+                            { start: '00:00', end: '00:00' },
+                        ],
+                        id: String(asignId),
+                    }
+                };
+            case 'inputNode':
+                console.log('in inputNode');
+                return {
+                    id: String(asignId),
+                    type: 'inputNode',
+                    position: { x: 100, y: 390 },
+                    data: {
+                        ...commonAttributes,
+                        label: 'Input Added',
+                        correctAnswer: '',
+                        id: String(asignId),
+                    },
+                }
+            case 'dialogNode':
+                console.log('in dialogNode');
+                return {
+                    id: String(asignId),
+                    type: 'dialogNode',
+                    position: { x: 150, y: 300 },
+                    className: 'light',
+                    groupType: 'dialog',
+                    data: {
+                        ...commonAttributes,
+                        label: 'Dialog Added',
                         id: String(asignId),
                     }
                 };
@@ -82,7 +124,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         id: String(asignId),
                         isEnd: 'true',
                     }
-                }
+                };
             default:
                 return null;
         }

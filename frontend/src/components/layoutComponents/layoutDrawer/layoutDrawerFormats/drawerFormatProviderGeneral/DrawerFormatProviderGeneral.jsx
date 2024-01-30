@@ -5,6 +5,8 @@ import EndNodeFormatGeneral from './EndNodeFormatGeneral';
 import BridgeNodeFormatGeneral from './BridgeNodeFormatGeneral';
 import TimeNodeFormatGeneral from './TimeNodeFormatGeneral';
 import MuAnsFormatGeneral from './MuAnsFormatGeneral';
+import ReactNodeFormatGeneral from './ReactNodeFormatGeneral';
+import InputNodeFormatGeneral from './InputNodeFormatGeneral';
 
 const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
 
@@ -28,6 +30,14 @@ const DrawerFormatProviderGeneral = ({ nodeData, setNodes }) => {
         case 'muAns':
             return (
                 <MuAnsFormatGeneral nodeData={nodeData} setNodes={setNodes} />
+            )
+        case 'reactNode':
+            return (
+                <ReactNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} />
+            )
+        case 'inputNode':
+            return (
+                <InputNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} />
             )
         case 'endNode':
             return (

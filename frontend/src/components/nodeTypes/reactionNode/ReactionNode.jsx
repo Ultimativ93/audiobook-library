@@ -1,29 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
-import '../multipleAnswerNode/multiple-answer-node.css';
+import '../reactionNode/reaction-node.css';
 
-const MultipleAnswerNode = ({ data, isConnectable }) => {
+const ReactionNode = ({ data, isConnectable }) => {
     const updateNodeInternals = useUpdateNodeInternals();
+    const nodeRef = useRef();
 
     useEffect(() => {
         updateNodeInternals(data.id);
-    }, [data.answerCombinations, data.id, updateNodeInternals]);
-    
-    const totalWidth = 200;
+    }, [data.answerPeriods, data.id, updateNodeInternals]);
+
+    const nonEmptyAnswers = data.answerPeriods.filter(answer => answer !== '');
 
     return (
-        <div className="multiple-answer-node">
+        <div className="reaction-node" ref={nodeRef}>
             <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
             <div>
                 <label htmlFor="text">{data.label}</label>
             </div>
 
-            <div className="multiple-choice-node-source-handles">
-                {data.answerCombinations.map((combination, index) => {
+            <div className="reaction-node-source-handles">
+                {nonEmptyAnswers.map((answer, index) => {
                     const handleId = `${data.id}-handle-${index}`;
-                    const leftPosition = (index / (data.answerCombinations.length - 1)) * totalWidth;
+                    const totalWidth = 200;
+                    const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
 
                     return (
                         <Handle
@@ -37,8 +39,9 @@ const MultipleAnswerNode = ({ data, isConnectable }) => {
                     );
                 })}
             </div>
+
         </div>
-    );
+    )
 }
 
-export default MultipleAnswerNode;
+export default ReactionNode;

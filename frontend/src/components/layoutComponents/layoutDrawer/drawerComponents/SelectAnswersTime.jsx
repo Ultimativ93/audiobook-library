@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input, Flex, Spacer } from '@chakra-ui/react';
-import { updateNodeProperty, removeAnswer, updateAnswersAndTimes } from '../LayoutDrawerFunctions';
+import { removeAnswer, updateAnswersAndTimes } from '../LayoutDrawerFunctions';
 
 const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges }) => {
     const [answers, setAnswers] = useState(nodeData.data.answers);

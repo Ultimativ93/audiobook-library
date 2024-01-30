@@ -28,7 +28,7 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
                 - Daten vom Backend in Select einfügen, je nachdem wie viele daten gekommen sind auch options + abfangen von default = null / nachricht, whatever.                      X
                     brauchen wir öfter, daher component.
                 - Der Name sollte direkt geändert werden, wenn das Label in der Eingabe Zeile geändert wird.                                                                            X
-                - Bisher sind alle cases ziemlich gleich, zu default umändern um code zu sparen und die, die anders sind mit der case abfangen                                          O
+                - Bisher sind alle cases ziemlich gleich, zu default umändern um code zu sparen und die, die anders sind mit der case abfangen !!!!!                                    O
 
             - FetchAudio: Es werden bisher nur beim ersten Upload die Daten angezeigt, die UseEffect wird aber immer aufgerufen wenn der Drawer geöffnet wird, angucken !!!             O
 
@@ -62,5 +62,16 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
 
             - DrawerFormatProviderQuestions: Für Nodes die keine Questions haben, eine Möglichkeit suchen, dass Questions im Drawer nicht angezeigt werden (Bridge, EndNode)            O
 
-            - MuAnsFormatCombination: Wenn neue Antworten hinzugefügt werden, werden nicht direkt die Antwortmöglichkeit in Combination Options hinzugefügt.                               O
+            - MuAnsFormatCombination: Wenn neue Antworten hinzugefügt werden, werden nicht direkt die Antwortmöglichkeit in Combination Options hinzugefügt.                            O
+
+            - ReactionNode: Hier muss abgefangen werden, dass nur Zahlen eingegeben werden können und auch nur in der Art wie wir es wollen.                                            O
+
+30.01.2024  - DialogNode: Hier sollten wir je nachdem wieviele Nodes in dem Dialogknoten hinzugefügt werden, die height und width verändern. Vielleicht sollte man das direkt scallable O
+                machen.
+
+
+
+
+
+
 

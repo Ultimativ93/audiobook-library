@@ -13,8 +13,6 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) 
         return null;
     }
 
-    console.log("In LayoutDrawer data: ", nodeData);
-
     return (
         <Drawer
             isOpen={isOpen}
@@ -33,14 +31,16 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) 
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes}/>
+                            <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} />
                         </TabPanel>
                         <TabPanel>
-                            <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges}/>
+                            <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
                         </TabPanel>
-                        <TabPanel>
-                            <MuAnsFromatCombination nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
-                        </TabPanel>
+                        {nodeData.type === 'muAns' &&
+                            <TabPanel>
+                                <MuAnsFromatCombination nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
+                            </TabPanel>
+                        }
                     </TabPanels>
                 </Tabs>
             </DrawerContent>

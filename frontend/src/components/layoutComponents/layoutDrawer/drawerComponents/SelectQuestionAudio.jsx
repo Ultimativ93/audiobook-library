@@ -8,9 +8,6 @@ const SelectQuestionAudio = ({ nodeData, setNodes }) => {
     const audioPaths = FetchAudio();
 
     const [selectedQuestionAudio, setSelectedQuestionAudio] = useState(nodeData.data.questionAudio || '');
-
-    console.log("SelectQuestionAudio - nodeData: ", nodeData);
-    console.log("SelectQuestionAudio - audioPaths: ", audioPaths);
     
     return (
         <>

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 
 import './player.css';
-import FetchFlow from '../../components/tasks/FetchFlow';
+import FetchFlow from '../../components/tasks/playerTasks/FetchFlow';
 import LayoutEditorLinks from '../../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
-import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/PlayerLogic';
+import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/playerTasks/PlayerLogic';
 
 const Player = () => {
   const [flow, setFlow] = useState(null);

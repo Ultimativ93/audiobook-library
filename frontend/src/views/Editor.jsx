@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
-import axios from 'axios'; import 'reactflow/dist/style.css';
+import axios from 'axios';
+import 'reactflow/dist/style.css';
 
 import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorDrawer';
 import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorButtons';
@@ -15,6 +16,8 @@ import MultipleAnswerNode from '../components/nodeTypes/multipleAnswerNode/Multi
 import ReactionNode from '../components/nodeTypes/reactionNode/ReactionNode';
 import InputNode from '../components/nodeTypes/inputNode/InputNode';
 import DialogNode from '../components/nodeTypes/dialogNode/DialogNode';
+
+import useStore from '../components/tasks/store';
 
 // We will change this later to user id + label of audiobook
 const flowKey = 'First-trys';
@@ -48,7 +51,9 @@ const Editor = () => {
     const { setViewport } = useReactFlow();
 
     // Function to handle node connections by updating the edges state
-    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+    const onConnect = useCallback((params) => {
+        setEdges((prevEdges) => addEdge(params, prevEdges));
+    }, [setEdges]);
 
     // Function to handle saving nodes into the database which is located in the backend
     const onSave = useCallback(async () => {
@@ -93,7 +98,7 @@ const Editor = () => {
 
     // Function to add a new node to the viewport based on the specified node type
     const onAdd = useCallback((nodeType) => {
-        console.log("NodeType Edi:",nodeType)
+        console.log("NodeType Editor:", nodeType)
         const lastNodeId = nodes.length > 0 ? nodes[nodes.length - 1].id : 0;
         const newNode = NodeTypesDataFormat(nodeType, lastNodeId);
         setNodes((prevNodes) => prevNodes.concat(newNode));
@@ -119,8 +124,9 @@ const Editor = () => {
                 onConnect={onConnect}
                 onInit={setRfInstance}
                 nodeTypes={nodeTypes}
-                onNodeClick={(event, node) => onOpenDrawer(node)}
+                onNodeClick={(event, node) => { onOpenDrawer(node) }}
             >
+                 
                 <Background />
             </ReactFlow>
         </>

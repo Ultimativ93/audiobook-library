@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from '@chakra-ui/react';
 
-import FetchAudio from '../../../tasks/FetchAudio';
+import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { updateStoryAudio } from '../LayoutDrawerFunctions';
 
 const SelectStoryAudio = ({ nodeData, setNodes }) => {

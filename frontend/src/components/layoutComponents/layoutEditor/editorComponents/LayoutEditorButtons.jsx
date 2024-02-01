@@ -13,7 +13,6 @@ const LayoutEditorButtons = ({ onSave, onRestore, onAdd }) => {
             <button onClick={() => onAdd('muAns')} style={{ margin: 5 }}>MuAns</button>
             <button onClick={() => onAdd('reactNode')} style={{ margin: 5 }}>Reaction</button>
             <button onClick={() => onAdd('inputNode')} style={{ margin: 5 }}>Input</button>
-            <button onClick={() => onAdd('dialogNode')} style={{ margin: 5 }}>Dialog</button>
         </Panel>
     )
 }

@@ -15,9 +15,6 @@ import TimeNode from '../components/nodeTypes/timeNode/TimeNode';
 import MultipleAnswerNode from '../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
 import ReactionNode from '../components/nodeTypes/reactionNode/ReactionNode';
 import InputNode from '../components/nodeTypes/inputNode/InputNode';
-import DialogNode from '../components/nodeTypes/dialogNode/DialogNode';
-
-import useStore from '../components/tasks/store';
 
 // We will change this later to user id + label of audiobook
 const flowKey = 'First-trys';
@@ -31,7 +28,6 @@ const nodeTypes = {
     muAns: MultipleAnswerNode,
     reactNode: ReactionNode,
     inputNode: InputNode,
-    dialogNode: DialogNode,
 };
 
 // Array with initial nodes
@@ -109,6 +105,8 @@ const Editor = () => {
         setSelectedNodeData(node);
         setIsDrawerOpen(true);
     };
+
+    console.log("Nodes im Editor:", nodes);
 
     return (
         <>

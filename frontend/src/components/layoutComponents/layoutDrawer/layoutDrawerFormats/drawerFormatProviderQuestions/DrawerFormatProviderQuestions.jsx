@@ -33,10 +33,6 @@ const DrawerFormatProviderQuestions = ({ nodeData, setNodes, setEdges, edges }) 
             return (
                 <InputNodeFormatQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
             )
-        case 'endNode':
-            return {
-                // ... 
-            }
         default:
             console.log("Default in LayoutFormatProvider, check it!");
             // create default functionality

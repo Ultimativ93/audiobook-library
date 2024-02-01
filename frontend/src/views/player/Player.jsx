@@ -4,14 +4,16 @@ import ReactAudioPlayer from 'react-audio-player';
 import './player.css';
 import FetchFlow from '../../components/tasks/playerTasks/FetchFlow';
 import LayoutEditorLinks from '../../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
-import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/playerTasks/PlayerLogic';
+import PlayerAnswers from '../../components/layoutComponents/layoutPlayer/PlayerAnswers';
+import PlayerEnd from '../../components/layoutComponents/layoutPlayer/playerEnd/PlayerEnd';
+
+import { getAudioPathFromName, getAudioFromPath, handleAudioEnded } from '../../components/tasks/playerTasks/PlayerLogic';
 
 const Player = () => {
   const [flow, setFlow] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
   const [currentNode, setCurrentNode] = useState(1);
   const [currentNodeProps, setCurrentNodeProps] = useState(null);
-  const [isEnd, setIsEnd] = useState(null);
 
   // useEffect that runs when the component renders first to fetch the flow
   useEffect(() => {
@@ -28,41 +30,38 @@ const Player = () => {
         const path = await getAudioPathFromName(flow.nodes[currentNode].data.audioStory);
         const audioBlobResponse = await getAudioFromPath(path);
         setAudioBlob(audioBlobResponse);
+        console.log("currentNode", flow.nodes[currentNode].data.id);
         setCurrentNodeProps(flow.nodes[currentNode].data);
-        if (flow.nodes[currentNode].data.isEnd === 'true') {
-          setIsEnd(true);
-          console.log('Ist ein Ende')
-        }
       }
     };
 
     fetchData();
   }, [currentNode, flow]);
 
-  const handleButtonClick = (index) => {
-    handleButtonClickLogic(index, flow, currentNodeProps, setCurrentNode);
-  };
-  
+  if (currentNodeProps) {
+    console.log("CurrentNode Player: ", flow.nodes[currentNode])
+  }
+
+
   return (
     <>
       <LayoutEditorLinks />
       <div className="player-wrapper">
-        <div>Other Content</div>
-        {currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
+
+        {currentNodeProps && (
           <div>
-            <p>Frage: {currentNodeProps.question}</p>
-            <p>Antworten:</p>
-            <ul>
-              {currentNodeProps.answers.map((answer, index) => (
-                <button style={{ margin: 10, backgroundColor: 'lightgray', padding: 20, borderRadius: 5 }} key={index} onClick={() => handleButtonClick(index)}>{answer}</button>
-              ))}
-            </ul>
-          </div>
-        )}
+            Label: {currentNodeProps.label}
+          </div>)}
+
+        <PlayerAnswers currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+        <PlayerEnd currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+
         <div className="player">
+
           {audioBlob && (
-            <ReactAudioPlayer autoPlay controls src={audioBlob} />
+            <ReactAudioPlayer controls src={audioBlob} onEnded={() => handleAudioEnded(currentNodeProps, flow, setCurrentNode)}/>
           )}
+
         </div>
 
       </div>

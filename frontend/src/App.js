@@ -27,7 +27,3 @@ function App() {
 }
 
 export default App;
-
-/* <div className="App" style={{ height: 800 }}>
-            <Editor />
-          </div> */

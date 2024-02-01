@@ -35,26 +35,69 @@ const getAudioFromPath = async (audioPath) => {
     }
 };
 
+const getCurrentAudioLength = async (audioBlob) => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    try {
+        const audio = new Audio(audioBlob);
+        
+        const loadedMetadataPromise = new Promise((resolve, reject) => {
+            audio.addEventListener('loadedmetadata', () => {
+                resolve(audio.duration);
+            });
+            audio.addEventListener('error', reject);
+        });
+
+        await audio.load();
+        await loadedMetadataPromise;
+
+        const duration = audio.duration;
+
+        return duration;
+    } catch (error) {
+        console.error("Error getting audio duration", error);
+        return null;
+    } finally {
+        audioContext.close(); // Close the AudioContext to release resources
+    }
+};
+
+const handleAudioEnded = (currentNodeProps, flow, setCurrentNode) => {
+    console.log("curNodProp", flow.nodes);
+    if (flow && flow.nodes) {
+        const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
+        console.log("type in handleAudioEnded", flow.nodes[targetNodeIndex].type)
+        if (flow.nodes[targetNodeIndex].type && flow.nodes[targetNodeIndex].type === 'bridgeNode') {
+            // Call handleButtonClickLogic with appropriate parameters
+            handleButtonClickLogic(0, flow, currentNodeProps, setCurrentNode);
+        }
+    }
+};
+
+
 const handleButtonClickLogic = (index, flow, currentNodeProps, setCurrentNode) => {
     const outgoingEdges = flow.edges.filter((edge) => edge.source === currentNodeProps.id);
     console.log("Outgoing Edges: ", outgoingEdges);
-  
-    // Find the edge with the matching sourceHandle (using the last value in the sourceHandles array).
-    const targetEdge = outgoingEdges.find((edge) => edge.sourceHandle === `${currentNodeProps.id}-handle-${index}`);
+
+    // Find the edge with the matching target (if sourceHandle is null)
+    const targetEdge = outgoingEdges.find((edge) => edge.sourceHandle === null || edge.sourceHandle === `${currentNodeProps.id}-handle-${index}`);
     console.log("targetEdge: ", targetEdge);
-  
+
     if (targetEdge) {
-      const targetNodeIndex = flow.nodes.findIndex((node) => node.id === targetEdge.target);
-  
-      if (targetNodeIndex !== -1) {
-        console.log("TargetNode: ", targetNodeIndex);
-        setCurrentNode(targetNodeIndex);
-      }
+        const targetNodeIndex = flow.nodes.findIndex((node) => node.id === targetEdge.target);
+
+        if (targetNodeIndex !== -1) {
+            console.log("TargetNode: ", targetNodeIndex);
+            setCurrentNode(targetNodeIndex);
+        }
     }
-  };
+};
+
 
 export {
     getAudioPathFromName,
     getAudioFromPath,
-    handleButtonClickLogic
+    getCurrentAudioLength,
+    handleButtonClickLogic,
+    handleAudioEnded,
 }; 

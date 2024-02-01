@@ -1,6 +1,4 @@
-TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,
-
-ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal grundlegende Funktionen auf funktionalität prüfen.                                                       O
+TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,                                                    O
 
 16.01.2024  - React Flow einarbeiten, Startknoten für den Editor erstellen                                                                                                              X
             
@@ -69,7 +67,7 @@ ALLGEMEIN: TypeScript !!! Müssen wir umbedingt noch einarbeiten.. aber erstmal 
 30.01.2024  - DialogNode: Hier sollten wir je nachdem wieviele Nodes in dem Dialogknoten hinzugefügt werden, die height und width verändern. Vielleicht sollte man das direkt scallable O
                 machen.
 
-
+01.02.2024  - Startknoten darf nicht gelöscht werden können, oder wir müssen den Startknoten noch als NodeType festlegen und erzeugen                                                   O
 
 
 

@@ -4,6 +4,7 @@ import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
 const SelectPeriod = ({ nodeData, setNodes }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
+  console.log("Periods in SP: ", periods)
 
   const handleAddPeriod = () => {
     setPeriods([...periods, { start: '', end: '' }]);
@@ -23,12 +24,20 @@ const SelectPeriod = ({ nodeData, setNodes }) => {
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
   };
 
+  
+
   return (
     <>
       <h4>Period Based Reactions</h4>
       {periods.map((period, index) => (
         <Flex key={index} direction="column" align="start">
           <Flex align="center">
+            <Input
+              placeholder='Answer ..'
+              value={period.answer}
+              onChange={(e) => handlePeriodChange(index, 'answer', e.target.value)}
+              flex="5"
+            />
             <Input
               placeholder='00:00'
               value={period.start}

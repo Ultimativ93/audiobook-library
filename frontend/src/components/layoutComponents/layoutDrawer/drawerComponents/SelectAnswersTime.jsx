@@ -40,7 +40,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges }) => {
                         />
                         <Spacer />
                         <Input
-                            placeholder="Time .."
+                            placeholder="00:00"
                             value={answer.time}
                             onChange={(e) => handleAnswerChange(index, 'time', e.target.value)}
                             flex="4"

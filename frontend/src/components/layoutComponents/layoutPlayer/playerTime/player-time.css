@@ -1,0 +1,9 @@
+.player-time {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.player-time Button{
+    margin: 10px;
+}

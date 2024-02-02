@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import ReactAudioPlayer from 'react-audio-player';
+import React, { useState, useEffect, useRef } from 'react';
 
 import './player.css';
 import FetchFlow from '../../components/tasks/playerTasks/FetchFlow';
 import LayoutEditorLinks from '../../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
 import PlayerAnswers from '../../components/layoutComponents/layoutPlayer/PlayerAnswers';
 import PlayerEnd from '../../components/layoutComponents/layoutPlayer/playerEnd/PlayerEnd';
+import PlayerInput from '../../components/layoutComponents/layoutPlayer/playerInput/PlayerInput';
+import PlayerMuAns from '../../components/layoutComponents/layoutPlayer/PlayerMuAns';
+import PlayerReaction from '../../components/layoutComponents/layoutPlayer/PlayerReaction';
+import PlayerTime from '../../components/layoutComponents/layoutPlayer/playerTime/PlayerTime';
 
 import { getAudioPathFromName, getAudioFromPath, handleAudioEnded } from '../../components/tasks/playerTasks/PlayerLogic';
 
@@ -14,6 +17,9 @@ const Player = () => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [currentNode, setCurrentNode] = useState(1);
   const [currentNodeProps, setCurrentNodeProps] = useState(null);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  const audioRef = useRef();
 
   // useEffect that runs when the component renders first to fetch the flow
   useEffect(() => {
@@ -39,8 +45,26 @@ const Player = () => {
   }, [currentNode, flow]);
 
   if (currentNodeProps) {
-    console.log("CurrentNode Player: ", flow.nodes[currentNode])
+    //console.log("CurrentNode Player: ", flow.nodes[currentNode])
   }
+
+  useEffect(() => {
+    const audioElement = audioRef.current;
+  
+    if (audioElement) {
+      const handleTimeUpdate = (e) => {
+        const newTime = e.target.currentTime;
+        setCurrentTime(newTime);
+      };
+  
+      audioElement.addEventListener('timeupdate', handleTimeUpdate);
+  
+      return () => {
+        audioElement.removeEventListener('timeupdate', handleTimeUpdate);
+      };
+    }
+  }, [audioRef, currentNodeProps, flow]);
+
 
 
   return (
@@ -51,19 +75,51 @@ const Player = () => {
         {currentNodeProps && (
           <div>
             Label: {currentNodeProps.label}
-          </div>)}
+          </div>
+        )}
 
-        <PlayerAnswers currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muChoi' && (
+          <PlayerAnswers currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+        )}
+
         <PlayerEnd currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
 
-        <div className="player">
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'inputNode' && (
+          <PlayerInput currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+        )}
 
-          {audioBlob && (
-            <ReactAudioPlayer controls src={audioBlob} onEnded={() => handleAudioEnded(currentNodeProps, flow, setCurrentNode)}/>
-          )}
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muAns' && (
+          <PlayerMuAns currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+        )}
 
-        </div>
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'reactNode' && (
+          <PlayerReaction
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            onTimeUpdate={currentTime}
+          />
+        )}
 
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'timeNode' && (
+          <PlayerTime 
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            onTimeUpdate={currentTime}
+          />
+        )}
+
+          <div className="player">
+            {audioBlob && (
+              <audio
+                ref={audioRef}
+                controls
+                src={audioBlob}
+                onEnded={() => handleAudioEnded(currentNodeProps, flow, setCurrentNode)}
+              />
+            )}
+          </div>
       </div>
     </>
   );

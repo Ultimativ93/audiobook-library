@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import LayoutEditorLinks from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
+
 const DataUpload = (props) => {
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -11,8 +13,8 @@ const DataUpload = (props) => {
             'audio/mp3': ['.mp3'],
             'audio/aac': ['.aac'],
             'audio/wav': ['.wav'],
-            'audio/ogg' : ['.ogg'],
-          },
+            'audio/ogg': ['.ogg'],
+        },
         maxFiles: 50,
     });
 
@@ -70,20 +72,24 @@ const DataUpload = (props) => {
 
 
     return (
-        <section className="container">
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10px' }} {...getRootProps({ className: 'dropzone' })}>
-                <input {...getInputProps()} />
-                <p style={{ width: '50vw', height: '30vh', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid black', borderStyle: 'dashed', borderRadius: '15px', backgroundColor: 'lightgrey', color: 'grey' }}>Drag 'n' drop some files here, or click to select files</p>
-            </div>
-            <aside>
-                <h4>Files</h4>
-                <ul>{files}</ul>
-                <h4>Rejected files</h4>
-                <ul>{fileRejectionItems}</ul>
-            </aside>
-            <button style={{ backgroundColor: 'lightblue', border: '2px solid black', borderRadius: '10px', padding: 5, marginTop: 10, width: 100, }} onClick={handleUpload}>Upload</button>
-            {uploadSuccess && <p>Ur files have been successfully uploaded to the server!</p>}
-        </section>
+        <>
+            <LayoutEditorLinks />
+            <section className="container">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10px' }} {...getRootProps({ className: 'dropzone' })}>
+                    <input {...getInputProps()} />
+                    <p style={{ width: '50vw', height: '30vh', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid black', borderStyle: 'dashed', borderRadius: '15px', backgroundColor: 'lightgrey', color: 'grey' }}>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+                <aside>
+                    <h4>Files</h4>
+                    <ul>{files}</ul>
+                    <h4>Rejected files</h4>
+                    <ul>{fileRejectionItems}</ul>
+                </aside>
+                <button style={{ backgroundColor: 'lightblue', border: '2px solid black', borderRadius: '10px', padding: 5, marginTop: 10, width: 100, }} onClick={handleUpload}>Upload</button>
+                {uploadSuccess && <p>Ur files have been successfully uploaded to the server!</p>}
+            </section>
+        </>
+
     );
 }
 

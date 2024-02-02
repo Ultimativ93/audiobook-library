@@ -50,8 +50,8 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...commonAttributes,
                         label: 'Time Added',
                         answers: [
-                            { answer: "Answer 1", time: "Time 1" },
-                            { answer: "Answer 2", time: "Time 2" }
+                            { answer: "", time: "" },
+                            { answer: "", time: "" }
                         ],
                         id: String(asignId),
                     }
@@ -80,7 +80,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...commonAttributes,
                         label: 'Reaction Added',
                         answerPeriods: [
-                            { start: '00:00', end: '00:00' },
+                            { start: '00:00', end: '00:00', answer: '' },
                         ],
                         id: String(asignId),
                     }

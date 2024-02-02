@@ -13,11 +13,13 @@ const PlayerAnswers = ({ currentNodeProps, flow, setCurrentNode }) => {
         <>
             {currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
                 <div>
-                    <p>Frage: {currentNodeProps.question}</p>
-                    <p>Antworten:</p>
+                    <p>Question: {currentNodeProps.question}</p>
+                    <p>Answers:</p>
                     <ul>
                         {currentNodeProps.answers.map((answer, index) => (
-                            <Button colorScheme='blue' style={{margin: 10}} key={index} onClick={() => handleButtonClick(index)}>{answer}</Button>
+                            <Button colorScheme='blue' style={{ margin: 10 }} key={index} onClick={() => handleButtonClick(index)}>
+                                {answer}
+                            </Button>
                         ))}
                     </ul>
                 </div>

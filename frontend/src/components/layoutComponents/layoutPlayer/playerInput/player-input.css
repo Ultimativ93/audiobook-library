@@ -1,0 +1,9 @@
+.player-input-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.player-input-buttons Button {
+    margin: 10px;
+}

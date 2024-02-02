@@ -12,6 +12,11 @@ const ReactionNode = ({ data, isConnectable }) => {
     }, [data.answerPeriods, data.id, updateNodeInternals]);
 
     const nonEmptyAnswers = data.answerPeriods.filter(answer => answer !== '');
+    console.log("nonEmptyAnswers: ", nonEmptyAnswers);
+    const handleNoReaction = { start: '', end: '', answer: 'NoReaction' }
+
+    nonEmptyAnswers.push(handleNoReaction);
+    console.log("nonEmptyAnswers nach einfügen: ", nonEmptyAnswers);
 
     return (
         <div className="reaction-node" ref={nodeRef}>
@@ -27,6 +32,11 @@ const ReactionNode = ({ data, isConnectable }) => {
                     const totalWidth = 200;
                     const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
 
+                    const handleStyle = {
+                        left: `${leftPosition}px`,
+                        backgroundColor: index === nonEmptyAnswers.length - 1 ? 'red' : 'black',
+                    };
+
                     return (
                         <Handle
                             key={handleId}
@@ -34,14 +44,13 @@ const ReactionNode = ({ data, isConnectable }) => {
                             position={Position.Bottom}
                             id={handleId}
                             isConnectable={isConnectable}
-                            style={{ left: `${leftPosition}px` }}
+                            style={handleStyle}
                         />
                     );
                 })}
             </div>
-
         </div>
-    )
+    );
 }
 
 export default ReactionNode;

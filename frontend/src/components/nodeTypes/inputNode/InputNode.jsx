@@ -21,6 +21,13 @@ const InputNode = ({ data, isConnectable }) => {
           const handleId = `${data.id}-handle-${index}`;
           const leftPosition = (index / 2) * totalWidth;
 
+          let handleStyle = {};
+          if (index === 0) {
+            handleStyle = {backgroundColor: 'red'};
+          } else if (index === 1) {
+            handleStyle = {backgroundColor: 'green'};
+          }
+
           return (
             <Handle
               key={handleId}
@@ -28,7 +35,7 @@ const InputNode = ({ data, isConnectable }) => {
               position={Position.Bottom}
               id={handleId}
               isConnectable={isConnectable}
-              style={{ left: `${leftPosition}px` }}
+              style={{ left: `${leftPosition}px`, ...handleStyle }}
             />
           );
         })}

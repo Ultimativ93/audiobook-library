@@ -106,8 +106,6 @@ const Editor = () => {
         setIsDrawerOpen(true);
     };
 
-    console.log("Nodes im Editor:", nodes);
-
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />

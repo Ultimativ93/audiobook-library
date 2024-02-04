@@ -60,28 +60,39 @@ const getCurrentAudioLength = async (audioBlob) => {
         audioContext.close();
     }
 };
-
-const handleAudioEnded = (currentNodeProps, flow, setCurrentNode) => {
-    console.log("curNodProp", flow.nodes);
+/*
+const handleAudioEnded = async (currentNodeProps, flow, setCurrentNode) => {
     if (flow && flow.nodes) {
         const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
-        console.log("type in handleAudioEnded", flow.nodes[targetNodeIndex].type)
 
-        if (flow.nodes[targetNodeIndex].type && flow.nodes[targetNodeIndex].type === 'bridgeNode') {
-            handleButtonClickLogic(0, flow, currentNodeProps, setCurrentNode);
+        if (targetNodeIndex !== -1) {
+            const targetNodeType = flow.nodes[targetNodeIndex].type;
 
-        } else if (flow.nodes[targetNodeIndex].type && flow.nodes[targetNodeIndex].type === 'reactNode') {
-            const lastPeriodIndex = currentNodeProps.answerPeriods.length;
-            handleButtonClickLogic(lastPeriodIndex, flow, currentNodeProps, setCurrentNode);
+            if (targetNodeType === 'bridgeNode') {
+                handleButtonClickLogic(0, flow, currentNodeProps, setCurrentNode);
+            } else if (targetNodeType === 'reactNode') {
+                const lastPeriodIndex = currentNodeProps.answerPeriods.length;
+                handleButtonClickLogic(lastPeriodIndex, flow, currentNodeProps, setCurrentNode);
+            } else if (targetNodeType === 'timeNode') {
+                const lastAnswerIndex = currentNodeProps.answers.length - 1;
+                handleButtonClickLogic(lastAnswerIndex, flow, currentNodeProps, setCurrentNode);
+            }
+            
+            if (targetNodeType !== 'bridgeNode' && targetNodeType !== 'endNode') {
+                console.log("TargetType: ", targetNodeType);
+                // Wenn die Zielknotenart nicht 'timeNode' ist, spiele data.questionAudio ab
+                const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio);
+                const questionAudioBlob = await getAudioFromPath(questionAudioPath);
 
-        } else if (flow.nodes[targetNodeIndex].type && flow.nodes[targetNodeIndex].type === 'timeNode') {
-            const lastAnswerIndex = currentNodeProps.answers.length-1;
-            console.log("last answer index", lastAnswerIndex)
-            handleButtonClickLogic(lastAnswerIndex, flow, currentNodeProps, setCurrentNode);
+                if (questionAudioBlob) {
+                    const audioElement = new Audio(questionAudioBlob);
+                    audioElement.play();
+                }
+            }
         }
-
     }
-};
+}; */
+
 
 const handleButtonClickLogic = (index, flow, currentNodeProps, setCurrentNode) => {
     const outgoingEdges = flow.edges.filter((edge) => edge.source === currentNodeProps.id);
@@ -107,5 +118,5 @@ export {
     getAudioFromPath,
     getCurrentAudioLength,
     handleButtonClickLogic,
-    handleAudioEnded,
+    //handleAudioEnded,
 }; 

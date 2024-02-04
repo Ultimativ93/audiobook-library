@@ -1,10 +1,54 @@
-import React, { useState } from 'react';
-import { Button, Input, Flex, Spacer } from '@chakra-ui/react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
+
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 
 const SelectPeriod = ({ nodeData, setNodes }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
-  console.log("Periods in SP: ", periods)
+  const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
+  const timeoutRef = useRef(null);
+  const audioPaths = FetchAudio();
+
+  useEffect(() => {
+    if (!arraysEqual(answerAudios, nodeData.data.answerAudios || [])) {
+      setAnswerAudios(nodeData.data.answerAudios || []);
+    }
+  }, [nodeData.data.answers, nodeData.data.answerAudios]);
+
+  const arraysEqual = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  };
+
+  const handleInputChange = (index, value, type) => {
+    const newAnswerAudios = [...answerAudios];
+
+    if (newAnswerAudios[index] === undefined) {
+      newAnswerAudios[index] = '';
+    }
+
+    if (type === 'answerAudio') {
+      newAnswerAudios[index] = value;
+    }
+
+    setAnswerAudios(newAnswerAudios);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    if (value.trim() === '') {
+      handleInputBlur(index, type);
+    } else {
+      timeoutRef.current = setTimeout(() => {
+        updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
+      }, 500);
+    }
+  };
 
   const handleAddPeriod = () => {
     setPeriods([...periods, { start: '', end: '' }]);
@@ -24,7 +68,19 @@ const SelectPeriod = ({ nodeData, setNodes }) => {
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
   };
 
-  
+  const handleRemoveAnswer = (index) => {
+    const newAnswerAudios = [...answerAudios];
+    newAnswerAudios.splice(index, 1);
+    setAnswerAudios(newAnswerAudios);
+    updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
+  };
+
+  const handleInputBlur = (index, type) => {
+    const trimmedAnswer = answerAudios[index].trim();
+    if (trimmedAnswer === '') {
+      handleRemoveAnswer(index);
+    }
+  };
 
   return (
     <>
@@ -38,6 +94,21 @@ const SelectPeriod = ({ nodeData, setNodes }) => {
               onChange={(e) => handlePeriodChange(index, 'answer', e.target.value)}
               flex="5"
             />
+            <Spacer />
+            <Select
+              placeholder='Answer Audio ..'
+              value={answerAudios[index] || ''}
+              onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
+              onBlur={() => handleInputBlur(index, 'answerAudio')}
+              flex="7"
+            >
+              {audioPaths.map((audio, idx) => (
+                <option key={idx} value={audio.audioName}>
+                  {audio.audioName}
+                </option>
+              ))}
+            </Select>
+            <Spacer />
             <Input
               placeholder='00:00'
               value={period.start}

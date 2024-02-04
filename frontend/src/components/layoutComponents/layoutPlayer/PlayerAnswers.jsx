@@ -3,15 +3,14 @@ import { Button } from '@chakra-ui/react';
 
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
-const PlayerAnswers = ({ currentNodeProps, flow, setCurrentNode }) => {
-
+const PlayerAnswers = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
     const handleButtonClick = (index) => {
         handleButtonClickLogic(index, flow, currentNodeProps, setCurrentNode);
     };
 
     return (
         <>
-            {currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
+            {visible && currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
                 <div>
                     <p>Question: {currentNodeProps.question}</p>
                     <p>Answers:</p>

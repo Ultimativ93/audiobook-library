@@ -3,7 +3,7 @@ import { Button } from '@chakra-ui/react';
 
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
-const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode }) => {
+const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [clickedAnswers, setClickedAnswers] = useState([]);
 
@@ -39,7 +39,7 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode }) => {
       
     return (
         <>
-            {currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
+            {visible && currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
                 <div>
                     <p>Question: {currentNodeProps.question}</p>
                     <p>Answers: </p>

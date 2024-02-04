@@ -7,7 +7,7 @@ import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/edit
 import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorButtons';
 import LayoutEditorLinks from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
 
-import NodeTypesDataFormat from '../components/nodeTypes/nodeTypesDataFormat/NodeTypesDataFormat';
+import NodeTypesDataFormat from '../components/nodeTypes/NodeTypesDataFormat';
 import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
 import EndNode from '../components/nodeTypes/endNode/EndNode';
 import BridgeNode from '../components/nodeTypes/bridgeNode/BridgeNode';

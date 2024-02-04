@@ -45,6 +45,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
             - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.
                 - Interaktions Signal Logic implementieren                                                                                                                              O
                 - Repeat Question Logic implementieren                                                                                                                                  O
+                - Wenn derzeit die Wiedergabeleist zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                    O
+
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
@@ -77,7 +79,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 
             - TimeNode: Hier sollten wir auch noch die Länge der Zeit anzeigen lassen, damit der User das bis zum Ende auch setzen kann                                                 O
 
-
+04.02.2024  - LayoutEditorLinks: Das hat nichts im layoutEditor zu suchen, dass ist eine allgemeine Komponente. Umbennen und an der richtigen stelle platzieren                         O
 
 
 

@@ -5,7 +5,9 @@ import { ReactFlowProvider } from 'reactflow';
 import Editor from './views/Editor';
 import DataUpload from './views/DataUpload';
 import Player from './views/player/Player';
+import AudiobookSetup from './views/audioBookSetup/AudiobookSetup';
 import './App.css';
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
               <Route path="/" element={<Editor />} />
               <Route path="/data-upload" element={<DataUpload />} />
               <Route path="/player" element={<Player />} />
+              <Route path="/audiobook-setup" element={<AudiobookSetup />} />
             </Routes>
           </BrowserRouter>
 

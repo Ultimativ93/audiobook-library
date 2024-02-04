@@ -5,7 +5,7 @@ import { handleButtonClickLogic } from '../../../tasks/playerTasks/PlayerLogic';
 
 import '../playerTime/player-time.css';
 
-const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate }) => {
+const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visible }) => {
     const [currentTime, setCurrentTime] = useState(null);
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate }) =>
         <>
             {currentNodeProps.question}
             <div className='player-time'>
-                {renderAnswers()}
+                {visible && renderAnswers()}
             </div>
         </>
 

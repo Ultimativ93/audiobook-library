@@ -19,7 +19,7 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) 
             placement='right'
             onClose={onClose}
             finalFocusRef={btnRef}
-            size="md"
+            size="lg"
         >
             <DrawerOverlay />
             <DrawerContent>

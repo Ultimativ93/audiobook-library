@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import './player.css';
+
 import FetchFlow from '../../components/tasks/playerTasks/FetchFlow';
 import LayoutEditorLinks from '../../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
 import PlayerAnswers from '../../components/layoutComponents/layoutPlayer/PlayerAnswers';
@@ -10,7 +11,7 @@ import PlayerMuAns from '../../components/layoutComponents/layoutPlayer/PlayerMu
 import PlayerReaction from '../../components/layoutComponents/layoutPlayer/PlayerReaction';
 import PlayerTime from '../../components/layoutComponents/layoutPlayer/playerTime/PlayerTime';
 
-import { getAudioPathFromName, getAudioFromPath, handleAudioEnded } from '../../components/tasks/playerTasks/PlayerLogic';
+import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/playerTasks/PlayerLogic';
 
 const Player = () => {
   const [flow, setFlow] = useState(null);
@@ -18,25 +19,27 @@ const Player = () => {
   const [currentNode, setCurrentNode] = useState(1);
   const [currentNodeProps, setCurrentNodeProps] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
+  const [questionAudioPlayed, setQuestionAudioPlayed] = useState(false);
+  const [answersVisible, setAnswersVisible] = useState(false);
 
+  const [lastPlayedAudioSrc, setLastPlayedAudioSrc] = useState(null);
+  const [currentAudioSrc, setCurrentAudioSrc] = useState(null);
+  const [answerAudioIndex, setAnswerAudioIndex] = useState(0);
   const audioRef = useRef();
 
-  // useEffect that runs when the component renders first to fetch the flow
   useEffect(() => {
-    const flowKey = 'First-trys'; // Setting flowkey manually, but will change that later to flowKey id + user.id
+    const flowKey = 'First-trys';
     FetchFlow(flowKey).then((flowData) => {
       setFlow(flowData);
     });
   }, []);
 
-  // useEffect to update the audio path, audio blob, and current node props based on the current node
   useEffect(() => {
     const fetchData = async () => {
       if (flow != null && flow.nodes != null && flow.nodes.length > 1 && currentNode != null) {
         const path = await getAudioPathFromName(flow.nodes[currentNode].data.audioStory);
         const audioBlobResponse = await getAudioFromPath(path);
         setAudioBlob(audioBlobResponse);
-        console.log("currentNode", flow.nodes[currentNode].data.id);
         setCurrentNodeProps(flow.nodes[currentNode].data);
       }
     };
@@ -44,71 +47,153 @@ const Player = () => {
     fetchData();
   }, [currentNode, flow]);
 
-  if (currentNodeProps) {
-    //console.log("CurrentNode Player: ", flow.nodes[currentNode])
-  }
-
   useEffect(() => {
     const audioElement = audioRef.current;
-  
     if (audioElement) {
       const handleTimeUpdate = (e) => {
         const newTime = e.target.currentTime;
         setCurrentTime(newTime);
       };
-  
       audioElement.addEventListener('timeupdate', handleTimeUpdate);
-  
       return () => {
         audioElement.removeEventListener('timeupdate', handleTimeUpdate);
       };
     }
   }, [audioRef, currentNodeProps, flow]);
 
+  const handleSpecialCasesAnswers = (targetNodeType) => {
+    console.log("TargetNode in SCA:", targetNodeType)
+    if (targetNodeType === 'bridgeNode') {
+      handleButtonClickLogic(0, flow, currentNodeProps, setCurrentNode);
+    } else if (targetNodeType === 'reactNode') {
+      const lastPeriodIndex = currentNodeProps.answerPeriods.length;
+      handleButtonClickLogic(lastPeriodIndex, flow, currentNodeProps, setCurrentNode);
+    } else if (targetNodeType === 'timeNode' && questionAudioPlayed) {
+      const lastAnswerIndex = currentNodeProps.answers.length - 1;
+      handleButtonClickLogic(lastAnswerIndex, flow, currentNodeProps, setCurrentNode);
+    } else {
+      console.log("Error in handleSpecialCasesAnswers, no fitting case.")
+    }
+  }
 
+  const playQuestionAudio = async () => {
+    const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio);
+    const questionAudioBlob = await getAudioFromPath(questionAudioPath);
 
-  return (
-    <>
-      <LayoutEditorLinks />
-      <div className="player-wrapper">
+    if (questionAudioBlob && !questionAudioPlayed) {
+      audioRef.current.src = questionAudioBlob;
+      audioRef.current.play();
+      setQuestionAudioPlayed(true);
+      setAnswersVisible(true);
+      setLastPlayedAudioSrc(currentNodeProps.questionAudio);
+      console.log("Question Played", questionAudioPlayed);
+    }
+  }
 
-        {currentNodeProps && (
-          <div>
-            Label: {currentNodeProps.label}
-          </div>
-        )}
+  const playAnswerAudio = async () => {
+    if (currentNodeProps.answerAudios && (currentNodeProps.answerAudios.length > answerAudioIndex)) {
+      const answerAudioPath = await getAudioPathFromName(currentNodeProps.answerAudios[answerAudioIndex]);
+      const answerAudioBlob = await getAudioFromPath(answerAudioPath)
 
-        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muChoi' && (
-          <PlayerAnswers currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
-        )}
+      if (answerAudioBlob && questionAudioPlayed) {
+        audioRef.current.src = answerAudioBlob;
+        audioRef.current.play();
+        setAnswerAudioIndex(answerAudioIndex + 1);
+      }
+    }
+  }
 
-        <PlayerEnd currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
+  const handleAudioEnded = () => {
+    if (flow && flow.nodes) {
+      const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
+      console.log("TargetNodeIndex", targetNodeIndex)
+      const targetNodeType = flow.nodes[targetNodeIndex].type;
+      console.log("TargetNodeType", targetNodeType);
+      console.log("questionAudioPlay", questionAudioPlayed);
 
-        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'inputNode' && (
-          <PlayerInput currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
-        )}
+      if (targetNodeType === 'bridgeNode' || (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode'))) {
+        console.log("before return specialCases")
+        handleSpecialCasesAnswers(targetNodeType);
+      } else if (questionAudioPlayed) {
+        playAnswerAudio();
+      } else {
+        playQuestionAudio();
+      }
+    }
+  }
 
-        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muAns' && (
-          <PlayerMuAns currentNodeProps={currentNodeProps} flow={flow} setCurrentNode={setCurrentNode} />
-        )}
+    useEffect(() => {
+      setQuestionAudioPlayed(false);
+      setAnswersVisible(false);
+      setAnswerAudioIndex(0);
+    }, [currentNode]);
 
-        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'reactNode' && (
-          <PlayerReaction
+    if (currentNodeProps && currentAudioSrc) {
+      //console.log("CurrentAuidoSrc: ", currentAudioSrc);
+    }
+
+    return (
+      <>
+        <LayoutEditorLinks />
+        <div className="player-wrapper">
+          {currentNodeProps && (
+            <div>
+              Label: {currentNodeProps.label}
+            </div>
+          )}
+
+          {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muChoi' && (
+            <PlayerAnswers
+              currentNodeProps={currentNodeProps}
+              flow={flow}
+              setCurrentNode={setCurrentNode}
+              visible={answersVisible}
+            />
+          )}
+
+          <PlayerEnd
             currentNodeProps={currentNodeProps}
             flow={flow}
             setCurrentNode={setCurrentNode}
-            onTimeUpdate={currentTime}
           />
-        )}
 
-        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'timeNode' && (
-          <PlayerTime 
-            currentNodeProps={currentNodeProps}
-            flow={flow}
-            setCurrentNode={setCurrentNode}
-            onTimeUpdate={currentTime}
-          />
-        )}
+          {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'inputNode' && (
+            <PlayerInput
+              currentNodeProps={currentNodeProps}
+              flow={flow}
+              setCurrentNode={setCurrentNode}
+              visible={answersVisible}
+            />
+          )}
+
+          {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muAns' && (
+            <PlayerMuAns
+              currentNodeProps={currentNodeProps}
+              flow={flow}
+              setCurrentNode={setCurrentNode}
+              visible={answersVisible}
+            />
+          )}
+
+          {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'reactNode' && (
+            <PlayerReaction
+              currentNodeProps={currentNodeProps}
+              flow={flow}
+              setCurrentNode={setCurrentNode}
+              onTimeUpdate={currentTime}
+              questionAudioPlayed={questionAudioPlayed}
+            />
+          )}
+
+          {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'timeNode' && (
+            <PlayerTime
+              currentNodeProps={currentNodeProps}
+              flow={flow}
+              setCurrentNode={setCurrentNode}
+              onTimeUpdate={currentTime}
+              visible={answersVisible}
+            />
+          )}
 
           <div className="player">
             {audioBlob && (
@@ -120,9 +205,9 @@ const Player = () => {
               />
             )}
           </div>
-      </div>
-    </>
-  );
-};
+        </div>
+      </>
+    );
+  };
 
-export default Player;
+  export default Player;

@@ -1,18 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Input } from '@chakra-ui/react';
+import { Button, Input, Flex, Select, Spacer } from '@chakra-ui/react';
 
-import { updateNodeProperty, removeAnswer } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 
 const SelectAnswers = ({ nodeData, setNodes, setEdges, edges }) => {
-  const [answers, setAnswers] = useState(nodeData.data.answers);
+  const [answers, setAnswers] = useState(nodeData.data.answers || []);
+  const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
   const timeoutRef = useRef(null);
+  const audioPaths = FetchAudio();
 
   useEffect(() => {
-    // Hier wird überprüft, ob sich die Antworten in der nodeData geändert haben
-    if (!arraysEqual(answers, nodeData.data.answers)) {
-      setAnswers(nodeData.data.answers);
+    if (!arraysEqual(answers, nodeData.data.answers || [])) {
+      setAnswers(nodeData.data.answers || []);
     }
-  }, [nodeData.data.answers]);
+    if (!arraysEqual(answerAudios, nodeData.data.answerAudios || [])) {
+      setAnswerAudios(nodeData.data.answerAudios || []);
+    }
+  }, [nodeData.data.answers, nodeData.data.answerAudios]);
 
   const arraysEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
@@ -26,38 +31,60 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges }) => {
     const lastAnswer = answers[answers.length - 1];
     if (lastAnswer !== '') {
       setAnswers([...answers, '']);
+      setAnswerAudios([...answerAudios, '']);
     }
   };
 
-  const handleInputChange = (index, value) => {
+  const handleInputChange = (index, value, type) => {
     const newAnswers = [...answers];
+    const newAnswerAudios = [...answerAudios];
+
     if (newAnswers[index] === undefined) {
       newAnswers[index] = '';
     }
-    newAnswers[index] = value;
+    if (newAnswerAudios[index] === undefined) {
+      newAnswerAudios[index] = '';
+    }
+
+    if (type === 'answer') {
+      newAnswers[index] = value;
+    } else if (type === 'answerAudio') {
+      newAnswerAudios[index] = value;
+    }
+
     setAnswers(newAnswers);
+    setAnswerAudios(newAnswerAudios);
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    // Check if the content is empty, trigger blur immediately
     if (value.trim() === '') {
-      handleInputBlur(index);
+      handleInputBlur(index, type);
     } else {
-      // Set a new timeout to trigger update after 500 milliseconds
       timeoutRef.current = setTimeout(() => {
         updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
+        updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
       }, 500);
     }
   };
 
   const handleRemoveAnswer = (index) => {
-    removeAnswer(setNodes, setEdges, edges, nodeData, index, setAnswers);
+    const newAnswers = [...answers];
+    const newAnswerAudios = [...answerAudios];
+
+    newAnswers.splice(index, 1);
+    newAnswerAudios.splice(index, 1);
+
+    setAnswers(newAnswers);
+    setAnswerAudios(newAnswerAudios);
+
+    updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
+    updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
   };
 
-  const handleInputBlur = (index) => {
-    const trimmedAnswer = answers[index].trim();
+  const handleInputBlur = (index, type) => {
+    const trimmedAnswer = type === 'answer' ? answers[index].trim() : answerAudios[index].trim();
     if (trimmedAnswer === '') {
       handleRemoveAnswer(index);
     }
@@ -67,13 +94,29 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges }) => {
     <>
       <h4>Answers</h4>
       {answers.map((answer, index) => (
-        <div key={index}>
+        <Flex key={index} alignItems="center">
           <Input
             placeholder='Answer .. '
             value={answer}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            onBlur={() => handleInputBlur(index)}
+            onChange={(e) => handleInputChange(index, e.target.value, 'answer')}
+            onBlur={() => handleInputBlur(index, 'answer')}
+            flex="5"
           />
+          <Spacer />
+          <Select
+            placeholder='Answer Audio ..'
+            value={answerAudios[index] || ''}
+            onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
+            onBlur={() => handleInputBlur(index, 'answerAudio')}
+            flex="5"
+          >
+            {audioPaths.map((audio, idx) => (
+              <option key={idx} value={audio.audioName}>
+                {audio.audioName}
+              </option>
+            ))}
+          </Select>
+          <Spacer />
           <Button
             colorScheme='red'
             size='sm'
@@ -81,7 +124,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges }) => {
           >
             Remove Answer
           </Button>
-        </div>
+        </Flex>
       ))}
       <Button colorScheme='blue' size='sm' onClick={handleAddAnswer}>
         Add Answer

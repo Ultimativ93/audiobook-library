@@ -4,7 +4,7 @@ import { Button, Input } from '@chakra-ui/react';
 import '../playerInput/player-input.css'
 import { handleButtonClickLogic } from '../../../tasks/playerTasks/PlayerLogic';
 
-const PlayerInput = ({ currentNodeProps, flow, setCurrentNode }) => {
+const PlayerInput = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -16,24 +16,27 @@ const PlayerInput = ({ currentNodeProps, flow, setCurrentNode }) => {
             handleButtonClickLogic(0, flow, currentNodeProps, setCurrentNode);
         }
     }
-    
+
     const handleButtonNoAnswer = () => {
         handleButtonClickLogic(2, flow, currentNodeProps, setCurrentNode);
     }
 
     return (
         <>
-            <form onSubmit={(event) => handleSubmit(event)}>
-                <Input
-                    name="answer"
-                    placeholder='Type correct answer'
-                    style={{ width: '300px' }}
-                />
-                <div className="player-input-buttons">
-                    <Button type="submit" colorScheme='blue'>Submit Answer</Button>
-                    <Button colorScheme='red' onClick={handleButtonNoAnswer}>I dont know the answer</Button>
-                </div>
-            </form>
+            {visible && (
+                <form onSubmit={(event) => handleSubmit(event)}>
+                    <Input
+                        name="answer"
+                        placeholder='Type correct answer'
+                        style={{ width: '300px' }}
+                    />
+                    <div className="player-input-buttons">
+                        <Button type="submit" colorScheme='blue'>Submit Answer</Button>
+                        <Button colorScheme='red' onClick={handleButtonNoAnswer}>I dont know the answer</Button>
+                    </div>
+                </form>
+            )}
+
         </>
     )
 }

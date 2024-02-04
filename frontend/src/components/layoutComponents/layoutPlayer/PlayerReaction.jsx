@@ -3,7 +3,7 @@ import { Button } from '@chakra-ui/react';
 
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
-const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate }) => {
+const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, questionAudioPlayed }) => {
     const [currentTime, setCurrenTime] = useState(null);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate }
         handleButtonClickLogic(index, flow, currentNodeProps, setCurrentNode);
     };
 
-    if (currentTime !== null && currentTime !== undefined && currentTime !== 0 && validPeriod) {
+    if (questionAudioPlayed && currentTime !== null && currentTime !== undefined && currentTime !== 0 && validPeriod) {
         return (
             <>
                 {currentNodeProps.question}

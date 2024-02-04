@@ -1,0 +1,14 @@
+.audiobook-setup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.audiobook-setup-contents-buttons {
+    margin: 10px;
+}
+
+.audiobook-setup-contents-buttons Button {
+    margin: 10px;
+}

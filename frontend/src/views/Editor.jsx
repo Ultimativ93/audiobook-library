@@ -1,11 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import 'reactflow/dist/style.css';
 
-import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorDrawer';
-import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorButtons';
-import LayoutEditorLinks from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
+import 'reactflow/dist/style.css';
+import './editor/editor.css'
+
+import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
+import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/layoutEditorButtons/LayoutEditorButtons';
+import LayoutLinks from '../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
 
 import NodeTypesDataFormat from '../components/nodeTypes/NodeTypesDataFormat';
 import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
@@ -32,7 +35,7 @@ const nodeTypes = {
 
 // Array with initial nodes
 const initialNodes = [
-    { id: '1', data: { label: 'Start' }, position: { x: 100, y: 100 } },
+    { id: '1', data: { label: 'Start', isDeletable: false }, position: { x: 100, y: 100 }, style: {width: '120px', backgroundColor: '#9B9B9B', color: '#fff', fontSize: '16px', borderColor: '#ffbd03', borderRadius: '5px', padding: '8px'}},
 ];
 
 // Array with initial edges
@@ -45,6 +48,10 @@ const Editor = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [selectedNodeData, setSelectedNodeData] = useState(null);
     const { setViewport } = useReactFlow();
+
+    const location = useLocation();
+    const audiobookTitle = location.state?.audiobookTitle;
+    console.log("Das ist unser Name aus Details: ", audiobookTitle);
 
     // Function to handle node connections by updating the edges state
     const onConnect = useCallback((params) => {
@@ -59,7 +66,7 @@ const Editor = () => {
             try {
                 const response = await axios.post('http://localhost:3005/saveFlow', {
                     flow,
-                    flowKey: flowKey, // or whatever is the correct flowKey
+                    flowKey: audiobookTitle ,
                 });
 
                 if (response.status === 200) {
@@ -102,27 +109,46 @@ const Editor = () => {
 
     // Function to set the selected node and open the drawer with the selected node
     const onOpenDrawer = (node) => {
-        setSelectedNodeData(node);
-        setIsDrawerOpen(true);
+        if (!(node.id === '1')) {
+            setSelectedNodeData(node);
+            setIsDrawerOpen(true);
+        }
+        
     };
+
+    // Function to prevent deletion of the start node
+    const handleNodesChange = (changes) => {
+        const nextChanges = changes.reduce((acc, change) => {
+          if (change.type === 'remove') {
+            const removedNode = nodes.find((node) => node.id === change.id);
+            if (removedNode && removedNode.data && removedNode.data.isDeletable === false) {
+              return acc;
+            }
+          }
+          return [...acc, change];
+        }, []);
+      
+        onNodesChange(nextChanges);
+      };
 
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
             <LayoutEditorButtons onSave={onSave} onRestore={onRestore} onAdd={onAdd} />
-            <LayoutEditorLinks />
+            <LayoutLinks />
 
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={onNodesChange}
+                onNodesChange={handleNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 onInit={setRfInstance}
                 nodeTypes={nodeTypes}
                 onNodeClick={(event, node) => { onOpenDrawer(node) }}
+                className='editor-flow'
             >
-                 
+
                 <Background />
             </ReactFlow>
         </>

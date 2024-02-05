@@ -1,7 +1,7 @@
 import React from 'react'
 import { Panel } from 'reactflow';
 
-import LayoutDrawer from '../../layoutDrawer/LayoutDrawer';
+import LayoutDrawer from '../layoutDrawer/LayoutDrawer';
 
 const LayoutEditorDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) => {
     return (

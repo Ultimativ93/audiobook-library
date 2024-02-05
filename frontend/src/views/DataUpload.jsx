@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import LayoutEditorLinks from '../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
+import LayoutLinks from '../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
 
 const DataUpload = (props) => {
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
@@ -74,7 +74,7 @@ const DataUpload = (props) => {
 
     return (
         <>
-            <LayoutEditorLinks />
+            <LayoutLinks />
             <section className="container">
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10px' }} {...getRootProps({ className: 'dropzone' })}>
                     <input {...getInputProps()} />

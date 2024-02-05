@@ -1,0 +1,10 @@
+.react-flow__handle {
+    width: 10px;
+    height: 10px;
+    background-color: #ffbd03;
+  }
+
+  .react-flow__handle:hover {
+    width: 12px;
+    height: 12px;
+  }

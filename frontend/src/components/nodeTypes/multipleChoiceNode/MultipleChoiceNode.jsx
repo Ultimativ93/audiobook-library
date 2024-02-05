@@ -17,14 +17,14 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
     <div className="multiple-choice-node" ref={nodeRef}>
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
-      <div>
-        <label htmlFor="text">{data.label}</label>
+      <div >
+        <label htmlFor="text" className="node-label">{data.label}</label>
       </div>
 
       <div className="multiple-choice-node-source-handles">
         {nonEmptyAnswers.map((answer, index) => {
           const handleId = `${data.id}-handle-${index}`;
-          const totalWidth = 200;
+          const totalWidth = 175;
           const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
 
           return (

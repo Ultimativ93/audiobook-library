@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './player.css';
 
 import FetchFlow from '../../components/tasks/playerTasks/FetchFlow';
-import LayoutEditorLinks from '../../components/layoutComponents/layoutEditor/editorComponents/LayoutEditorLinks';
+import LayoutLinks from '../../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
 import PlayerAnswers from '../../components/layoutComponents/layoutPlayer/PlayerAnswers';
 import PlayerEnd from '../../components/layoutComponents/layoutPlayer/playerEnd/PlayerEnd';
 import PlayerInput from '../../components/layoutComponents/layoutPlayer/playerInput/PlayerInput';
@@ -134,7 +134,7 @@ const Player = () => {
 
     return (
       <>
-        <LayoutEditorLinks />
+        <LayoutLinks />
         <div className="player-wrapper">
           {currentNodeProps && (
             <div>

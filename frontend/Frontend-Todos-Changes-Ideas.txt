@@ -81,6 +81,6 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 
 04.02.2024  - LayoutEditorLinks: Das hat nichts im layoutEditor zu suchen, dass ist eine allgemeine Komponente. Umbennen und an der richtigen stelle platzieren                         O
 
-
+05.02.2024  - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                              O
 
 

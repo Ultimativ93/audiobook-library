@@ -139,7 +139,7 @@ router.get('/getAudio', async (ctx) => {
         ctx.response.status = 200;
         ctx.response.type = 'audio/ogg';
         ctx.response.length = stat.size;
-        ctx.body = fs.createReadStream(audioPath);  // Use audioPath instead of filePath
+        ctx.body = fs.createReadStream(audioPath);
 
     } catch (error) {
         console.error(`Error getting audio with path ${audioPath} from the server`, error);
@@ -148,7 +148,20 @@ router.get('/getAudio', async (ctx) => {
     }
 });
 
-
+router.post('/saveAudiobookDetails', async (ctx) => {
+    const { audiobookDetails } = ctx.request.body;
+    console.log("im post", audiobookDetails);
+    const audiobookTitle = audiobookDetails.title;
+    try {
+        const savedDetailsId = await db.addDetails(audiobookDetails, audiobookTitle);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Audiobook details saved successfully', savedDetailsId };
+    } catch (error) {
+        console.error('Error saving audiobook details on server: ', error);
+        ctx.status = 500;
+        ctx.body = { success: false, message: 'Internal Server Error' };
+    }
+});
 
 router.get('/', async (ctx) => {
     ctx.body = 'Hallo Welt von Koa';

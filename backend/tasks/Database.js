@@ -22,7 +22,7 @@ class Database {
             // Creating table audioPaths
             this.db.run('CREATE TABLE IF NOT EXISTS audioFiles (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) => {
                 if (err) {
-                    console.log('Error while creating table: ', err);
+                    console.log('Error while creating table audioFiles: ', err);
                 } else {
                     console.log('Created table "audioFiles" or it already excists');
                 }
@@ -31,9 +31,18 @@ class Database {
             // Creating table flows
             this.db.run('CREATE TABLE IF NOT EXISTS flows (id INTEGER PRIMARY KEY, flowData TEXT, flowKey TEXT)', (err) => {
                 if (err) {
-                    console.log('Error while creating table: ', err);
+                    console.log('Error while creating table flows: ', err);
                 } else {
                     console.log('Created table "flows" or it already exists');
+                }
+            })
+
+            // Creating table details
+            this.db.run('CREATE TABLE IF NOT EXISTS details (id INTEGER PRIMARY KEY, detailData TEXT, audiobookTitle TEXT)', (err) => {
+                if (err) {
+                    console.log('Error while creating table details: ', err);
+                } else {
+                    console.log('Created table "details" or it already exists')
                 }
             })
         });
@@ -51,6 +60,23 @@ class Database {
                 } else {
                     console.log('File path successfully added to the database:', filePath);
                     console.log('Audio name successfully added to the database:', audioName);
+                    resolve(this.lastID);
+                }
+            });
+        });
+    }
+
+    // Adding audiobook details into details
+    addDetails(audiobookDetails, audiobookTitle) {
+        console.log('Adding audiobook details to database', audiobookDetails);
+        console.log('Adding audiobook title to database', audiobookDetails);
+
+        return new Promise((resolve, reject) => {
+            this.db.run('INSERT INTO details (detailData, audiobookTitle) VALUES (?, ?)', [JSON.stringify(audiobookDetails), audiobookTitle], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    console.log('Audiobook Details successfully added to the database:', audiobookDetails);
                     resolve(this.lastID);
                 }
             });
@@ -84,6 +110,7 @@ class Database {
         });
     }
 
+    // Get single audioPath from audioPaths
     getFilePath(audioName) {
         return new Promise((resolve, reject) => {
             this.db.get('SELECT audioPath FROM audioPaths WHERE audioName = ?', [audioName], (err, row) => {

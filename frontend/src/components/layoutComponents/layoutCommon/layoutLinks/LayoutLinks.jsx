@@ -5,26 +5,29 @@ import { Button } from '@chakra-ui/react';
 
 import '../layoutLinks/layout-links.css';
 
-const LayoutLinks = () => {
+const LayoutLinks = ({ audiobookTitle }) => {
   return (
     <Panel className='layout-links' position='top-right'>
 
       <Button colorScheme='orange' size='sm'>
-        <Link to="/data-upload" style={{ margin: 5 }}>Upload Audio</Link>
+        <Link to={`/data-upload/${audiobookTitle}`}>Upload Audio</Link>
       </Button>
 
       <Button colorScheme='orange' size='sm'>
-        <Link to="/player" style={{ margin: 5 }}>Player</Link>
+        <Link to="/player">Player</Link>
       </Button>
 
       <Button colorScheme='orange' size='sm'>
-        <Link to="/" style={{ margin: 5 }}>Editor</Link>
+        <Link to="/">Editor</Link>
       </Button>
 
       <Button colorScheme='orange' size='sm'>
-        <Link to="/audiobook-setup" style={{ margin: 5 }}>Setup</Link>
+        <Link to="/audiobook-setup">Setup</Link>
       </Button>
 
+      <Button colorScheme='orange' size='sm'>
+        <Link to="/user-projects">Projects</Link>
+      </Button>
     </Panel>
   );
 };

@@ -1,23 +1,23 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import 'reactflow/dist/style.css';
-import './editor/editor.css'
+import '../editor/editor.css'
 
-import LayoutEditorDrawer from '../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
-import LayoutEditorButtons from '../components/layoutComponents/layoutEditor/layoutEditorButtons/LayoutEditorButtons';
-import LayoutLinks from '../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
+import LayoutEditorDrawer from '../../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
+import LayoutEditorButtons from '../../components/layoutComponents/layoutEditor/layoutEditorButtons/LayoutEditorButtons';
+import LayoutLinks from '../../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
 
-import NodeTypesDataFormat from '../components/nodeTypes/NodeTypesDataFormat';
-import MultipleChoiceNode from '../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
-import EndNode from '../components/nodeTypes/endNode/EndNode';
-import BridgeNode from '../components/nodeTypes/bridgeNode/BridgeNode';
-import TimeNode from '../components/nodeTypes/timeNode/TimeNode';
-import MultipleAnswerNode from '../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
-import ReactionNode from '../components/nodeTypes/reactionNode/ReactionNode';
-import InputNode from '../components/nodeTypes/inputNode/InputNode';
+import NodeTypesDataFormat from '../../components/nodeTypes/NodeTypesDataFormat';
+import MultipleChoiceNode from '../../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
+import EndNode from '../../components/nodeTypes/endNode/EndNode';
+import BridgeNode from '../../components/nodeTypes/bridgeNode/BridgeNode';
+import TimeNode from '../../components/nodeTypes/timeNode/TimeNode';
+import MultipleAnswerNode from '../../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
+import ReactionNode from '../../components/nodeTypes/reactionNode/ReactionNode';
+import InputNode from '../../components/nodeTypes/inputNode/InputNode';
 
 // We will change this later to user id + label of audiobook
 const flowKey = 'First-trys';
@@ -35,7 +35,7 @@ const nodeTypes = {
 
 // Array with initial nodes
 const initialNodes = [
-    { id: '1', data: { label: 'Start', isDeletable: false }, position: { x: 100, y: 100 }, style: {width: '120px', backgroundColor: '#9B9B9B', color: '#fff', fontSize: '16px', borderColor: '#ffbd03', borderRadius: '5px', padding: '8px'}},
+    { id: '1', data: { label: 'Start', isDeletable: false }, position: { x: 100, y: 100 }, style: { width: '120px', backgroundColor: '#9B9B9B', color: '#fff', fontSize: '16px', borderColor: '#ffbd03', borderRadius: '5px', padding: '8px' } },
 ];
 
 // Array with initial edges
@@ -52,6 +52,7 @@ const Editor = () => {
     const location = useLocation();
     const audiobookTitle = location.state?.audiobookTitle;
     console.log("Das ist unser Name aus Details: ", audiobookTitle);
+    const newAudiobook = location.state?.new;
 
     // Function to handle node connections by updating the edges state
     const onConnect = useCallback((params) => {
@@ -66,7 +67,7 @@ const Editor = () => {
             try {
                 const response = await axios.post('http://localhost:3005/saveFlow', {
                     flow,
-                    flowKey: audiobookTitle ,
+                    flowKey: audiobookTitle,
                 });
 
                 if (response.status === 200) {
@@ -82,8 +83,9 @@ const Editor = () => {
     }, [rfInstance, flowKey]);
 
     const onRestore = useCallback(async () => {
+        console.log("flowkey in restore: ", audiobookTitle)
         try {
-            const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${flowKey}`);
+            const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${audiobookTitle}`);
 
             if (response.status === 200) {
                 const flow = response.data;
@@ -113,29 +115,39 @@ const Editor = () => {
             setSelectedNodeData(node);
             setIsDrawerOpen(true);
         }
-        
+
     };
 
     // Function to prevent deletion of the start node
     const handleNodesChange = (changes) => {
         const nextChanges = changes.reduce((acc, change) => {
-          if (change.type === 'remove') {
-            const removedNode = nodes.find((node) => node.id === change.id);
-            if (removedNode && removedNode.data && removedNode.data.isDeletable === false) {
-              return acc;
+            if (change.type === 'remove') {
+                const removedNode = nodes.find((node) => node.id === change.id);
+                if (removedNode && removedNode.data && removedNode.data.isDeletable === false) {
+                    return acc;
+                }
             }
-          }
-          return [...acc, change];
+            return [...acc, change];
         }, []);
-      
+
         onNodesChange(nextChanges);
-      };
+    };
+
+
+    // If audiobookTitle ist set, restore flow from database.
+    useEffect(() => {
+        console.log("newAudiobook: ", newAudiobook)
+        if (audiobookTitle && newAudiobook !== true) {
+            onRestore();
+        }
+    }, [audiobookTitle, onRestore, newAudiobook]);
 
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
             <LayoutEditorButtons onSave={onSave} onRestore={onRestore} onAdd={onAdd} />
-            <LayoutLinks />
+            {console.log("AUdiobookTitle in Editor: ", audiobookTitle)}
+            <LayoutLinks audiobookTitle={audiobookTitle}/>
 
             <ReactFlow
                 nodes={nodes}

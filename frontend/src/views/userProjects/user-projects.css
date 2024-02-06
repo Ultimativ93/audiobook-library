@@ -1,0 +1,29 @@
+.user-projects {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user-projects-card {
+    width: 250px;
+    margin-right: 20px;
+}
+
+.user-projects-card-image {
+    width: 90%;
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.user-projects-card .chakra-card__body {
+    padding: 10px;
+}
+
+.user-projects-card .chakra-card__footer {
+    padding-bottom: 10px;
+    padding-top: 0;
+}
+
+.user-projects-card .chakra-card__footer {
+    display: block;
+}

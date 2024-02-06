@@ -49,18 +49,80 @@ class Database {
     }
 
     // Adding an audioPath and audioName into audioPaths in the database
-    addFilePath(filePath, audioName) {
+    addFilePath(filePath, audioName, audiobookTitle) {
         console.log('Adding file path to database:', filePath);
         console.log('Adding audio name to database:', audioName);
 
         return new Promise((resolve, reject) => {
-            this.db.run('INSERT INTO audioPaths (audioPath, audioName) VALUES (?, ?)', [filePath, audioName], function (err) {
+            this.db.run('INSERT INTO audioPaths (audioPath, audioName, audiobookTitle) VALUES (?, ?, ?)', [filePath, audioName, audiobookTitle], function (err) {
                 if (err) {
                     reject(err.message);
                 } else {
                     console.log('File path successfully added to the database:', filePath);
                     console.log('Audio name successfully added to the database:', audioName);
                     resolve(this.lastID);
+                }
+            });
+        });
+    }
+
+    // Deleting an audioPath and audioName from audioPaths in the database
+    deletePath(audiobookTitle) {
+        console.log('Deleting audioPaths with audiobookTitle:', audiobookTitle);
+
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    console.log(`Deleted all audioPaths with audiobookTitle '${audiobookTitle}' from the database.`);
+                    resolve();
+                }
+            });
+        });
+    }
+
+    // Deleting a flow from flows in the database
+    deleteFlow(audiobookTitle) {
+        console.log('Deleting flow with audiobookTitle:', audiobookTitle);
+
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM flows WHERE flowKey = ?', [audiobookTitle], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    console.log(`Deleted flow with flowKey '${audiobookTitle}' from the database.`);
+                    resolve();
+                }
+            });
+        });
+    }
+
+    // Deletes a detail with the name of audiobookTitle from the databse
+    deleteDetail(audiobookTitle) {
+        console.log('Deleting detail with audiobookTitle:', audiobookTitle);
+    
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM details WHERE audiobookTitle = ?', [audiobookTitle], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    console.log(`Deleted detail with audiobookTitle '${audiobookTitle}' from the database.`);
+                    resolve();
+                }
+            });
+        });
+    }
+
+    // Get File Path by Title from the audiobook
+    getFilePathsByTitle(audiobookTitle) {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT audioPath FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    const filePaths = rows.map(row => row.audioPath);
+                    resolve(filePaths);
                 }
             });
         });
@@ -127,14 +189,14 @@ class Database {
     // Saving flow in the table flows
     saveFlow(flow, flowKey) {
         console.log('Saving flow to database:', flow);
-    
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT id FROM flows WHERE flowKey = ?', [flowKey], (err, row) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-    
+
                 if (row) {
                     this.db.run('UPDATE flows SET flowData = ? WHERE flowKey = ?', [JSON.stringify(flow), flowKey], (updateErr) => {
                         if (updateErr) {
@@ -167,6 +229,19 @@ class Database {
                 } else {
                     const flow = row ? JSON.parse(row.flowData) : null;
                     resolve(flow);
+                }
+            });
+        });
+    }
+
+    // Get all details from details
+    getAllDetails() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT id, detailData, audiobookTitle FROM details', [], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
                 }
             });
         });

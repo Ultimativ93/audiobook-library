@@ -2,11 +2,13 @@ import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-rou
 import { ChakraProvider } from '@chakra-ui/react';
 import { ReactFlowProvider } from 'reactflow';
 
-import Editor from './views/Editor';
+import './App.css';
+
+import Editor from './views/editor/Editor'
 import DataUpload from './views/DataUpload';
 import Player from './views/player/Player';
 import AudiobookSetup from './views/audioBookSetup/AudiobookSetup';
-import './App.css';
+import UserProjects from './views/userProjects/UserProjects';
 
 
 function App() {
@@ -17,9 +19,10 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Editor />} />
-              <Route path="/data-upload" element={<DataUpload />} />
+              <Route path="/data-upload/:audiobookTitle" element={<DataUpload />} />
               <Route path="/player" element={<Player />} />
               <Route path="/audiobook-setup" element={<AudiobookSetup />} />
+              <Route path="/user-projects" element={<UserProjects />} />
             </Routes>
           </BrowserRouter>
 

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import '../audioBookSetup/audiobook-setup.css';
 
-import LayoutLinks from '../../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
 import { handleInputChange, handleCheckBoxChange, handleInputChangeSecondLevel, handleAddContributor, handleRemoveContributor, handleCheckSetup } from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 import { handleUploadDetails } from '../../components/tasks/setupTasks/UploadDetails';
 
@@ -39,8 +38,6 @@ const AudioBookSetup = () => {
 
     return (
         <>
-            <LayoutLinks />
-
             <div className="audiobook-setup">
                 {!newAudiobook && (
                     <Button colorScheme='blue' onClick={() => handleCreateAudioBook()}>Create New Audiobook</Button>
@@ -164,7 +161,7 @@ const AudioBookSetup = () => {
                                     console.log("Alles richtig")
                                     const detailsSaved = handleUploadDetails(isAudiobook);
                                     if (detailsSaved) {
-                                        navigate('/', { state: { audiobookTitle: isAudiobook.title } });
+                                        navigate('/', { state: { audiobookTitle: isAudiobook.title, new: true } });
                                     } else {
                                         alert("Something went wrong. Try again please or contact support!")
                                     }
@@ -172,7 +169,12 @@ const AudioBookSetup = () => {
                             }}>
                                 Start Editing
                             </Button>
-                            <Button colorScheme='red'>Cancel</Button>
+                            <Button
+                                colorScheme='red'
+                                onClick={() => setNewAudiobook()}
+                            >
+                                Cancel
+                            </Button>
                         </div>
                     </div>
                 )}

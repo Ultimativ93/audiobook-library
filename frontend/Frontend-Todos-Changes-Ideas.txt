@@ -83,4 +83,14 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 
 05.02.2024  - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                              O
 
+06.02.2024  - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.       O
+
+            - UserProjects: Get All User Projects (all flows), set some details (title), set Edit Button and delete, status (editing, pending, etc),                                    O
+                sort for name, length, show how many nodes,                                                                                                                             O
+                how many errors (missing files or not connected nodes), we need a standard thumbnail, that gets set aslong as the thumbnail havent been set.                            O
+                - Noch eine extra Bestätigung, um das Projekt zu löschen.                                                                                                               O
+
+
+
+
 

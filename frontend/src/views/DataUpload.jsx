@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useParams } from 'react-router-dom';
 
 import LayoutLinks from '../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
 
-const DataUpload = (props) => {
+const DataUpload = () => {
+    const { audiobookTitle } = useParams();
+    console.log("audiobookTitle", audiobookTitle);
+
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
         accept: {
             'image/png': ['.png'],
@@ -44,20 +48,19 @@ const DataUpload = (props) => {
             acceptedFiles.forEach((file) => {
                 formData.append('files', file);
             });
-
-            //console.log('FormData:', Array.from(formData.entries()));
-
+            formData.append('audiobookTitle', audiobookTitle);
+    
             const response = await fetch('http://localhost:3005/upload', {
                 method: 'POST',
                 body: formData,
             });
-
+    
             console.log('Response:', response);
-
+    
             const responseData = await response.json();
             console.log('Response Data:', responseData);
             console.log('Response.ok: ', response.ok);
-
+    
             if (response.ok) {
                 console.log('Nice! Files uploaded successfully:', responseData.message);
                 setUploadSuccess(true);

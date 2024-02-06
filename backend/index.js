@@ -29,9 +29,10 @@ app.use(koaBody({
 router.post('/upload', async (ctx) => {
     console.log('Upload route hit');
     console.log('Uploaded files:', ctx.request.files);
+    console.log('Audiobook Name in Backend: ', ctx.request.body.audiobookTitle)
 
     const files = ctx.request.files && (Array.isArray(ctx.request.files.files) ? ctx.request.files.files : [ctx.request.files.files]);
-
+    const audiobookTitle = ctx.request.body.audiobookTitle;
     if (files && files.length > 0) {
         try {
             const databaseResponses = [];
@@ -42,7 +43,7 @@ router.post('/upload', async (ctx) => {
 
                 const fileName = file.originalFilename;
 
-                const databaseResponse = await db.addFilePath(file.filepath, fileName);
+                const databaseResponse = await db.addFilePath(file.filepath, fileName, audiobookTitle);
                 databaseResponses.push(databaseResponse);
             }
 
@@ -72,7 +73,91 @@ router.post('/saveFlow', async(ctx) => {
     } catch (error) {
         console.error('Error saving flow on server: ', error);
         ctx.status = 500;
-        ctx.body = {success: false, message: 'Internal Server Error'};
+        ctx.body = {success: false, message: 'Internal Server Error while saving Flow'};
+    }
+});
+
+router.post('/deletePaths', async(ctx) => {
+    const audiobookTitle = ctx.request.body;
+    console.log("Audiobook Title to delete audioPaths:", audiobookTitle);
+    try {
+        const deletedPaths = await db.deletePath(audiobookTitle);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'AudiPaths deleted successfully', deletedPaths}
+    } catch (error) {
+        console.error('Error deleting audioPaths');
+        ctx.status = 500;
+        ctx.body = {success: false, message: 'Internal Server Error while deleting Path'}
+    }
+});
+
+router.post('/deleteFiles', async(ctx) => {
+    console.log("ctx Request body #########################", ctx.request.body)
+    const audiobookTitle = ctx.request.body;
+    console.log("Audiobook Title to delete files:", audiobookTitle);
+    try {
+        const filePaths = await db.getFilePathsByTitle(audiobookTitle);
+        
+        // Delete all Filepaths from the server
+        for (const filePath of filePaths) {
+            const fileName = path.basename(filePath); // Extract just the filename from the filePath
+            const fullPath = path.join(__dirname, 'uploads', fileName); // Construct the full path to the file
+            fs.unlinkSync(fullPath); // Delete the file
+            console.log(`Deleted file: ${fullPath}`);
+        }
+
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Files deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting files:', error);
+        ctx.status = 500;
+        ctx.body = { success: false, message: 'Internal Server Error while deleting files' };
+    }
+});
+
+
+
+
+router.post('/deleteFlow', async(ctx) => {
+    const audiobookTitle = ctx.request.body;
+    console.log("Audiobook Title to delete flow:", audiobookTitle);
+    try {
+        const deletedFlow = await db.deleteFlow(audiobookTitle);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Flow deleted successfully', deletedFlow}
+    } catch (error) {
+        console.error('Error deleting flow:', error);
+        ctx.status = 500;
+        ctx.body = {success: false, message: 'Internal Server Error while deleting Flow'}
+    }
+});
+
+router.post('/deleteDetail', async(ctx) => {
+    const audiobookTitle = ctx.request.body;
+    console.log("Audiobook Title to delete detail:", audiobookTitle);
+    try {
+        const deletedDetail = await db.deleteDetail(audiobookTitle);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Detail deleted successfully', deletedDetail}
+    } catch (error) {
+        console.error('Error deleting detail:', error);
+        ctx.status = 500;
+        ctx.body = {success: false, message: 'Internal Server Error while deleting Detail'}
+    }
+});
+
+
+router.post('/deleteDetail', async(ctx) => {
+    const audiobookTitle = ctx.request.body.audiobookTitle;
+    console.log("Audiobook Title to delete detail:", audiobookTitle);
+    try {
+        const deletedDetail = await db.deleteDetail(audiobookTitle);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Detail deleted successfully', deletedDetail}
+    } catch (error) {
+        console.error('Error deleting detail:', error);
+        ctx.status = 500;
+        ctx.body = {success: false, message: 'Internal Server Error while deleting Detail'}
     }
 });
 
@@ -84,7 +169,7 @@ router.get('/audioPaths', async (ctx) => {
     } catch (error) {
         console.error('Error getting audio paths:', error);
         ctx.status = 500;
-        ctx.body = 'Internal Server Error';
+        ctx.body = 'Internal Server Error, paths';
     }
 });
 
@@ -105,9 +190,27 @@ router.get('/getFlow', async (ctx) => {
     } catch (error) {
         console.error('Error getting flow from the database:', error);
         ctx.status = 500;
-        ctx.body = 'Internal Server Error';
+        ctx.body = 'Internal Server Error, flow';
     }
 });
+
+router.get('/getAllDetails', async (ctx) => {
+    try {
+        const details = await db.getAllDetails();
+        if (details) {
+            ctx.status = 200;
+            ctx.body = details;
+        } else {
+            console.warn('No details found in the database');
+            ctx.status = 404;
+            ctx.body = 'No details found in the database';
+        }
+    } catch (error) {
+        console.error('Error getting all details from the database:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error, all details'
+    }
+})
 
 router.get('/getAudioName', async (ctx) => {
     const { audioName } = ctx.request.query;

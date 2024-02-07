@@ -20,7 +20,7 @@ class Database {
     initialize() {
         this.db.serialize(() => {
             // Creating table audioPaths
-            this.db.run('CREATE TABLE IF NOT EXISTS audioFiles (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT)', (err) => {
+            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT, audiobookTitle TEXT)', (err) => {
                 if (err) {
                     console.log('Error while creating table audioFiles: ', err);
                 } else {
@@ -242,6 +242,21 @@ class Database {
                     reject(err.message);
                 } else {
                     resolve(rows);
+                }
+            });
+        });
+    }
+
+    // Get details by title from details
+    getDetailsByTitle(audiobookTitle) {
+        console.log("AudiobookTitle in getDetailsByTitle", audiobookTitle)
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT detailData FROM details WHERE audiobookTitle = ?', [audiobookTitle], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    const details = row ? JSON.parse(row.detailData) : null;
+                    resolve(details);
                 }
             });
         });

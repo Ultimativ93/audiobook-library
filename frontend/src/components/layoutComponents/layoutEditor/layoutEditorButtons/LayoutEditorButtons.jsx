@@ -3,10 +3,12 @@ import { Panel } from 'reactflow';
 import { Button } from '@chakra-ui/react';
 
 import '../layoutEditorButtons/layout-editor-buttons.css';
+import LayoutMenu from '../../layoutCommon/layoutMenu/LayoutMenu';
 
-const LayoutEditorButtons = ({ onSave, onRestore, onAdd }) => {
+const LayoutEditorButtons = ({ onSave, onRestore, onAdd, audiobookTitle }) => {
     return (
         <Panel className="layout-editor-buttons" position="top-left">
+            <LayoutMenu audiobookTitle={audiobookTitle}/>
             <Button size='sm' colorScheme='green' onClick={onSave}>Save</Button>
             <Button size='sm' colorScheme='green' onClick={onRestore}>Restore</Button>
             <Button size='sm' colorScheme='linkedin' onClick={() => onAdd('muChoi')}>MuChoi</Button>

@@ -3,5 +3,32 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 50px;
+    background-color: #151228;
+    width: 100%;
+    height: 100%;
 }
+
+.player-wrapper-label {
+    width: 25vw;
+    height: auto;
+    padding: 10px;
+    color: #27B6C6;
+    background-color: white;
+    border-radius: 10px;
+    border-color: #27B6C6;
+    margin: 10px;
+}
+
+.player {
+    width: 100%;
+    position: absolute;
+    bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player audio::-webkit-media-controls-timeline {
+    pointer-events: none;
+}
+

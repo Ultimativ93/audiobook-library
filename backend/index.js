@@ -161,6 +161,21 @@ router.post('/deleteDetail', async(ctx) => {
     }
 });
 
+router.post('/saveAudiobookDetails', async (ctx) => {
+    const { audiobookDetails } = ctx.request.body;
+    console.log("im post", audiobookDetails);
+    const audiobookTitle = audiobookDetails.title;
+    try {
+        const savedDetailsId = await db.addDetails(audiobookDetails, audiobookTitle);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Audiobook details saved successfully', savedDetailsId };
+    } catch (error) {
+        console.error('Error saving audiobook details on server: ', error);
+        ctx.status = 500;
+        ctx.body = { success: false, message: 'Internal Server Error' };
+    }
+});
+
 router.get('/audioPaths', async (ctx) => {
     try {
         const allFilePaths = await db.getAllFilePaths();
@@ -251,18 +266,24 @@ router.get('/getAudio', async (ctx) => {
     }
 });
 
-router.post('/saveAudiobookDetails', async (ctx) => {
-    const { audiobookDetails } = ctx.request.body;
-    console.log("im post", audiobookDetails);
-    const audiobookTitle = audiobookDetails.title;
+router.get('/getAudiobookDetails', async (ctx) => {
+    const audiobookTitle = ctx.request.query.audiobookTitle; // Extrahieren Sie den Titel aus den Query-Parametern
+    console.log("Audiobook Title:", audiobookTitle);
     try {
-        const savedDetailsId = await db.addDetails(audiobookDetails, audiobookTitle);
-        ctx.status = 200;
-        ctx.body = { success: true, message: 'Audiobook details saved successfully', savedDetailsId };
+        const details = await db.getDetailsByTitle(audiobookTitle);
+        
+        if (details) {
+            ctx.status = 200;
+            ctx.body = details;
+        } else {
+            console.warn('No details found for the audiobook title:', audiobookTitle);
+            ctx.status = 404;
+            ctx.body = 'No details found for the audiobook title';
+        }
     } catch (error) {
-        console.error('Error saving audiobook details on server: ', error);
+        console.error('Error getting audiobook details from the database:', error);
         ctx.status = 500;
-        ctx.body = { success: false, message: 'Internal Server Error' };
+        ctx.body = 'Internal Server Error';
     }
 });
 

@@ -18,7 +18,7 @@ const LayoutLinks = ({ audiobookTitle }) => {
       </Button>
 
       <Button colorScheme='orange' size='sm'>
-        <Link to="/">Editor</Link>
+        <Link to={`/editor/${audiobookTitle}`}>Editor</Link>
       </Button>
 
       <Button colorScheme='orange' size='sm'>
@@ -27,6 +27,10 @@ const LayoutLinks = ({ audiobookTitle }) => {
 
       <Button colorScheme='orange' size='sm'>
         <Link to="/user-projects">Projects</Link>
+      </Button>
+
+      <Button colorScheme='orange' size='sm'>
+        <Link to="/">Home</Link>
       </Button>
     </Panel>
   );

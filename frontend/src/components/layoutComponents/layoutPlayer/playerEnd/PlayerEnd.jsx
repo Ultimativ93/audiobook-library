@@ -8,6 +8,8 @@ const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode }) => {
     const [isEnd, setIsEnd] = useState(null);
     const navigate = useNavigate();
 
+    //console.log("CurrentnodeProps in End: ", currentNodeProps)
+
     useEffect(() => {
         if (currentNodeProps) {
             if (currentNodeProps.isEnd === 'true') {

@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, Stack, Checkbox, Textarea, Select, Flex } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 import { v4 as uuid4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import '../audioBookSetup/audiobook-setup.css';
 
 import { handleInputChange, handleCheckBoxChange, handleInputChangeSecondLevel, handleAddContributor, handleRemoveContributor, handleCheckSetup } from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
-import { handleUploadDetails } from '../../components/tasks/setupTasks/UploadDetails';
+import { handleUploadDetails, handleGetDetails } from '../../components/tasks/setupTasks/FetchDetails';
 
-const AudioBookSetup = () => {
+const AudioBookSetup = () => { 
     const [newAudiobook, setNewAudiobook] = useState();
+    const [audiobookDetails, setAudiobookDetails] = useState();
     const navigate = useNavigate();
+    const { audiobookTitle } = useParams();
 
     const isFieldEmpty = (field) => {
         return field === 'string' && field.trim() === '';
@@ -36,11 +39,29 @@ const AudioBookSetup = () => {
         setNewAudiobook(audiobookFormat);
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            if (audiobookTitle) {
+                try {
+                    const details = await handleGetDetails(audiobookTitle);
+                    console.log("DETAILS: ", details);
+                    setAudiobookDetails(details);
+                } catch (error) {
+                    console.error('Error fetching audiobook details:', error);
+                }
+            }
+        };
+    
+        fetchData();
+    }, [audiobookTitle]);
+    
+
     return (
         <>
             <div className="audiobook-setup">
-                {!newAudiobook && (
-                    <Button colorScheme='blue' onClick={() => handleCreateAudioBook()}>Create New Audiobook</Button>
+
+                {!newAudiobook && !audiobookTitle && (
+                    <Button colorScheme='blue' leftIcon={<AddIcon />} onClick={() => handleCreateAudioBook()}>Create New Audiobook</Button>
                 )}
 
                 {newAudiobook && (
@@ -161,20 +182,13 @@ const AudioBookSetup = () => {
                                     console.log("Alles richtig")
                                     const detailsSaved = handleUploadDetails(isAudiobook);
                                     if (detailsSaved) {
-                                        navigate('/', { state: { audiobookTitle: isAudiobook.title, new: true } });
+                                        navigate('/editor', { state: { audiobookTitle: isAudiobook.title, new: true } });
                                     } else {
                                         alert("Something went wrong. Try again please or contact support!")
                                     }
                                 }
-                            }}>
-                                Start Editing
-                            </Button>
-                            <Button
-                                colorScheme='red'
-                                onClick={() => setNewAudiobook()}
-                            >
-                                Cancel
-                            </Button>
+                            }}>Start Editing</Button>
+                            <Button colorScheme='red' onClick={() => setNewAudiobook()}>Cancel</Button>
                         </div>
                     </div>
                 )}

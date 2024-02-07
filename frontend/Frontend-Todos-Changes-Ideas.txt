@@ -6,7 +6,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 - MultipleChoiceNode, inline Style rausholen                                                                                                                            O
                 - DataUpload: Inline style rausholen,                                                                                                                                   O    
            
-17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird                                                                           O
+17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird                                                                           X
                 - Umbennen, nur ein Teil davon wird wirklich der LayoutDrawer sein, alle anderen sind Drawer.., das verwirrt nur.                                                       O
                 - EndNode, Bridge brauchen keine weiteren Tabs "QUestion und Kombination" abfangen im Drawer wie bei MuAns.                                                             O
 
@@ -14,7 +14,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden                                            X
 
 20.01.2024  -DataUpload: 
-                - Managae Files: Select File, delete files, add files, validate Files (no empty), doppelte File benennungen abfangen, vieles mehr..                                     O
+                - Manage Files: Select File, delete files, add files, validate Files (no empty), doppelte File benennungen abfangen, vieles mehr..                                      O
                     - Abfangen, wenn ein file rejected wurde und Button Upload gedrückt wird, das nichts hochgeladen wird (im Moment passiert das noch)                                 O
                     Im Moment sind die möglichen Files die auf einmal hochgeladen werdena auf 50 begrenzt, Rücksprache halten, ob wir das so machen wollen/sollen/dürfen.               O
                 - Style: Alles so ziemlich, aber auf jeden Fall, dass wenn man über den Drag'n'Drop bereich geht, das der Cursor sich zu Pointer ändert                                 O
@@ -45,7 +45,9 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
             - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.
                 - Interaktions Signal Logic implementieren                                                                                                                              O
                 - Repeat Question Logic implementieren                                                                                                                                  O
-                - Wenn derzeit die Wiedergabeleist zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                    O
+                - Wenn derzeit die Wiedergabeleiste zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                   X
+                - Wenn vom Player zum Editor gewechselt wird, wird der audiobookTitle "undefined", da wir später den Player seperat vom Editor haben, müssen wir das gerade nichts      O
+                    abfangen. Aber für das testen benötigen wird das, also anpassen.
 
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
@@ -71,7 +73,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 30.01.2024  - DialogNode: Hier sollten wir je nachdem wieviele Nodes in dem Dialogknoten hinzugefügt werden, die height und width verändern. Vielleicht sollte man das direkt scallable O
                 machen.
 
-01.02.2024  - Startknoten darf nicht gelöscht werden können, oder wir müssen den Startknoten noch als NodeType festlegen und erzeugen                                                   O
+01.02.2024  - Startknoten darf nicht gelöscht werden können, oder wir müssen den Startknoten noch als NodeType festlegen und erzeugen                                                   X
+                - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
 
 02.02.2024  - InputNode: Hier sollten wir noch genau festlegen, welcher Handle der richtige Handle ist, welcher die falsche Antwort enthählt und welche mit keiner Antwort              O
 
@@ -79,9 +82,11 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 
             - TimeNode: Hier sollten wir auch noch die Länge der Zeit anzeigen lassen, damit der User das bis zum Ende auch setzen kann                                                 O
 
-04.02.2024  - LayoutEditorLinks: Das hat nichts im layoutEditor zu suchen, dass ist eine allgemeine Komponente. Umbennen und an der richtigen stelle platzieren                         O
+04.02.2024  - LayoutEditorLinks: Das hat nichts im layoutEditor zu suchen, dass ist eine allgemeine Komponente. Umbennen und an der richtigen stelle platzieren                         X
+                - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        O
 
 05.02.2024  - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                              O
+                - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
 
 06.02.2024  - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.       O
 
@@ -90,7 +95,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 how many errors (missing files or not connected nodes), we need a standard thumbnail, that gets set aslong as the thumbnail havent been set.                            O
                 - Noch eine extra Bestätigung, um das Projekt zu löschen.                                                                                                               O
 
-
-
+07.02.2024  - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                       O
+            
+            - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.
 
 

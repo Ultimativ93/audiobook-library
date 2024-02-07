@@ -2,13 +2,15 @@
     height: 50px;
   width: 200px;
   border: 1px solid #000;
-  padding: 5px;
   border-radius: 5px;
-  background: lightgray;
+  border-color: #ffbd03;
+  padding: 5px;
+  background: #D77560;
+  color: white;
 }
 
 .end-node label {
     display: block;
-    color: #000;
+    color: white;
     font-size: 16px;
 }

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useParams } from 'react-router-dom';
 
-import LayoutLinks from '../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
+import LayoutLinks from '../../components/layoutComponents/layoutCommon/layoutLinks/LayoutLinks';
+import LayoutMenu from '../../components/layoutComponents/layoutCommon/layoutMenu/LayoutMenu';
 
 const DataUpload = () => {
     const { audiobookTitle } = useParams();
@@ -77,7 +78,7 @@ const DataUpload = () => {
 
     return (
         <>
-            <LayoutLinks />
+            <LayoutMenu audiobookTitle={audiobookTitle}/>
             <section className="container">
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10px' }} {...getRootProps({ className: 'dropzone' })}>
                     <input {...getInputProps()} />

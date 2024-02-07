@@ -28,7 +28,7 @@ const PlayerInput = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
                     <Input
                         name="answer"
                         placeholder='Type correct answer'
-                        style={{ width: '300px' }}
+                        style={{ width: '300px', backgroundColor: 'white' }}
                     />
                     <div className="player-input-buttons">
                         <Button type="submit" colorScheme='blue'>Submit Answer</Button>

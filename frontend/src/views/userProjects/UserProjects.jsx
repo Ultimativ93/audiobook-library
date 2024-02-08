@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Image, Stack, Heading, Text, ButtonGroup, Button, CardBody, CardFooter, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-import { DeleteIcon } from '@chakra-ui/icons';
+import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
 import { Link, useLocation } from 'react-router-dom';
 
 import '../userProjects/user-projects.css';
 
 import FetchDetails from '../../components/tasks/projectsTasks/FetchDetails';
-import { handleDeleteProject } from '../../components/tasks/projectsTasks/DeleteDetails';
-import AudioBookSetup from '../audioBookSetup/AudiobookSetup';
+import UserProjectsDeleteModal from '../../components/layoutComponents/layoutUserProjects/UserProjectsDeleteModal';
+import UserProjectsAddModal from '../../components/layoutComponents/layoutUserProjects/UserProjectAddModal';
 
 const UserProjects = () => {
   const [details, setDetails] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [newAudiobook, setNewAudiobook] = useState(false);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -30,6 +32,7 @@ const UserProjects = () => {
     fetchDetails();
   }, []);
 
+  // Reload details after deletions of a project.
   const reloadDetails = async () => {
     try {
       const detailsData = await FetchDetails();
@@ -39,22 +42,22 @@ const UserProjects = () => {
     }
   };
 
-  const handleProjectDeletion = async () => {
-    const isDeleted = await handleDeleteProject(selectedProject);
-    if (isDeleted) {
-      reloadDetails();
-    }
-    setIsModalOpen(false); // Close the modal after deletion
-  };
-
   const handleDeleteButtonClick = (audiobookTitle) => {
     setSelectedProject(audiobookTitle);
-    setIsModalOpen(true); // Open the modal when the delete button is clicked
+    setIsModalDeleteOpen(true);
   };
+
+  // Handle add project
+  const handleAddProject = () => {
+    setIsModalAddOpen(true);
+  }
 
   return (
     <div className='user-projects-wrapper'>
-      <AudioBookSetup />
+
+      <Button colorScheme='blue' leftIcon={<AddIcon />} onClick={() => handleAddProject()}>
+        Create New Audiobook
+      </Button>
 
       <div className='user-projects'>
         {details && details.map((detail) => {
@@ -83,7 +86,7 @@ const UserProjects = () => {
                     colorScheme='blue'
                     size='sm'
                   >
-                    <Link to={`/editor/${detail.audiobookTitle}`} state={{ new: newAudiobook }}> {/* Übergebe newAudiobook über den Router-Zustand */}
+                    <Link to={`/editor/${detail.audiobookTitle}`} state={{ new: newAudiobook }}>
                       Start
                     </Link>
                   </Button>
@@ -100,28 +103,18 @@ const UserProjects = () => {
               </CardFooter>
             </Card>
 
-
           );
         })}
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirm Deletion</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure you want to delete this project?
-          </ModalBody>
+      {isModalDeleteOpen && (
+        <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} reloadDetails={reloadDetails} />
+      )}
 
-          <ModalFooter>
-            <Button colorScheme="red" mr={3} leftIcon={<DeleteIcon />} onClick={handleProjectDeletion}>
-              Delete
-            </Button>
-            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {isModalAddOpen && (
+        <UserProjectsAddModal isModalAddOpen={isModalAddOpen} setIsModalAddOpen={setIsModalAddOpen} />
+      )}
+
     </div>
   );
 };

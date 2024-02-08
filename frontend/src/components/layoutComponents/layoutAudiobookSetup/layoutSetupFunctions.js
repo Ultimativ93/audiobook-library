@@ -67,28 +67,37 @@ const handleRemoveContributor = (index, setNewAudiobook) => {
 const handleCheckSetup = (newAudiobook) => {
     const missingFields = [];
 
-    Object.keys(newAudiobook).forEach((field) => {
-        if (typeof newAudiobook[field] === 'string' && newAudiobook[field].trim() === '') {
-            missingFields.push(field);
-        }
-    });
+    if (!newAudiobook) {
+        console.error('newAudiobook ist nicht definiert');
+        return false;
+    }
 
-    let isAtLeastOneCheckboxSelected = false;
+    if (!newAudiobook.title || newAudiobook.title.trim() === '') {
+        missingFields.push('Audiobook Title');
+    }
 
-    Object.keys(newAudiobook.inputSelections).forEach((key) => {
-        if (newAudiobook.inputSelections[key]) {
-            isAtLeastOneCheckboxSelected = true;
-        }
-    });
+    if (!newAudiobook.description || newAudiobook.description.trim() === '') {
+        missingFields.push('Audiobook Description');
+    }
 
-    if (!isAtLeastOneCheckboxSelected) {
+    if (!newAudiobook.author || newAudiobook.author.trim() === '') {
+        missingFields.push('Author');
+    }
+
+    // Korrigieren Sie den Attributnamen auf inputSelections
+    if (!newAudiobook.inputSelections || Object.keys(newAudiobook.inputSelections).length === 0) {
         missingFields.push('Select at least one input option');
     }
 
-    if (newAudiobook.contributors) {
+    if (!newAudiobook.contributors || newAudiobook.contributors.length === 0) {
+        missingFields.push('At least one contributor is required');
+    } else {
         newAudiobook.contributors.forEach((contributor, index) => {
-            if (!contributor.role || !contributor.name || contributor.role.trim() === '' || contributor.name.trim() === '') {
-                missingFields.push(`Contributor ${index + 1}`);
+            if (!contributor.role || contributor.role.trim() === '') {
+                missingFields.push(`Contributor ${index + 1} role`);
+            }
+            if (!contributor.name || contributor.name.trim() === '') {
+                missingFields.push(`Contributor ${index + 1} name`);
             }
         });
     }
@@ -102,9 +111,9 @@ const handleCheckSetup = (newAudiobook) => {
     } else {
         console.log('Missing fields:', missingFields);
         alert(`Missing fields: ${missingFields.join(', ')}`);
+        return false;
     }
-}
-
+};
 
 export {
     handleInputChange,

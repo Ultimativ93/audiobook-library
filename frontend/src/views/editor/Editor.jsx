@@ -51,6 +51,7 @@ const Editor = () => {
     // Setting audiobookTitle, to handle routes and restore.
     const { audiobookTitleParam } = useParams();
     const location = useLocation();
+    //console.log("State ????: ", location.state.new);
     const newAudiobook = location.state && location.state.new ? location.state.new : false;
     const audiobookTitle = audiobookTitleParam || (location.state && location.state.audiobookTitle);
 

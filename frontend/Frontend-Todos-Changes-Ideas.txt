@@ -87,6 +87,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 
 05.02.2024  - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                              O
                 - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
+                - Wir haben das jetzt im Editor als Modal-Menu. Falls wir die Route nichtmehr brauchen, aus App.js löschen !!!                                                          O
 
 06.02.2024  - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.       O
 
@@ -97,6 +98,9 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 
 07.02.2024  - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                       O
             
-            - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.
+            - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.                                                                                           O
 
+08.02.2024  - ExistingAudiobookSetup: Wir haben es bisher so programmiert, dass man den bestehenden Audiobook Titel nicht ändern darf, ansonsten muss auch der name des flows und der   O
+                dazugehörigen Audiopaths geändert werden.
 
+            - LayoutMenuModalUpload: Hier sollte noch hinzugefügt werden, dass dem Creator die bereits hochgeladenen Files zu diesem Flow angezeigt werden.                             O

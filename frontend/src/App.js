@@ -19,10 +19,11 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/editor/:audiobookTitleParam" element={<Editor />} />
-             
+              <Route path="/editor" element={<Editor />} />
               <Route path="/data-upload/:audiobookTitle" element={<DataUpload />} />
               <Route path="/player" element={<Player />} />
               <Route path="/audiobook-setup/:audiobookTitle" element={<AudiobookSetup />} />
+              <Route path="/audiobook-setup" element={<AudiobookSetup />} />
               <Route path="/user-projects" element={<UserProjects />} />
               <Route path="/" element={<Home />} />
             </Routes>

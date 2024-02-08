@@ -262,6 +262,29 @@ class Database {
         });
     }
 
+    // Change details of exisiting details by title
+    changeDetailsByTitle(audiobookDetails, audiobookTitle) {
+        console.log("AudiobookTitle in changeDetailsByTitle", audiobookTitle);
+        console.log("Details in changeDetailsByTitle", audiobookDetails);
+    
+        return new Promise((resolve, reject) => {
+            this.db.run(
+                'UPDATE details SET detailData = ? WHERE audiobookTitle = ?',
+                [JSON.stringify(audiobookDetails), audiobookTitle],
+                function(err) {
+                    if (err) {
+                        console.error('Error updating audiobook details:', err);
+                        reject(err);
+                    } else {
+                        console.log('Audiobook details updated successfully:', this.changes);
+                        resolve(this.changes);
+                    }
+                }
+            );
+        });
+    }
+    
+
     // Closing database
     close() {
         this.db.close((err) => {

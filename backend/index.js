@@ -278,7 +278,7 @@ router.get('/getAudiobookDetails', async (ctx) => {
         } else {
             console.warn('No details found for the audiobook title:', audiobookTitle);
             ctx.status = 404;
-            ctx.body = 'No details found for the audiobook title';
+            ctx.body = 'No details found for the audiobookTitle';
         }
     } catch (error) {
         console.error('Error getting audiobook details from the database:', error);
@@ -286,6 +286,28 @@ router.get('/getAudiobookDetails', async (ctx) => {
         ctx.body = 'Internal Server Error';
     }
 });
+
+router.post('/changeDetails', async (ctx) => {
+    const { audiobookDetails, audiobookTitle } = ctx.request.body;
+    console.log("Audiobook Title in changeDetails:", audiobookTitle);
+    try {
+        const details = await db.changeDetailsByTitle(audiobookDetails, audiobookTitle);
+
+        if (details) {
+            ctx.status = 200;
+            ctx.body = details;
+        } else {
+            console.warn('No details found for the audiobookTitle', audiobookTitle);
+            ctx.status = 404;
+            ctx.body = 'No details found for audiobookTitle';
+        }
+    } catch (error) {
+        console.error('Error changing audiobook details from the database:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+})
+
 
 router.get('/', async (ctx) => {
     ctx.body = 'Hallo Welt von Koa';

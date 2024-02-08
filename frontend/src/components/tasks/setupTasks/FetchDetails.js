@@ -41,8 +41,30 @@ const handleGetDetails = async (audiobookTitle) => {
     }
 }
 
+const handleChangeDetails = async (audiobookDetails) => {
+    console.log("AudiobookDetails in handleChangeDetails", audiobookDetails);
+    try {
+        const response = await axios.post('http://localhost:3005/changeDetails', {
+            audiobookTitle: audiobookDetails.title,
+            audiobookDetails: audiobookDetails
+        });
+        if (response.status === 200) {
+            console.log('Audiobook details successfully changed on the server');
+            return response.data;
+        } else {
+            console.error('Error changing audiobook details on the server.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error in handleChangeDetails:', error);
+        throw error;
+    }
+}
+
+
 
 export {
     handleUploadDetails,
     handleGetDetails,
+    handleChangeDetails,
 }

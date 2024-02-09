@@ -8,7 +8,7 @@ import NewAudiobookSetup from './NewAudiobookSetup';
 import ExistingAudiobookSetup from './ExistingAudiobookSetup';
 import { handleGetDetails } from '../../components/tasks/setupTasks/FetchDetails';
 
-const AudioBookSetup = () => {
+const AudioBookSetup = ({ setModalsState }) => {
     const [newAudiobook, setNewAudiobook] = useState();
     const [existingAudiobookDetails, setExistingAudiobookDetails] = useState();
 
@@ -36,12 +36,9 @@ const AudioBookSetup = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log("AudiobookTitle:", audiobookTitle)
             if (audiobookTitle !== 'null' && audiobookTitle !== undefined) {
-                console.log("Trotzdem hier drin")
                 try {
                     const details = await handleGetDetails(audiobookTitle);
-                    console.log("DETAILS: ", details);
                     setExistingAudiobookDetails(details);
                 } catch (error) {
                     console.error('Error fetching audiobook details:', error);
@@ -60,11 +57,11 @@ const AudioBookSetup = () => {
         <>  
             <div className="audiobook-setup">
                 {newAudiobook && (
-                    <NewAudiobookSetup newAudiobook={newAudiobook} setNewAudiobook={setNewAudiobook} />
+                    <NewAudiobookSetup newAudiobook={newAudiobook} setNewAudiobook={setNewAudiobook} setModalsState={setModalsState} />
                 )}
 
                 {existingAudiobookDetails && (
-                    <ExistingAudiobookSetup existingAudiobookDetails={existingAudiobookDetails} setExistingAudiobookDetails={setExistingAudiobookDetails} />
+                    <ExistingAudiobookSetup existingAudiobookDetails={existingAudiobookDetails} setExistingAudiobookDetails={setExistingAudiobookDetails} setModalsState={setModalsState} />
                 )}
             </div>
         </>

@@ -1,0 +1,14 @@
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-body {
+    text-align: center;
+  }
+  
+  .player-container {
+    width: 800px;
+    height: 500px;
+  }

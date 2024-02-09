@@ -34,7 +34,7 @@ const nodeTypes = {
 
 // Array with initial nodes
 const initialNodes = [
-    { id: '1', data: { label: 'Start', isDeletable: false }, position: { x: 100, y: 100 }, },
+    { id: '1', data: { label: 'Start', isDeletable: false, isStart: 'true' }, position: { x: 100, y: 100 }, },
 ];
 
 // Array with initial edges
@@ -48,10 +48,12 @@ const Editor = () => {
     const [selectedNodeData, setSelectedNodeData] = useState(null);
     const { setViewport } = useReactFlow();
 
+    console.log("Nodes im Editor: ", nodes);
+    console.log("Edges im Editor: ", edges);
+
     // Setting audiobookTitle, to handle routes and restore.
     const { audiobookTitleParam } = useParams();
     const location = useLocation();
-    //console.log("State ????: ", location.state.new);
     const newAudiobook = location.state && location.state.new ? location.state.new : false;
     const audiobookTitle = audiobookTitleParam || (location.state && location.state.audiobookTitle);
 
@@ -84,7 +86,6 @@ const Editor = () => {
     }, [rfInstance, flowKey]);
 
     const onRestore = useCallback(async () => {
-        console.log("flowkey in restore: ", audiobookTitle)
         try {
             const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${audiobookTitle}`);
 
@@ -112,7 +113,7 @@ const Editor = () => {
 
     // Function to set the selected node and open the drawer with the selected node
     const onOpenDrawer = (node) => {
-        if (!(node.id === '1')) {
+        if (!(node.id === '1' && node.data.label === 'Start')) {
             setSelectedNodeData(node);
             setIsDrawerOpen(true);
         }
@@ -137,10 +138,7 @@ const Editor = () => {
 
     // If audiobookTitle ist set, restore flow from database.
     useEffect(() => {
-        console.log("audiobookTitle:", audiobookTitle)
-        console.log("newAudiobook", newAudiobook);
         if (audiobookTitle && audiobookTitle !== 'undefined' && newAudiobook !== true  ) {
-            console.log("trotzdem drin, trotz undefined")
             onRestore();
         }
     }, [audiobookTitle, onRestore, newAudiobook]);

@@ -12,11 +12,9 @@ const ReactionNode = ({ data, isConnectable }) => {
     }, [data.answerPeriods, data.id, updateNodeInternals]);
 
     const nonEmptyAnswers = data.answerPeriods.filter(answer => answer !== '');
-    console.log("nonEmptyAnswers: ", nonEmptyAnswers);
     const handleNoReaction = { start: '', end: '', answer: 'NoReaction' }
 
     nonEmptyAnswers.push(handleNoReaction);
-    console.log("nonEmptyAnswers nach einfügen: ", nonEmptyAnswers);
 
     return (
         <div className="reaction-node" ref={nodeRef}>

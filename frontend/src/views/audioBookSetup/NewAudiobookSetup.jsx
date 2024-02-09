@@ -1,14 +1,10 @@
 import React from 'react'
 import { Input, Button, Stack, Checkbox, Textarea, Select, Flex } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 
 import { handleInputChange, handleCheckBoxChange, handleInputChangeSecondLevel, handleAddContributor, handleRemoveContributor, handleCheckSetup } from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 import { handleUploadDetails } from '../../components/tasks/setupTasks/FetchDetails';
 
-
-const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook,  }) => {
-    const navigate = useNavigate();
-
+const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook, setIsModalSetupOpen }) => {
     const isFieldEmpty = (field) => {
         return field === 'string' && field.trim() === '';
     };
@@ -129,10 +125,9 @@ const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook,  }) => {
                 <Button colorScheme='blue' onClick={() => {
                     const isAudiobook = handleCheckSetup(newAudiobook)
                     if (isAudiobook) {
-                        console.log("Alles richtig")
                         const detailsSaved = handleUploadDetails(isAudiobook);
                         if (detailsSaved) {
-                            navigate('/editor', { state: { audiobookTitle: isAudiobook.title, new: true } });
+                           setIsModalSetupOpen(false);
                         } else {
                             alert("Something went wrong. Try again please or contact support!")
                         }

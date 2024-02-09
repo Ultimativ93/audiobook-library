@@ -55,7 +55,11 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 - Abfangen das wenn STRG geklickt ist, um mehrere Node auszuwählen, das der Drawer sich nicht öffnet.                                                                   O
                 - Geklickte Nodes hervorheben                                                                                                                                           O
                 - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!                                                                           O
-                - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!
+                - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!                                                                O
+                - onRestor: hier könnten wir den FetchFlow noch in Tasks auslagern, Server zugriffe haben wir nicht direkt in den Componenten                                           O
+                - Nodes können auf sich selber verweisen, Edges überprüfen, auch nur eine Edge aus einem Handle ziehbar machen !!!!!                                                    O
+                - Save: Sollte anzeigen, dass der Flow noch nicht gespeichert wurde, wenn es Änderungen gibt. Beim verlassen des Editors, sollte der User auch                          O
+                    darauf hingewiesen werden dass seine Daten verloren gehen.
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 
@@ -104,3 +108,14 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 dazugehörigen Audiopaths geändert werden.
 
             - LayoutMenuModalUpload: Hier sollte noch hinzugefügt werden, dass dem Creator die bereits hochgeladenen Files zu diesem Flow angezeigt werden.                             O
+
+09.02.2024  - ValidateFlow: TimeNode kann man noch Buchstaben eingeben, hier nur das richtige Zeitformat möglich machen                                                                   O
+                ReactionNode: Ebenfalls keine Buchstaben erlauben, und einstellen, dass sich die Zeiten nicht überschneiden dürfen.                                                     O
+                Allgemein: Es wird noch nicht validiert: Interaction Signal, Repeat Question Audio, InputSelection(kommt noch raus)                                                     O
+                
+
+
+
+
+
+                

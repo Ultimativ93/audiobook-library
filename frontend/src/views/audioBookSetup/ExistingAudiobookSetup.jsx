@@ -1,15 +1,10 @@
 import React from 'react'
 import { Input, Button, Stack, Checkbox, Textarea, Select, Flex } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 
 import { handleInputChange, handleCheckBoxChange, handleInputChangeSecondLevel, handleAddContributor, handleRemoveContributor, handleCheckSetup } from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 import { handleChangeDetails } from '../../components/tasks/setupTasks/FetchDetails';
 
-const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setIsModalSetupOpen }) => {
-    console.log("existingAudiobookDetails", existingAudiobookDetails);
-
-    const navigate = useNavigate();
-
+const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setModalsState }) => {
     const isFieldEmpty = (field) => {
         return field === 'string' && field.trim() === '';
     };
@@ -127,24 +122,24 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
                     </Select>
                 </div>
                 <div className='audiobook-setup-contents-buttons'>
-                    <Button colorScheme='blue' onClick={() => {
-                        console.log("Button clicked")
-                        if (existingAudiobookDetails) {
-                            console.log("Existing: ", existingAudiobookDetails);
-                            const isAudiobook = handleCheckSetup(existingAudiobookDetails)
-                            console.log("Hier drutner")
-                            if (isAudiobook) {
-                                console.log("Alles richtig")
-                                const detailsSaved = handleChangeDetails(isAudiobook);
-                                if (detailsSaved) {
-                                    setIsModalSetupOpen(false);
-                                } else {
-                                    alert("Something went wrong. Try again please or contact support!")
+                <Button colorScheme='blue' onClick={() => {
+                            console.log("Button clicked")
+                            if (existingAudiobookDetails) {
+                                console.log("Existing: ", existingAudiobookDetails);
+                                const isAudiobook = handleCheckSetup(existingAudiobookDetails)
+                                console.log("Hier drutner")
+                                if (isAudiobook) {
+                                    console.log("Alles richtig")
+                                    const detailsSaved = handleChangeDetails(isAudiobook);
+                                    if (detailsSaved) {
+                                        setModalsState(false);
+                                    } else {
+                                        alert("Something went wrong. Try again please or contact support!")
+                                    }
                                 }
                             }
-                        }
-                    }}>Continue Editing</Button>
-                    <Button colorScheme='red' onClick={() => navigate('/editor', { state: { audiobookTitle: existingAudiobookDetails.title, new: false } })}>Cancel</Button>
+                        }}>Continue Editing</Button>
+                    <Button colorScheme='red' onClick={() => setModalsState(false)}>Cancel</Button>
                 </div>
             </div>
         )}

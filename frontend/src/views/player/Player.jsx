@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import './player.css';
 
@@ -23,10 +24,12 @@ const Player = () => {
   const [answersVisible, setAnswersVisible] = useState(false);
   const [answerAudioIndex, setAnswerAudioIndex] = useState(0);
   const audioRef = useRef();
+  const location = useLocation();
 
   // Here we will have to change the flowKey to the flowkey we want to access !!!!!
   useEffect(() => {
-    const flowKey = 'First-trys';
+    const flowKey = location.pathname.split('/').pop();
+    console.log("Flowkey im Player: ", flowKey);
     FetchFlow(flowKey).then((flowData) => {
       setFlow(flowData);
     });
@@ -127,7 +130,6 @@ const Player = () => {
 
   return (
     <>
-      <LayoutLinks />
 
       <div className="player-wrapper">
         {currentNodeProps && (

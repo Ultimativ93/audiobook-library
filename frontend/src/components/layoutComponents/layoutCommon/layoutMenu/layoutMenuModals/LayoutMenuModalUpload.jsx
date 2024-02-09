@@ -4,7 +4,6 @@ import { useDropzone } from 'react-dropzone';
 
 const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTitle }) => {
     const [uploadSuccess, setUploadSuccess] = useState(false);
-    console.log("audiobookTitle", audiobookTitle);
 
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
         accept: {

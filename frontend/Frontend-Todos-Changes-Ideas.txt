@@ -48,7 +48,9 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 - Wenn derzeit die Wiedergabeleiste zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                   X
                 - Wenn vom Player zum Editor gewechselt wird, wird der audiobookTitle "undefined", da wir später den Player seperat vom Editor haben, müssen wir das gerade nichts      O
                     abfangen. Aber für das testen benötigen wird das, also anpassen.
-
+                - Wenn ein Endknoten durchgespielt wird, wird nach weiterem Audio gesucht, das wirft derzeit noch einen Fehler, abfangen.                                               O
+                - Es könnte noch einen Fehler geben, wenn wir einen Kreis bauen, also wenn wir zum Startknoten verweisen, entweder Handle entfernen, oder abfangen, dass ein            O
+                    Startknoten übergangen wird.
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.

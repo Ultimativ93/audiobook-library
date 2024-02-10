@@ -1,0 +1,86 @@
+Was derzeit schon funktioniert:
+
+    - Projektstruktur:  - Wir haben eine funktionierende Projektstruktur, bestehend aus einem Frontend Server der mit React läuft und einem Backend indem wir Koa als Middleware benutzen.
+                            Im Backend werden alle kritischen Daten gespeichert, Flows, Details zum Hörbuch und die Audiopaths und die hochgeladenen Audio- und Bilddateien.
+    
+    - Node Editor:      - Wir haben einen Node Editor mit React-Flow programmiert. In diesem können wir Nodes hinzufügen, Nodes löschen, Nodes bewegen, Edges hinzufügen, Edges löschen,
+                            Zoomen, per Mausklick innerhalb des Flows bewegen.
+                            - Ebenso ist es möglich, die Flows zu speichern und zu restoren. Dabei wird der Flow im Backend gespeichert und von diesem auch wiederhergestellt.
+
+                        - Wir haben 8 verschiedene Nodetypes: StartNode, MultipleChoiceNode, EndNode, BridgeNode, TimeNode, MultipleAnswerNode, ReactionNode und die InputNode.
+                            - Startknoten: Hat immer eine Edge zum darauf eingefügten Knoten.
+                            - MultipleChoiceNode: Hat inputs für: Label, Story Audio, Interaction Signal, Question, Question Audio, Repeat Question Audio, Select Inputs, Answers,
+                                AnswerAudios, Add Answer und Remove Answer
+                            - InputNode: Hat inputs für: Label, Story Audio, Interaction Signal, Question, Question Audio, Repeat Question Audio, Select Inputs, Set Correct Answer,
+                                Remove Answer
+                            - BridgeNode: Hat inputs für: Label, Story Audio
+                            - TimeNode: Label, Story Audio, Interaction Signal, Question, Question Audio, Repeat Question Audio, Select Inputs, Answers, Answer Audio, TimeNode,
+                                Add Answer, Remove Answer
+                            - MultipleAnswerNode: Label, Story Audio, Interaction Signal, Question, Question Audio, RepeatQuestion Audio, Select Inputs, Answer, Answer Audio,
+                                Add Answer, Remove Answer, Answer Combination, Remove Answer Combinations
+                            - ReactionNode: Label, AudioS Story, Interaction Signal, Question, Question Audio, Repeat Question Audio, Select Inputs, Answer, Answer Audio, Time Period,
+                                Add Period, Remove Period
+                            - EndNode: Label, Story Audio, isEnd
+
+                            Es gibt noch bugs in den Nodes, die noch behoben werden müssen.
+
+                        - Wenn Nodes angeklickt werden, öffnet sich ein Drawer, mitdem man die unterschiedlichen Inputs einfügen kann.
+
+                        - Upload Audio Bereich: Hier kann der Creator Audios auf den Server hochladen, es gibt schon eine Validierung für gewisse Dateitypen. Ebenso haben wir eine
+                            maximale Dateigröße festgelegt. Die Daten werden im Backend im Upload Ordner gespeichert, der Pfad dazu in der Datenbank.
+                            - Hochgeladene Datein sind mit dem Flow Namen verbunden, damit diese auch gelöscht werden, wenn der Flow gelöscht wird.
+                        
+                        - Setup Audiobook: Hier können wir die Beschreibung, den Namen des Authoren und weitere Contributors hinzufügen. Ebenso wird hier der Input Selection gewählt.
+                            Ebenso wird hier schonmal festgelegt, um was für eine Kategorie von Audiobook es sich handelt.
+
+                        - Preview: Hier lassen wir das derzeitige Projekt validieren, ob alle Inputs korrekt gesetzt sind, ob die Nodes miteinander verbunden sind etc. Wenn das Projekt
+                            validiert wurde. Kann sich der Creator das Audiobook hier über die Player Componente abspielen lassen.
+
+                        - Player: Der Player bekommt das derzeitige Projekt übergeben und spielt dieses dann ab. Es wird angezeigt bei welcher Node wir uns befinden, über das Label,
+                            unten wird der Player angezeigt, indem wir bisher die Timeline nicht klickbar gesetzt haben. Wenn das Story Audio abgespielt wurde, wird die Frage und die
+                            dazugehörigen Antworten angezeigt und vorgelesen. Beim klick auf eine Antwort wird zu dem dazu passenden Knoten verwiesen, wo wiederum das Story Audio
+                            abgespielt wird. Die verschiedenen NodeTypes wurden hier berücksichtigt, mit kleineren Bugs funktioniert der Player bisher.
+
+                        - User Projects: Hier werden die Projekte angezeigt, die ein Creator bisher erstellt hat. Ebenso ist es möglich ein neues Projekt hinzuzufügen, hier muss der
+                            Creator zwingend einen Namen für das Projekt vergeben.
+                            - Der Creator hat hier die Möglichkeit die Projekte zu löschen. Beim löschen wird nochmal verifiziert ob er das Porjekt wirklich löschen möchte. Beim löschen
+                                werden alle zu dem Projekt dazugehörigen Audios ebenfalls vom Server gelöscht und auch alle dazugehörigen Daten in der Datenbank gelöscht.
+                            - Ebenfalls gelangt der Creator von hier zum Editor, indem er entweder ein neues Projekt erstellt, oder auf Start bei einem bestehenden Projekt drückt.
+
+                        - 
+
+Was wir rausgeschmissen haben oder noch verändern:
+                        - Dialogknoten: Da die Logik eines Dialogknoten auch ohne eben diesen zu verwirklichen ist, haben wir diesen Knotenart wieder aus unserem Projekt entfernt.
+
+                        - Select Inputs: Haben wir schon in das Setup verfrachtet, da nicht jeder Knoten einen unterschiedlichen Input haben sollte.
+
+
+Was noch kommt:
+                        - Ein EndKnoten wollten wir noch so umbauen, dass wenn der Check "isEnd" geaändert wird, zu einem Bridge Node wird.
+                        - Upload Audio Bereich: Antiviren Software muss noch eingefügt werden
+                            - Weitere Dateitypen abfangen.
+                            - Hochgeladene Dateien anzeigen und löschbar machen.
+                        - Input Selections brauchbar machen. Im Player dann jeweils auch implementieren, also wenn nur Maus, dann Antworten nicht vorlesen. Wenn nur Sound, dann 
+                            vorlesen und so weiter.
+                        - Mini Map für den Editor
+                        - Das Hörbuch Portal mit User-Login
+                            - dazu dann das user Handling (Hörbücher mit User verbinden)
+                        - Zweite Spur, also Hintergrundaudio für die Knoten hinzufügen.
+                            - Das dann auch im Player implementieren
+                            - Validierung anpassen
+                            - Datenbank anpassen
+                        - Allgemeine Anpassungen bei der Benutzeroberfläche, bisher kaum gestyled. Usability before User Interface ..
+                        - Bugs aus Frontend-Todos-Changes-Ideas + Backend-Todos-Changes-Ideas entfernen.
+                        - Interactions Signal implementieren
+                        - Repeat Question im Player implementieren
+                        - Abfangen das bereits gesetzte Daten im Editor nicht verloren gehen bevor die Seite geschlossen oder verlassen wird 
+                        - Editor: Handle Bennenungen für den User
+                        - Interactives Audiobook zum Testen aufnehmen und einarbeiten
+                        - Dokumentation
+                        - Video Präsentation / Making Of
+
+Was noch kommen könnte:
+
+                        - Gruppieren von Nodes
+                        - Auswählen von mehreren Nodes ohne STRG zu drücken
+                        - Funktionen zusammenfassen / verbessern / verkürzen -> Performance

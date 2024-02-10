@@ -8,8 +8,6 @@ const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode }) => {
     const [isEnd, setIsEnd] = useState(null);
     const navigate = useNavigate();
 
-    //console.log("CurrentnodeProps in End: ", currentNodeProps)
-
     useEffect(() => {
         if (currentNodeProps) {
             if (currentNodeProps.isEnd === 'true') {
@@ -23,13 +21,17 @@ const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode }) => {
     }, [currentNodeProps]);
 
     const handleToStart = () => {
-        console.log("in HandleStart Flow:", flow);
         if (flow && flow.nodes) {
-            const startNode = flow.nodes.reduce((minNode, currentNode) => {
-                return minNode.id < currentNode.id ? minNode : currentNode;
-            })
-
-            setCurrentNode(startNode.id);
+            const startNode = flow.nodes.find(node => node.id === '1');
+            if (startNode) {
+                const connectedEdge = flow.edges.find(edge => edge.source === startNode.id);
+                if (connectedEdge) {
+                    const connectedNode = flow.nodes.find(node => node.id === connectedEdge.target);
+                    if (connectedNode) {
+                        setCurrentNode(connectedNode.id-1);
+                    }
+                }
+            }
         }
     }
 

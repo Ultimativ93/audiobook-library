@@ -75,7 +75,7 @@ const UserProjects = () => {
                 <Stack>
                   <Heading size='md'>{detail.audiobookTitle}</Heading>
                   <Text>
-                    {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(" ").slice(0, 50).join(" ") : ''}
+                    {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(" ").slice(0, 20).join(" ") : ''}
                   </Text>
                 </Stack>
               </CardBody>

@@ -81,6 +81,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
 
 02.02.2024  - InputNode: Hier sollten wir noch genau festlegen, welcher Handle der richtige Handle ist, welcher die falsche Antwort enthählt und welche mit keiner Antwort              O
+                - Derzeit haben wir noch einen remove Answer. Das sollten wir löschen, wenn wir nicht noch zusätzliche Antworten hinzufügen wollen.                                     O
 
             - PlayerReaction: Hier müssen wir noch das Interaktionssignal angeben, bevor das Audio abgespielt wird.
 

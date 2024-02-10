@@ -5,7 +5,7 @@ import './layout-menu-modal-preview.css';
 
 import Player from '../../../../../../views/player/Player';
 import { fetchFlow } from '../../../../../tasks/editorTasks/FetchFlow';
-import { validateMuChoi, validateEndNode, validateBridgeNode, validateTimeNode, validateMuAns, validateReactNode, validateInputNode, validateEdgeMuChoi, validateEdgeEndNode, validateEdgeBridgeNode, validateEdgeTimeNode, validateEdgeMuAns, validateEdgeReactNode, validateEdgeInputNode, validateEdgeStart } from '../../../../../tasks/editorTasks/ValidateFlow';
+import { validateMuChoi, validateEndNode, validateBridgeNode, validateTimeNode, validateMuAns, validateReactNode, validateInputNode, validateEdges } from '../../../../../tasks/editorTasks/ValidateFlow';
 
 const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookTitle }) => {
     const [flowToCheck, setFlowToCheck] = useState();
@@ -48,29 +48,11 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                 return null;
             });
 
-            const edgeResults = flowToCheck.nodes.map(node => {
-                if (node.type === 'muChoi') {
-                    return validateEdgeMuChoi(node, flowToCheck.edges);
-                } else if (node.type === 'endNode') {
-                    return validateEdgeEndNode(node, flowToCheck.edges);
-                } else if (node.type === 'bridgeNode') {
-                    return validateEdgeBridgeNode(node, flowToCheck.edges);
-                } else if (node.type === 'timeNode') {
-                    return validateEdgeTimeNode(node, flowToCheck.edges);
-                } else if (node.type === 'muAns') {
-                    return validateEdgeMuAns(node, flowToCheck.edges);
-                } else if (node.type === 'reactNode') {
-                    return validateEdgeReactNode(node, flowToCheck.edges);
-                } else if (node.type === 'inputNode') {
-                    return validateEdgeInputNode(node, flowToCheck.edges);
-                } else if (node.data.isStart === 'true') {
-                    return validateEdgeStart(node, flowToCheck.edges);
-                }
-            })
+            const edgeResults = validateEdges(flowToCheck.nodes, flowToCheck.edges);
 
             setValidationResults({
                 nodes: nodeResults.filter(result => result !== null),
-                edges: edgeResults.filter(result => result !== null),
+                edges: edgeResults
             });
         }
     };

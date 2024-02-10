@@ -181,148 +181,73 @@ const validateInputNode = (node) => {
     return missingData.length > 0 ? `Missing data for Input Node ${node.data.label}: ${missingData.join(", ")}` : null;
 }
 
-const validateEdgeMuChoi = (node, edges) => {
-    let missingData = [];
+const validateEdges = (nodes, edges) => {
+    const invalidEdges = new Map();
 
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push('has no incoming edge');
-    }
+    nodes.forEach(node => {
+        let errorMessage = "";
 
-    if (node.data.answers) {
-        node.data.answers.forEach((answer, index) => {
-            const handleId = `${node.id}-handle-${index}`;
-            const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
-            if (!outgoingEdge) {
-                missingData.push(`has no outgoing edge from handle ${handleId}, `);
+        if (node.data && node.data.isStart === 'true') {
+            return;
+        }
+
+        if (node.type !== 'endNode') {
+            if (node.type === 'muAns') {
+                if (node.data.answerCombinations && node.data.answerCombinations.length > 0) {
+                    node.data.answerCombinations.forEach(combination => {
+                        const handleId = `${node.id}-handle-${combination.id}`;
+                        const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
+                        if (!outgoingEdge) {
+                            errorMessage += `has no outgoing edge from handle ${handleId}, `;
+                        }
+                    });
+                } else {
+                    errorMessage += "has no answer combinations defined, ";
+                }
+            } else if (node.type === 'reactNode') {
+                const expectedHandleCount = node.data.answerPeriods ? node.data.answerPeriods.length + 1 : 1;
+                for (let i = 0; i < expectedHandleCount; i++) {
+                    const handleId = `${node.id}-handle-${i}`;
+                    const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
+                    if (!outgoingEdge) {
+                        errorMessage += `has no outgoing edge from handle ${handleId}, `;
+                    }
+                }
+            } else {
+                if (node.data.answers) {
+                    node.data.answers.forEach((answer, index) => {
+                        const handleId = `${node.id}-handle-${index}`;
+                        const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
+                        if (!outgoingEdge) {
+                            errorMessage += `has no outgoing edge from handle ${handleId}, `;
+                        }
+                    });
+                }
             }
-        })
-    }
 
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
-
-const validateEdgeEndNode = (node, edges) => {
-    let missingData = [];
-
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push('has no incoming edge');
-    }
-
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
-
-const validateEdgeBridgeNode = (node, edges) => {
-    let missingData = [];
-
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push(`has no incoming edge`);
-    }
-
-    const outgoingEdge = edges.find(edge => edge.source === node.id);
-    if (!outgoingEdge) {
-        missingData.push(`has no outgoing edge`);
-    }
-
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
-
-const validateEdgeTimeNode = (node, edges) => {
-    let missingData = [];
-
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push(`has no incoming edge`);
-    }
-
-    if (node.data.answers) {
-        node.data.answers.forEach((answer, index) => {
-            const handleId = `${node.id}-handle-${index}`;
-            const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
-            if (!outgoingEdge) {
-                missingData.push(`has no outgoing edge from handle ${handleId}, `);
+            const incomingEdge = edges.find(edge => edge.target === node.id);
+            if (!incomingEdge) {
+                errorMessage += `has no incoming edge, `;
             }
-        })
-    }
-
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
-
-const validateEdgeMuAns = (node, edges) => {
-    let missingData = [];
-
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push(`has no incoming edge`);
-    }
-
-    if (node.data.answerCombinations) {
-        node.data.answerCombinations.forEach((combination, index) => {
-            const handleId = `${node.id}-handle-${index}`;
-            const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
-            if (!outgoingEdge) {
-                missingData.push(`has no outgoing edge from handle ${handleId}, `);
-            }
-        });
-    }
-
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
-
-const validateEdgeReactNode = (node, edges) => {
-    let missingData = [];
-
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push(`has no incoming edge`);
-    }
-
-    const expectedHandleCount = node.data.answerPeriods ? node.data.answerPeriods.length + 1 : 1;
-    if (typeof expectedHandleCount === 'number') {
-        for (let i = 0; i < expectedHandleCount; i++) {
-            const handleId = `${node.id}-handle-${i}`;
-            const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
-            if (!outgoingEdge) {
-                missingData.push(`has no outgoing edge from handle ${handleId}, `);
+        } else {
+            const incomingEdge = edges.find(edge => edge.target === node.id);
+            if (!incomingEdge) {
+                errorMessage += `has no incoming edge, `;
             }
         }
-    }
 
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
-
-const validateEdgeInputNode = (node, edges) => {
-    let missingData = [];
-
-    const incomingEdge = edges.find(edge => edge.target === node.id);
-    if (!incomingEdge) {
-        missingData.push(`has no incoming edge`);
-    }
-
-    const expectedHandleCount = 3;
-    for (let i = 0; i < expectedHandleCount; i++) {
-        const handleId = `${node.id}-handle-${i}`;
-        const outgoingEdge = edges.find(edge => edge.source === node.id && edge.sourceHandle === handleId);
-        if (!outgoingEdge) {
-            missingData.push(`has no outgoing edge from handle ${handleId}, `);
+        if (errorMessage.trim() !== "") {
+            if (invalidEdges.has(node.type)) {
+                invalidEdges.set(node.type, `${invalidEdges.get(node.type)} ${errorMessage}`);
+            } else {
+                invalidEdges.set(node.type, errorMessage);
+            }
         }
-    }
+    });
 
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
+    return Array.from(invalidEdges);
+};
 
-const validateEdgeStart = (node, edges) => {
-    let missingData = [];
-
-    const outgoingEdges = edges.filter(edge => edge.source === node.id);
-    if (outgoingEdges.length === 0) {
-        missingData.push(`has no outgoing edge`);
-    }
-
-    return missingData.length > 0 ? `Missing data for ${node.data.label}: ${missingData.join(", ")}` : null;
-}
 
 export {
     validateMuChoi,
@@ -332,12 +257,5 @@ export {
     validateMuAns,
     validateReactNode,
     validateInputNode,
-    validateEdgeMuChoi,
-    validateEdgeEndNode,
-    validateEdgeBridgeNode,
-    validateEdgeTimeNode,
-    validateEdgeMuAns,
-    validateEdgeReactNode,
-    validateEdgeInputNode,
-    validateEdgeStart,
+    validateEdges,
 };

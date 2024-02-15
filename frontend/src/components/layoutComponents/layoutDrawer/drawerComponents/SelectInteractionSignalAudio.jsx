@@ -4,9 +4,9 @@ import { Select } from '@chakra-ui/react';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
-const SelectInteractionSignalAudio = ({ nodeData, setNodes }) => {
-    const audioPaths = FetchAudio();
-
+const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+    const audioPaths = FetchAudio(audiobookTitle);
+    console.log("audiobookTitle", audiobookTitle);
     const [selectedAudio, setSelectedAudio] = useState(nodeData.data.interactionSignalAudio || '');
 
     console.log("SelectAudio - nodeData: ", nodeData);
@@ -23,7 +23,6 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes }) => {
                     updateNodeProperty(setNodes, nodeData, 'interactionSignalAudio', event.target.value);
                 }}
             >
-                {/* Hier das return hinzufügen */}
                 {audioPaths.map((audio, index) => (
                     <option key={index} value={audio.audioName}>
                         {audio.audioName}

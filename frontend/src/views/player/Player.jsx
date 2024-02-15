@@ -26,7 +26,7 @@ const Player = () => {
   const audioRef = useRef();
   const location = useLocation();
 
-  // Here we will have to change the flowKey to the flowkey we want to access !!!!!
+  // Here we set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
   useEffect(() => {
     const flowKey = location.pathname.split('/').pop();
     console.log("Flowkey im Player: ", flowKey);

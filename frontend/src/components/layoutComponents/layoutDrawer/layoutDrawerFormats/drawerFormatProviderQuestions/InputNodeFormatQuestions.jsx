@@ -7,13 +7,13 @@ import SelectRepeatQuestionAudio from '../../drawerComponents/SelectRepeatQuesti
 import SelectInputSelections from '../../drawerComponents/SelectInputSelections';
 import SelectCorrectAnswer from '../../drawerComponents/SelectCorrectAnswer';
 
-const InputNodeFormatQuestions = ({ nodeData, setNodes, setEdges, edges }) => {
+const InputNodeFormatQuestions = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
   return (
     <>
     <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
     <DrawerBody>
         <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
-        <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} />
+        <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>
         <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
         <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
         <SelectCorrectAnswer nodeData={nodeData} setNodes={setNodes} />

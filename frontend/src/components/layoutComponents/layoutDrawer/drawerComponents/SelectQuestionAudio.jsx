@@ -4,8 +4,8 @@ import { Select } from '@chakra-ui/react';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
-const SelectQuestionAudio = ({ nodeData, setNodes }) => {
-    const audioPaths = FetchAudio();
+const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+    const audioPaths = FetchAudio(audiobookTitle);
 
     const [selectedQuestionAudio, setSelectedQuestionAudio] = useState(nodeData.data.questionAudio || '');
     

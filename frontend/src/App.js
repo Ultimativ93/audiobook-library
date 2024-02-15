@@ -13,7 +13,7 @@ import Home from './views/home/Home';
 
 function App() {
   return (
-    <div className="App" style={{ height: 800 }}>
+    <div className="App">
       <ChakraProvider>
         <ReactFlowProvider>
           <BrowserRouter>
@@ -28,7 +28,6 @@ function App() {
               <Route path="/" element={<Home />} />
             </Routes>
           </BrowserRouter>
-
         </ReactFlowProvider>
       </ChakraProvider>
     </div>

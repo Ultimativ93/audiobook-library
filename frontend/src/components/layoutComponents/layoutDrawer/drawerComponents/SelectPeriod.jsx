@@ -4,11 +4,11 @@ import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 
-const SelectPeriod = ({ nodeData, setNodes }) => {
+const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
   const timeoutRef = useRef(null);
-  const audioPaths = FetchAudio();
+  const audioPaths = FetchAudio(audiobookTitle);
 
   useEffect(() => {
     if (!arraysEqual(answerAudios, nodeData.data.answerAudios || [])) {

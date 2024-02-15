@@ -7,16 +7,16 @@ import SelectRepeatQuestionAudio from '../../drawerComponents/SelectRepeatQuesti
 import SelectInputSelections from '../../drawerComponents/SelectInputSelections';
 import SelectPeriod from '../../drawerComponents/SelectPeriod';
 
-const ReactNodeFromatQuestions = ({ nodeData, setNodes, setEdges, edges }) => {
+const ReactNodeFromatQuestions = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
     return (
         <>
             <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
             <DrawerBody>
                 <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
-                <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} />
+                <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                 <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
                 <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
-                <SelectPeriod nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges}/>
+                <SelectPeriod nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
             </DrawerBody>
 
             <DrawerFooter>

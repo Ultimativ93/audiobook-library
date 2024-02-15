@@ -1,23 +1,23 @@
-TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,                                                    O
+TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!! (drei !) : wichtig, 
 
 16.01.2024  - React Flow einarbeiten, Startknoten für den Editor erstellen                                                                                                              X
             
-            - App.js Div hat inline Stile, das holen wir noch raus und packen es in eine seperate style datei. Gillt für alle Datein                                                    O
-                - MultipleChoiceNode, inline Style rausholen                                                                                                                            O
-                - DataUpload: Inline style rausholen,                                                                                                                                   O    
-           
+            - App.js Div hat inline Stile, das holen wir noch raus und packen es in eine seperate style datei. Gillt für alle Datein                                                    X
+                - MultipleChoiceNode, inline Style rausholen                                                                                                                            X
+                - DataUpload: Inline style rausholen,                                                                                                                                   X    
+
 17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird                                                                           X
-                - Umbennen, nur ein Teil davon wird wirklich der LayoutDrawer sein, alle anderen sind Drawer.., das verwirrt nur.                                                       O
-                - EndNode, Bridge brauchen keine weiteren Tabs "QUestion und Kombination" abfangen im Drawer wie bei MuAns.                                                             O
+                - Umbennen, nur ein Teil davon wird wirklich der LayoutDrawer sein, alle anderen sind Drawer.., das verwirrt nur.     -> Bleibt so benannt                              X
+                - EndNode, Bridge brauchen keine weiteren Tabs "QUestion und Kombination" abfangen im Drawer wie bei MuAns.                                                             X
 
             - NodeTypeDataFormat: Wir müssen irgendwie Daten Formate vorgeben, also das MuChoi z.B. 3 Antworten hat mindestens etc.                                                     X
                 vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden                                            X
 
 20.01.2024  -DataUpload: 
-                - Manage Files: Select File, delete files, add files, validate Files (no empty), doppelte File benennungen abfangen, vieles mehr..                                      O
-                    - Abfangen, wenn ein file rejected wurde und Button Upload gedrückt wird, das nichts hochgeladen wird (im Moment passiert das noch)                                 O
-                    Im Moment sind die möglichen Files die auf einmal hochgeladen werdena auf 50 begrenzt, Rücksprache halten, ob wir das so machen wollen/sollen/dürfen.               O
-                - Style: Alles so ziemlich, aber auf jeden Fall, dass wenn man über den Drag'n'Drop bereich geht, das der Cursor sich zu Pointer ändert                                 O
+                - Manage Files: Select File x, delete files x, add files x, validate Files (no empty) x, doppelte File benennungen abfangen x, vieles mehr..                            X          O
+                    - Abfangen, wenn ein file rejected wurde und Button Upload gedrückt wird, das nichts hochgeladen wird (im Moment passiert das noch)                                 X
+                    Im Moment sind die möglichen Files die auf einmal hochgeladen werdena auf 50 begrenzt, Rücksprache halten, ob wir das so machen wollen/sollen/dürfen.               X
+                - Style: Alles so ziemlich, aber auf jeden Fall, dass wenn man über den Drag'n'Drop bereich geht, das der Cursor sich zu Pointer ändert                                 X
                 - Sicherheit: hier später noch eine antiviren library benutzen                                                                                                          O
                 - Um Datein zu überprüfen, sollten sie im Upload bereich auch abspielbar sein und nicht erst im Editor                                                                  O
 
@@ -27,6 +27,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                     brauchen wir öfter, daher component.
                 - Der Name sollte direkt geändert werden, wenn das Label in der Eingabe Zeile geändert wird.                                                                            X
                 - Bisher sind alle cases ziemlich gleich, zu default umändern um code zu sparen und die, die anders sind mit der case abfangen !!!!!                                    O
+                - Defaul functionality                                                                                                                                                  O
 
             - FetchAudio: Es werden bisher nur beim ersten Upload die Daten angezeigt, die UseEffect wird aber immer aufgerufen wenn der Drawer geöffnet wird, angucken !!!             O
 
@@ -51,6 +52,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 - Wenn ein Endknoten durchgespielt wird, wird nach weiterem Audio gesucht, das wirft derzeit noch einen Fehler, abfangen.                                               O
                 - Es könnte noch einen Fehler geben, wenn wir einen Kreis bauen, also wenn wir zum Startknoten verweisen, entweder Handle entfernen, oder abfangen, dass ein            O
                     Startknoten übergangen wird.
+                - User Validation, nur befugte Nutzer dürfen das Hörbuch über die query erreichen dürfen !!!!!                                                                          O
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
@@ -62,6 +64,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
                 - Nodes können auf sich selber verweisen, Edges überprüfen, auch nur eine Edge aus einem Handle ziehbar machen !!!!!                                                    O
                 - Save: Sollte anzeigen, dass der Flow noch nicht gespeichert wurde, wenn es Änderungen gibt. Beim verlassen des Editors, sollte der User auch                          O
                     darauf hingewiesen werden dass seine Daten verloren gehen.
+                - Audio nur für das gerade geöffnete Projekt auswählbar machen.
+                - MultipleChoiceNode: Fehler wenn keine Antwort bei ans2 gesetzt wurde und audio ausgewählt wird "cant trim of undefined"   !!!                                         O
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 
@@ -75,6 +79,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
             - ReactionNode: Hier muss abgefangen werden, dass nur Zahlen eingegeben werden können und auch nur in der Art wie wir es wollen.                                            O
                 - Im Editor die länge des ausgewählten Audios anzeigen und nur innerhalb der Länge auswählbar machen, sonst Fehler im Player                                            O
                 - Im Editor überschneidende Periods abfangen, oder zumindest nochmal bedenken ob wir das gut finden oder nicht                                                          O
+                - Wenn eine Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab             O
+                    und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
 
 30.01.2024  - DialogNode: Hier sollten wir je nachdem wieviele Nodes in dem Dialogknoten hinzugefügt werden, die height und width verändern. Vielleicht sollte man das direkt scallable O
                 machen.
@@ -101,7 +107,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
             - UserProjects: Get All User Projects (all flows), set some details (title), set Edit Button and delete, status (editing, pending, etc),                                    O
                 sort for name, length, show how many nodes,                                                                                                                             O
                 how many errors (missing files or not connected nodes), we need a standard thumbnail, that gets set aslong as the thumbnail havent been set.                            O
-                - Noch eine extra Bestätigung, um das Projekt zu löschen.                                                                                                               O
+                - Noch eine extra Bestätigung, um das Projekt zu löschen.                                                                                                               X
+                - Abfangen dass ein Projektname nicht doppelt vorkommen darf.                                                                                                           O
 
 07.02.2024  - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                       O
             
@@ -110,13 +117,22 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig,        
 08.02.2024  - ExistingAudiobookSetup: Wir haben es bisher so programmiert, dass man den bestehenden Audiobook Titel nicht ändern darf, ansonsten muss auch der name des flows und der   O
                 dazugehörigen Audiopaths geändert werden.
 
-            - LayoutMenuModalUpload: Hier sollte noch hinzugefügt werden, dass dem Creator die bereits hochgeladenen Files zu diesem Flow angezeigt werden.                             O
+            - LayoutMenuModalUpload: Hier sollte noch hinzugefügt werden, dass dem Creator die bereits hochgeladenen Files zu diesem Flow angezeigt werden.                             x
+                - Hier muss noch abgefangen werden, dass wenn man sich eine grafik/ein Audio angesehen/gehört hat, und man dann ein anderes audio/grafik anwählt, dass dieses           O
+                    dann auch angezeigt/abspielbar wird.
 
-09.02.2024  - ValidateFlow: TimeNode kann man noch Buchstaben eingeben, hier nur das richtige Zeitformat möglich machen                                                                   O
+09.02.2024  - ValidateFlow: TimeNode kann man noch Buchstaben eingeben, hier nur das richtige Zeitformat möglich machen                                                                 O
                 ReactionNode: Ebenfalls keine Buchstaben erlauben, und einstellen, dass sich die Zeiten nicht überschneiden dürfen.                                                     O
                 Allgemein: Es wird noch nicht validiert: Interaction Signal, Repeat Question Audio, InputSelection(kommt noch raus)                                                     O
                 
+11.02.2024  - MuAns Knoten: Bug beim auswählen von Audio beheben. Wenn audio nicht gesetzt und man nochmal "Answer Audio" auswählt, dann wird eine Antwort gelöscht.                    O
+                - Antwort Kombinationen werden erst nach wegklicken aktualisiert. Sollten aber direkt aktualisiert werden wenn eine Antwort hinzugefügt wurde.                          O
 
+14.02.2024  - UploadTasks: + Button hat noch keine Funktion, sollte eigentlich Ordner hinzufügen, dann brauchen wir aber auch eine Ordnerstruktur                                       O
+
+15.02.2024  - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                                   O
+            
+            
 
 
 

@@ -65,6 +65,7 @@ Was noch kommt:
                         - Mini Map für den Editor
                         - Das Hörbuch Portal mit User-Login
                             - dazu dann das user Handling (Hörbücher mit User verbinden)
+                            - wie auch die verschiedenen Rechte und die dazugehörigen Seiten für den User (Admin Seite, Projekteverwalten, etc.)
                         - Zweite Spur, also Hintergrundaudio für die Knoten hinzufügen.
                             - Das dann auch im Player implementieren
                             - Validierung anpassen
@@ -78,6 +79,7 @@ Was noch kommt:
                         - Interactives Audiobook zum Testen aufnehmen und einarbeiten
                         - Dokumentation
                         - Video Präsentation / Making Of
+                        - Übergangsszenarien einarbeiten, Bilder, Animationen, Audios.
 
 Was noch kommen könnte:
 

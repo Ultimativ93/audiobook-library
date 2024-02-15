@@ -5,7 +5,7 @@ import DrawerFormatProviderGeneral from './layoutDrawerFormats/drawerFormatProvi
 import DrawerFormatProviderQuestions from './layoutDrawerFormats/drawerFormatProviderQuestions/DrawerFormatProviderQuestions';
 import MuAnsFromatCombination from './layoutDrawerFormats/drawerFormatProviderCombination/MuAnsFromatCombination';
 
-const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) => {
+const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
     const btnRef = React.useRef();
 
     if (!nodeData || !nodeData.data) {
@@ -26,15 +26,15 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges }) 
                 <Tabs>
                     <TabList>
                         <Tab>General Options</Tab>
-                        <Tab>Question Options</Tab>
+                        {nodeData.type !== 'endNode' && nodeData.type !== 'bridgeNode' && <Tab>Question Options</Tab>}
                         {nodeData.type === 'muAns' && <Tab>Combination Options</Tab>}
                     </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} />
+                            <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                         </TabPanel>
                         <TabPanel>
-                            <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
+                            <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
                         </TabPanel>
                         {nodeData.type === 'muAns' &&
                             <TabPanel>

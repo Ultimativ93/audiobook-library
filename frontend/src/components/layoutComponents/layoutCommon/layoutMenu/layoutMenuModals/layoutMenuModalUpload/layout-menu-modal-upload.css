@@ -1,0 +1,59 @@
+.layout-menu-modal-upload-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.layout-menu-modal-upload-left,
+.layout-menu-modal-upload-right-wrapper {
+    flex: 1; /* Verteilt den verfügbaren Platz gleichmäßig auf layout-menu-modal-upload-left und layout-menu-modal-upload-right-wrapper */
+}
+
+.dropzone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 100%; /* Die Dropzone nimmt jetzt den gesamten verfügbaren Platz ein */
+}
+
+.layout-menu-modal-upload-right {
+    margin-left: 5px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.layout-menu-modal-upload-right-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.layout-menu-modal-upload-dropzone {
+    width: 100%;
+    height: 40vh;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-style: dashed;
+    border-radius: 10px;
+    background-color: lightgrey;
+    color: rgb(39, 39, 39);
+}
+
+.file-item p {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.layout-menu-modal-upload-right-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Nimmt den gesamten verfügbaren Platz ein */
+}
+
+.layout-menu-modal-upload-right-player {
+    margin-top: 20px;
+    justify-content: center;
+    align-self: center;
+}

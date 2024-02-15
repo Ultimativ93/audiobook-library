@@ -4,7 +4,7 @@ import { Switch } from '@chakra-ui/react';
 import SelectInteractionSignalAudio from './SelectInteractionSignalAudio';
 import { updateNodePropertyCheck } from '../LayoutDrawerFunctions';
 
-const SelectInteraktionSignal = ({ nodeData, setNodes }) => {
+const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle }) => {
   const [shouldShowAudio, setShouldShowAudio] = useState(nodeData.data.interactionSignal === 'true');
 
   return (
@@ -17,7 +17,7 @@ const SelectInteraktionSignal = ({ nodeData, setNodes }) => {
           setShouldShowAudio(event.target.checked);
         }}
       />
-      {shouldShowAudio && <SelectInteractionSignalAudio nodeData={nodeData} setNodes={setNodes}/>}
+      {shouldShowAudio && <SelectInteractionSignalAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>}
     </>
   );
 }

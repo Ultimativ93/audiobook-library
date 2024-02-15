@@ -4,9 +4,9 @@ import { Select } from '@chakra-ui/react';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { updateStoryAudio } from '../LayoutDrawerFunctions';
 
-const SelectStoryAudio = ({ nodeData, setNodes }) => {
+const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     // Call fetchAudio to get audio-status
-    const audioPaths = FetchAudio();
+    const audioPaths = FetchAudio(audiobookTitle);
     const [selectedStoryAudio, setSelectedAudioStory] = useState(nodeData.data.audioStory || '');
 
     useEffect(() => {

@@ -89,7 +89,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
     }, [flowToCheck]);
 
     return (
-        <Modal isOpen={isPreviewModalOpen} size="5xl" onClose={() => setModalsState(prevState => ({ ...prevState, isPreviewModalOpen: false }))}>
+        <Modal isOpen={isPreviewModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPreviewModalOpen: false }))} size="5xl">
             <ModalOverlay />
             <ModalContent className="modal-content">
                 <ModalCloseButton />

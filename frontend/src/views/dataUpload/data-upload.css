@@ -1,0 +1,29 @@
+.data-upload-dropzone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.data-upload-dropzone p {
+    width: 50vw;
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-style: dashed;
+    border-radius: 15px;
+    background-color: lightgrey;
+    color: orange;
+}
+
+.data-upload-container button {
+    background-color: lightblue;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 10px;
+    width: 100px;
+}
+

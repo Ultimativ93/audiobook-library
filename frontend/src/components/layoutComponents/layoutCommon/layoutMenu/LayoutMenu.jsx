@@ -4,7 +4,7 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 
 import LayoutMenuModalSetup from './layoutMenuModals/LayoutMenuModalSetup';
-import LayoutMenuModalUpload from './layoutMenuModals/LayoutMenuModalUpload';
+import LayoutMenuModalUpload from './layoutMenuModals/layoutMenuModalUpload/LayoutMenuModalUpload';
 import LayoutMenuModalPreview from './layoutMenuModals/layoutMenuModalPreview/LayoutMenuModalPreview';
 
 const LayoutMenu = ({ audiobookTitle }) => {
@@ -26,7 +26,7 @@ const LayoutMenu = ({ audiobookTitle }) => {
             <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} variant='outline' />
             <MenuList>
                 <MenuItem onClick={() => toggleModal('isUploadModalOpen')}>
-                    Upload Audio
+                    Upload Data
                 </MenuItem>
 
                 <MenuItem onClick={() => toggleModal('isSetupModalOpen')}>

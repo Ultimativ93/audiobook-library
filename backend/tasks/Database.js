@@ -15,7 +15,6 @@ class Database {
         });
     }
 
-
     // Initializing database and creating a table "audioPaths" if doesnt exist
     initialize() {
         this.db.serialize(() => {
@@ -66,7 +65,7 @@ class Database {
         });
     }
 
-    // Deleting an audioPath and audioName from audioPaths in the database
+    // Deleting audioPaths and audioNames from audioPaths in the database
     deletePath(audiobookTitle) {
         console.log('Deleting audioPaths with audiobookTitle:', audiobookTitle);
 
@@ -76,6 +75,22 @@ class Database {
                     reject(err.message);
                 } else {
                     console.log(`Deleted all audioPaths with audiobookTitle '${audiobookTitle}' from the database.`);
+                    resolve();
+                }
+            });
+        });
+    }
+
+    // Deleting a file path from audioPaths in the database
+    deleteFilePath(file) {
+        console.log('Deleting file path from audioPaths:', file);
+
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM audioPaths WHERE audioName = ?', [file], function (err) {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    console.log(`Deleted file path '${file}' from the database.`);
                     resolve();
                 }
             });
@@ -101,7 +116,7 @@ class Database {
     // Deletes a detail with the name of audiobookTitle from the databse
     deleteDetail(audiobookTitle) {
         console.log('Deleting detail with audiobookTitle:', audiobookTitle);
-    
+
         return new Promise((resolve, reject) => {
             this.db.run('DELETE FROM details WHERE audiobookTitle = ?', [audiobookTitle], function (err) {
                 if (err) {
@@ -160,9 +175,9 @@ class Database {
     }
 
     // Get all audioPath from audioPaths
-    getAllFilePaths() {
+    getAllFilePaths(audiobookTitle) {
         return new Promise((resolve, reject) => {
-            this.db.all('SELECT audioPath, audioName FROM audioPaths', [], (err, rows) => {
+            this.db.all('SELECT audioPath, audioName FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
                 if (err) {
                     reject(err.message);
                 } else {
@@ -266,12 +281,12 @@ class Database {
     changeDetailsByTitle(audiobookDetails, audiobookTitle) {
         console.log("AudiobookTitle in changeDetailsByTitle", audiobookTitle);
         console.log("Details in changeDetailsByTitle", audiobookDetails);
-    
+
         return new Promise((resolve, reject) => {
             this.db.run(
                 'UPDATE details SET detailData = ? WHERE audiobookTitle = ?',
                 [JSON.stringify(audiobookDetails), audiobookTitle],
-                function(err) {
+                function (err) {
                     if (err) {
                         console.error('Error updating audiobook details:', err);
                         reject(err);
@@ -283,7 +298,21 @@ class Database {
             );
         });
     }
-    
+
+    getAllFileNames(audiobookTitle) {
+        console.log("AudiobookTitle", audiobookTitle);
+
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT audioName FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    const fileNames = rows.map(row => row.audioName);
+                    resolve(fileNames);
+                }
+            });
+        });
+    }
 
     // Closing database
     close() {

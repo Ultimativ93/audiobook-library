@@ -3,6 +3,7 @@ import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Backgro
 import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
+// We delete the reactflow dist style later and will user our own, allready implemented styles.
 import 'reactflow/dist/style.css';
 import '../editor/editor.css'
 
@@ -47,9 +48,6 @@ const Editor = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [selectedNodeData, setSelectedNodeData] = useState(null);
     const { setViewport } = useReactFlow();
-
-    console.log("Nodes im Editor: ", nodes);
-    console.log("Edges im Editor: ", edges);
 
     // Setting audiobookTitle, to handle routes and restore.
     const { audiobookTitleParam } = useParams();
@@ -146,7 +144,7 @@ const Editor = () => {
 
     return (
         <>
-            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
+            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
             <LayoutEditorButtons onSave={onSave} onRestore={onRestore} onAdd={onAdd} audiobookTitle={audiobookTitle}/>
 
             <ReactFlow

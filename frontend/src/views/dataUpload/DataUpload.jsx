@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useParams } from 'react-router-dom';
 
-import LayoutMenu from '../../components/layoutComponents/layoutCommon/layoutMenu/LayoutMenu';
+import '../dataUpload/data-upload.css';
 
 const DataUpload = () => {
     const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -77,10 +77,10 @@ const DataUpload = () => {
 
     return (
         <>
-            <section className="container">
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10px' }} {...getRootProps({ className: 'dropzone' })}>
+            <section className="data-upload-container">
+                <div className="data-upload-dropzone"  {...getRootProps({ className: 'dropzone' })}>
                     <input {...getInputProps()} />
-                    <p style={{ width: '50vw', height: '30vh', display: 'flex', justifyContent: 'center', alignItems: 'center', border: '2px solid black', borderStyle: 'dashed', borderRadius: '15px', backgroundColor: 'lightgrey', color: 'grey' }}>Drag 'n' drop some files here, or click to select files</p>
+                    <p>Drag 'n' drop some files here, or click to select files</p>
                 </div>
                 <aside>
                     <h4>Files</h4>
@@ -88,7 +88,7 @@ const DataUpload = () => {
                     <h4>Rejected files</h4>
                     <ul>{fileRejectionItems}</ul>
                 </aside>
-                <button style={{ backgroundColor: 'lightblue', border: '2px solid black', borderRadius: '10px', padding: 5, marginTop: 10, width: 100, }} onClick={handleUpload}>Upload</button>
+                <button onClick={handleUpload}>Upload</button>
                 {uploadSuccess && <p>Ur files have been successfully uploaded to the server!</p>}
             </section>
         </>

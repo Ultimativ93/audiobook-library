@@ -4,7 +4,7 @@ import { DrawerBody, DrawerFooter, DrawerHeader } from '@chakra-ui/react';
 import SelectNodeLabel from '../../drawerComponents/SelectNodeLabel';
 import SelectStoryAudio from '../../drawerComponents/SelectStoryAudio';
 
-const BridgeNodeFormatGeneral = ({ nodeData, setNodes }) => {
+const BridgeNodeFormatGeneral = ({ nodeData, setNodes, audiobookTitle }) => {
 
     console.log("NodeData in BridgeNode:", nodeData);
 
@@ -13,7 +13,7 @@ const BridgeNodeFormatGeneral = ({ nodeData, setNodes }) => {
             <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
             <DrawerBody>
                 <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
-                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} />
+                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
             </DrawerBody>
             <DrawerFooter>
             </DrawerFooter>

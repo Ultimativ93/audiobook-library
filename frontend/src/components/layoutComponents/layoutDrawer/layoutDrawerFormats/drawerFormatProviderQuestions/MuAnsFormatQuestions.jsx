@@ -1,5 +1,5 @@
 import React from 'react';
-import { DrawerBody, DrawerFooter, DrawerHeader } from '@chakra-ui/react';
+import { DrawerBody, DrawerHeader } from '@chakra-ui/react';
 
 import SelectQuestion from '../../drawerComponents/SelectQuestion';
 import SelectQuestionAudio from '../../drawerComponents/SelectQuestionAudio';
@@ -18,9 +18,6 @@ const MuAnsFormatQuestions = ({ nodeData, setNodes, setEdges, edges, audiobookTi
                 <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
                 <SelectAnswers nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle}/>
             </DrawerBody>
-            <DrawerFooter>
-                {/* */}
-            </DrawerFooter>
         </>
     )
 }

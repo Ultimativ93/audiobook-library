@@ -83,12 +83,9 @@ const fetchDataFromServer = async (audiobookTitle) => {
 };
 
 const fetchAudioUrl = async (fileName, setAudioUrl) => {
-    console.log("FileName in fetchAudioUrl: ", fileName);
-
     try {
         const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${fileName}`);
         const audioPath = response.data;
-        console.log("AudioPath in fetchAudioUrl: ", audioPath);
 
         const audioBlobResponse = await axios.get(`http://localhost:3005/getAudio?audioPath=${encodeURIComponent(audioPath)}`, {
             responseType: 'blob'
@@ -96,9 +93,6 @@ const fetchAudioUrl = async (fileName, setAudioUrl) => {
 
         const audioBlob = new Blob([audioBlobResponse.data], { type: 'audio/ogg' });
         const audioUrl = URL.createObjectURL(audioBlob);
-
-        console.log("AudioBlob: ", audioBlob);
-        console.log("AudioUrl: ", audioUrl);
 
         setAudioUrl(audioUrl);
     } catch (error) {

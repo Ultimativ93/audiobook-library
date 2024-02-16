@@ -1,15 +1,13 @@
 .input-node {
-    height: 50px;
+  height: 50px;
   width: 200px;
-  border: 1px solid #000;
-  border-color: #ffbd03;
   border-radius: 5px;
   padding: 5px;
   background: #4FADAE;
 }
 
 .input-node label {
-    display: block;
-    color: white;
-    font-size: 16px;
-  }
+  display: block;
+  color: white;
+  font-size: 16px;
+}

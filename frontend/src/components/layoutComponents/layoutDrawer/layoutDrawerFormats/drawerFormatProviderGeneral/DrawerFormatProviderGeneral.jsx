@@ -11,10 +11,6 @@ import InputNodeFormatGeneral from './InputNodeFormatGeneral';
 const DrawerFormatProviderGeneral = ({ nodeData, setNodes, audiobookTitle }) => {
 
     switch (nodeData.type) {
-        case 'start':
-            return {
-                // has to be created
-            }
         case 'muChoi':
             return (
                 <MuChoiFormatGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
@@ -44,8 +40,7 @@ const DrawerFormatProviderGeneral = ({ nodeData, setNodes, audiobookTitle }) => 
                 <EndNodeFormatGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
             )
         default:
-            console.log("Default in LayoutFormatProvider, check it!");
-            // create default functionality
+            console.log("There was a problem setting the case of format for your node in DrawerFormatProviderGeneral, please contact the support!");
             return null;
     }
 }

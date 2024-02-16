@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Switch } from '@chakra-ui/react';
 
 import SelectInteractionSignalAudio from './SelectInteractionSignalAudio';
-import { updateNodePropertyCheck } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
 const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle }) => {
   const [shouldShowAudio, setShouldShowAudio] = useState(nodeData.data.interactionSignal === 'true');
@@ -13,7 +13,7 @@ const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle }) => {
       <Switch
         defaultChecked={shouldShowAudio}
         onChange={(event) => {
-          updateNodePropertyCheck(setNodes, nodeData, 'interactionSignal', event);
+          updateNodeProperty(setNodes, nodeData, 'interactionSignal', event.target.checked.toString());
           setShouldShowAudio(event.target.checked);
         }}
       />

@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { Select } from '@chakra-ui/react';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
-import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 
 const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     const audioPaths = FetchAudio(audiobookTitle);
-    console.log("audiobookTitle", audiobookTitle);
     const [selectedAudio, setSelectedAudio] = useState(nodeData.data.interactionSignalAudio || '');
-
-    console.log("SelectAudio - nodeData: ", nodeData);
-    console.log("SelectAudio - audioPaths: ", audioPaths);
+    const audioUsage = useAudioUsage(audioPaths);
 
     return (
         <>
@@ -23,11 +20,20 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
                     updateNodeProperty(setNodes, nodeData, 'interactionSignalAudio', event.target.value);
                 }}
             >
-                {audioPaths.map((audio, index) => (
-                    <option key={index} value={audio.audioName}>
-                        {audio.audioName}
-                    </option>
-                ))}
+                {audioPaths.map((audio, index) => {
+                    const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                    return (
+                        <option
+                            key={index}
+                            value={audio.audioName}
+                            style={{ color: color }}
+                        >
+                            {audio.audioName}
+                        </option>
+                    )
+                })}
+
+
             </Select>
         </>
     )

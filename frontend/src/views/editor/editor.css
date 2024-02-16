@@ -1,10 +1,28 @@
 .react-flow__handle {
-    width: 10px;
-    height: 10px;
-    background-color: #ffbd03;
-  }
+  width: 10px;
+  height: 10px;
+  background-color: #ffbd03;
+}
 
-  .react-flow__handle:hover {
-    width: 12px;
-    height: 12px;
-  }
+.react-flow__handle:hover {
+  width: 12px;
+  height: 12px;
+}
+
+.react-flow__node {
+  border: 2px solid #ffbd03;
+  border-radius: 8px;
+  left: -2px;
+  top: -2px;
+  z-index: 20;
+}
+
+.react-flow__node:hover {
+  border-width: 3px;
+  left: -3px;
+  top: -3px;
+}
+
+.react-flow__node.selected {
+  background-color: rgba(255, 255, 255, 0.1); /* Ändern Sie die Transparenz hier */
+}

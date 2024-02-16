@@ -72,29 +72,38 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
     };
 
     const handlePlayClick = () => {
-        const audioFiles = selectedFiles.filter(file => file.endsWith('.mp3') || file.endsWith('.aac') || file.endsWith('.wav') || file.endsWith('.ogg') || file.endsWith('.m4a'));
-        if (audioFiles.length === 1) {
-            setShowAudio(true);
-            setShowGraphic(false);
-            fetchAudioUrl(audioFiles[0], (audioUrl) => setAudioUrls([audioUrl]));
-        } else if (audioFiles.length === 0) {
-            alert("Bitte wählen Sie eine Audiodatei aus, um sie abzuspielen.");
+        if (showAudio) {
+            setShowAudio(false);
         } else {
-            alert("Bitte wählen Sie nur eine Audiodatei aus, um sie abzuspielen.");
+            const audioFiles = selectedFiles.filter(file => file.endsWith('.mp3') || file.endsWith('.aac') || file.endsWith('.wav') || file.endsWith('.ogg') || file.endsWith('.m4a'));
+            if (audioFiles.length === 1) {
+                setShowAudio(true);
+                setShowGraphic(false);
+                fetchAudioUrl(audioFiles[0], (audioUrl) => setAudioUrls([audioUrl]));
+            } else if (audioFiles.length === 0) {
+                alert("Bitte wählen Sie eine Audiodatei aus, um sie abzuspielen.");
+            } else {
+                alert("Bitte wählen Sie nur eine Audiodatei aus, um sie abzuspielen.");
+            }
         }
     }
 
     const handleShowGraphic = () => {
-        const graphicFiles = selectedFiles.filter(file => file.endsWith('.png') || file.endsWith('.PNG') || file.endsWith('.jpg') || file.endsWith('.JPG') || file.endsWith('.jpeg') || file.endsWith('.jpeg'));
-        if (graphicFiles.length === 1) {
-            setShowGraphic(true);
-            setShowAudio(false);
-            fetchGraphicUrl(graphicFiles[0], (graphicUrl) => setGraphicUrls([graphicUrl]));
-        } else if (graphicFiles.length === 0) {
-            alert("Bitte wählen Sie eine Grafikdatei aus, um sie anzuzeigen.");
+        if (showGraphic) {
+            setShowGraphic(false);
         } else {
-            alert("Bitte wählen Sie nur eine Grafikdatei aus, um sie anzuzeigen.");
+            const graphicFiles = selectedFiles.filter(file => file.endsWith('.png') || file.endsWith('.PNG') || file.endsWith('.jpg') || file.endsWith('.JPG') || file.endsWith('.jpeg') || file.endsWith('.jpeg'));
+            if (graphicFiles.length === 1) {
+                setShowGraphic(true);
+                setShowAudio(false);
+                fetchGraphicUrl(graphicFiles[0], (graphicUrl) => setGraphicUrls([graphicUrl]));
+            } else if (graphicFiles.length === 0) {
+                alert("Bitte wählen Sie eine Grafikdatei aus, um sie anzuzeigen.");
+            } else {
+                alert("Bitte wählen Sie nur eine Grafikdatei aus, um sie anzuzeigen.");
+            }
         }
+
     }
 
     useEffect(() => {
@@ -179,12 +188,22 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                     <div className="layout-menu-modal-upload-right-buttons">
                                         <div className="layout-menu-modal-upload-right-buttons-left">
                                             <Button size='sm' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
-                                            <Button size='sm' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
-                                                Play Audio
-                                            </Button>
-                                            <Button size='sm' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
+                                            {showAudio && (
+                                                <Button size='sm' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
+                                                    Hide Audio
+                                                </Button>
+                                            )}
+                                            {!showAudio && (
+                                                <Button size='sm' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
+                                                    Play Audio
+                                                </Button>
+                                            )}
+                                            {showGraphic && (<Button size='sm' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
+                                                Hide Graphic
+                                            </Button>)}
+                                            {!showGraphic && (<Button size='sm' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
                                                 Show Graphic
-                                            </Button>
+                                            </Button>)}
                                         </div>
                                         <div className="layout-menu-modal-upload-right-buttons-right">
                                             <Select size='sm' placeholder="Sort By" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>

@@ -1,20 +1,24 @@
 import React from 'react'
 import { Input } from '@chakra-ui/react';
 
-import { updateQuestion } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
 const SelectQuestion = ({ nodeData, setNodes }) => {
+    const handleQuestionChange = (event) => {
+        const newQuestion = event.target.value;
+        updateNodeProperty(setNodes, nodeData, 'question', newQuestion);
+    };
+
     return (
         <>
             <h4>Set Question</h4>
             <Input
                 placeholder='Question ..'
                 defaultValue={nodeData.data.question}
-                onChange={(event) => updateQuestion(setNodes, nodeData, event)}
+                onChange={handleQuestionChange}
             />
         </>
     )
 }
 
-export default SelectQuestion
-
+export default SelectQuestion;

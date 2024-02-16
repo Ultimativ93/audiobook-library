@@ -1,5 +1,5 @@
 import React from 'react'
-import { DrawerBody, DrawerFooter, DrawerHeader } from '@chakra-ui/react';
+import { DrawerBody, DrawerHeader } from '@chakra-ui/react';
 
 import SelectNodeLabel from '../../drawerComponents/SelectNodeLabel';
 import SelectStoryAudio from '../../drawerComponents/SelectStoryAudio';
@@ -14,8 +14,6 @@ const EndNodeFormatGeneral = ({ nodeData, setNodes, audiobookTitle }) => {
                 <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                 <SelectEnd nodeData={nodeData} setNodes={setNodes} />
             </DrawerBody>
-            <DrawerFooter>
-            </DrawerFooter>
         </>
     )
 }

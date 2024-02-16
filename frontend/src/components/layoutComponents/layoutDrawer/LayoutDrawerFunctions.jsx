@@ -1,107 +1,6 @@
-// Updates label of a node, after it gets changed in the drawer
-const updateNodeLabel = (setNodes, nodeId, event) => {
-    console.log("Event in updateNodeLabel", event.target.value)
-    const newLabel = event.target.value;
-    console.log("NewLabel:", newLabel)
-
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeId) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        label: newLabel,
-                    },
-                };
-            }
-            return node;
-        });
-    });
-};
-
-// Updates audioStory of a node, after it gets changed in the drawer
-const updateStoryAudio = (setNodes, nodeData, event) => {
-    const newAudioStory = event.target.value;
-
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeData.id) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        audioStory: newAudioStory,
-                    },
-                };
-            }
-            return node;
-        });
-    });
-}
-
-// Updates isEnd of a node, after it gets changed in the drawer
-const updateIsEnd = (setNodes, nodeData, event) => {
-    const newIsEnd = event.target.checked;
-    console.log("newIsEnd: ", newIsEnd);
-
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeData.id) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        isEnd: `${newIsEnd}`,
-                    },
-                };
-            }
-            return node;
-        });
-    });
-};
-
-// Updates question of a node, after it gets changed in the drawer
-const updateQuestion = (setNodes, nodeData, event) => {
-    const newQuestion = event.target.value;
-    console.log("newQuestion: ", newQuestion);
-
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeData.id) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        question: newQuestion,
-                    },
-                };
-            }
-            return node;
-        });
-    });
-};
-
-// Updates repearQuestionAudio of a node, after it gets changed in the drawer
-const updateRepeatQuestion = (setNodes, nodeData, event) => {
-    const newRepeatQuestion = event.target.checked;
-    console.log("newRepeatQuestion: ", newRepeatQuestion);
-
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeData.id) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        repeatQuestionAudio: `${newRepeatQuestion}`,
-                    },
-                };
-            }
-            return node;
-        });
-    });
-};
+import { fetchFlow } from '../../tasks/editorTasks/FetchFlow';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 // Remove answer from node and update related edges
 const removeAnswer = (setNodes, setEdges, edges, nodeData, index, setAnswers) => {
@@ -153,24 +52,6 @@ const removeAnswer = (setNodes, setEdges, edges, nodeData, index, setAnswers) =>
                 return {
                     ...node,
                     data: updatedData,
-                };
-            }
-            return node;
-        });
-    });
-};
-
-// Update AnswersAndTimes, can be changed to updateNodeProperty !!!!!
-const updateAnswersAndTimes = (setNodes, nodeData, updatedAnswers) => {
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeData.id) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        answers: updatedAnswers,
-                    },
                 };
             }
             return node;
@@ -248,7 +129,7 @@ const removeCombination = (setNodes, nodeData, combinationId) => {
 
 // Updated nodeproperties - we should change all the functions to updateNodeProperty, much less code !!!!!
 const updateNodeProperty = (setNodes, nodeData, property, value) => {
-    console.log("in updateProperty")
+    console.log("in updateProperty", value)
     setNodes((prevNodes) => {
         return prevNodes.map((node) => {
             if (node.id === nodeData.id) {
@@ -265,37 +146,47 @@ const updateNodeProperty = (setNodes, nodeData, property, value) => {
     });
 };
 
-// Updates node Property of checkboxes, after it gets changed in the drawer
-const updateNodePropertyCheck = (setNodes, nodeData, property, event) => {
-    const propertyValue = event.target.checked;
-    console.log("Hast interaction Signal: ", propertyValue);
+const useAudioUsage = (audioPaths) => {
+    const [audioUsage, setAudioUsage] = useState({});
+    const params = useParams();
 
-    setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
-            if (node.id === nodeData.id) {
-                return {
-                    ...node,
-                    data: {
-                        ...node.data,
-                        [property]: `${propertyValue}`,
-                    },
-                };
+    useEffect(() => {
+        const fetchAudioUsage = async () => {
+            const usage = {};
+            for (const audio of audioPaths) {
+                const isUsed = await isAudioUsed(audio.audioName, params.audiobookTitleParam);
+                usage[audio.audioName] = isUsed;
             }
-            return node;
-        });
-    });
-};
+            setAudioUsage(usage);
+        };
+
+        fetchAudioUsage();
+    }, [audioPaths, params.audiobookTitleParam]);
+
+    return audioUsage;
+}
+
+const isAudioUsed = async (audioName, params) => {
+    console.log("In LDF isAudioUsed: ", audioName);
+    console.log("Params in isAudioUsed:", params);
+    const flow = await fetchFlow(params)
+    console.log("Flow in isAudioUsed:", flow);
+    console.log("Nodes Audiostory", flow.nodes[1].data.audioStory)
+
+    for (const node of flow.nodes) {
+        if (node.data && Object.values(node.data).some(value => typeof value === 'string' && value.includes(audioName))) {
+            console.log("wir kommen hier rein");
+            return true;
+        }
+    }
+    return false;
+}
 
 export {
-    updateNodeLabel,
-    updateStoryAudio,
-    updateIsEnd,
-    updateQuestion,
-    updateRepeatQuestion,
     updateNodeProperty,
-    updateNodePropertyCheck,
-    updateAnswersAndTimes,
     updateAnswerCombination,
     removeAnswer,
     removeCombination,
+    isAudioUsed,
+    useAudioUsage,
 };

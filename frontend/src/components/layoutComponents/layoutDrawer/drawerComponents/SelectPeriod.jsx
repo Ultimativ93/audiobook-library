@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
-import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 
 const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
@@ -9,6 +9,7 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
   const timeoutRef = useRef(null);
   const audioPaths = FetchAudio(audiobookTitle);
+  const audioUsage = useAudioUsage(audioPaths);
 
   useEffect(() => {
     if (!arraysEqual(answerAudios, nodeData.data.answerAudios || [])) {
@@ -102,11 +103,21 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
               onBlur={() => handleInputBlur(index, 'answerAudio')}
               flex="7"
             >
-              {audioPaths.map((audio, idx) => (
-                <option key={idx} value={audio.audioName}>
-                  {audio.audioName}
-                </option>
-              ))}
+              {audioPaths.map((audio, idx) => {
+                const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                return (
+                  <option
+                    key={idx}
+                    value={audio.audioName}
+                    style={{ color: color }}
+                  >
+                    {audio.audioName}
+                  </option>
+                )
+
+              })}
+
+
             </Select>
             <Spacer />
             <Input

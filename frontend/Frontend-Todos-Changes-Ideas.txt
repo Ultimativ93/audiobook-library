@@ -14,36 +14,35 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden                                            X
 
 20.01.2024  -DataUpload: 
-                - Manage Files: Select File x, delete files x, add files x, validate Files (no empty) x, doppelte File benennungen abfangen x, vieles mehr..                            X          O
+                - Manage Files: Select File x, delete files x, add files x, validate Files (no empty) x, doppelte File benennungen abfangen x, vieles mehr..                            X
                     - Abfangen, wenn ein file rejected wurde und Button Upload gedrückt wird, das nichts hochgeladen wird (im Moment passiert das noch)                                 X
                     Im Moment sind die möglichen Files die auf einmal hochgeladen werdena auf 50 begrenzt, Rücksprache halten, ob wir das so machen wollen/sollen/dürfen.               X
                 - Style: Alles so ziemlich, aber auf jeden Fall, dass wenn man über den Drag'n'Drop bereich geht, das der Cursor sich zu Pointer ändert                                 X
-                - Sicherheit: hier später noch eine antiviren library benutzen                                                                                                          O
-                - Um Datein zu überprüfen, sollten sie im Upload bereich auch abspielbar sein und nicht erst im Editor                                                                  O
+                - Sicherheit: hier später noch eine antiviren library benutzen, oder anders absichern   !!!!!                                                                           O
+                - Um Datein zu überprüfen, sollten sie im Upload bereich auch abspielbar sein und nicht erst im Editor                                                                  X
 
 21.01.2024  - DrawerFormatProviderGeneral: braucht eine Verbindung zum Backend, oder eher eine weitere Component die darauf zugreift -> hier nochmal gucken  (wurde FetchAudio)         X
-                wo wir das reinschmeißen, ich denke nicht dass das Sinn macht, das in Components zu haben und auch nicht umbedingt das manche Datein dann .jsx sein müssen.             O
+                wo wir das reinschmeißen, ich denke nicht dass das Sinn macht, das in Components zu haben und auch nicht umbedingt das manche Datein dann .jsx sein müssen.             X
                 - Daten vom Backend in Select einfügen, je nachdem wie viele daten gekommen sind auch options + abfangen von default = null / nachricht, whatever.                      X
                     brauchen wir öfter, daher component.
                 - Der Name sollte direkt geändert werden, wenn das Label in der Eingabe Zeile geändert wird.                                                                            X
-                - Bisher sind alle cases ziemlich gleich, zu default umändern um code zu sparen und die, die anders sind mit der case abfangen !!!!!                                    O
-                - Defaul functionality                                                                                                                                                  O
+                - Bisher sind alle cases ziemlich gleich, zu default umändern um code zu sparen und die, die anders sind mit der case abfangen                                          X
+                - Default functionality                                                                                                                                                 X
 
-            - FetchAudio: Es werden bisher nur beim ersten Upload die Daten angezeigt, die UseEffect wird aber immer aufgerufen wenn der Drawer geöffnet wird, angucken !!!             O
+            - FetchAudio: Es werden bisher nur beim ersten Upload die Daten angezeigt, die UseEffect wird aber immer aufgerufen wenn der Drawer geöffnet wird, angucken !!!             X
 
-22.01.2024  - SelectStoryAudio: Das ist eigentlich auch eine Task und könnte in LayoutDrawerFunctions ausgelagert werden.                                                               O
-                - Verwendete Audios könnten markiert werden, das könnte die übersichtlichkeit erhöhen + doppelt benutzte Audios z.B. rot                                                O
+22.01.2024  - SelectStoryAudio: Das ist eigentlich auch eine Task und könnte in LayoutDrawerFunctions ausgelagert werden.                                                               X
+                - Verwendete Audios könnten markiert werden, das könnte die übersichtlichkeit erhöhen + doppelt benutzte Audios z.B. rot                                                X
             
-            - LayoutDrawerFunctions: Hier sollten wir noch die updateNodeLabelWrapper in updateNodeLabel einarbeiten, sowie in updateAudioStory. Dazu dann functions aufgerufe          O
+            - LayoutDrawerFunctions: Hier sollten wir noch die updateNodeLabelWrapper in updateNodeLabel einarbeiten, sowie in updateAudioStory. Dazu dann functions aufgerufe          X
                 überprüfen.
-                - Außerdem könnten wir hier nochmal gucken, das die Funktionen generisch eingefügt werden, dann sparen wir uns einigeZeilen Code. Wie es in updateNodeProperty passiert O
+                - Außerdem könnten wir hier nochmal gucken, das die Funktionen generisch eingefügt werden, dann sparen wir uns einigeZeilen Code. Wie es in updateNodeProperty passiert X
 
-23.01.2024  - SelectQuestionAudio: Hier und auch in SelectStoryAudio sollte gezeigt werden, ob die ausgewählte Datei schon benutzt wird. Sonst könnte Question auch Answer sein etc.    O
+23.01.2024  - SelectQuestionAudio: Hier und auch in SelectStoryAudio sollte gezeigt werden, ob die ausgewählte Datei schon benutzt wird. Sonst könnte Question auch Answer sein etc.    X
 
-24.01.2024  - EndNode: Man könnte den Endknoten mit einem Haken zu einer Bridge machen, damit man Abhängigkeiten so darstellen kann. Zum Beispiel wird oben nein gesagt,                O
-                darauf ist es kein Endknoten mehr und man kann woanders hin, ermöglicht mehr interaktivität. Kann man auch händisch bauen, ist aber umständlich.
-            
-            - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.
+24.01.2024  - EndNode: isEnd switch entfernen, wenn wir es nicht zu bridge ändern wollen                                                                                                X
+
+            - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.                                                                                    X
                 - Interaktions Signal Logic implementieren                                                                                                                              O
                 - Repeat Question Logic implementieren                                                                                                                                  O
                 - Wenn derzeit die Wiedergabeleiste zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                   X
@@ -53,6 +52,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Es könnte noch einen Fehler geben, wenn wir einen Kreis bauen, also wenn wir zum Startknoten verweisen, entweder Handle entfernen, oder abfangen, dass ein            O
                     Startknoten übergangen wird.
                 - User Validation, nur befugte Nutzer dürfen das Hörbuch über die query erreichen dürfen !!!!!                                                                          O
+                - Interactions Signal hinzufügen
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
@@ -66,6 +66,14 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                     darauf hingewiesen werden dass seine Daten verloren gehen.
                 - Audio nur für das gerade geöffnete Projekt auswählbar machen.
                 - MultipleChoiceNode: Fehler wenn keine Antwort bei ans2 gesetzt wurde und audio ausgewählt wird "cant trim of undefined"   !!!                                         O
+                - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
+                - Anwählen einer Node verdeutlichen, also dass wenn der Drawer geöffnet ist, auch die Node farbig hinterlegt wird, o.Ä.                                                 O
+                - Hintergrundaudio Spur                                                                                                                                                 O
+                - Upload Audio link zu den input field hinzufügen                                                                                                                       O
+                - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       O
+                    abgespielt werden können.
+                - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
+                    belassen.
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 

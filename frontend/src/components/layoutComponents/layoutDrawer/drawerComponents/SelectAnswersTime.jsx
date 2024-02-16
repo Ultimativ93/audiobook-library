@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
-import { removeAnswer, updateAnswersAndTimes, updateNodeProperty } from '../LayoutDrawerFunctions';
+import { removeAnswer, updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 
 const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
@@ -9,12 +9,13 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
     const timeoutRef = useRef(null);
     const audioPaths = FetchAudio(audiobookTitle);
+    const audioUsage = useAudioUsage(audioPaths);
 
     const handleAddAnswer = () => {
         const lastAnswer = answers[answers.length - 1];
         if (lastAnswer && typeof lastAnswer === 'object' && lastAnswer.answer !== '') {
-          setAnswers([...answers, { answer: '', time: '' }]);
-          setAnswerAudios([...answerAudios, '']);
+            setAnswers([...answers, { answer: '', time: '' }]);
+            setAnswerAudios([...answerAudios, '']);
         }
     };
 
@@ -22,7 +23,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         const updatedAnswers = [...answers];
         updatedAnswers[index][field] = value;
         setAnswers(updatedAnswers);
-        updateAnswersAndTimes(setNodes, nodeData, updatedAnswers);
+        updateNodeProperty(setNodes, nodeData, 'answers', updatedAnswers);
     };
 
     const handleRemoveAnswer = (index) => {
@@ -93,11 +94,18 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             onBlur={() => handleInputBlur(index, 'answerAudio')}
                             flex="4"
                         >
-                            {audioPaths.map((audio, idx) => (
-                                <option key={idx} value={audio.audioName}>
-                                    {audio.audioName}
-                                </option>
-                            ))}
+                            {audioPaths.map((audio, idx) => {
+                                const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                                return (
+                                    <option
+                                        key={idx}
+                                        value={audio.audioName}
+                                        style={{ color: color }}
+                                    >
+                                        {audio.audioName}
+                                    </option>
+                                )
+                            })}
                         </Select>
                         <Spacer />
                         <Input

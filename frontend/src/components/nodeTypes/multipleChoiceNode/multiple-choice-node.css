@@ -3,7 +3,7 @@
   width: 175px;
   padding: 5px;
   border-radius: 5px;
-  background: #542C4D;
+  background: var(--node-background-color, #542C4D);
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -1,16 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
 import { useParams, useLocation } from 'react-router-dom';
-import axios from 'axios';
-
-// We delete the reactflow dist style later and will user our own, allready implemented styles.
-import 'reactflow/dist/style.css';
-import '../editor/editor.css'
 
 import LayoutEditorDrawer from '../../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
 import LayoutEditorButtons from '../../components/layoutComponents/layoutEditor/layoutEditorButtons/LayoutEditorButtons';
-
 import NodeTypesDataFormat from '../../components/nodeTypes/NodeTypesDataFormat';
+
 import MultipleChoiceNode from '../../components/nodeTypes/multipleChoiceNode/MultipleChoiceNode';
 import EndNode from '../../components/nodeTypes/endNode/EndNode';
 import BridgeNode from '../../components/nodeTypes/bridgeNode/BridgeNode';
@@ -19,10 +14,21 @@ import MultipleAnswerNode from '../../components/nodeTypes/multipleAnswerNode/Mu
 import ReactionNode from '../../components/nodeTypes/reactionNode/ReactionNode';
 import InputNode from '../../components/nodeTypes/inputNode/InputNode';
 
-// We will change this later to user id + label of audiobook
-const flowKey = 'First-trys';
+import {
+    saveFlow,
+    restoreFlow,
+    handleNodeClick,
+    handleCloseDrawer,
+    handleNodesChange,
+    handleFlowClick,
+    handleSelectionChange,
+    colorSelectedNodes,
+} from '../../components/tasks/editorTasks/EditorFunctions';
 
-// Object defining custom nodes for react-flow
+import 'reactflow/dist/style.css';
+import '../editor/editor.css'
+
+// Define node types
 const nodeTypes = {
     muChoi: MultipleChoiceNode,
     endNode: EndNode,
@@ -33,12 +39,11 @@ const nodeTypes = {
     inputNode: InputNode,
 };
 
-// Array with initial nodes
+// Initial nodes and edges
 const initialNodes = [
     { id: '1', data: { label: 'Start', isDeletable: false, isStart: 'true' }, position: { x: 100, y: 100 }, },
 ];
 
-// Array with initial edges
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 const Editor = () => {
@@ -48,117 +53,66 @@ const Editor = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [selectedNodeData, setSelectedNodeData] = useState(null);
     const { setViewport } = useReactFlow();
+    const [selectedNodes, setSelectedNodes] = useState([]);
 
-    // Setting audiobookTitle, to handle routes and restore.
+    // Get parameters from URL
     const { audiobookTitleParam } = useParams();
     const location = useLocation();
     const newAudiobook = location.state && location.state.new ? location.state.new : false;
     const audiobookTitle = audiobookTitleParam || (location.state && location.state.audiobookTitle);
 
-    // Function to handle node connections by updating the edges state
+    // Callback to handle connection between nodes
     const onConnect = useCallback((params) => {
         setEdges((prevEdges) => addEdge(params, prevEdges));
     }, [setEdges]);
 
-    // Function to handle saving nodes into the database which is located in the backend
-    const onSave = useCallback(async () => {
-        if (rfInstance) {
-            const flow = rfInstance.toObject();
+    // Callback to save flow
+    const onSave = useCallback(() => {
+        saveFlow(rfInstance, audiobookTitle);
+    }, [rfInstance, audiobookTitle]);
 
-            try {
-                const response = await axios.post('http://localhost:3005/saveFlow', {
-                    flow,
-                    flowKey: audiobookTitle,
-                });
+    // Callback to restore flow
+    const onRestoreCallback = useCallback(() => {
+        restoreFlow(audiobookTitle, setNodes, setEdges, setViewport, newAudiobook, onRestoreCallback);
+    }, [audiobookTitle, setNodes, setEdges, setViewport, newAudiobook]);
 
-                if (response.status === 200) {
-                    console.log('Flow successfully sent to the server.');
-                } else {
-                    console.error('Error sending flow to the server.');
-                }
-            } catch (error) {
-                console.error('Error in try:', error);
-            }
-            localStorage.setItem(flowKey, JSON.stringify(flow));
-        }
-    }, [rfInstance, flowKey]);
-
-    const onRestore = useCallback(async () => {
-        try {
-            const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${audiobookTitle}`);
-
-            if (response.status === 200) {
-                const flow = response.data;
-                const { x = 0, y = 0, zoom = 1 } = flow.viewport || {};
-                setNodes(flow.nodes || []);
-                setEdges(flow.edges || []);
-                setViewport({ x, y, zoom });
-            } else {
-                console.warn('No flow found in the database');
-            }
-        } catch (error) {
-            console.error('Error restoring flow from the database:', error);
-        }
-    }, [setNodes, setViewport, setEdges, flowKey]);
-
-    // Function to add a new node to the viewport based on the specified node type
+    // Callback to add a new node
     const onAdd = useCallback((nodeType) => {
-        console.log("NodeType Editor:", nodeType)
         const lastNodeId = nodes.length > 0 ? nodes[nodes.length - 1].id : 0;
         const newNode = NodeTypesDataFormat(nodeType, lastNodeId);
         setNodes((prevNodes) => prevNodes.concat(newNode));
     }, [setNodes, nodes.length]);
 
-    // Function to set the selected node and open the drawer with the selected node
-    const onOpenDrawer = (node) => {
-        if (!(node.id === '1' && node.data.label === 'Start')) {
-            setSelectedNodeData(node);
-            setIsDrawerOpen(true);
-        }
-
-    };
-
-    // Function to prevent deletion of the start node
-    const handleNodesChange = (changes) => {
-        const nextChanges = changes.reduce((acc, change) => {
-            if (change.type === 'remove') {
-                const removedNode = nodes.find((node) => node.id === change.id);
-                if (removedNode && removedNode.data && removedNode.data.isDeletable === false) {
-                    return acc;
-                }
-            }
-            return [...acc, change];
-        }, []);
-
-        onNodesChange(nextChanges);
-    };
-
-
-    // If audiobookTitle ist set, restore flow from database.
+    // useEffect to restore flow on component mount
     useEffect(() => {
-        if (audiobookTitle && audiobookTitle !== 'undefined' && newAudiobook !== true  ) {
-            onRestore();
+        if (audiobookTitle && audiobookTitle !== 'undefined' && newAudiobook !== true) {
+            onRestoreCallback();
         }
-    }, [audiobookTitle, onRestore, newAudiobook]);
-    
+    }, [audiobookTitle, onRestoreCallback, newAudiobook]);
+
+    // useEffect to handle color changes of selected nodes
+    useEffect(() => {
+        colorSelectedNodes(selectedNodes)();
+    }, [selectedNodes]);
 
     return (
         <>
-            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
-            <LayoutEditorButtons onSave={onSave} onRestore={onRestore} onAdd={onAdd} audiobookTitle={audiobookTitle}/>
+            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
+            <LayoutEditorButtons onSave={onSave} onRestore={onRestoreCallback} onAdd={onAdd} audiobookTitle={audiobookTitle} />
 
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={handleNodesChange}
+                onNodesChange={handleNodesChange(nodes, onNodesChange)}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 onInit={setRfInstance}
                 nodeTypes={nodeTypes}
-                onNodeClick={(event, node) => { onOpenDrawer(node) }}
+                onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData)}
+                onSelectionChange={handleSelectionChange(selectedNodes, setSelectedNodes)}
                 className='editor-flow'
+                onClick={(event) => handleFlowClick(event, () => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData))}
             >
-
                 <Background />
             </ReactFlow>
         </>

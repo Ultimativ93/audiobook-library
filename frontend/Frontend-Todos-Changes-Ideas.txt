@@ -74,6 +74,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                     abgespielt werden können.
                 - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
                     belassen.
+                - Label von Nodes mittig zentrieren, und nur einen gewissen Teil des Labels auf der Node anzeigen, sprengt sonst den Rahmen.                                            O
+                - Wenn mehrere Nodes angewählt werden, sollen diese auch Farblich hinterlegt werden                                                                                     X
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 

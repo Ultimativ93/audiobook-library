@@ -3,7 +3,7 @@
   width: 200px;
   border-radius: 5px;
   padding: 5px;
-  background: #4FADAE;
+  background: var(--node-background-color, #4FADAE);
 }
 
 .input-node label {

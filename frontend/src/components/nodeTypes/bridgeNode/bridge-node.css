@@ -3,10 +3,8 @@
     width: 200px;
     border-radius: 5px;
     padding: 5px;
-    background: #9B4A5F;
+    background: var(--node-background-color, #9B4A5F);
     color: white;
-}
-
-.bridge-node:clicked {
-    height:300px;
+    position: relative;
+    z-index: 1;
 }

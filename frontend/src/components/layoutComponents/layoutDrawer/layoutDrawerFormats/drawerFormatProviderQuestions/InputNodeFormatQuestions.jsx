@@ -1,5 +1,5 @@
 import React from 'react';
-import { DrawerBody, DrawerHeader } from '@chakra-ui/react';
+import { DrawerBody } from '@chakra-ui/react';
 
 import SelectQuestion from '../../drawerComponents/SelectQuestion';
 import SelectQuestionAudio from '../../drawerComponents/SelectQuestionAudio';
@@ -10,7 +10,6 @@ import SelectCorrectAnswer from '../../drawerComponents/SelectCorrectAnswer';
 const InputNodeFormatQuestions = ({ nodeData, setNodes, audiobookTitle }) => {
   return (
     <>
-    <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
     <DrawerBody>
         <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
         <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>

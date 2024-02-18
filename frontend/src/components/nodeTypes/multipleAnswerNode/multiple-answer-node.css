@@ -3,6 +3,6 @@
     width: 200px;
     border-radius: 5px;
     padding: 5px;
-    background: #245A76;
+    background: var(--node-background-color, #245A76);
     color: white;
 }

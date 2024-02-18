@@ -1,0 +1,7 @@
+
+/* Slide-Out-Animation */
+.drawer-content-closed {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}

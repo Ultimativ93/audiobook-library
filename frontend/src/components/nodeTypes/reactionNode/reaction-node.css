@@ -3,7 +3,7 @@
     width: 200px;
     border-radius: 5px;
     padding: 5px;
-    background: #81D6BE;
+    background: var(--node-background-color, #81D6BE);
 }
 
 .reaction-node {

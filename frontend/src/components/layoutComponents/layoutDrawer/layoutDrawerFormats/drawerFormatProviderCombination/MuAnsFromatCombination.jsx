@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
-import { DrawerBody, DrawerFooter, DrawerHeader } from '@chakra-ui/react';
+import { DrawerBody, DrawerFooter } from '@chakra-ui/react';
 
 import { updateAnswerCombination, removeCombination } from '../../LayoutDrawerFunctions';
 
@@ -61,7 +61,6 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
     const uniqueCombinations = Array.from(new Set(answerCombinations.map(JSON.stringify))).map(JSON.parse);
 
     return (<>
-        <DrawerHeader>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
         <DrawerBody>
             <div>
                 <h4>Answer Combinations</h4>

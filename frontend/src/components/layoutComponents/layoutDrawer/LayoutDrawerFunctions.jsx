@@ -129,7 +129,6 @@ const removeCombination = (setNodes, nodeData, combinationId) => {
 
 // Updated nodeproperties - we should change all the functions to updateNodeProperty, much less code !!!!!
 const updateNodeProperty = (setNodes, nodeData, property, value) => {
-    console.log("in updateProperty", value)
     setNodes((prevNodes) => {
         return prevNodes.map((node) => {
             if (node.id === nodeData.id) {
@@ -167,15 +166,10 @@ const useAudioUsage = (audioPaths) => {
 }
 
 const isAudioUsed = async (audioName, params) => {
-    console.log("In LDF isAudioUsed: ", audioName);
-    console.log("Params in isAudioUsed:", params);
     const flow = await fetchFlow(params)
-    console.log("Flow in isAudioUsed:", flow);
-    console.log("Nodes Audiostory", flow.nodes[1].data.audioStory)
 
     for (const node of flow.nodes) {
         if (node.data && Object.values(node.data).some(value => typeof value === 'string' && value.includes(audioName))) {
-            console.log("wir kommen hier rein");
             return true;
         }
     }

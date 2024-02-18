@@ -17,38 +17,38 @@ const ReactionNode = ({ data, isConnectable }) => {
     nonEmptyAnswers.push(handleNoReaction);
 
     return (
-        <div className="reaction-node" ref={nodeRef}>
-            <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+            <div className="reaction-node" ref={nodeRef}>
+                <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
 
-            <div>
-                <label htmlFor="text">{data.label}</label>
+                <div>
+                    <label htmlFor="text">{data.label}</label>
+                </div>
+
+                <div className="reaction-node-source-handles">
+                    {nonEmptyAnswers.map((answer, index) => {
+                        const handleId = `${data.id}-handle-${index}`;
+                        const totalWidth = 200;
+                        const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
+
+                        const handleStyle = {
+                            left: `${leftPosition}px`,
+                            backgroundColor: index === nonEmptyAnswers.length - 1 ? 'red' : '#ffbd03',
+                        };
+
+                        return (
+                            <Handle
+                                key={handleId}
+                                type="source"
+                                position={Position.Bottom}
+                                id={handleId}
+                                isConnectable={isConnectable}
+                                style={handleStyle}
+                            />
+                        );
+                    })}
+                </div>
             </div>
-
-            <div className="reaction-node-source-handles">
-                {nonEmptyAnswers.map((answer, index) => {
-                    const handleId = `${data.id}-handle-${index}`;
-                    const totalWidth = 200;
-                    const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
-
-                    const handleStyle = {
-                        left: `${leftPosition}px`,
-                        backgroundColor: index === nonEmptyAnswers.length - 1 ? 'red' : '#ffbd03',
-                    };
-
-                    return (
-                        <Handle
-                            key={handleId}
-                            type="source"
-                            position={Position.Bottom}
-                            id={handleId}
-                            isConnectable={isConnectable}
-                            style={handleStyle}
-                        />
-                    );
-                })}
-            </div>
-        </div>
     );
-}
+};
 
 export default ReactionNode;

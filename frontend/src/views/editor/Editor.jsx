@@ -21,7 +21,7 @@ import {
     handleCloseDrawer,
     handleNodesChange,
     handleFlowClick,
-    handleSelectionChange,
+    //handleSelectionChange,
     colorSelectedNodes,
 } from '../../components/tasks/editorTasks/EditorFunctions';
 
@@ -54,6 +54,7 @@ const Editor = () => {
     const [selectedNodeData, setSelectedNodeData] = useState(null);
     const { setViewport } = useReactFlow();
     const [selectedNodes, setSelectedNodes] = useState([]);
+    const [isNodeSelected, setIsNodeSelected] = useState(false);
 
     // Get parameters from URL
     const { audiobookTitleParam } = useParams();
@@ -90,14 +91,32 @@ const Editor = () => {
         }
     }, [audiobookTitle, onRestoreCallback, newAudiobook]);
 
+    // Callback for handleSelectionChange,
+    const handleSelectionChangeCallback = useCallback((selectedNodeIds) => {
+        let ids = [];
+        if (Array.isArray(selectedNodeIds)) {
+            ids = selectedNodeIds;
+        } else if (selectedNodeIds && Array.isArray(selectedNodeIds.nodes)) {
+            ids = selectedNodeIds.nodes.map(node => node.id);
+        } else {
+            console.error('selectedNodeIds is not in the expected format:', selectedNodeIds);
+        }
+        setSelectedNodes(ids);
+        setIsNodeSelected(ids.length > 0);
+        colorSelectedNodes(ids);
+    }, []);
+
     // useEffect to handle color changes of selected nodes
     useEffect(() => {
-        colorSelectedNodes(selectedNodes)();
-    }, [selectedNodes]);
+        if (isNodeSelected) {
+            const changeColors = colorSelectedNodes(selectedNodes);
+            changeColors();
+        }
+    }, [selectedNodes, isNodeSelected]);
 
     return (
         <>
-            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
+            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
             <LayoutEditorButtons onSave={onSave} onRestore={onRestoreCallback} onAdd={onAdd} audiobookTitle={audiobookTitle} />
 
             <ReactFlow
@@ -108,13 +127,14 @@ const Editor = () => {
                 onConnect={onConnect}
                 onInit={setRfInstance}
                 nodeTypes={nodeTypes}
-                onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData)}
-                onSelectionChange={handleSelectionChange(selectedNodes, setSelectedNodes)}
+                onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen)}
+                onSelectionChange={handleSelectionChangeCallback}
                 className='editor-flow'
-                onClick={(event) => handleFlowClick(event, () => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData))}
+                onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)} 
             >
                 <Background />
             </ReactFlow>
+
         </>
     );
 };

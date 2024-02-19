@@ -23,12 +23,16 @@ const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode }) => {
     const handleToStart = () => {
         if (flow && flow.nodes) {
             const startNode = flow.nodes.find(node => node.id === '1');
+            console.log("in handleStart")
             if (startNode) {
+                console.log("weiter in handle")
                 const connectedEdge = flow.edges.find(edge => edge.source === startNode.id);
                 if (connectedEdge) {
+                    console.log("deutlich weiter")
                     const connectedNode = flow.nodes.find(node => node.id === connectedEdge.target);
                     if (connectedNode) {
-                        setCurrentNode(connectedNode.id-1);
+                        console.log("wir versuchen das", connectedNode.id);
+                        setCurrentNode(flow.nodes.findIndex(node => node.id === connectedNode.id));
                     }
                 }
             }

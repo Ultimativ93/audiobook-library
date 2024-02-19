@@ -127,7 +127,7 @@ const removeCombination = (setNodes, nodeData, combinationId) => {
     });
 };
 
-// Updated nodeproperties - we should change all the functions to updateNodeProperty, much less code !!!!!
+// Updates nodeproperties
 const updateNodeProperty = (setNodes, nodeData, property, value) => {
     setNodes((prevNodes) => {
         return prevNodes.map((node) => {
@@ -169,12 +169,23 @@ const isAudioUsed = async (audioName, params) => {
     const flow = await fetchFlow(params)
 
     for (const node of flow.nodes) {
-        if (node.data && Object.values(node.data).some(value => typeof value === 'string' && value.includes(audioName))) {
-            return true;
+        for (const value of Object.values(node.data)) {
+            if (Array.isArray(value)) {
+                for (const item of value) {
+                    if (typeof item === 'string' && item.includes(audioName)) {
+                        return true;
+                    }
+                }
+            } else {
+                if (typeof value === 'string' && value.includes(audioName)) {
+                    return true;
+                }
+            }
         }
     }
     return false;
 }
+
 
 export {
     updateNodeProperty,

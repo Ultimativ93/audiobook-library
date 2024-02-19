@@ -7,6 +7,7 @@ import DrawerFormatProviderGeneral from './layoutDrawerFormats/drawerFormatProvi
 import DrawerFormatProviderQuestions from './layoutDrawerFormats/drawerFormatProviderQuestions/DrawerFormatProviderQuestions';
 import MuAnsFromatCombination from './layoutDrawerFormats/drawerFormatProviderCombination/MuAnsFromatCombination';
 
+// Definition von theme und components außerhalb der Komponente
 const components = {
     Drawer: {
         variants: {
@@ -27,10 +28,11 @@ const theme = extendTheme({ components });
 
 const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
     const btnRef = React.useRef();
-
+    
     if (!nodeData || !nodeData.data) {
         return null;
     }
+
 
     return (
         <ChakraProvider theme={theme}>
@@ -43,7 +45,7 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                 trapFocus={false}
                 variant="alwaysOpen"
             >
-                <DrawerOverlay display='none'/>
+                <DrawerOverlay display='none' />
                 <DrawerContent width={500} className={`drawer-content ${isOpen ? 'drawer-content-open' : 'drawer-content-closed'}`}>
                     <DrawerCloseButton />
                     <DrawerHeader borderBottomWidth='1px'>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
@@ -59,7 +61,9 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                                     <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                                 </TabPanel>
                                 <TabPanel>
-                                    <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
+                                    {(nodeData.type === 'muChoi' || nodeData.type === 'timeNode' || nodeData.type === 'muAns' || nodeData.type === 'reactNode' || nodeData.type === 'inputNode') && (
+                                        <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
+                                    )}
                                 </TabPanel>
                                 {nodeData.type === 'muAns' &&
                                     <TabPanel>

@@ -13,6 +13,7 @@ import PlayerTime from '../../components/layoutComponents/layoutPlayer/playerTim
 
 import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/playerTasks/PlayerLogic';
 
+
 const Player = () => {
   const [flow, setFlow] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -22,11 +23,12 @@ const Player = () => {
   const [questionAudioPlayed, setQuestionAudioPlayed] = useState(false);
   const [answersVisible, setAnswersVisible] = useState(false);
   const [answerAudioIndex, setAnswerAudioIndex] = useState(0);
+  const [interactionSignalPlayed, setInteractionSignalPlayed] = useState(false);
 
   const audioRef = useRef();
   const location = useLocation();
 
-  // Here we set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
+  // Set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
   useEffect(() => {
     const flowKey = location.pathname.split('/').pop();
     console.log("Flowkey im Player: ", flowKey);
@@ -40,7 +42,10 @@ const Player = () => {
     const fetchData = async () => {
       if (flow != null && flow.nodes != null && flow.nodes.length > 1 && currentNode != null) {
         const path = await getAudioPathFromName(flow.nodes[currentNode].data.audioStory);
+        console.log("Path", path);
         const audioBlobResponse = await getAudioFromPath(path);
+        if(audioBlobResponse) {
+        }
         setAudioBlob(audioBlobResponse);
         setCurrentNodeProps(flow.nodes[currentNode].data);
       }
@@ -110,12 +115,26 @@ const Player = () => {
     const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio);
     const questionAudioBlob = await getAudioFromPath(questionAudioPath);
 
-    if (questionAudioBlob && !questionAudioPlayed) {
+    if (questionAudioBlob && (!questionAudioPlayed || currentNodeProps.repeatQuestionAudio === "true")) {
       audioRef.current.src = questionAudioBlob;
       audioRef.current.play();
       setQuestionAudioPlayed(true);
       setAnswersVisible(true);
-      console.log("Question Played", questionAudioPlayed);
+    }
+  }
+
+
+  // Play Interaction Signal if selected
+  const playInteractionSignal = async () => {
+    if (currentNodeProps.interactionSignal === "true" && currentNodeProps.interactionSignalAudio) {
+      const interactionSignalAudioPath = await getAudioPathFromName(currentNodeProps.interactionSignalAudio);
+      const interactionSignalAudioBlob = await getAudioFromPath(interactionSignalAudioPath);
+
+      if (interactionSignalAudioBlob) {
+        audioRef.current.src = interactionSignalAudioBlob;
+        audioRef.current.play();
+        setInteractionSignalPlayed(true);
+      }
     }
   }
 
@@ -133,22 +152,34 @@ const Player = () => {
     }
   }
 
-  // Handling the end of a story
+  // Handling the end of an audio
   const handleAudioEnded = () => {
-    if (flow && flow.nodes) {
+    if (flow && flow.nodes && currentNodeProps) {
       const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
-      console.log("TargetNodeIndex", targetNodeIndex)
       const targetNodeType = flow.nodes[targetNodeIndex].type;
-      console.log("TargetNodeType", targetNodeType);
-      console.log("questionAudioPlay", questionAudioPlayed);
 
-      if (targetNodeType === 'bridgeNode' || (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode'))) {
-        console.log("before return specialCases")
-        handleSpecialCasesAnswers(targetNodeType);
-      } else if (questionAudioPlayed) {
-        playAnswerAudio();
+      // Check if all answer audios have been played
+      if (questionAudioPlayed && answerAudioIndex === currentNodeProps.answerAudios.length) {
+        if (currentNodeProps.repeatQuestionAudio === "true") {
+          console.log("Repeating question audio...");
+          setQuestionAudioPlayed(false);
+          console.log("questionAudioPlayed vor weiter:", questionAudioPlayed);
+          playQuestionAudio();
+          setAnswerAudioIndex(0);
+        } else {
+          console.log("All answer audios played.");
+        }
       } else {
-        playQuestionAudio();
+        // Play next answer audio
+        if (targetNodeType === 'bridgeNode' || (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode'))) {
+          handleSpecialCasesAnswers(targetNodeType);
+        } else if (questionAudioPlayed) {
+          playAnswerAudio();
+        } else if (!questionAudioPlayed && interactionSignalPlayed) {
+          playQuestionAudio();
+        } else {
+          playInteractionSignal();
+        }
       }
     }
   }
@@ -157,6 +188,7 @@ const Player = () => {
     setQuestionAudioPlayed(false);
     setAnswersVisible(false);
     setAnswerAudioIndex(0);
+    setInteractionSignalPlayed(false);
   }, [currentNode]);
 
   return (

@@ -37,19 +37,25 @@ export const restoreFlow = async (audiobookTitle, setNodes, setEdges, setViewpor
     }
 };
 
-export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeData) => {
+export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen) => {
     if (event.ctrlKey) {
         return;
     }
 
-    if (node.id === '1' && node.data.label === 'Start') return; // Don't open drawer for start node
-    setIsDrawerOpen(true);
+    if (node.id === '1' && node.data.label === 'Start') return;
+
+    if (!isDrawerOpen) {
+        setIsDrawerOpen(true);
+    }
+
     setSelectedNodeData(node);
 };
 
-export const handleCloseDrawer = (setIsDrawerOpen, setSelectedNodeData) => {
+
+export const handleCloseDrawer = (setIsDrawerOpen, setSelectedNodeData, selectedNodes) => {
     setIsDrawerOpen(false);
     setSelectedNodeData(null);
+    colorSelectedNodes(selectedNodes)();
 };
 
 export const handleNodesChange = (nodes, onNodesChange) => (changes) => {
@@ -65,13 +71,16 @@ export const handleNodesChange = (nodes, onNodesChange) => (changes) => {
     onNodesChange(nextChanges);
 };
 
-export const handleFlowClick = (event, handleCloseDrawer) => {
-    if (!event.target.closest('.react-flow__node')) {
-        handleCloseDrawer();
+export const handleFlowClick = (event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes ) => {
+    if (!event.target.closest('.react-flow__node') && selectedNodes.length > 0) {
+        handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes);
+        setSelectedNodeData(null);
+        setSelectedNodes([]);
+
     }
 };
 
-export const handleSelectionChange = (selectedNodes, setSelectedNodes) => (selectedNodeIds) => {
+/* export const handleSelectionChange = (selectedNodes, setSelectedNodes) => (selectedNodeIds) => {
     let ids = [];
     if (Array.isArray(selectedNodeIds)) {
         ids = selectedNodeIds;
@@ -81,18 +90,22 @@ export const handleSelectionChange = (selectedNodes, setSelectedNodes) => (selec
         console.error('selectedNodeIds is not in the expected format:', selectedNodeIds);
     }
     setSelectedNodes(ids);
-};
+}; */
 
-export const colorSelectedNodes = (selectedNodes) => () => {
-    if (!Array.isArray(selectedNodes)) {
-        console.error('selectedNodes is not an array:', selectedNodes);
-        return;
-    }
+export const colorSelectedNodes = (selectedNodes) => {
+    const changeNodeColors = () => {
+        if (!Array.isArray(selectedNodes)) {
+            console.error('selectedNodes is not an array:', selectedNodes);
+            return;
+        }
 
-    const nodesElement = document.querySelectorAll('.react-flow__node');
-    nodesElement.forEach(nodeElement => {
-        const nodeId = nodeElement.dataset.id;
-        const isSelected = selectedNodes.includes(nodeId);
-        nodeElement.style.setProperty('--node-background-color', isSelected ? 'orange' : 'initial');
-    });
+        const nodesElement = document.querySelectorAll('.react-flow__node');
+        nodesElement.forEach(nodeElement => {
+            const nodeId = nodeElement.dataset.id;
+            const isSelected = selectedNodes.includes(nodeId);
+            nodeElement.style.setProperty('--node-background-color', isSelected ? 'orange' : 'initial');
+        });
+    };
+
+    return changeNodeColors;
 };

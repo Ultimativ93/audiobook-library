@@ -9,6 +9,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
 17.01.2024  - LayoutDrawer.jsx: Abfangen, dass er sich nicht öffnet wenn die Startnode (Id:1) angeklickt wird                                                                           X
                 - Umbennen, nur ein Teil davon wird wirklich der LayoutDrawer sein, alle anderen sind Drawer.., das verwirrt nur.     -> Bleibt so benannt                              X
                 - EndNode, Bridge brauchen keine weiteren Tabs "QUestion und Kombination" abfangen im Drawer wie bei MuAns.                                                             X
+                - Drawer onClose ohne Transition.   !                                                                                                                                   O
 
             - NodeTypeDataFormat: Wir müssen irgendwie Daten Formate vorgeben, also das MuChoi z.B. 3 Antworten hat mindestens etc.                                                     X
                 vielleicht sollten wir hier auch noch zusehen, dass alle die sich eh wiederholen, in seperaten Objekten abegspeichert werden                                            X
@@ -43,16 +44,19 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
 24.01.2024  - EndNode: isEnd switch entfernen, wenn wir es nicht zu bridge ändern wollen                                                                                                X
 
             - Player: Player muss noch die Daten bekommen, Datenset im Editor mit Namen abspeichern.                                                                                    X
-                - Interaktions Signal Logic implementieren                                                                                                                              O
-                - Repeat Question Logic implementieren                                                                                                                                  O
+                - Interaktions Signal Logic implementieren                                                                                                                              X
+                - Repeat Question Logic implementieren                                                                                                                                  X
                 - Wenn derzeit die Wiedergabeleiste zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                   X
-                - Wenn vom Player zum Editor gewechselt wird, wird der audiobookTitle "undefined", da wir später den Player seperat vom Editor haben, müssen wir das gerade nichts      O
+                - Wenn vom Player zum Editor gewechselt wird, wird der audiobookTitle "undefined", da wir später den Player seperat vom Editor haben, müssen wir das gerade nichts      X
                     abfangen. Aber für das testen benötigen wird das, also anpassen.
                 - Wenn ein Endknoten durchgespielt wird, wird nach weiterem Audio gesucht, das wirft derzeit noch einen Fehler, abfangen.                                               O
                 - Es könnte noch einen Fehler geben, wenn wir einen Kreis bauen, also wenn wir zum Startknoten verweisen, entweder Handle entfernen, oder abfangen, dass ein            O
                     Startknoten übergangen wird.
                 - User Validation, nur befugte Nutzer dürfen das Hörbuch über die query erreichen dürfen !!!!!                                                                          O
-                - Interactions Signal hinzufügen
+                - Interactions Signal hinzufügen                                                                                                                                        X
+                - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
+                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
+                - Endknoten audio muss direkt Startnode                                                                                                                                 O
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
@@ -76,6 +80,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                     belassen.
                 - Label von Nodes mittig zentrieren, und nur einen gewissen Teil des Labels auf der Node anzeigen, sprengt sonst den Rahmen.                                            O
                 - Wenn mehrere Nodes angewählt werden, sollen diese auch Farblich hinterlegt werden                                                                                     X
+                - Wechseln zwischen gleichen Nodes mit geöffneten Drawer, wechselt den Inhalt nicht                                                                                     O
+                - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 

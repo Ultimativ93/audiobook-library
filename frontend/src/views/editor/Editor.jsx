@@ -21,7 +21,6 @@ import {
     handleCloseDrawer,
     handleNodesChange,
     handleFlowClick,
-    //handleSelectionChange,
     colorSelectedNodes,
 } from '../../components/tasks/editorTasks/EditorFunctions';
 
@@ -114,6 +113,8 @@ const Editor = () => {
         }
     }, [selectedNodes, isNodeSelected]);
 
+    console.log("Nodes", nodes);
+
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
@@ -134,7 +135,6 @@ const Editor = () => {
             >
                 <Background />
             </ReactFlow>
-
         </>
     );
 };

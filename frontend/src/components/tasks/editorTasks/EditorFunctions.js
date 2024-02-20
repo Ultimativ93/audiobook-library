@@ -51,7 +51,6 @@ export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeDat
     setSelectedNodeData(node);
 };
 
-
 export const handleCloseDrawer = (setIsDrawerOpen, setSelectedNodeData, selectedNodes) => {
     setIsDrawerOpen(false);
     setSelectedNodeData(null);
@@ -79,18 +78,6 @@ export const handleFlowClick = (event, handleCloseDrawer, setSelectedNodeData, s
 
     }
 };
-
-/* export const handleSelectionChange = (selectedNodes, setSelectedNodes) => (selectedNodeIds) => {
-    let ids = [];
-    if (Array.isArray(selectedNodeIds)) {
-        ids = selectedNodeIds;
-    } else if (selectedNodeIds && Array.isArray(selectedNodeIds.nodes)) {
-        ids = selectedNodeIds.nodes.map(node => node.id);
-    } else {
-        console.error('selectedNodeIds is not in the expected format:', selectedNodeIds);
-    }
-    setSelectedNodes(ids);
-}; */
 
 export const colorSelectedNodes = (selectedNodes) => {
     const changeNodeColors = () => {

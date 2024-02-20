@@ -112,7 +112,6 @@ const handleButtonClickLogic = (index, flow, currentNodeProps, setCurrentNode) =
     }
 };
 
-
 export {
     getAudioPathFromName,
     getAudioFromPath,

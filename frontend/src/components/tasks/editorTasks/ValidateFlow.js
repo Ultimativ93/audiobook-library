@@ -23,6 +23,18 @@ const validateMuChoi = (node) => {
         });
     }
 
+    if (node.data.backgroundAudioSelected) {
+        if (!node.data.backgroundAudio) {
+            missingData.push(`Backgroundaudio is missing.`)
+        }
+    } 
+
+    if (node.data.interactionSignal) {
+        if (!node.data.interactionSignalAudio) {
+            missingData.push(`Interaction Signal Audio is missing.`)
+        }
+    }
+
     return missingData.length > 0 ? `Missing data for Multiple Choice Node with Label: ${node.data.label}: ${missingData.join(", ")}` : null;
 };
 
@@ -76,6 +88,18 @@ const validateTimeNode = (node) => {
         });
     }
 
+    if (node.data.backgroundAudioSelected) {
+        if (!node.data.backgroundAudio) {
+            missingData.push(`Backgroundaudio is missing.`)
+        }
+    } 
+
+    if (node.data.interactionSignal) {
+        if (!node.data.interactionSignalAudio) {
+            missingData.push(`Interaction Signal Audio is missing.`)
+        }
+    }
+
     return missingData.length > 0 ? `Missing data for Time Node ${node.data.label}: ${missingData.join(", ")}` : null;
 }
 
@@ -111,6 +135,18 @@ const validateMuAns = (node) => {
 
     if (!hasCombination) {
         missingData.push("At least one answer combination is required.");
+    }
+
+    if (node.data.backgroundAudioSelected) {
+        if (!node.data.backgroundAudio) {
+            missingData.push(`Backgroundaudio is missing.`)
+        }
+    } 
+
+    if (node.data.interactionSignal) {
+        if (!node.data.interactionSignalAudio) {
+            missingData.push(`Interaction Signal Audio is missing.`)
+        }
     }
 
     return missingData.length > 0 ? `Missing data for Multiple Answer Node ${node.data.label}: ${missingData.join(", ")}` : null;
@@ -156,6 +192,18 @@ const validateReactNode = (node) => {
         }
     }
 
+    if (node.data.backgroundAudioSelected) {
+        if (!node.data.backgroundAudio) {
+            missingData.push(`Backgroundaudio is missing.`)
+        }
+    } 
+
+    if (node.data.interactionSignal) {
+        if (!node.data.interactionSignalAudio) {
+            missingData.push(`Interaction Signal Audio is missing.`)
+        }
+    }
+
     return missingData.length > 0 ? `Missing data for React Node ${node.data.label}: ${missingData.join(", ")}` : null;
 }
 
@@ -176,6 +224,18 @@ const validateInputNode = (node) => {
 
     if (!node.data.correctAnswer) {
         missingData.push("Correct Answer missing.")
+    }
+
+    if (node.data.backgroundAudioSelected) {
+        if (!node.data.backgroundAudio) {
+            missingData.push(`Backgroundaudio is missing.`)
+        }
+    } 
+
+    if (node.data.interactionSignal) {
+        if (!node.data.interactionSignalAudio) {
+            missingData.push(`Interaction Signal Audio is missing.`)
+        }
     }
 
     return missingData.length > 0 ? `Missing data for Input Node ${node.data.label}: ${missingData.join(", ")}` : null;

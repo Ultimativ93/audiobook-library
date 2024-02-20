@@ -8,7 +8,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
     }
 
     const commonAttributes = {
-        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '',
+        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudioSelected: '', backgroundAudio: ''
     }
 
     const generateNodeTypeData = (type, customData = {}) => {

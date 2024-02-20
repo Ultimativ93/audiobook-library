@@ -57,6 +57,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
                 - Endknoten audio muss direkt Startnode                                                                                                                                 O
+                - Wir brauchen eigentlich auch noch ein Background Audio für das Story Audio.                                                                                           O
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
@@ -82,6 +83,10 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Wenn mehrere Nodes angewählt werden, sollen diese auch Farblich hinterlegt werden                                                                                     X
                 - Wechseln zwischen gleichen Nodes mit geöffneten Drawer, wechselt den Inhalt nicht                                                                                     O
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
+                - Handlebeschriftung, vielleicht bei Hover                                                                                                                              O
+                - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
+                - Die benutzten Audios werden nach löschen einer Node noch falsch angezeigt, sollten direkt aktualisieren und nicht erst beim neuen Laden                               O
+                - Background Audio, Repeat Question, Interactionssignal in der Überprüfung abgefangen                                                                                   O
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 

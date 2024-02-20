@@ -23,12 +23,8 @@ const Player = () => {
   const [answersVisible, setAnswersVisible] = useState(false);
   const [answerAudioIndex, setAnswerAudioIndex] = useState(0);
   const [interactionSignalPlayed, setInteractionSignalPlayed] = useState(false);
-  const [backgroundAudio, setBackgroundAudio] = useState(null);
-  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
-  const [backgroundAudioPosition, setBackgroundAudioPosition] = useState(0);
 
   const audioRef = useRef();
-  const backgroundAudioRef = useRef();
   const location = useLocation();
 
   // Set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
@@ -47,7 +43,7 @@ const Player = () => {
         const path = await getAudioPathFromName(flow.nodes[currentNode].data.audioStory);
         console.log("Path", path);
         const audioBlobResponse = await getAudioFromPath(path);
-        if (audioBlobResponse) {
+        if(audioBlobResponse) {
         }
         setAudioBlob(audioBlobResponse);
         setCurrentNodeProps(flow.nodes[currentNode].data);
@@ -194,157 +190,84 @@ const Player = () => {
     setInteractionSignalPlayed(false);
   }, [currentNode]);
 
-  // Load Background Audio
-  useEffect(() => {
-    const loadBackgroundAudio = async () => {
-      if (currentNodeProps && currentNodeProps.backgroundAudioSelected === "true" && questionAudioPlayed) {
-        console.log("background Audio:", currentNodeProps.backgroundAudioSelected);
-        const backgroundAudioPath = await getAudioPathFromName(currentNodeProps.backgroundAudio);
-        const backgroundAudioBlob = await getAudioFromPath(backgroundAudioPath);
-        setBackgroundAudio(backgroundAudioBlob);
-      }
-    };
-
-    loadBackgroundAudio();
-  }, [currentNodeProps, questionAudioPlayed]);
-
-  // Stop background Audio when normal audio player is paused
-  useEffect(() => {
-    const backgroundAudioElement = backgroundAudioRef.current;
-    const audioElement = audioRef.current;
-
-    const handleAudioPaused = () => {
-      console.log("Normal audio player paused.");
-      setIsManuallyPaused(true);
-      if (backgroundAudioElement && !backgroundAudioElement.paused) {
-        console.log("Pausing background audio.");
-        backgroundAudioElement.pause();
-      }
-    };
-
-    const handleAudioEnded = () => {
-      console.log("Normal audio player ended.");
-      setIsManuallyPaused(false);
-      if (backgroundAudioElement && !backgroundAudioElement.paused) {
-        console.log("Pausing background audio.");
-        backgroundAudioElement.pause();
-      }
-    };
-
-    if (audioElement) {
-      audioElement.addEventListener('pause', handleAudioPaused);
-      audioElement.addEventListener('ended', handleAudioEnded);
-      return () => {
-        audioElement.removeEventListener('pause', handleAudioPaused);
-        audioElement.removeEventListener('ended', handleAudioEnded);
-      };
-    }
-  }, [audioRef.current, backgroundAudioRef]);
-
-  // Play background Audio
-  useEffect(() => {
-    const backgroundAudioElement = backgroundAudioRef.current;
-    if (backgroundAudioElement && backgroundAudio && !isManuallyPaused && !audioRef.current.paused) {
-      if (backgroundAudioElement.paused) {
-        backgroundAudioElement.src = backgroundAudio;
-        backgroundAudioElement.currentTime = currentTime;
-        backgroundAudioElement.play();
-      }
-    }
-
-    return () => {
-      if (backgroundAudioElement) {
-        backgroundAudioElement.pause();
-        backgroundAudioElement.src = "";
-      }
-    };
-  }, [backgroundAudio, isManuallyPaused, currentTime]);
-
   return (
-    <div className="player-wrapper">
-      {currentNodeProps && (
-        <div className="player-wrapper-label">
-          Label: {currentNodeProps.label}
+    <>
+
+      <div className="player-wrapper">
+        {currentNodeProps && (
+          <div className="player-wrapper-label">
+            Label: {currentNodeProps.label}
+          </div>
+        )}
+
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muChoi' && (
+          <PlayerAnswers
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            visible={answersVisible}
+          />
+        )}
+
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'endNode' && (
+          <PlayerEnd
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+          />
+        )}
+
+
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'inputNode' && (
+          <PlayerInput
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            visible={answersVisible}
+          />
+        )}
+
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muAns' && (
+          <PlayerMuAns
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            visible={answersVisible}
+          />
+        )}
+
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'reactNode' && (
+          <PlayerReaction
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            onTimeUpdate={currentTime}
+            questionAudioPlayed={questionAudioPlayed}
+          />
+        )}
+
+        {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'timeNode' && (
+          <PlayerTime
+            currentNodeProps={currentNodeProps}
+            flow={flow}
+            setCurrentNode={setCurrentNode}
+            onTimeUpdate={currentTime}
+            visible={answersVisible}
+          />
+        )}
+
+        <div className="player">
+          {audioBlob && (
+            <audio
+              ref={audioRef}
+              controls
+              src={audioBlob}
+              onEnded={() => handleAudioEnded(currentNodeProps, flow, setCurrentNode)}
+            />
+          )}
         </div>
-      )}
-
-      <div className="background-audio">
-        {backgroundAudio && (
-          <audio
-            ref={backgroundAudioRef}
-            src={backgroundAudio}
-            loop
-          />
-        )}
       </div>
-
-      {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muChoi' && (
-        <PlayerAnswers
-          currentNodeProps={currentNodeProps}
-          flow={flow}
-          setCurrentNode={setCurrentNode}
-          visible={answersVisible}
-        />
-      )}
-
-      {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'endNode' && (
-        <PlayerEnd
-          currentNodeProps={currentNodeProps}
-          flow={flow}
-          setCurrentNode={setCurrentNode}
-        />
-      )}
-
-
-      {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'inputNode' && (
-        <PlayerInput
-          currentNodeProps={currentNodeProps}
-          flow={flow}
-          setCurrentNode={setCurrentNode}
-          visible={answersVisible}
-        />
-      )}
-
-      {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muAns' && (
-        <PlayerMuAns
-          currentNodeProps={currentNodeProps}
-          flow={flow}
-          setCurrentNode={setCurrentNode}
-          visible={answersVisible}
-        />
-      )}
-
-      {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'reactNode' && (
-        <PlayerReaction
-          currentNodeProps={currentNodeProps}
-          flow={flow}
-          setCurrentNode={setCurrentNode}
-          onTimeUpdate={currentTime}
-          questionAudioPlayed={questionAudioPlayed}
-        />
-      )}
-
-      {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'timeNode' && (
-        <PlayerTime
-          currentNodeProps={currentNodeProps}
-          flow={flow}
-          setCurrentNode={setCurrentNode}
-          onTimeUpdate={currentTime}
-          visible={answersVisible}
-        />
-      )}
-
-      <div className="player">
-        {audioBlob && (
-          <audio
-            ref={audioRef}
-            controls
-            src={audioBlob}
-            onEnded={() => handleAudioEnded(currentNodeProps, flow, setCurrentNode)}
-          />
-        )}
-      </div>
-    </div>
+    </>
   );
 };
 

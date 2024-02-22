@@ -1,54 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Switch, Select } from '@chakra-ui/react';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { useAudioUsage, updateBackgroundAudio } from '../LayoutDrawerFunctions';
 
-const SelectBackgroundAudio = ({ nodeData, setNodes, audiobookTitle }) => {
-    const [showAudio, setShowAudio] = useState(nodeData.data.backgroundAudioSelected === 'true');
+const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobookTitle }) => {
+    const [selectedAudio, setSelectedAudio] = useState('');
+    const [showAudio, setShowAudio] = useState(false);
     const audioPaths = FetchAudio(audiobookTitle);
-    const [selectedAudio, setSelectedAudio] = useState(nodeData.data.backgroundAudio || '')
     const audioUsage = useAudioUsage(audioPaths);
 
+    const handleAudioChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedAudio(selectedValue);
+        updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedValue);
+    };
+
     return (
-        <>
-            <h4>Background Audio</h4>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
             <Switch
-                defaultChecked={showAudio}
-                onChange={(event) => {
-                    updateNodeProperty(setNodes, nodeData, 'backgroundAudioSelected', event.target.checked.toString());
-                    setShowAudio(event.target.checked);
-                }}
+                checked={showAudio}
+                style={{ marginRight: '5px' }}
             />
-            {showAudio && (
-                <>
-                    <h4>Select Backgroung Audio</h4>
-                    <Select
-                        placeholder='Select Background Audio ...'
-                        value={selectedAudio}
-                        onChange={(event) => {
-                            setSelectedAudio(event.target.value);
-                            updateNodeProperty(setNodes, nodeData, 'backgroundAudio', event.target.value);
-                        }}
-                    >
-                        {audioPaths.map((audio, index) => {
-                            const color = audioUsage[audio.audioName] ? 'green' : 'orange';
-                            return (
-                                <option
-                                    key={index}
-                                    value={audio.audioName}
-                                    style={{ color: color }}
-                                >
-                                    {audio.audioName}
-                                </option>
-                            )
-                        })}
-                    </Select>
-                </>
-            )
-            }
-        </>
+            <div>
+                <h4 style={{ margin: '0', marginBottom: '2px', fontSize: '10px' }}>Background Audio</h4>
+            </div>
+            
+        </div>
     )
 }
 
-export default SelectBackgroundAudio;
+export default SwitchBackgroundAudio;

@@ -6,7 +6,6 @@ import SelectQuestionAudio from '../../drawerComponents/SelectQuestionAudio';
 import SelectRepeatQuestionAudio from '../../drawerComponents/SelectRepeatQuestionAudio';
 import SelectInputSelections from '../../drawerComponents/SelectInputSelections';
 import SelectCorrectAnswer from '../../drawerComponents/SelectCorrectAnswer';
-import SelectBackgroundAudio from '../../drawerComponents/SelectBackgroundAudio';
 
 const InputNodeFormatQuestions = ({ nodeData, setNodes, audiobookTitle }) => {
   return (
@@ -15,7 +14,6 @@ const InputNodeFormatQuestions = ({ nodeData, setNodes, audiobookTitle }) => {
         <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
         <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>
         <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
-        <SelectBackgroundAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
         <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
         <SelectCorrectAnswer nodeData={nodeData} setNodes={setNodes} />
     </DrawerBody>

@@ -148,7 +148,7 @@ const updateNodeProperty = (setNodes, nodeData, property, value) => {
 const useAudioUsage = (audioPaths) => {
     const [audioUsage, setAudioUsage] = useState({});
     const params = useParams();
-
+    
     useEffect(() => {
         const fetchAudioUsage = async () => {
             const usage = {};
@@ -172,12 +172,16 @@ const isAudioUsed = async (audioName, params) => {
         for (const value of Object.values(node.data)) {
             if (Array.isArray(value)) {
                 for (const item of value) {
-                    if (typeof item === 'string' && item.includes(audioName)) {
+                    if (typeof item === 'object' && item.backgroundAudio && typeof item.backgroundAudio === 'string' && item.backgroundAudio.includes(audioName)) {
+                        return true;
+                    } else if (typeof item === 'string' && item.includes(audioName)) {
                         return true;
                     }
                 }
             } else {
-                if (typeof value === 'string' && value.includes(audioName)) {
+                if (typeof value === 'object' && value.backgroundAudio && typeof value.backgroundAudio === 'string' && value.backgroundAudio.includes(audioName)) {
+                    return true;
+                } else if (typeof value === 'string' && value.includes(audioName)) {
                     return true;
                 }
             }
@@ -187,6 +191,38 @@ const isAudioUsed = async (audioName, params) => {
 }
 
 
+const updateBackgroundAudio = (setNodes, nodeData, backgroundAudioFor, selectedAudio, showAudio) => {
+    setNodes((prevNodes) => {
+        return prevNodes.map((node) => {
+            if (node.id === nodeData.id) {
+                let updatedBackgroundAudio = [...node.data.backgroundAudio];
+
+                if (!showAudio) { 
+                    updatedBackgroundAudio = updatedBackgroundAudio.filter(audio => audio.audio !== backgroundAudioFor);
+                } else {
+                    const existingAudioIndex = updatedBackgroundAudio.findIndex(audio => audio.audio === backgroundAudioFor);
+                    if (existingAudioIndex !== -1) {
+                        updatedBackgroundAudio[existingAudioIndex] = { audio: backgroundAudioFor, backgroundAudio: selectedAudio };
+                    } else {
+                        updatedBackgroundAudio.push({ audio: backgroundAudioFor, backgroundAudio: selectedAudio });
+                    }
+                }
+
+                const updatedData = {
+                    ...node.data,
+                    backgroundAudio: updatedBackgroundAudio,
+                };
+                return {
+                    ...node,
+                    data: updatedData,
+                };
+            }
+            return node;
+        });
+    });
+};
+
+
 export {
     updateNodeProperty,
     updateAnswerCombination,
@@ -194,4 +230,5 @@ export {
     removeCombination,
     isAudioUsed,
     useAudioUsage,
+    updateBackgroundAudio,
 };

@@ -38,7 +38,7 @@ const SelectInputSelections = ({ nodeData, setNodes }) => {
 
     return (
         <>
-            <h4>Select Input Selections</h4>
+            <h4 style={{ marginTop:'5px'}}>Select Input Selections</h4>
             <Stack direction="row" flexWrap="wrap">
                 {Object.keys(inputSelectionsRef.current).map((key, index) => (
                     <Checkbox

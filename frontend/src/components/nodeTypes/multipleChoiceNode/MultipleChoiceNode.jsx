@@ -13,6 +13,23 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
 
   const nonEmptyAnswers = data.answers.filter(answer => answer !== '');
 
+  // Add handles for each answer
+  const handles = nonEmptyAnswers.map((_, index) => {
+    const handleId = `${data.id}-handle-${index}`;
+    const totalWidth = 175;
+    const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
+    return (
+      <Handle
+        key={handleId}
+        type="source"
+        position={Position.Bottom}
+        id={handleId}
+        isConnectable={isConnectable}
+        style={{ left: `${leftPosition}px` }}
+      />
+    );
+  });
+
   return (
       <div className="multiple-choice-node" ref={nodeRef}>
         <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
@@ -22,22 +39,7 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
         </div>
 
         <div className="multiple-choice-node-source-handles">
-          {nonEmptyAnswers.map((answer, index) => {
-            const handleId = `${data.id}-handle-${index}`;
-            const totalWidth = 175;
-            const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
-
-            return (
-              <Handle
-                key={handleId}
-                type="source"
-                position={Position.Bottom}
-                id={handleId}
-                isConnectable={isConnectable}
-                style={{ left: `${leftPosition}px` }}
-              />
-            );
-          })}
+          {handles}
         </div>
       </div>
   );

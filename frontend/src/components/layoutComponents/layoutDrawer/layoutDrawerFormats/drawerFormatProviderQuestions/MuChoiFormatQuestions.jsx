@@ -16,7 +16,6 @@ const MuChoiFormatQuestions = ({ nodeData, setNodes, setEdges, edges, audiobookT
         <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
         <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
         <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
-        <SelectBackgroundAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
         <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
         <SelectAnswers nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
       </DrawerBody>

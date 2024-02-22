@@ -131,7 +131,7 @@ const Editor = () => {
                 onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen)}
                 onSelectionChange={handleSelectionChangeCallback}
                 className='editor-flow'
-                onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)} 
+                onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)}
             >
                 <Background />
             </ReactFlow>

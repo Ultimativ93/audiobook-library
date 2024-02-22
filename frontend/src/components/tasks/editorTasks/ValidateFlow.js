@@ -30,7 +30,7 @@ const validateMuChoi = (node) => {
     } 
 
     if (node.data.interactionSignal) {
-        if (!node.data.interactionSignalAudio) {
+        if ((node.data.interactionSignalAudio === '' || !node.data.interactionSignalAudio) && (!node.data.interactionSignal || node.data.interactionSignal === '')) {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
     }
@@ -98,6 +98,10 @@ const validateTimeNode = (node) => {
         if (!node.data.interactionSignalAudio) {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
+    }
+
+    if (!node.data.answerProcessAudio) {
+        missingData.push(`Answer Process Audio is missing.`)
     }
 
     return missingData.length > 0 ? `Missing data for Time Node ${node.data.label}: ${missingData.join(", ")}` : null;
@@ -202,6 +206,10 @@ const validateReactNode = (node) => {
         if (!node.data.interactionSignalAudio) {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
+    }
+
+    if (!node.data.answerProcessAudio) {
+        missingData.push(`Answer Process Audio is missing.`)
     }
 
     return missingData.length > 0 ? `Missing data for React Node ${node.data.label}: ${missingData.join(", ")}` : null;

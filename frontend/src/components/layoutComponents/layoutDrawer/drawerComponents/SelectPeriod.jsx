@@ -3,10 +3,12 @@ import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
+import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
 const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
+  const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
   const timeoutRef = useRef(null);
   const audioPaths = FetchAudio(audiobookTitle);
   const audioUsage = useAudioUsage(audioPaths);
@@ -17,12 +19,22 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
     }
   }, [nodeData.data.answers, nodeData.data.answerAudios]);
 
+  useEffect(() => {
+    setAnswerBackgroundAudio(new Array(periods.length).fill(false)); // Setze die Länge von periods als Länge von answerBackgroundAudio
+  }, [periods]);
+
   const arraysEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) return false;
     }
     return true;
+  };
+
+  const handleToggleBackgroundAudio = (index) => {
+    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+    newAnswerBackgroundAudio[index] = !newAnswerBackgroundAudio[index];
+    setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
   const handleInputChange = (index, value, type) => {
@@ -52,7 +64,9 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   };
 
   const handleAddPeriod = () => {
-    setPeriods([...periods, { start: '', end: '' }]);
+    const newPeriods = [...periods, { answer: `Period ${periods.length + 1}`, start: '', end: '' }]; // Füge eine neue Periode mit einem standardmäßigen Antwortwert hinzu
+    setPeriods(newPeriods);
+    updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods); // Aktualisiere die Perioden direkt mit updateNodeProperty
   };
 
   const handlePeriodChange = (index, field, value) => {
@@ -85,12 +99,12 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
 
   return (
     <>
-      <h4>Period Based Reactions</h4>
+      <h4 style={{ marginTop:'5px'}}>Period Based Reactions</h4>
       {periods.map((period, index) => (
         <Flex key={index} direction="column" align="start">
           <Flex align="center">
             <Input
-              placeholder='Answer ..'
+              placeholder={`Period ${index + 1}`} 
               value={period.answer}
               onChange={(e) => handlePeriodChange(index, 'answer', e.target.value)}
               flex="5"
@@ -116,9 +130,15 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
                 )
 
               })}
-
-
             </Select>
+            <SwitchBackgroundAudio
+              backgroundAudioFor={`answer-${index}`}
+              nodeData={nodeData}
+              setNodes={setNodes}
+              audiobookTitle={audiobookTitle}
+              isChecked={answerBackgroundAudio[index]}
+              onToggle={() => handleToggleBackgroundAudio(index)}
+            />
             <Spacer />
             <Input
               placeholder='00:00'

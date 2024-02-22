@@ -8,7 +8,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
     }
 
     const commonAttributes = {
-        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudioSelected: '', backgroundAudio: ''
+        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudio: [],
     }
 
     const generateNodeTypeData = (type, customData = {}) => {
@@ -55,6 +55,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                             { answer: "", time: "" }
                         ],
                         answerAudios: [],
+                        answerProcessAudio: '',
                         id: String(asignId),
                     }
                 }
@@ -85,6 +86,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         answerPeriods: [
                             { start: '00:00', end: '00:00', answer: '' },
                         ],
+                        answerProcessAudio: '',
                         id: String(asignId),
                     }
                 };

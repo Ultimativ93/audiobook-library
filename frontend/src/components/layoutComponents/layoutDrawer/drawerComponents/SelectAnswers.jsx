@@ -3,10 +3,12 @@ import { Button, Input, Flex, Select, Spacer } from '@chakra-ui/react';
 
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
+import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
 const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
   const [answers, setAnswers] = useState(nodeData.data.answers || []);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
+  const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
   const timeoutRef = useRef(null);
   const audioPaths = FetchAudio(audiobookTitle);
   const audioUsage = useAudioUsage(audioPaths);
@@ -20,6 +22,10 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     }
   }, [nodeData.data.answers, nodeData.data.answerAudios]);
 
+  useEffect(() => {
+    setAnswerBackgroundAudio(new Array(answers.length).fill(false));
+  }, [answers]);
+
   const arraysEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
@@ -31,14 +37,19 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   const handleAddAnswer = () => {
     const lastAnswer = answers[answers.length - 1];
     if (lastAnswer !== '') {
-      setAnswers([...answers, '']);
+      const newAnswer = `Answer ${answers.length + 1}`;
+      const updatedAnswers = [...answers, newAnswer];
+      setAnswers(updatedAnswers);
       setAnswerAudios([...answerAudios, '']);
+      setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
+      updateNodeProperty(setNodes, nodeData, 'answers', updatedAnswers);
     }
   };
 
   const handleInputChange = (index, value, type) => {
     const newAnswers = [...answers];
     const newAnswerAudios = [...answerAudios];
+    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
 
     if (newAnswers[index] === undefined) {
       newAnswers[index] = '';
@@ -73,22 +84,39 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   const handleRemoveAnswer = (index) => {
     const newAnswers = [...answers];
     const newAnswerAudios = [...answerAudios];
-
+    const newAnswerBackgroundAudio = [...answerBackgroundAudio]; 
+  
     newAnswers.splice(index, 1);
     newAnswerAudios.splice(index, 1);
-
+    newAnswerBackgroundAudio.splice(index, 1);
+  
+    const newEdges = edges.filter(edge => {
+      const sourceHandleId = `${nodeData.id}-handle-${index}`;
+      return edge.sourceHandle !== sourceHandleId;
+    });
+  
     setAnswers(newAnswers);
     setAnswerAudios(newAnswerAudios);
-
+    setAnswerBackgroundAudio(newAnswerBackgroundAudio);
+    setEdges(newEdges); 
+  
     updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
     updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
   };
+  
 
   const handleInputBlur = (index, type) => {
     const trimmedAnswer = type === 'answer' ? answers[index].trim() : answerAudios[index].trim();
     if (trimmedAnswer === '') {
       handleRemoveAnswer(index);
     }
+  };
+
+  const handleToggleBackgroundAudio = (index) => {
+    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+    newAnswerBackgroundAudio[index] = !newAnswerBackgroundAudio[index];
+
+    setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
   return (
@@ -123,9 +151,16 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
                 </option>
               )
             })}
-
-
           </Select>
+          <Spacer />
+          <SwitchBackgroundAudio
+            backgroundAudioFor={`answer-${index}`}
+            nodeData={nodeData}
+            setNodes={setNodes}
+            audiobookTitle={audiobookTitle}
+            isChecked={answerBackgroundAudio[index]}
+            onToggle={() => handleToggleBackgroundAudio(index)} 
+          />
           <Spacer />
           <Button
             colorScheme='red'

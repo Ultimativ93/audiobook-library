@@ -20,7 +20,7 @@ const SelectCorrectAnswer = ({ nodeData, setNodes }) => {
     
     return (
         <>
-            <h4>Set Correct Answer</h4>
+            <h4 style={{ marginTop:'5px'}}>Set Correct Answer</h4>
             <Input
                 placeholder='Correct Answer ..'
                 value={correctAnswer}

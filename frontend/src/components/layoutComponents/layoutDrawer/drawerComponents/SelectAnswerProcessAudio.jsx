@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { Select } from '@chakra-ui/react';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 
-const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     const audioPaths = FetchAudio(audiobookTitle);
-    const [selectedQuestionAudio, setSelectedQuestionAudio] = useState(nodeData.data.questionAudio || '');
+    const [selectedAnswerProcessAudio, setSelectedAnswerProcessAudio] = useState(nodeData.data.answerProcessAudio || '');
     const audioUsage = useAudioUsage(audioPaths);
 
     return (
         <>
-            <h4>Select Question Audio</h4>
+            <h4>Setlect Answer Process Audio</h4>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ marginRight: '20px' }}>
                     <Select
                         placeholder='Select Question Audio ...'
-                        value={selectedQuestionAudio}
+                        value={selectedAnswerProcessAudio}
                         onChange={(event) => {
-                            setSelectedQuestionAudio(event.target.value);
-                            updateNodeProperty(setNodes, nodeData, 'questionAudio', event.target.value);
+                            setSelectedAnswerProcessAudio(event.target.value);
+                            updateNodeProperty(setNodes, nodeData, 'answerProcessAudio', event.target.value);
                         }}
                     >
                         {audioPaths.map((audio, index) => {
@@ -38,11 +38,11 @@ const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                     </Select>
                 </div>
                 <div>
-                    <SwitchBackgroundAudio backgroundAudioFor={'questionAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                    <SwitchBackgroundAudio backgroundAudioFor={'answerProcessAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                 </div>
             </div>
         </>
     );
 };
 
-export default SelectQuestionAudio;
+export default SelectAnswerProcessAudio;

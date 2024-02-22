@@ -41,7 +41,7 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                 placement='right'
                 onClose={onClose}
                 finalFocusRef={btnRef}
-                size="lg"
+                size="xl"
                 trapFocus={false}
                 variant="alwaysOpen"
             >

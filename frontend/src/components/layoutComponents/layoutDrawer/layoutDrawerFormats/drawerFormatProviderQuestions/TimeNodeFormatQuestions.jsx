@@ -3,10 +3,9 @@ import { DrawerBody } from '@chakra-ui/react';
 
 import SelectQuestion from '../../drawerComponents/SelectQuestion';
 import SelectQuestionAudio from '../../drawerComponents/SelectQuestionAudio';
-import SelectRepeatQuestionAudio from '../../drawerComponents/SelectRepeatQuestionAudio';
 import SelectInputSelections from '../../drawerComponents/SelectInputSelections';
 import SelectAnswersTime from '../../drawerComponents/SelectAnswersTime';
-import SelectBackgroundAudio from '../../drawerComponents/SelectBackgroundAudio';
+import SelectAnswerProcessAudio from '../../drawerComponents/SelectAnswerProcessAudio';
 
 const TimeNodeFormatQuestions = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
 
@@ -15,9 +14,8 @@ const TimeNodeFormatQuestions = ({ nodeData, setNodes, setEdges, edges, audioboo
             <DrawerBody>
                 <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
                 <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
-                <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
-                <SelectBackgroundAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                 <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
+                <SelectAnswerProcessAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>
                 <SelectAnswersTime nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
             </DrawerBody>
         </>

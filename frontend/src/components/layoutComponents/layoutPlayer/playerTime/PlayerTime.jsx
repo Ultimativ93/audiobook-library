@@ -12,8 +12,6 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visi
         setCurrentTime(onTimeUpdate);
     }, [onTimeUpdate]);
 
-    console.log("CurrentNodeProps in PT: ", currentNodeProps);
-
     const handleButtonClick = (index) => {
         handleButtonClickLogic(index, flow, currentNodeProps, setCurrentNode);
     };
@@ -49,7 +47,7 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visi
 
     return (
         <>
-            {currentNodeProps.question}
+            {currentNodeProps && currentNodeProps.question}
             <div className='player-time'>
                 {visible && renderAnswers()}
             </div>

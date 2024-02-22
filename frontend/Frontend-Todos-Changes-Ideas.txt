@@ -49,22 +49,27 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Wenn derzeit die Wiedergabeleiste zum Ende gezogen wird, bekommen wir Fehler, da dann bereits neue Audios geladen werden. Abfangen!                                   X
                 - Wenn vom Player zum Editor gewechselt wird, wird der audiobookTitle "undefined", da wir später den Player seperat vom Editor haben, müssen wir das gerade nichts      X
                     abfangen. Aber für das testen benötigen wird das, also anpassen.
-                - Wenn ein Endknoten durchgespielt wird, wird nach weiterem Audio gesucht, das wirft derzeit noch einen Fehler, abfangen.                                               O
+                - Wenn ein Endknoten durchgespielt wird, wird nach weiterem Audio gesucht, das wirft derzeit noch einen Fehler, abfangen.                                               X
                 - Es könnte noch einen Fehler geben, wenn wir einen Kreis bauen, also wenn wir zum Startknoten verweisen, entweder Handle entfernen, oder abfangen, dass ein            O
                     Startknoten übergangen wird.
-                - User Validation, nur befugte Nutzer dürfen das Hörbuch über die query erreichen dürfen !!!!!                                                                          O
+                - User Validation, nur befugte Nutzer dürfen das Hörbuch über die query erreichen dürfen !!!!!                                                                          X
                 - Interactions Signal hinzufügen                                                                                                                                        X
                 - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
                 - Endknoten audio muss direkt Startnode                                                                                                                                 O
-                - Wir brauchen eigentlich auch noch ein Background Audio für das Story Audio.                                                                                           O
+                - Wir brauchen eigentlich auch noch ein Background Audio für allle Audios.                                                                                              O
+                - Input Node, was ist wenn eine Antwort nicht bis zum Ende angezeigt wird und keine Antwort ausgewählt wird. Zeit abfangen, wenn Frage kürzer ist als angegebene Zeit   O
+                    also brauchen wir auch noch ein Handle wie bei Reaction.
+                - Antworten von time und reaction werden noch nicht wiedergegeben. Sollen auch erst dann wiedergegeben werden, wenn sie angezeigt werden und dürfen dann auch nur so    O
+                    lang sein wie angegeben.        
+                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
-                - Abfangen das wenn STRG geklickt ist, um mehrere Node auszuwählen, das der Drawer sich nicht öffnet.                                                                   O
-                - Geklickte Nodes hervorheben                                                                                                                                           O
-                - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!                                                                           O
-                - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!                                                                O
+                - Abfangen das wenn STRG geklickt ist, um mehrere Node auszuwählen, das der Drawer sich nicht öffnet.                                                                   X
+                - Geklickte Nodes hervorheben                                                                                                                                           X
+                - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!    -> uuid4 mit flowkey verknüpfen, dann können auch alle gleich heißen   O
+                - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!                                                                X
                 - onRestor: hier könnten wir den FetchFlow noch in Tasks auslagern, Server zugriffe haben wir nicht direkt in den Componenten                                           O
                 - Nodes können auf sich selber verweisen, Edges überprüfen, auch nur eine Edge aus einem Handle ziehbar machen !!!!!                                                    O
                 - Save: Sollte anzeigen, dass der Flow noch nicht gespeichert wurde, wenn es Änderungen gibt. Beim verlassen des Editors, sollte der User auch                          O
@@ -72,8 +77,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Audio nur für das gerade geöffnete Projekt auswählbar machen.
                 - MultipleChoiceNode: Fehler wenn keine Antwort bei ans2 gesetzt wurde und audio ausgewählt wird "cant trim of undefined"   !!!                                         O
                 - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
-                - Anwählen einer Node verdeutlichen, also dass wenn der Drawer geöffnet ist, auch die Node farbig hinterlegt wird, o.Ä.                                                 O
-                - Hintergrundaudio Spur                                                                                                                                                 O
+                - Anwählen einer Node verdeutlichen, also dass wenn der Drawer geöffnet ist, auch die Node farbig hinterlegt wird, o.Ä.                                                 X
+                - Hintergrundaudio Spur                                                                                                                                                 X
                 - Upload Audio link zu den input field hinzufügen                                                                                                                       O
                 - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       O
                     abgespielt werden können.
@@ -81,19 +86,26 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                     belassen.
                 - Label von Nodes mittig zentrieren, und nur einen gewissen Teil des Labels auf der Node anzeigen, sprengt sonst den Rahmen.                                            O
                 - Wenn mehrere Nodes angewählt werden, sollen diese auch Farblich hinterlegt werden                                                                                     X
-                - Wechseln zwischen gleichen Nodes mit geöffneten Drawer, wechselt den Inhalt nicht                                                                                     O
+                - Wechseln zwischen gleichen Nodes mit geöffneten Drawer, wechselt den Inhalt nicht                                                                                     X
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
                 - Handlebeschriftung, vielleicht bei Hover                                                                                                                              O
                 - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
                 - Die benutzten Audios werden nach löschen einer Node noch falsch angezeigt, sollten direkt aktualisieren und nicht erst beim neuen Laden                               O
-                - Background Audio, Repeat Question, Interactionssignal in der Überprüfung abgefangen                                                                                   O
+                - Background Audio, Repeat Question, Interactionssignal in der Überprüfung abgefangen                                                                                   X
+                - Background Audio für alle Audiospuren                                                                                                                                 X
+                - MuChoi: Wenn wir eine Answer löschen, verschwindet zawr das handle, aber es wird kein neues handle hinzugefügt, wenn wir eine Antwort hinzufügen. Ebenfalls           X
+                    wird die Edge nicht gelöscht. Es wird erst hizugefügt, wenn wir eine Antwort in das Input Feld schreiben                                                            O
+                - ReactionNode: Hier wird soll direkt ein handle hinzugefügt werden und die antworten gespeichert werden, wenn period hinzugefügt wird.                                 O
+                - Wenn eine Node angewählt ist und sie gelöscht wird, sollte sich der Drawer schließen.                                                                                 O
+                - Interactions Signal wird nicht richtig gelöscht, wenn es auf false gesetzt wird                                                                                       X
+                - useAudioUsage: wenn eine Node gelöscht wird, soll auch gelöscht werden, dass die Audios benutzt werden, im Moment werden sie noch als benutzt angezeigt               O
+                - ValidateFlow: Abfangen das es keine leeren Fragen gibt und auch keine leere correct Answer bei input Node                                                             O
+                - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
+                - Drawer: wenn man von einer node die den reiter questions oder combinations hat in eine geht die das nicht hat, wird nicht direkt General Options ausgewählt.          O
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 
-29.01.2024  - SelectInteractionsSignalAudio && SelectQuestionAudio && SelectStoryAudio: Sind alle ziemlic gleich, bis auf das die Propertys unterschiedlich sind,                       O
-                wenn Zeit ist, sollte das noch auf eine Komponente zusammengefügt werden.
-
-            - DrawerFormatProviderQuestions: Für Nodes die keine Questions haben, eine Möglichkeit suchen, dass Questions im Drawer nicht angezeigt werden (Bridge, EndNode)            O
+29.01.2024  - DrawerFormatProviderQuestions: Für Nodes die keine Questions haben, eine Möglichkeit suchen, dass Questions im Drawer nicht angezeigt werden (Bridge, EndNode)            X
 
             - MuAnsFormatCombination: Wenn neue Antworten hinzugefügt werden, werden nicht direkt die Antwortmöglichkeit in Combination Options hinzugefügt.                            O
 

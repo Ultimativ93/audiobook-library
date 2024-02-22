@@ -52,7 +52,7 @@ const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, 
 
     return (
         <>
-            {currentNodeProps.question}
+            {currentNodeProps && currentNodeProps.question}
         </>
     );
 };

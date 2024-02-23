@@ -16,7 +16,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ marginRight: '20px' }}>
                     <Select
-                        placeholder='Select Question Audio ...'
+                        placeholder='Select Answer Process Audio ...'
                         value={selectedAnswerProcessAudio}
                         onChange={(event) => {
                             setSelectedAnswerProcessAudio(event.target.value);

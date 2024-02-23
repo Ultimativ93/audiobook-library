@@ -102,6 +102,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - ValidateFlow: Abfangen das es keine leeren Fragen gibt und auch keine leere correct Answer bei input Node                                                             O
                 - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
                 - Drawer: wenn man von einer node die den reiter questions oder combinations hat in eine geht die das nicht hat, wird nicht direkt General Options ausgewählt.          O
+                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
 
 28.01.2024  - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!                  O
 

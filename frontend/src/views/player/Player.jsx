@@ -22,16 +22,23 @@ const Player = () => {
   const [answersVisible, setAnswersVisible] = useState(false);
   const [answerAudioIndex, setAnswerAudioIndex] = useState(0);
   const [backgroundAudio, setBackgroundAudio] = useState(null);
-  
+  const [answerProcessAudio, setAnswerProcessAudio] = useState(null);
+  const [answerProcessBackgroundAudio, setAnswerProcessBackgroundAudio] = useState(null);
+
   const [questionAudioPlayed, setQuestionAudioPlayed] = useState(false);
   const [interactionSignalPlayed, setInteractionSignalPlayed] = useState(false);
   const [answerProcessAudioPlayed, setAnswerProcessAudioPlayed] = useState(false);
+  const [answerProcessAnswersAudioPlayed, setAnswerProcessAnswersAudioPlayed] = useState(false);
+  const [backgroundAudioPlayed, setBackgroundAudioPlayed] = useState(false);
 
   const audioRef = useRef();
   const backgroundAudioRef = useRef();
+  const answerProcessAudioRef = useRef();
+  const answerProcessBackgroundAudioRef = useRef();
+
   const location = useLocation();
 
-  console.log("Flow", flow);
+  //console.log("Flow", flow);
 
   // Set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
   useEffect(() => {
@@ -51,8 +58,18 @@ const Player = () => {
         setAudioBlob(audioBlobResponse);
         setCurrentNodeProps(flow.nodes[currentNode].data);
 
-        console.log("!!!!!! Wir laden im useEffect !!!!!!!!")
+        console.log("!!!!!! Wir laden im useEffect", flow.nodes[currentNode].data.label)
         await loadBackgroundAudio(flow.nodes[currentNode].data, 'audioStory');
+        setQuestionAudioPlayed(false);
+        setInteractionSignalPlayed(false);
+        setAnswerProcessAudioPlayed(false);
+        setAnswerProcessAnswersAudioPlayed(false);
+        setBackgroundAudioPlayed(false);
+
+        setAnswerProcessAudio(null);
+        setAnswerProcessBackgroundAudio(null);
+
+        answerProcessAudioRef.current.src = null;
       }
     };
 
@@ -117,7 +134,7 @@ const Player = () => {
 
   // Play question Audio for and set answers visible after question audio played
   const playQuestionAudio = async () => {
-    console.log("In Play Question")
+    console.log("In Play Question");
     const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio);
     const questionAudioBlob = await getAudioFromPath(questionAudioPath);
     await loadBackgroundAudio(flow.nodes[currentNode].data, 'questionAudio');
@@ -131,7 +148,70 @@ const Player = () => {
     } else {
       console.log("Question audio could not be played or already played.");
     }
-  }
+  };
+
+  // Play AnswerProcessAudio in TimeNode and ReactionNode
+  const playAnswerProcessAudio = async () => {
+    if (currentNodeProps.answerProcessAudio && !answerProcessAudioPlayed) {
+      setAnswerProcessAudio(null);
+      setAnswerProcessBackgroundAudio(null);
+
+      const answerProcessAudioPath = await getAudioPathFromName(currentNodeProps.answerProcessAudio);
+      const answerProcessAudioBlob = await getAudioFromPath(answerProcessAudioPath);
+      await loadBackgroundAudio(flow.nodes[currentNode].data, 'answerProcessAudio');
+      console.log("in playAnswerProcessAudio, currentTime", currentTime)
+      const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
+      const targetNodeType = flow.nodes[targetNodeIndex].type;
+
+      if (targetNodeType === 'timeNode') {
+        playAnswerProcessAnswersTime();
+      }
+
+      if (answerProcessAudioBlob) {
+        audioRef.current.src = answerProcessAudioBlob;
+        audioRef.current.play();
+        setAnswerProcessAudioPlayed(true);
+      }
+    }
+  };
+
+
+  // Play AnswerProcess Answers while playAnswerProcess
+  const playAnswerProcessAnswersTime = async () => {
+    if (currentNodeProps && currentNodeProps.answerAudios && currentNodeProps.answerAudios.length > 0) {
+      const answerAudios = currentNodeProps.answerAudios;
+      let index = 0;
+
+      const playNextAnswer = async () => {
+        console.log("answerProcessAnswersAudioPlayed !!!!!!!!!!!!!!!!!!!!!!!!!!!!!", answerProcessAnswersAudioPlayed);
+        if (index < answerAudios.length && answerProcessAudioRef.current.src !== null && !answerProcessAnswersAudioPlayed) {
+          const answerAudioPath = await getAudioPathFromName(answerAudios[index]);
+          const answerAudioBlob = await getAudioFromPath(answerAudioPath);
+
+          const loadedAnswerProcessBackgroundAudioawait = loadAnswerProcessBackgroundAudio(flow.nodes[currentNode].data, `answer-${index}`);
+          if (loadedAnswerProcessBackgroundAudioawait) {
+            answerProcessBackgroundAudioRef.current.play();
+          }
+
+          if (answerAudioBlob && questionAudioPlayed) {
+            answerProcessAudioRef.current.src = answerAudioBlob;
+            answerProcessAudioRef.current.play();
+
+            await new Promise(resolve => {
+              answerProcessAudioRef.current.onended = resolve;
+            });
+
+            index++;
+            playNextAnswer();
+          }
+        } else {
+          setAnswerProcessAnswersAudioPlayed(true);
+        }
+      };
+
+      playNextAnswer();
+    }
+  };
 
   // Play Interaction Signal if selected
   const playInteractionSignal = async () => {
@@ -170,7 +250,7 @@ const Player = () => {
       const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
       const targetNodeType = flow.nodes[targetNodeIndex].type;
 
-      console.log("In handleAudioEnded", questionAudioPlayed, currentNodeProps)
+      console.log("In handleAudioEnded", questionAudioPlayed, currentNodeProps);
 
       // Check if all answer audios have been played
       if (questionAudioPlayed && (currentNodeProps && currentNodeProps.answerAudios && answerAudioIndex === currentNodeProps.answerAudios.length)) {
@@ -184,28 +264,30 @@ const Player = () => {
           console.log("All answer audios played.");
         }
       } else {
-        console.log("Trying to play next answer questionPlayed: ", questionAudioPlayed, currentNodeProps)
+        console.log("Trying to play next answer questionPlayed: ", questionAudioPlayed, currentNodeProps);
         // If is not an end, play answers, question and interaction Signal
         if (currentNodeProps.isEnd !== 'true') {
           // Play next answer audio
-          if (targetNodeType === 'bridgeNode' || (questionAudioPlayed && answerProcessAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode'))) {
+          if (targetNodeType === 'bridgeNode' || (!answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
+            playAnswerProcessAudio()
+          } else if (targetNodeType === 'bridgeNode' || (answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
+            console.log("handleSpecialCaseNoAnswer")
             handleSpecialCasesNoAnswer(targetNodeType);
-            console.log("SpecialCases")
           } else if (questionAudioPlayed) {
             playAnswerAudio();
           } else if (!questionAudioPlayed && interactionSignalPlayed) {
             playQuestionAudio();
           } else if (!questionAudioPlayed && (currentNodeProps.interactionSignal === 'false' || currentNodeProps.interactionSignal === '')) {
-            console.log("play question")
+            console.log("play question");
             playQuestionAudio();
           } else {
-            console.log("hier drin")
+            console.log("hier drin");
             playInteractionSignal();
           }
         }
       }
     }
-  }
+  };
 
   useEffect(() => {
     setQuestionAudioPlayed(false);
@@ -224,9 +306,35 @@ const Player = () => {
       if (relevantBackgroundAudio) {
         const backgroundAudioPath = await getAudioPathFromName(relevantBackgroundAudio.backgroundAudio);
         const backgroundAudioBlob = await getAudioFromPath(backgroundAudioPath);
+        console.log("loadBackgroundAudio, backgroundAudioBlob", backgroundAudioBlob);
+        // Checking for Time Node, to set answerBackgroundAudio
         setBackgroundAudio(backgroundAudioBlob);
       } else {
+        console.log("loadBackgroundAudioblob, setBackgroundAudio")
         setBackgroundAudio(null);
+      }
+    }
+  }
+
+  const loadAnswerProcessBackgroundAudio = async (node, bgAudioToLoad) => {
+    console.log("Node in loadAnswerProcessBackgroundAudio", node);
+    console.log("bgAudioToLoad in loadAnswerProcessBackgroundAudio", bgAudioToLoad);
+
+    if (node && node.backgroundAudio && node.backgroundAudio.length > 0) {
+      const relevantBackgroundAudio = node.backgroundAudio.find(bgAudio => {
+        return bgAudio.audio === bgAudioToLoad;
+      })
+      console.log("RelevantBackgroundAudio in lAPBA", relevantBackgroundAudio);
+      if (relevantBackgroundAudio) {
+        const answerProcessBackgroundAudioPath = await getAudioPathFromName(relevantBackgroundAudio.backgroundAudio);
+        const answerProcessBackgroundAudioBlob = await getAudioFromPath(answerProcessBackgroundAudioPath);
+        if (answerProcessBackgroundAudioBlob) {
+          setAnswerProcessBackgroundAudio(answerProcessBackgroundAudioBlob);
+          return true;
+        }
+      } else {
+        setAnswerProcessBackgroundAudio(null);
+        return false;
       }
     }
   }
@@ -236,9 +344,23 @@ const Player = () => {
     console.log("QuestionPlayed: ", questionAudioPlayed)
 
     const backgroundAudioElement = backgroundAudioRef.current;
-    if (backgroundAudioElement) {
+    console.log("playBackgroundAudio backgroundAudioElement", backgroundAudioElement)
+    if (backgroundAudioElement && !backgroundAudioPlayed) {
       console.log("Playing background audio...");
       backgroundAudioElement.play();
+
+    }
+
+    const answerProcessAudioElement = answerProcessAudioRef.current;
+    if (answerProcessAudioElement && questionAudioPlayed && answerProcessAudioPlayed && !answerProcessAnswersAudioPlayed) {
+      console.log("Playing answerProcessAudioElement...");
+      answerProcessAudioElement.play();
+    }
+
+    const answerProcessBackgroundAudioElement = answerProcessBackgroundAudioRef.current;
+    if (answerProcessBackgroundAudioElement && questionAudioPlayed && answerProcessAudioPlayed && !answerProcessAnswersAudioPlayed) {
+      console.log("Playing answerProcessBackgroundAudioElement...");
+      answerProcessBackgroundAudioElement.play();
     }
   };
 
@@ -248,11 +370,26 @@ const Player = () => {
       console.log("Stopping background audio...")
       backgroundAudioElement.pause();
     }
-  }
+
+    const answerProcessAudioElement = answerProcessAudioRef.current;
+    if (answerProcessAudioElement) {
+      console.log("Stopping answerProcess answer audio...")
+      answerProcessAudioElement.pause();
+    }
+
+    const answerProcessBackgroundAudioElement = answerProcessBackgroundAudioRef.current;
+    if (answerProcessBackgroundAudioElement) {
+      console.log("Stoppin answerProcess background audio...");
+      answerProcessBackgroundAudioElement.pause();
+    }
+  };
 
   const handleAudioEndedWithBackgroundStop = () => {
     handleAudioEnded(currentNodeProps, flow, setCurrentNode);
     stopBackgroundAudio();
+    setBackgroundAudio(null);
+    setAnswerProcessBackgroundAudio(null);
+    setAnswerProcessAudio(null);
   };
 
   return (
@@ -268,8 +405,23 @@ const Player = () => {
           <audio
             ref={backgroundAudioRef}
             src={backgroundAudio}
+            onEnded={() => setBackgroundAudioPlayed(true)}
           />
         )}
+      </div>
+
+      <div className="answer-process-audio">
+        <audio
+          ref={answerProcessAudioRef}
+          src={answerProcessAudio}
+        />
+      </div>
+
+      <div className="answer-process-background-audio">
+        <audio
+          ref={answerProcessBackgroundAudioRef}
+          src={answerProcessBackgroundAudio}
+        />
       </div>
 
       {flow && flow.nodes && flow.nodes[currentNode] && flow.nodes[currentNode].type === 'muChoi' && (

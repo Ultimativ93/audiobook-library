@@ -113,7 +113,7 @@ const Editor = () => {
         }
     }, [selectedNodes, isNodeSelected]);
 
-    console.log("Nodes", nodes);
+    //console.log("Nodes", nodes);
 
     return (
         <>

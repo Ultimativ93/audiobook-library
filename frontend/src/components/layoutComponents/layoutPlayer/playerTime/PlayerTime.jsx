@@ -5,7 +5,7 @@ import { handleButtonClickLogic } from '../../../tasks/playerTasks/PlayerLogic';
 
 import '../playerTime/player-time.css';
 
-const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visible }) => {
+const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visible, answerProcessAudioPlaying }) => {
     const [currentTime, setCurrentTime] = useState(null);
 
     useEffect(() => {
@@ -17,7 +17,7 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visi
     };
 
     const renderAnswers = () => {
-        if (currentNodeProps && currentNodeProps.answers) {
+        if (currentNodeProps && currentNodeProps.answers && answerProcessAudioPlaying) {
             return currentNodeProps.answers.map((answer, index) => {
                 const answerTime = parseTimeToSeconds(answer.time);
                 const shouldDisplay = currentTime <= answerTime;

@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
-
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
-const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, questionAudioPlayed }) => {
-    const [currentTime, setCurrenTime] = useState(null);
+const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, questionAudioPlayed, answerProcessAudioPlaying, onValidPeriodChange }) => {
+    const [currentTime, setCurrentTime] = useState(null);
+    const [validPeriod, setValidPeriod] = useState(null);
 
     useEffect(() => {
-        setCurrenTime(onTimeUpdate);
+        setCurrentTime(onTimeUpdate);
     }, [onTimeUpdate]);
 
     const isInValidPeriod = () => {
-        if (currentNodeProps && currentNodeProps.answerPeriods) {
+        if (currentNodeProps && currentNodeProps.answerPeriods && questionAudioPlayed && answerProcessAudioPlaying) {
             for (const period of currentNodeProps.answerPeriods) {
                 const start = parseTimeToSeconds(period.start);
                 const end = parseTimeToSeconds(period.end);
-
                 if (currentTime >= start && currentTime <= end) {
                     return period;
                 }
@@ -29,30 +28,33 @@ const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, 
         return parseInt(minutes) * 60 + parseInt(seconds);
     };
 
-    const validPeriod = isInValidPeriod();
+    useEffect(() => {
+        const period = isInValidPeriod();
+        setValidPeriod(period);
+        if (onValidPeriodChange) {
+            onValidPeriodChange(period !== null);
+        }
+    }, [currentTime]);
 
     const handleButtonClick = (index) => {
         handleButtonClickLogic(index, flow, currentNodeProps, setCurrentNode);
     };
 
-    if (questionAudioPlayed && currentTime !== null && currentTime !== undefined && currentTime !== 0 && validPeriod) {
-        return (
-            <>
-                {currentNodeProps.question}
+    if (!questionAudioPlayed || !validPeriod) {
+        return null;
+    }
+
+    return (
+        <>
+            {currentNodeProps.question}
+            {validPeriod && answerProcessAudioPlaying && (
                 <Button
                     onClick={() => handleButtonClick(currentNodeProps.answerPeriods.indexOf(validPeriod))}
                     colorScheme='blue'
                 >
                     {validPeriod.answer}
-
                 </Button>
-            </>
-        );
-    }
-
-    return (
-        <>
-            {currentNodeProps && currentNodeProps.question}
+            )}
         </>
     );
 };

@@ -24,12 +24,15 @@ const Player = () => {
   const [backgroundAudio, setBackgroundAudio] = useState(null);
   const [answerProcessAudio, setAnswerProcessAudio] = useState(null);
   const [answerProcessBackgroundAudio, setAnswerProcessBackgroundAudio] = useState(null);
+  const [answerProcessAudioPlaying, setAnswerProcessAudioPlaying] = useState(null);
 
   const [questionAudioPlayed, setQuestionAudioPlayed] = useState(false);
   const [interactionSignalPlayed, setInteractionSignalPlayed] = useState(false);
   const [answerProcessAudioPlayed, setAnswerProcessAudioPlayed] = useState(false);
   const [answerProcessAnswersAudioPlayed, setAnswerProcessAnswersAudioPlayed] = useState(false);
   const [backgroundAudioPlayed, setBackgroundAudioPlayed] = useState(false);
+  const [isInValidPeriod, setIsInValidPeriod] = useState(false);
+  const [index, setIndex] = useState(0);
 
   const audioRef = useRef();
   const backgroundAudioRef = useRef();
@@ -65,9 +68,13 @@ const Player = () => {
         setAnswerProcessAudioPlayed(false);
         setAnswerProcessAnswersAudioPlayed(false);
         setBackgroundAudioPlayed(false);
+        setAnswerProcessAudioPlaying(false);
+        setIsInValidPeriod(false);
 
         setAnswerProcessAudio(null);
         setAnswerProcessBackgroundAudio(null);
+        setBackgroundAudio(null);
+        setIndex(0);
 
         answerProcessAudioRef.current.src = null;
       }
@@ -141,8 +148,8 @@ const Player = () => {
 
     if (questionAudioBlob && (!questionAudioPlayed || currentNodeProps.repeatQuestionAudio === "true")) {
       audioRef.current.src = questionAudioBlob;
-      audioRef.current.play();
       console.log("Question audio is playing...");
+      audioRef.current.play();
       setQuestionAudioPlayed(true);
       setAnswersVisible(true);
     } else {
@@ -171,45 +178,8 @@ const Player = () => {
         audioRef.current.src = answerProcessAudioBlob;
         audioRef.current.play();
         setAnswerProcessAudioPlayed(true);
+        setAnswerProcessAudioPlaying(true);
       }
-    }
-  };
-
-
-  // Play AnswerProcess Answers while playAnswerProcess
-  const playAnswerProcessAnswersTime = async () => {
-    if (currentNodeProps && currentNodeProps.answerAudios && currentNodeProps.answerAudios.length > 0) {
-      const answerAudios = currentNodeProps.answerAudios;
-      let index = 0;
-
-      const playNextAnswer = async () => {
-        console.log("answerProcessAnswersAudioPlayed !!!!!!!!!!!!!!!!!!!!!!!!!!!!!", answerProcessAnswersAudioPlayed);
-        if (index < answerAudios.length && answerProcessAudioRef.current.src !== null && !answerProcessAnswersAudioPlayed) {
-          const answerAudioPath = await getAudioPathFromName(answerAudios[index]);
-          const answerAudioBlob = await getAudioFromPath(answerAudioPath);
-
-          const loadedAnswerProcessBackgroundAudioawait = loadAnswerProcessBackgroundAudio(flow.nodes[currentNode].data, `answer-${index}`);
-          if (loadedAnswerProcessBackgroundAudioawait) {
-            answerProcessBackgroundAudioRef.current.play();
-          }
-
-          if (answerAudioBlob && questionAudioPlayed) {
-            answerProcessAudioRef.current.src = answerAudioBlob;
-            answerProcessAudioRef.current.play();
-
-            await new Promise(resolve => {
-              answerProcessAudioRef.current.onended = resolve;
-            });
-
-            index++;
-            playNextAnswer();
-          }
-        } else {
-          setAnswerProcessAnswersAudioPlayed(true);
-        }
-      };
-
-      playNextAnswer();
     }
   };
 
@@ -269,6 +239,7 @@ const Player = () => {
         if (currentNodeProps.isEnd !== 'true') {
           // Play next answer audio
           if (targetNodeType === 'bridgeNode' || (!answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
+            console.log("playAnswerProcessAudio");
             playAnswerProcessAudio()
           } else if (targetNodeType === 'bridgeNode' || (answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
             console.log("handleSpecialCaseNoAnswer")
@@ -337,7 +308,91 @@ const Player = () => {
         return false;
       }
     }
+    return false;
   }
+
+  const playAnswerProcessAnswersTime = async () => {
+    if (currentNodeProps && currentNodeProps.answerAudios && currentNodeProps.answerAudios.length > 0) {
+      const answerAudios = currentNodeProps.answerAudios;
+      let index = 0;
+
+      const playNextAnswer = async () => {
+        console.log("answerProcessAnswersAudioPlayed !!!!!!!!!!!!!!!!!!!!!!!!!!!!!", answerProcessAnswersAudioPlayed);
+        if (index < answerAudios.length) {
+          const answerAudioPath = await getAudioPathFromName(answerAudios[index]);
+          const answerAudioBlob = await getAudioFromPath(answerAudioPath);
+
+          const loadedAnswerProcessBackgroundAudio = await loadAnswerProcessBackgroundAudio(flow.nodes[currentNode].data, `answer-${index}`);
+          console.log("loadedAnswerProcessBackgroundAudio", loadedAnswerProcessBackgroundAudio);
+
+          if (answerAudioBlob && questionAudioPlayed) {
+            answerProcessAudioRef.current.src = answerAudioBlob;
+            answerProcessAudioRef.current.play();
+            console.log("Before playing loadedAnswerProcessBackground: ", loadedAnswerProcessBackgroundAudio)
+            if (loadedAnswerProcessBackgroundAudio) {
+              answerProcessBackgroundAudioRef.current.oncanplaythrough = () => {
+                answerProcessBackgroundAudioRef.current.play();
+              };
+            }
+
+            await new Promise(resolve => {
+              answerProcessAudioRef.current.onended = resolve;
+              answerProcessBackgroundAudioRef.current.onended = resolve;
+            });
+
+            index++;
+            playNextAnswer();
+          }
+        } else {
+          setAnswerProcessAnswersAudioPlayed(true);
+        }
+      };
+
+      playNextAnswer();
+    }
+  };
+
+  const onValidPeriodChange = (isValidPeriod) => {
+    setIsInValidPeriod(isValidPeriod);
+  };
+
+  useEffect(() => {
+    playAnswerProcessAnswersReaction();
+  }, [isInValidPeriod])
+
+  const playAnswerProcessAnswersReaction = async () => {
+    console.log("handleValidPeriodChange !?!?!?!?!?!", isInValidPeriod);
+    if ((currentNodeProps && currentNodeProps.answerAudios && currentNodeProps.answerAudios.length > 0) && isInValidPeriod) {
+      console.log("in playAnswerProcessAnswersReaction")
+      const answerAudios = currentNodeProps.answerAudios;
+
+      console.log("playing answer in playAnswerProcessAnswersReaction")
+      if (index < answerAudios.length) {
+        const answerAudioPath = await getAudioPathFromName(answerAudios[index]);
+        const answerAudioBlob = await getAudioFromPath(answerAudioPath);
+
+        const loadedAnswerProcessBackgroundAudio = await loadAnswerProcessBackgroundAudio(flow.nodes[currentNode].data, `answer-${index}`);
+        console.log("loadedAnswerProcessBackgroundAudio", loadedAnswerProcessBackgroundAudio);
+        if (answerAudioBlob && questionAudioPlayed) {
+          answerProcessAudioRef.current.src = answerAudioBlob;
+          answerProcessAudioRef.current.play();
+ 
+          if (loadedAnswerProcessBackgroundAudio) {
+            answerProcessBackgroundAudioRef.current.oncanplaythrough = () => {
+              answerProcessBackgroundAudioRef.current.play();
+            }
+          }
+        }
+
+        await new Promise(resolve => {
+          answerProcessAudioRef.current.onended = resolve;
+          answerProcessBackgroundAudioRef.current.onended = resolve;
+        });
+
+        setIndex(index + 1);
+      }
+    }
+  };
 
   const playBackgroundAudio = async () => {
     console.log("playBackgroundAudio");
@@ -348,7 +403,6 @@ const Player = () => {
     if (backgroundAudioElement && !backgroundAudioPlayed) {
       console.log("Playing background audio...");
       backgroundAudioElement.play();
-
     }
 
     const answerProcessAudioElement = answerProcessAudioRef.current;
@@ -467,6 +521,8 @@ const Player = () => {
           setCurrentNode={setCurrentNode}
           onTimeUpdate={currentTime}
           questionAudioPlayed={questionAudioPlayed}
+          answerProcessAudioPlaying={answerProcessAudioPlaying}
+          onValidPeriodChange={onValidPeriodChange}
         />
       )}
 
@@ -477,6 +533,7 @@ const Player = () => {
           setCurrentNode={setCurrentNode}
           onTimeUpdate={currentTime}
           visible={answersVisible}
+          answerProcessAudioPlaying={answerProcessAudioPlaying}
         />
       )}
 

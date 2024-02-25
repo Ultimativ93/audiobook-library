@@ -62,7 +62,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                     also brauchen wir auch noch ein Handle wie bei Reaction.
                 - Antworten von time und reaction werden noch nicht wiedergegeben. Sollen auch erst dann wiedergegeben werden, wenn sie angezeigt werden und dürfen dann auch nur so    O
                     lang sein wie angegeben.        
-                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?
+                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?                                                                         O
+                - Frage wird im Moment nur ganz am Ende angezeigt..                                                                                                                     O
 
 25.01.2024   - Editor: Hier sollten wir gucken, das wir die daten auch noch im localStorage speichern, nur zur Sicherheit, damit die Daten nicht verloren gehen. Können wir dann später O
                 abgleichen.
@@ -143,6 +144,7 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 how many errors (missing files or not connected nodes), we need a standard thumbnail, that gets set aslong as the thumbnail havent been set.                            O
                 - Noch eine extra Bestätigung, um das Projekt zu löschen.                                                                                                               X
                 - Abfangen dass ein Projektname nicht doppelt vorkommen darf.                                                                                                           O
+                - Beim erstellen eines neuen Projekts, sollte auch der Title an den Editor weitergegeben werden, sonnst fehler.                                                         O
 
 07.02.2024  - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                       O
             

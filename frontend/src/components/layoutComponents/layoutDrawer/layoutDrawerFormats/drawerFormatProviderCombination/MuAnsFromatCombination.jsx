@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
-import { DrawerBody, DrawerFooter } from '@chakra-ui/react';
+import { DrawerBody } from '@chakra-ui/react';
 
 import { updateAnswerCombination, removeCombination } from '../../LayoutDrawerFunctions';
 
@@ -11,7 +11,13 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
     useEffect(() => {
         const initialCombinations = nodeData.data?.answerCombinations || [];
         setAnswerCombinations(initialCombinations);
-    }, [nodeData.data?.answerCombinations]);
+        setSelectedAnswers([]);
+      }, [nodeData.data?.answerCombinations, nodeData, setSelectedAnswers]);
+
+    useEffect(() => {
+        const initialCombinations = nodeData.data?.answerCombinations || [];
+        setAnswerCombinations(initialCombinations);
+    }, [nodeData.data?.answerCombinations, nodeData]);
 
     const toggleAnswerSelection = (answer) => {
         if (selectedAnswers.includes(answer)) {
@@ -60,6 +66,8 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
 
     const uniqueCombinations = Array.from(new Set(answerCombinations.map(JSON.stringify))).map(JSON.parse);
 
+
+    console.log("nodeData in MuAnsFromatCombination", nodeData);
     return (<>
         <DrawerBody>
             <div>
@@ -100,9 +108,6 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
                 </div>
             </div>
         </DrawerBody>
-        <DrawerFooter>
-            {/* */}
-        </DrawerFooter>
     </>
     );
 };

@@ -106,11 +106,13 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   
 
   const handleInputBlur = (index, type) => {
-    const trimmedAnswer = type === 'answer' ? answers[index].trim() : answerAudios[index].trim();
-    if (trimmedAnswer === '') {
-      handleRemoveAnswer(index);
+    if (type === 'answer') {
+      const trimmedAnswer = (answers[index] || '').trim();
+      if (trimmedAnswer === '') {
+        handleRemoveAnswer(index);
+      }
     }
-  };
+  };  
 
   const handleToggleBackgroundAudio = (index) => {
     const newAnswerBackgroundAudio = [...answerBackgroundAudio];
@@ -119,6 +121,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
+  console.log("nodeData in SelectAnswers:", nodeData);
   return (
     <>
       <h4>Answers</h4>

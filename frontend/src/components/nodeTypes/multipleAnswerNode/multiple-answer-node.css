@@ -1,8 +1,37 @@
 .multiple-answer-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     height: 50px;
     width: 200px;
     border-radius: 5px;
-    padding: 5px;
     background: var(--node-background-color, #245A76);
     color: white;
+    font-size: 14px;
+}
+
+.multiple-answer-node label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    word-wrap: break-word;
+}
+
+.multiple-answer-node .handle-label {
+    display: none;
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.multiple-answer-node .react-flow__handle:hover .handle-label {
+    display: block;
 }

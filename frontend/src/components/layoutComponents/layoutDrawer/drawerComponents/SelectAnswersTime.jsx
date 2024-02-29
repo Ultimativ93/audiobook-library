@@ -14,12 +14,9 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const audioUsage = useAudioUsage(audioPaths);
 
     const handleAddAnswer = () => {
-        const lastAnswer = answers[answers.length - 1];
-        if (lastAnswer && typeof lastAnswer === 'object' && lastAnswer.answer !== '') {
-            setAnswers([...answers, { answer: '', time: '' }]);
-            setAnswerAudios([...answerAudios, '']);
-            setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
-        }
+        setAnswers([...answers, { answer: '', time: '' }]);
+        setAnswerAudios([...answerAudios, '']);
+        setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
     };
 
     const handleAnswerChange = (index, field, value) => {
@@ -71,7 +68,10 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     };
 
     const handleInputBlur = (index, type) => {
-        const trimmedAnswer = type === 'answer' ? answers[index].trim() : answerAudios[index].trim();
+        const answerValue = type === 'answer' ? answers[index]?.answer : answerAudios[index];
+        if (!answerValue) return;
+    
+        const trimmedAnswer = answerValue.trim();
         if (trimmedAnswer === '') {
             handleRemoveAnswer(index);
         }
@@ -102,7 +102,6 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             placeholder='Answer Audio ..'
                             value={answerAudios[index] || ''}
                             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
-                            onBlur={() => handleInputBlur(index, 'answerAudio')}
                             flex="4"
                         >
                             {audioPaths.map((audio, idx) => {
@@ -129,7 +128,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                         />
                         <Spacer />
                         <Input
-                            placeholder="00:00"
+                            placeholder="00:01"
                             value={answer.time}
                             onChange={(e) => handleAnswerChange(index, 'time', e.target.value)}
                             flex="2"

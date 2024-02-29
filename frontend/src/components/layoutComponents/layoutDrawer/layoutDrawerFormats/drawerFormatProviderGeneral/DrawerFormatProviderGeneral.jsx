@@ -8,7 +8,7 @@ import MuAnsFormatGeneral from './MuAnsFormatGeneral';
 import ReactNodeFormatGeneral from './ReactNodeFormatGeneral';
 import InputNodeFormatGeneral from './InputNodeFormatGeneral';
 
-const DrawerFormatProviderGeneral = ({ nodeData, setNodes, audiobookTitle }) => {
+const DrawerFormatProviderGeneral = ({ nodeData, setNodes, audiobookTitle, isUploadModalOpen }) => {
 
     switch (nodeData.type) {
         case 'muChoi':

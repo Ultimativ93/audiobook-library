@@ -47,7 +47,9 @@ Was derzeit schon funktioniert:
                                 werden alle zu dem Projekt dazugehörigen Audios ebenfalls vom Server gelöscht und auch alle dazugehörigen Daten in der Datenbank gelöscht.
                             - Ebenfalls gelangt der Creator von hier zum Editor, indem er entweder ein neues Projekt erstellt, oder auf Start bei einem bestehenden Projekt drückt.
 
-                        - 
+                        - Player: BackgrooundAudios, Antworten werden bei TimeNodes beim Ende der AnswerProcessAudio abgeschnitten. Dafür sollten wir einen Hinweis geben, damit der User/Creator
+                            das dann auch weiß.
+ 
 
 Was wir rausgeschmissen haben oder noch verändern:
                         - Dialogknoten: Da die Logik eines Dialogknoten auch ohne eben diesen zu verwirklichen ist, haben wir diesen Knotenart wieder aus unserem Projekt entfernt.
@@ -56,7 +58,6 @@ Was wir rausgeschmissen haben oder noch verändern:
 
 
 Was noch kommt:
-                        - Ein EndKnoten wollten wir noch so umbauen, dass wenn der Check "isEnd" geaändert wird, zu einem Bridge Node wird.
                         - Upload Audio Bereich: Antiviren Software muss noch eingefügt werden
                             - Weitere Dateitypen abfangen.
                             - Hochgeladene Dateien anzeigen und löschbar machen.

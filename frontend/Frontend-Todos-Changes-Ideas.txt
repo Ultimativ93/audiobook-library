@@ -56,8 +56,8 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Interactions Signal hinzufügen                                                                                                                                        X
                 - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
-                - Endknoten audio muss direkt Startnode                                                                                                                                 O
-                - Wir brauchen eigentlich auch noch ein Background Audio für allle Audios.                                                                                              O
+                - Endknoten audio muss direkt Startnode     ???                                                                                                                         O
+                - Wir brauchen eigentlich auch noch ein Background Audio für allle Audios.                                                                                              X
                 - Input Node, was ist wenn eine Antwort nicht bis zum Ende angezeigt wird und keine Antwort ausgewählt wird. Zeit abfangen, wenn Frage kürzer ist als angegebene Zeit   O
                     also brauchen wir auch noch ein Handle wie bei Reaction.
                 - Antworten von time und reaction werden noch nicht wiedergegeben. Sollen auch erst dann wiedergegeben werden, wenn sie angezeigt werden und dürfen dann auch nur so    O
@@ -71,11 +71,11 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
                 - Geklickte Nodes hervorheben                                                                                                                                           X
                 - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!    -> uuid4 mit flowkey verknüpfen, dann können auch alle gleich heißen   O
                 - Beim Hinzufügen von Nodes in einen bestehenden Flow, wird derzeit die letzte Node überschrieben. !!!!!                                                                X
-                - onRestor: hier könnten wir den FetchFlow noch in Tasks auslagern, Server zugriffe haben wir nicht direkt in den Componenten                                           O
+                - onRestor: hier könnten wir den FetchFlow noch in Tasks auslagern, Server zugriffe haben wir nicht direkt in den Componenten                                           X
                 - Nodes können auf sich selber verweisen, Edges überprüfen, auch nur eine Edge aus einem Handle ziehbar machen !!!!!                                                    O
                 - Save: Sollte anzeigen, dass der Flow noch nicht gespeichert wurde, wenn es Änderungen gibt. Beim verlassen des Editors, sollte der User auch                          O
                     darauf hingewiesen werden dass seine Daten verloren gehen.
-                - Audio nur für das gerade geöffnete Projekt auswählbar machen.
+                - Audio nur für das gerade geöffnete Projekt auswählbar machen.                                                                                                         X
                 - MultipleChoiceNode: Fehler wenn keine Antwort bei ans2 gesetzt wurde und audio ausgewählt wird "cant trim of undefined"   !!!                                         O
                 - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
                 - Anwählen einer Node verdeutlichen, also dass wenn der Drawer geöffnet ist, auch die Node farbig hinterlegt wird, o.Ä.                                                 X
@@ -168,9 +168,122 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
 
 15.02.2024  - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                                   O
             
-            
 
 
+__________________________________________________________________________________________________________________________________________________________________________________________
+
+Nach Priorität:
+            - !!!!! (1):
 
 
-                
+            - !!! (2):  
+                - Drawer wenn eine Edge hinzugefügt wurde und dann neue antrworten hinzugefügt werden, schließt sich der Drawer. Liegt an drawerUpdate, aber ohne das                   O
+                    werden die neuen Antworten in Combinations nicht angezeigt.
+                - Reaction Node no Reaction handle, edge wird immer verschoben, wenn eine neue Period hinzugefügt wird.                                                                 O
+                - InputNode: Hier sollten wir noch genau festlegen, welcher Handle der richtige Handle ist, welcher die falsche Antwort enthählt und welche mit keiner Antwort          O
+                - Derzeit haben wir noch einen remove Answer. Das sollten wir löschen, wenn wir nicht noch zusätzliche Antworten hinzufügen wollen.                                     O
+                - PlayerReaction: Hier müssen wir noch das Interaktionssignal angeben, bevor das Audio abgespielt wird.
+                - TimeNode: Hier sollten wir auch noch die Länge der Zeit anzeigen lassen, damit der User das bis zum Ende auch setzen kann                                             O
+                - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        O
+                - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                          O
+                - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
+                - Wir haben das jetzt im Editor als Modal-Menu. Falls wir die Route nichtmehr brauchen, aus App.js löschen !!!                                                          O
+                - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.   O
+                - UserProjects: Get All User Projects (all flows), set some details (title), set Edit Button and delete, status (editing, pending, etc),                                O
+                    sort for name, length, show how many nodes, how many errors (missing files or not connected nodes), we need a                                                       O
+                    standard thumbnail, that gets set aslong as the thumbnail hasnt been set.                            
+                - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                   O
+                - ValidateFlow: TimeNode kann man noch Buchstaben eingeben, hier nur das richtige Zeitformat möglich machen                                                             O
+                - ReactionNode: Ebenfalls keine Buchstaben erlauben, und einstellen, dass sich die Zeiten nicht überschneiden dürfen.                                                   O
+                - Allgemein: Es wird noch nicht validiert: Interaction Signal, Repeat Question Audio, InputSelection(kommt noch raus)                                                   O
+                - MuAns Knoten: Bug beim auswählen von Audio beheben. Wenn audio nicht gesetzt und man nochmal "Answer Audio" auswählt, dann wird eine Antwort gelöscht.                O
+                - Antwort Kombinationen werden erst nach wegklicken aktualisiert. Sollten aber direkt aktualisiert werden wenn eine Antwort hinzugefügt wurde.                          O
+                - Beim erstellen eines neuen Projektes und dann beim bearbeiten im Editor, beim aktualisieren, werden die Nodes zwar im Hintergrund gespeichert, aber nicht             O
+                    angezeigt. Bug !!!
+                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
+                - Fehler beim schließen der Perview, wenn audio gerade abgespielt wird.                                                                                                 O
+                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
+                - Player: Bei einem neuen Knoten sollte auch direkt das nächste Story Audio abgespielt werden.                                                                          O
+                - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       O
+                    abgespielt werden können. 
+                - Suchen nach Audio in den InputFields                                                                                                                                  O
+                - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               O
+                - Namen der Nodes wie gewünscht ändern                                                                                                                                  O
+
+            - ! (3):
+                - Drawer onClose ohne Transition.                                                                                                                                       O
+                - Undo/Redo Buttons                                                                                                                                                     O
+                - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
+                - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
+                - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
+                    belassen.
+                - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
+                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
+                - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
+                - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
+                - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
+                - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.                                                                                       O
+                - ExistingAudiobookSetup: Wir haben es bisher so programmiert, dass man den bestehenden Audiobook Titel nicht ändern darf, ansonsten muss auch der                      O
+                    name des flows und der dazugehörigen Audiopaths geändert werden.
+                - Hier muss noch abgefangen werden, dass wenn man sich eine grafik/ein Audio angesehen/gehört hat, und man dann ein anderes audio/grafik anwählt, dass dieses           O
+                    dann auch angezeigt/abspielbar wird.
+                - UploadTasks: + Button hat noch keine Funktion, sollte eigentlich Ordner hinzufügen, dann brauchen wir aber auch eine Ordnerstruktur                                   O
+                - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                               O
+                - Bei Playable Flows, bei upload in der Datenbank als spielbar abspeichern und diese auf einer Seite sammeln (erstmal alle die abspielbar sind)                         O
+                - AudioBookSetup, gucken ob es noch benötigt wird. (NewAudiobookSetup, ExistingAudiobookSetup)                                                                          O
+                - ValidateFlow: sollte dann im Editor auch anzeigen, welche Nodes noch Fehlerhaft sind, und im Drawer welche Felder ausgewählt werden müssen.                           O
+                - Editor: Bei einem neuen Projekt, wird noch der flow direkt versucht zu fetchen, hier könnten wir erstmal saven und dann restoren, dann bekommen wir auch keinen       O
+                    Fehler
+                - Sicherheit: Im Upload, später noch eine antiviren library benutzen, oder anders absichern                                                                             O
+                - Menü geht erst beim erneuten klicken auf das Menü zu, anpassen                                                                                                        O
+                - Sortieren der Nodes hinzufügen                                                                                                                                        O  
+                - StateVariablen in ModalStateContext auslagern wenn noch Zeit ist, diese Datei sollte dann auch nochmal umbenant werden zu StateLibrary oder StateContext              O
+                - Save Button laden lassen, wenn gespeichert wird.                                                                                                                      O
+                - Wenn eine Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab             O
+                    und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
+
+
+            - Für Erklärungen:
+                - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.
+
+
+__________________________________________________________________________________________________________________________________________________________________________________________
+
+Erledigt:
+
+            -!!!!!:
+                - Flowkey muss unique sein, weil sonst die onRestore Funktion einen Error werfen wird   !!!!!    -> uuid4 mit flowkey verknüpfen, dann können auch alle gleich heißen   X
+                - ReactionNode: Hier muss abgefangen werden, dass nur Zahlen eingegeben werden können und auch nur in der Art wie wir es wollen.                                        X
+                - Im Editor die länge des ausgewählten Audios anzeigen und nur innerhalb der Länge auswählbar machen, sonst Fehler im Player                                            X
+                        - hier wird noch ein falsches Time format angezeigt, anstatt 00:10 wird 10:00 angezeigt.
+                - Im Editor überschneidende Periods abfangen, oder zumindest nochmal bedenken ob wir das gut finden oder nicht                                                          X
+                - Abfangen dass ein Projektname nicht doppelt vorkommen darf, leer sein darf, keine Sonderzeichen.                                                                      X
+                - Beim erstellen eines neuen Projekts, sollte auch der Title an den Editor weitergegeben werden, sonnst fehler.                                                         X
+
+
+            -!!!:
+                - FetchDetails: in handleIsNewTitle abfangen das keine Leerzeichen, ,.!/ gesetzt werden könnne.                                                                         X
+                - Es könnte noch einen Fehler geben, wenn wir einen Kreis bauen, also wenn wir zum Startknoten verweisen, entweder Handle entfernen, oder abfangen, dass ein            X
+                    Startknoten übergangen wird.
+                - Input Node, was ist wenn eine Antwort nicht bis zum Ende angezeigt wird und keine Antwort ausgewählt wird. Zeit abfangen, wenn Frage kürzer ist als angegebene Zeit   X
+                    also brauchen wir auch noch ein Handle wie bei Reaction.
+                - Antworten von time und reaction werden noch nicht wiedergegeben. Sollen auch erst dann wiedergegeben werden, wenn sie angezeigt werden und dürfen dann auch nur so    X
+                    lang sein wie angegeben.   
+                - Frage wird im Moment nur ganz am Ende angezeigt..                                                                                                                     X
+                - Nodes können auf sich selber verweisen, Edges überprüfen, auch nur eine Edge aus einem Handle ziehbar machen !!!!!                                                    X
+                - MultipleChoiceNode: Fehler wenn keine Antwort bei ans2 gesetzt wurde und audio ausgewählt wird "cant trim of undefined"   !!!                                         X
+                - Upload Audio link zu den input field hinzufügen                                                                                                                       X
+                - Label von Nodes mittig zentrieren, und nur einen gewissen Teil des Labels auf der Node anzeigen, sprengt sonst den Rahmen.                                            X
+                - Die benutzten Audios werden nach löschen einer Node noch falsch angezeigt, sollten direkt aktualisieren und nicht erst beim neuen Laden                               X
+                - Save: Sollte anzeigen, dass der Flow noch nicht gespeichert wurde, wenn es Änderungen gibt. Beim verlassen des Editors, sollte der User auch                          X
+                - ReactionNode: Hier soll direkt ein handle hinzugefügt werden und die antworten gespeichert werden, wenn period hinzugefügt wird.                                      X
+                - Wenn eine Node angewählt ist und sie gelöscht wird, sollte sich der Drawer schließen.                                                                                 X
+                - wird die Edge nicht gelöscht. Es wird erst hizugefügt, wenn wir eine Antwort in das Input Feld schreiben                                                              X
+                - useAudioUsage: wenn eine Node gelöscht wird, soll auch gelöscht werden, dass die Audios benutzt werden, im Moment werden sie noch als benutzt angezeigt               X
+                - ValidateFlow: Abfangen das es keine leeren Fragen gibt und auch keine leere correct Answer bei input Node                                                             X
+                - Handlebeschriftung, vielleicht bei Hover                                                                                                                              X
+                - Drawer: wenn man von einer node die den reiter questions oder combinations hat in eine geht die das nicht hat, wird nicht direkt General Options ausgewählt.          X
+                - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!              X
+                - MuAnsFormatCombination: Wenn neue Antworten hinzugefügt werden, werden nicht direkt die Antwortmöglichkeit in Combination Options hinzugefügt.                        X
+
+

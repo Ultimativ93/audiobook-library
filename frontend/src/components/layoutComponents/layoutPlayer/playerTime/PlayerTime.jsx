@@ -4,6 +4,7 @@ import { Button } from '@chakra-ui/react';
 import { handleButtonClickLogic } from '../../../tasks/playerTasks/PlayerLogic';
 
 import '../playerTime/player-time.css';
+import '../../../../views/player/player.css'
 
 const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visible, answerProcessAudioPlaying }) => {
     const [currentTime, setCurrentTime] = useState(null);
@@ -47,7 +48,9 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visi
 
     return (
         <>
-            {currentNodeProps && currentNodeProps.question}
+            {visible && currentNodeProps.question  && (
+                <p className="question">Question: {currentNodeProps.question}</p>
+            )}
             <div className='player-time'>
                 {visible && renderAnswers()}
             </div>

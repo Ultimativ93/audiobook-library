@@ -20,7 +20,7 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   }, [nodeData.data.answers, nodeData.data.answerAudios]);
 
   useEffect(() => {
-    setAnswerBackgroundAudio(new Array(periods.length).fill(false)); // Setze die Länge von periods als Länge von answerBackgroundAudio
+    setAnswerBackgroundAudio(new Array(periods.length).fill(false));
   }, [periods]);
 
   const arraysEqual = (arr1, arr2) => {
@@ -64,9 +64,9 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   };
 
   const handleAddPeriod = () => {
-    const newPeriods = [...periods, { answer: `Period ${periods.length + 1}`, start: '', end: '' }]; // Füge eine neue Periode mit einem standardmäßigen Antwortwert hinzu
+    const newPeriods = [...periods, { answer: `Period ${periods.length + 1}`, start: '', end: '' }];
     setPeriods(newPeriods);
-    updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods); // Aktualisiere die Perioden direkt mit updateNodeProperty
+    updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
   };
 
   const handlePeriodChange = (index, field, value) => {
@@ -91,11 +91,14 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   };
 
   const handleInputBlur = (index, type) => {
-    const trimmedAnswer = answerAudios[index].trim();
-    if (trimmedAnswer === '') {
-      handleRemoveAnswer(index);
+    const audio = answerAudios[index];
+    if (!audio) return; 
+
+    const trimmedAudio = audio.trim();
+    if (trimmedAudio === '') {
+        handleRemoveAnswer(index);
     }
-  };
+};
 
   return (
     <>

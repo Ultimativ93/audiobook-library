@@ -1,4 +1,5 @@
 import axios from 'axios';
+import isEqual from 'lodash/isEqual';
 
 export const saveFlow = async (rfInstance, audiobookTitle) => {
     if (!rfInstance) return;
@@ -20,7 +21,7 @@ export const saveFlow = async (rfInstance, audiobookTitle) => {
     localStorage.setItem(audiobookTitle, JSON.stringify(flow));
 };
 
-export const restoreFlow = async (audiobookTitle, setNodes, setEdges, setViewport, newAudiobook, onRestore) => {
+export const restoreFlow = async (audiobookTitle, setNodes, setEdges, setViewport) => {
     try {
         const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${audiobookTitle}`);
         if (response.status === 200) {
@@ -57,12 +58,16 @@ export const handleCloseDrawer = (setIsDrawerOpen, setSelectedNodeData, selected
     colorSelectedNodes(selectedNodes)();
 };
 
-export const handleNodesChange = (nodes, onNodesChange) => (changes) => {
+export const handleNodesChange = (nodes, onNodesChange, handleCloseDrawer, setIsDrawerOpen, setSelectedNodeData, selectedNodes) => (changes) => {
     const nextChanges = changes.reduce((acc, change) => {
         if (change.type === 'remove') {
             const removedNode = nodes.find((node) => node.id === change.id);
             if (removedNode && removedNode.data && removedNode.data.isDeletable === false) {
                 return acc;
+            }
+
+            if (selectedNodes.includes(change.id)) {
+                handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes);
             }
         }
         return [...acc, change];
@@ -70,7 +75,7 @@ export const handleNodesChange = (nodes, onNodesChange) => (changes) => {
     onNodesChange(nextChanges);
 };
 
-export const handleFlowClick = (event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes ) => {
+export const handleFlowClick = (event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes) => {
     if (!event.target.closest('.react-flow__node') && selectedNodes.length > 0) {
         handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes);
         setSelectedNodeData(null);
@@ -96,3 +101,48 @@ export const colorSelectedNodes = (selectedNodes) => {
 
     return changeNodeColors;
 };
+
+export const hasPositionChanged = (nodes, previousNodes) => {
+    return nodes.some(node => {
+        const previousNode = previousNodes.find(prevNode => prevNode.id === node.id);
+        return previousNode && !isEqual(previousNode.position, node.position);
+    });
+};
+
+export const handleNodeChangesAndSave = (nodes, edges, previousNodes, previousEdges, onSave) => {
+    const hasDataChanged = nodes.some(node => {
+        const previousNode = previousNodes.find(prevNode => prevNode.id === node.id);
+        return previousNode && !isEqual(
+            { ...previousNode, position: null },
+            { ...node, position: null }
+        );
+    });
+
+    const hasEdgesChanged = edges.some(edge => {
+        const previousEdge = previousEdges.find(prevEdge => prevEdge.id === edge.id);
+        return previousEdge && !isEqual(previousEdge, edge);
+    });
+
+    if ((hasDataChanged || hasEdgesChanged) && !hasPositionChanged(nodes, previousNodes)) {
+        onSave();
+    }
+};
+
+
+export const updateDrawer = (setIsDrawerOpen, setSelectedNodeData, selectedNodes, nodes) => {
+    if (selectedNodes.length > 0) {
+        const selectedNodeId = selectedNodes[0];
+        const selectedNode = nodes.find(node => node.id === selectedNodeId);
+        if (selectedNode) {
+            setSelectedNodeData(selectedNode);
+            setIsDrawerOpen(true);
+        } else {
+            setIsDrawerOpen(false);
+            setSelectedNodeData(null);
+        }
+    } else {
+        setIsDrawerOpen(false);
+        setSelectedNodeData(null);
+    }
+};
+

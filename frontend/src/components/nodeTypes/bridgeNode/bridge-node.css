@@ -1,10 +1,20 @@
 .bridge-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     height: 50px;
     width: 200px;
     border-radius: 5px;
-    padding: 5px;
     background: var(--node-background-color, #9B4A5F);
     color: white;
-    position: relative;
-    z-index: 1;
+}
+
+.bridge-node label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    word-wrap: break-word;
 }

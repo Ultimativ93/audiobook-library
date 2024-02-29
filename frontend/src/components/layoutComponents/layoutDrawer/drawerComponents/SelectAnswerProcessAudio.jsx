@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Select } from '@chakra-ui/react';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import ShowAudioLength from './ShowAudioLength';
 
 const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     const audioPaths = FetchAudio(audiobookTitle);
@@ -39,6 +40,11 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                 </div>
                 <div>
                     <SwitchBackgroundAudio backgroundAudioFor={'answerProcessAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                </div>
+                <div>
+                    {selectedAnswerProcessAudio && (
+                        <ShowAudioLength nodeData={nodeData} setNodes={setNodes} audioName={selectedAnswerProcessAudio} />
+                    )}
                 </div>
             </div>
         </>

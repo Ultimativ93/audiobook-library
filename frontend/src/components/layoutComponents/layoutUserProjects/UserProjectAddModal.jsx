@@ -4,7 +4,7 @@ import { v4 as uuid4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 
 import { handleInputChange } from '../layoutAudiobookSetup/LayoutSetupFunctions';
-import { handleUploadDetails } from '../../tasks/setupTasks/FetchDetails';
+import { handleUploadDetails, handleIsNewTitle } from '../../tasks/setupTasks/FetchDetails';
 
 const UserProjectAddModal = ({ isModalAddOpen, setIsModalAddOpen }) => {
     const [newAudiobook, setNewAudiobook] = useState();
@@ -54,10 +54,17 @@ const UserProjectAddModal = ({ isModalAddOpen, setIsModalAddOpen }) => {
                         </ModalBody>
 
                         <ModalFooter>
-                            <Button colorScheme='blue' onClick={() => {
-                                const detailsSaved = handleUploadDetails(newAudiobook);
-                                if (detailsSaved) {
-                                    navigate('/editor', { state: { audiobookTitle: newAudiobook.title, new: true } })
+                            <Button colorScheme='blue' onClick={async () => {
+                                const isNewAudiobookTitle = await handleIsNewTitle(newAudiobook);
+                                console.log("isNewAudiobooktitle onClick: ", isNewAudiobookTitle);
+                                if (isNewAudiobookTitle) {
+                                    const detailsSaved = handleUploadDetails(newAudiobook);
+                                    if (detailsSaved) {
+                                        navigate(`/editor/${newAudiobook.title}`, { state: { audiobookTitle: newAudiobook.title, new: true } })
+                                    }
+                                } else {
+                                    handleInputChange('', 'title', newAudiobook, setNewAudiobook);
+                                    alert("The title has to be unique, please enter a different title!")
                                 }
                             }}>
                                 Start Editing

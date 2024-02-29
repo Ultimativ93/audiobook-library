@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Input } from '@chakra-ui/react';
+import { Input, Box, Text } from '@chakra-ui/react';
 
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
 const SelectNodeLabel = ({ nodeData, setNodes }) => {
     const [label, setLabel] = useState(nodeData.data.label);
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
         setLabel(nodeData.data.label);
     }, [nodeData]);
-    
+
     const handleLabelChange = (event) => {
         const newValue = event.target.value;
-        setLabel(newValue);
-        updateNodeProperty(setNodes, nodeData, 'label', newValue);
+        console.log("newValue length", newValue.length);
+        if (newValue.length <= 40) {
+            setLabel(newValue);
+            updateNodeProperty(setNodes, nodeData, 'label', newValue);
+            setIsError(false);
+        } else {
+            setIsError(true);
+        }
     };
 
     return (
@@ -23,7 +30,13 @@ const SelectNodeLabel = ({ nodeData, setNodes }) => {
                 placeholder='Node name..'
                 value={label}
                 onChange={handleLabelChange}
+                borderColor={isError ? 'red.500' : 'gray.200'}
             />
+            {isError && (
+                <Box mt={1}>
+                    <Text color="red.500" fontSize="sm">The label must be 40 characters or less.</Text>
+                </Box>
+            )}
         </>
     );
 };

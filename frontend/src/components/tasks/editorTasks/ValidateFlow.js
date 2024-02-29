@@ -27,7 +27,7 @@ const validateMuChoi = (node) => {
         if (!node.data.backgroundAudio) {
             missingData.push(`Backgroundaudio is missing.`)
         }
-    } 
+    }
 
     if (node.data.interactionSignal) {
         if ((node.data.interactionSignalAudio === '' || !node.data.interactionSignalAudio) && (!node.data.interactionSignal || node.data.interactionSignal === '')) {
@@ -72,18 +72,46 @@ const validateTimeNode = (node) => {
     if (!node.data.questionAudio) {
         missingData.push("Question Audio is missing.");
     }
-    
+
     if (!node.data.answers || node.data.answers.length === 0) {
         missingData.push("Answers are missing.");
     } else {
         node.data.answers.forEach((answer, index) => {
-            
+
+            const timePattern = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+            const isValidTime = (time) => {
+                return timePattern.test(time);
+            }
+
             if (!answer.time) {
                 missingData.push(`Time for Answer ${index + 1} is missing.`);
             }
             if (!node.data.answerAudios || !node.data.answerAudios[index]) {
-                
                 missingData.push(`Audio for Answer ${index + 1} is missing.`);
+            }
+            if (answer.time) {
+                const validTime = isValidTime(answer.time);
+                if (!validTime) {
+                    missingData.push(`Time in answer ${index + 1} has to be correctly formated (01:23).`);
+                }
+                if (answer.time === '00:00') {
+                    missingData.push(`Time in answer ${index + 1} has to be at least 1 second delayed.`)
+                }
+                
+                // Get audio length in seconds
+                const audioLengthInSeconds = node.data.answerProcessAudioLength.split(':')
+                    .map(Number)
+                    .reduce((acc, val, index) => acc + val * (index === 0 ? 60 : 1), 0);
+                
+                // Get answer time in seconds
+                const answerTimeInSeconds = answer.time.split(':')
+                    .map(Number)
+                    .reduce((acc, val, index) => acc + val * (index === 0 ? 60 : 1), 0);
+                
+                if (answerTimeInSeconds > audioLengthInSeconds) {
+                    missingData.push(`Answer time in answer ${index + 1} exceeds the length of the audio.`);
+                }
             }
         });
     }
@@ -92,7 +120,7 @@ const validateTimeNode = (node) => {
         if (!node.data.backgroundAudio) {
             missingData.push(`Backgroundaudio is missing.`)
         }
-    } 
+    }
 
     if (node.data.interactionSignal) {
         if (!node.data.interactionSignalAudio) {
@@ -145,7 +173,7 @@ const validateMuAns = (node) => {
         if (!node.data.backgroundAudio) {
             missingData.push(`Backgroundaudio is missing.`)
         }
-    } 
+    }
 
     if (node.data.interactionSignal) {
         if (!node.data.interactionSignalAudio) {
@@ -155,7 +183,6 @@ const validateMuAns = (node) => {
 
     return missingData.length > 0 ? `Missing data for Multiple Answer Node ${node.data.label}: ${missingData.join(", ")}` : null;
 }
-
 
 const validateReactNode = (node) => {
     let missingData = [];
@@ -194,13 +221,66 @@ const validateReactNode = (node) => {
         if (allZeroStartEnd) {
             missingData.push("At least one Answer Period should have non-zero start and end values.");
         }
+
+        const timePattern = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+
+        const isValidTimeFormat = (time) => {
+            return timePattern.test(time);
+        }
+        
+        const periodToSecond = (period) => {
+            const [minutes, seconds] = period.split(':').map(Number);
+            const totalSeconds = minutes * 60 + seconds;
+            return totalSeconds;
+        }
+        
+        const endPeriodLargerThanStart = (period) => {
+            const startPeriodSeconds = periodToSecond(period.start);
+            const endPeriodSeconds = periodToSecond(period.end);
+            return startPeriodSeconds >= endPeriodSeconds;
+        }
+
+        const audioLengthInSeconds = periodToSecond(node.data.answerProcessAudioLength);
+
+        const periods = node.data.answerPeriods;
+        
+        periods.forEach((period, index) => {
+            if (period.start && period.end) {
+                const validStartTime = isValidTimeFormat(period.start);
+                const validEndTime = isValidTimeFormat(period.end);
+                if (!validStartTime || !validEndTime) {
+                    missingData.push(`Start and/or end time in answer ${index + 1} have to be correctly formatted (01:23)`);
+                } else {
+                    const endPeriodIsLarger = endPeriodLargerThanStart(period);
+                    if (endPeriodIsLarger) {
+                        missingData.push(`End time in answer ${index + 1} has to be greater than start time.`);
+                    }
+                    const startSeconds = periodToSecond(period.start);
+                    const endSeconds = periodToSecond(period.end);
+                    if (startSeconds < 0 || endSeconds > audioLengthInSeconds) {
+                        missingData.push(`Answer period ${index + 1} exceeds the length of the audio.`);
+                    }
+                    if (index > 0) {
+                        const previousPeriod = periods[index - 1];
+                        const previousEndTime = periodToSecond(previousPeriod.end);
+                        const currentStartTime = periodToSecond(period.start);
+                        
+                        if (previousEndTime > currentStartTime) {
+                            missingData.push(`Answer period ${index + 1} overlaps with the previous period.`);
+                        }
+                    }
+                }
+            } else {
+                missingData.push(`Incomplete time range for answer ${index + 1}. Both start and end times are required.`);
+            }
+        });
     }
 
     if (node.data.backgroundAudioSelected) {
         if (!node.data.backgroundAudio) {
             missingData.push(`Backgroundaudio is missing.`)
         }
-    } 
+    }
 
     if (node.data.interactionSignal) {
         if (!node.data.interactionSignalAudio) {
@@ -238,7 +318,7 @@ const validateInputNode = (node) => {
         if (!node.data.backgroundAudio) {
             missingData.push(`Backgroundaudio is missing.`)
         }
-    } 
+    }
 
     if (node.data.interactionSignal) {
         if (!node.data.interactionSignalAudio) {

@@ -51,8 +51,6 @@ const AudioBookSetup = ({ setModalsState }) => {
         fetchData();
     }, [audiobookTitle]);
 
-
-
     return (
         <>  
             <div className="audiobook-setup">

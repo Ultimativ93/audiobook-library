@@ -20,6 +20,7 @@ const handleUploadDetails = async (audiobookDetails) => {
 };
 
 const handleGetDetails = async (audiobookTitle) => {
+    console.log("audioBookTitle in getDetails", audiobookTitle)
     try {
         const response = await axios.get('http://localhost:3005/getAudiobookDetails', {
             params: {
@@ -59,10 +60,23 @@ const handleChangeDetails = async (audiobookDetails) => {
     }
 }
 
-
+const handleIsNewTitle = async (newAudiobook) => {
+    const specialCharactersRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if (newAudiobook.title === '' || specialCharactersRegex.test(newAudiobook.title)) {
+        return false;
+    } else {
+        try {
+            await handleGetDetails(newAudiobook.title);
+            return false;
+        } catch (error) {
+            return true;
+        }
+    }
+}
 
 export {
     handleUploadDetails,
     handleGetDetails,
     handleChangeDetails,
+    handleIsNewTitle,
 }

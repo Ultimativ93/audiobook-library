@@ -56,6 +56,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ],
                         answerAudios: [],
                         answerProcessAudio: '',
+                        answerProcessAudioLength: '',
                         id: String(asignId),
                     }
                 }
@@ -87,6 +88,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                             { start: '00:00', end: '00:00', answer: '' },
                         ],
                         answerProcessAudio: '',
+                        answerProcessAudioLength: '',
                         id: String(asignId),
                     }
                 };

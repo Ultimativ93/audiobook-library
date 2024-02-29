@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
+
+import "../../../views/player/player.css";
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
-const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, questionAudioPlayed, answerProcessAudioPlaying, onValidPeriodChange }) => {
+const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, questionAudioPlayed, answerProcessAudioPlaying, onValidPeriodChange, visible }) => {
     const [currentTime, setCurrentTime] = useState(null);
     const [validPeriod, setValidPeriod] = useState(null);
 
@@ -40,23 +42,25 @@ const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, 
         handleButtonClickLogic(index, flow, currentNodeProps, setCurrentNode);
     };
 
-    if (!questionAudioPlayed || !validPeriod) {
+    if (questionAudioPlayed) {
+        return (
+            <>
+                {visible && currentNodeProps.question  && (
+                    <p className="question">Question: {currentNodeProps.question}</p>
+                )}
+                {validPeriod && answerProcessAudioPlaying && (
+                    <Button
+                        onClick={() => handleButtonClick(currentNodeProps.answerPeriods.indexOf(validPeriod))}
+                        colorScheme='blue'
+                    >
+                        {validPeriod.answer}
+                    </Button>
+                )}
+            </>
+        );
+    } else {
         return null;
     }
-
-    return (
-        <>
-            {currentNodeProps.question}
-            {validPeriod && answerProcessAudioPlaying && (
-                <Button
-                    onClick={() => handleButtonClick(currentNodeProps.answerPeriods.indexOf(validPeriod))}
-                    colorScheme='blue'
-                >
-                    {validPeriod.answer}
-                </Button>
-            )}
-        </>
-    );
 };
 
 export default PlayerReaction;

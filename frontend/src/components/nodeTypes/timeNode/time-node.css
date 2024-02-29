@@ -1,15 +1,37 @@
 .time-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   height: 50px;
   width: 200px;
-  padding: 5px;
   border-radius: 5px;
   background: var(--node-background-color, #203450);
   color: white;
-  z-index: -1;
 }
 
-.multiple-choice-node label {
-  display: block;
+.time-node label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+
+.time-node .handle-label {
+  display: none;
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.time-node .react-flow__handle:hover .handle-label {
+  display: block;
 }

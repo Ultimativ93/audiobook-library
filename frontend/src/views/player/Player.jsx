@@ -145,7 +145,7 @@ const Player = () => {
     const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio);
     const questionAudioBlob = await getAudioFromPath(questionAudioPath);
     await loadBackgroundAudio(flow.nodes[currentNode].data, 'questionAudio');
-
+    console.log("REPEAT QUESTION !!!!!!!!!!!!!!!!!!", currentNodeProps.repeatQuestionAudio);
     if (questionAudioBlob && (!questionAudioPlayed || currentNodeProps.repeatQuestionAudio === "true")) {
       audioRef.current.src = questionAudioBlob;
       console.log("Question audio is playing...");
@@ -223,11 +223,10 @@ const Player = () => {
       console.log("In handleAudioEnded", questionAudioPlayed, currentNodeProps);
 
       // Check if all answer audios have been played
-      if (questionAudioPlayed && (currentNodeProps && currentNodeProps.answerAudios && answerAudioIndex === currentNodeProps.answerAudios.length)) {
+      if ((questionAudioPlayed && (currentNodeProps && currentNodeProps.answerAudios && answerAudioIndex === currentNodeProps.answerAudios.length)) || (questionAudioPlayed && currentNodeProps.correctAnswer)) {
         if (currentNodeProps.repeatQuestionAudio === "true") {
           console.log("Repeating question audio...");
           setQuestionAudioPlayed(false);
-          console.log("questionAudioPlayed vor weiter:", questionAudioPlayed);
           playQuestionAudio();
           setAnswerAudioIndex(0);
         } else {
@@ -523,6 +522,7 @@ const Player = () => {
           questionAudioPlayed={questionAudioPlayed}
           answerProcessAudioPlaying={answerProcessAudioPlaying}
           onValidPeriodChange={onValidPeriodChange}
+          visible={answersVisible}
         />
       )}
 

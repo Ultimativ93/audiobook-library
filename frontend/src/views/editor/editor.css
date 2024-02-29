@@ -26,3 +26,7 @@
 .react-flow__node {
   pointer-events: auto !important;
 }
+
+.react-flow__node[data-id="1"] .react-flow__handle.target {
+  display: none !important;
+}

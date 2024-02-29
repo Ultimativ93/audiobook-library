@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
 
+import "../../../views/player/player.css";
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
 const PlayerAnswers = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
@@ -12,7 +13,7 @@ const PlayerAnswers = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
         <>
             {visible && currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
                 <div>
-                    <p>Question: {currentNodeProps.question}</p>
+                    <p className="question">Question: {currentNodeProps.question}</p>
                     <p>Answers:</p>
                     <ul>
                         {currentNodeProps.answers.map((answer, index) => (

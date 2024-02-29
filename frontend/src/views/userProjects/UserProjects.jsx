@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Image, Stack, Heading, Text, ButtonGroup, Button, CardBody, CardFooter, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Card, Image, Stack, Heading, Text, ButtonGroup, Button, CardBody, CardFooter } from '@chakra-ui/react';
 import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -42,6 +42,7 @@ const UserProjects = () => {
     }
   };
 
+  // Handle delete project
   const handleDeleteButtonClick = (audiobookTitle) => {
     setSelectedProject(audiobookTitle);
     setIsModalDeleteOpen(true);

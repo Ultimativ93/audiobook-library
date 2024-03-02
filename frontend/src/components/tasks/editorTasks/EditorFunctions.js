@@ -38,20 +38,6 @@ export const restoreFlow = async (audiobookTitle, setNodes, setEdges, setViewpor
     }
 };
 
-export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen) => {
-    if (event.ctrlKey) {
-        return;
-    }
-
-    if (node.id === '1' && node.data.label === 'Start') return;
-
-    if (!isDrawerOpen) {
-        setIsDrawerOpen(true);
-    }
-
-    setSelectedNodeData(node);
-};
-
 export const handleCloseDrawer = (setIsDrawerOpen, setSelectedNodeData, selectedNodes) => {
     setIsDrawerOpen(false);
     setSelectedNodeData(null);
@@ -128,21 +114,17 @@ export const handleNodeChangesAndSave = (nodes, edges, previousNodes, previousEd
     }
 };
 
-
-export const updateDrawer = (setIsDrawerOpen, setSelectedNodeData, selectedNodes, nodes) => {
-    if (selectedNodes.length > 0) {
-        const selectedNodeId = selectedNodes[0];
-        const selectedNode = nodes.find(node => node.id === selectedNodeId);
-        if (selectedNode) {
-            setSelectedNodeData(selectedNode);
-            setIsDrawerOpen(true);
-        } else {
-            setIsDrawerOpen(false);
-            setSelectedNodeData(null);
-        }
-    } else {
-        setIsDrawerOpen(false);
-        setSelectedNodeData(null);
+export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeData, selectedNodeData, isDrawerOpen) => {
+    if (event.ctrlKey) {
+        return;
     }
-};
 
+    if (node.id === '1' && node.data.label === 'Start') return;
+
+    if (!isDrawerOpen) {
+        console.log("öffne Drawer", selectedNodeData)
+        setIsDrawerOpen(true);
+    }
+
+    setSelectedNodeData(node);
+};

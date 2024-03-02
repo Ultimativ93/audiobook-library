@@ -12,12 +12,12 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
         const initialCombinations = nodeData.data?.answerCombinations || [];
         setAnswerCombinations(initialCombinations);
         setSelectedAnswers([]);
-      }, [nodeData.data?.answerCombinations, nodeData, setSelectedAnswers]);
+      }, [nodeData.data.answerCombinations, nodeData, setSelectedAnswers]);
 
     useEffect(() => {
         const initialCombinations = nodeData.data?.answerCombinations || [];
         setAnswerCombinations(initialCombinations);
-    }, [nodeData.data?.answerCombinations, nodeData]);
+    }, [nodeData.data.answerCombinations, nodeData]);
 
     const toggleAnswerSelection = (answer) => {
         if (selectedAnswers.includes(answer)) {
@@ -61,13 +61,12 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
             prevAnswerCombinations.filter((combination) => combination.id !== combinationId)
         );
 
-        removeCombination(setNodes, nodeData, combinationId);
+        removeCombination(setNodes, setEdges, edges, nodeData, combinationId);
     };
 
     const uniqueCombinations = Array.from(new Set(answerCombinations.map(JSON.stringify))).map(JSON.parse);
 
-
-    console.log("nodeData in MuAnsFromatCombination", nodeData);
+    //console.log("nodeData in MuAnsFromatCombination", nodeData);
     return (<>
         <DrawerBody>
             <div>

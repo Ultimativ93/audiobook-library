@@ -176,17 +176,17 @@ Nach Priorität:
             - !!!!! (1):
 
 
-            - !!! (2):  
+            - !!! (2):
+                - MuAns knoten, Edges werden noch falsch gelöscht.                                                                                                                      O
+                - Editor: wenn mit offenen Drawer edges gezogen werden, werden die Nodes im Editor farbe deselektiert. Beim erneuten anwählen keine Farbe.                              O
+                - TimeNode, bei remove answer wird audio nicht zurückgesetzt                                                                                                            O
+                - Fehler in TimeNode beim setzen von AnswerProcessAudio
                 - Drawer wenn eine Edge hinzugefügt wurde und dann neue antrworten hinzugefügt werden, schließt sich der Drawer. Liegt an drawerUpdate, aber ohne das                   O
                     werden die neuen Antworten in Combinations nicht angezeigt.
                 - Reaction Node no Reaction handle, edge wird immer verschoben, wenn eine neue Period hinzugefügt wird.                                                                 O
-                - InputNode: Hier sollten wir noch genau festlegen, welcher Handle der richtige Handle ist, welcher die falsche Antwort enthählt und welche mit keiner Antwort          O
-                - Derzeit haben wir noch einen remove Answer. Das sollten wir löschen, wenn wir nicht noch zusätzliche Antworten hinzufügen wollen.                                     O
                 - PlayerReaction: Hier müssen wir noch das Interaktionssignal angeben, bevor das Audio abgespielt wird.
-                - TimeNode: Hier sollten wir auch noch die Länge der Zeit anzeigen lassen, damit der User das bis zum Ende auch setzen kann                                             O
                 - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        O
                 - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                          O
-                - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
                 - Wir haben das jetzt im Editor als Modal-Menu. Falls wir die Route nichtmehr brauchen, aus App.js löschen !!!                                                          O
                 - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.   O
                 - UserProjects: Get All User Projects (all flows), set some details (title), set Edit Button and delete, status (editing, pending, etc),                                O
@@ -209,6 +209,7 @@ Nach Priorität:
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
                 - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               O
                 - Namen der Nodes wie gewünscht ändern                                                                                                                                  O
+                - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
 
             - ! (3):
                 - Drawer onClose ohne Transition.                                                                                                                                       O
@@ -241,7 +242,8 @@ Nach Priorität:
                 - Save Button laden lassen, wenn gespeichert wird.                                                                                                                      O
                 - Wenn eine Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab             O
                     und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
-
+                - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
+                - Responsive für die meisten größen                                                                                                                                     O
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.
@@ -285,5 +287,9 @@ Erledigt:
                 - Drawer: wenn man von einer node die den reiter questions oder combinations hat in eine geht die das nicht hat, wird nicht direkt General Options ausgewählt.          X
                 - SelectAnswer: Hier kommt es noch zu kleineren Bugs, wenn man Antworten in der Mitte löscht werden teilweise dann auch die Edges gelöscht, angucken !!!!!              X
                 - MuAnsFormatCombination: Wenn neue Antworten hinzugefügt werden, werden nicht direkt die Antwortmöglichkeit in Combination Options hinzugefügt.                        X
+                - InputNode: Hier sollten wir noch genau festlegen, welcher Handle der richtige Handle ist, welcher die falsche Antwort enthählt und welche mit keiner Antwort          X
+                - Derzeit haben wir noch einen remove Answer. Das sollten wir löschen, wenn wir nicht noch zusätzliche Antworten hinzufügen wollen.                                     X
+                - TimeNode: Hier sollten wir auch noch die Länge der Zeit anzeigen lassen, damit der User das bis zum Ende auch setzen kann                                             X
+                - Startnode kann wieder den Drawer öffnen.                                                                                                                              X
 
 

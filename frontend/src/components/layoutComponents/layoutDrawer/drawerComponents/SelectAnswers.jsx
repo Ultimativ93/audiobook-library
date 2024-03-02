@@ -84,26 +84,26 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   const handleRemoveAnswer = (index) => {
     const newAnswers = [...answers];
     const newAnswerAudios = [...answerAudios];
-    const newAnswerBackgroundAudio = [...answerBackgroundAudio]; 
-  
+    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+
     newAnswers.splice(index, 1);
     newAnswerAudios.splice(index, 1);
     newAnswerBackgroundAudio.splice(index, 1);
-  
+
     const newEdges = edges.filter(edge => {
       const sourceHandleId = `${nodeData.id}-handle-${index}`;
       return edge.sourceHandle !== sourceHandleId;
     });
-  
+
     setAnswers(newAnswers);
     setAnswerAudios(newAnswerAudios);
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
-    setEdges(newEdges); 
-  
+    setEdges(newEdges);
+
     updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
     updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
   };
-  
+
 
   const handleInputBlur = (index, type) => {
     if (type === 'answer') {
@@ -112,7 +112,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
         handleRemoveAnswer(index);
       }
     }
-  };  
+  };
 
   const handleToggleBackgroundAudio = (index) => {
     const newAnswerBackgroundAudio = [...answerBackgroundAudio];
@@ -121,7 +121,8 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
-  console.log("nodeData in SelectAnswers:", nodeData);
+  //console.log("nodeData in SelectAnswers:", nodeData);
+  //console.log("nodeData answers", nodeData.data.answers)
   return (
     <>
       <h4>Answers</h4>
@@ -162,7 +163,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
             setNodes={setNodes}
             audiobookTitle={audiobookTitle}
             isChecked={answerBackgroundAudio[index]}
-            onToggle={() => handleToggleBackgroundAudio(index)} 
+            onToggle={() => handleToggleBackgroundAudio(index)}
           />
           <Spacer />
           <Button

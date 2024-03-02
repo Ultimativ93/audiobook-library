@@ -26,13 +26,15 @@ const SelectCorrectAnswer = ({ nodeData, setNodes }) => {
                 value={correctAnswer}
                 onChange={(e) => handleInputChange(e.target.value)}
             />
-            <Button
-                colorScheme='red'
-                size='sm'
-                onClick={() => handleRemoveAnswer()}
-            >
-                Remove Answer
-            </Button>
+            {correctAnswer && (
+                <Button
+                    colorScheme='red'
+                    size='sm'
+                    onClick={() => handleRemoveAnswer()}
+                >
+                    Remove Answer
+                </Button>
+            )}
         </>
     )
 };

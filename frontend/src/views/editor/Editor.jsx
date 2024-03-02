@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
 import { useParams, useLocation } from 'react-router-dom';
-import { saveFlow, restoreFlow, handleCloseDrawer, handleNodesChange, handleFlowClick, colorSelectedNodes, handleNodeChangesAndSave, handleNodeClick, updateDrawer} from '../../components/tasks/editorTasks/EditorFunctions';
+import { saveFlow, restoreFlow, handleCloseDrawer, handleNodesChange, handleFlowClick, colorSelectedNodes, handleNodeChangesAndSave, handleNodeClick, updateDrawer } from '../../components/tasks/editorTasks/EditorFunctions';
 
 import LayoutEditorDrawer from '../../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
 import LayoutEditorButtons from '../../components/layoutComponents/layoutEditor/layoutEditorButtons/LayoutEditorButtons';
@@ -125,12 +125,28 @@ const Editor = () => {
         setPreviousEdges(edges);
     }, [nodes, edges, previousNodes, previousEdges]);
 
-    useEffect(() => {
-        updateDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes, nodes);
-    }, [nodes, selectedNodes]);
-
-    console.log("nodes", nodes);
+    //console.log("nodes", nodes);
     console.log("edges", edges);
+    //console.log("isDrawer Open", isDrawerOpen);
+
+    // Updates Nodes in Drawer
+    useEffect(() => {
+        if (selectedNodes.length > 0) {
+            const selectedNodeId = selectedNodes[0];
+            const selectedNode = nodes.find(node => node.id === selectedNodeId);
+            if (selectedNode) {
+                setSelectedNodeData(selectedNode);
+                //setIsDrawerOpen(true);
+            } else {
+                //setIsDrawerOpen(false);
+                //setSelectedNodeData(null);
+            }
+        } else {
+            //setIsDrawerOpen(false);
+            //setSelectedNodeData(null);
+        }
+    }, [nodes]);
+
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />

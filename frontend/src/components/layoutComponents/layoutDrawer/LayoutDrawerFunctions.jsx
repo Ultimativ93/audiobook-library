@@ -108,12 +108,13 @@ const updateAnswerCombination = (setNodes, nodeData, updatedCombination) => {
     });
 };
 
-const removeCombination = (setNodes, nodeData, combinationId) => {
+const removeCombination = (setNodes, setEdges, prevEdges, nodeData, combinationId) => {
     setNodes((prevNodes) => {
-        return prevNodes.map((node) => {
+        const updatedNodes = prevNodes.map((node) => {
             if (node.id === nodeData.id) {
                 const updatedCombinations = (node.data.answerCombinations || []).filter((combination) => combination.id !== combinationId);
 
+                // Entfernen der gelöschten Combination und Aktualisieren der verbleibenden Combinations
                 return {
                     ...node,
                     data: {
@@ -124,8 +125,57 @@ const removeCombination = (setNodes, nodeData, combinationId) => {
             }
             return node;
         });
+
+
+        // Aktualisieren der Edges
+        setEdges((prevEdges) => {
+            let index = 0;
+            const updatedEdges = prevEdges.map((edge) => {
+                // Überprüfen, ob die Kante mit dem zu entfernenden Handle verknüpft ist
+                if (edge.sourceHandle === `${nodeData.id}-handle-${combinationId}`) {
+                    console.log("Edge sourceHandle gleich nodeDataid handle Combination id");
+                    // Wenn ja, die Kante entfernen
+                    return null;
+                } else if (edge.sourceHandle.includes(`${nodeData.id}-handle-`)) {
+                    // Wenn das Handle aktualisiert werden muss
+                    const handleParts = edge.sourceHandle.split('-');
+                    const handleIndex = parseInt(handleParts[handleParts.length - 1], 10);
+
+                    // Überprüfen, ob das Handle höher oder gleich dem gelöschten Handle ist
+                    console.log("prevEdges", prevEdges);
+                    console.log("handleIndex, combinationId", handleIndex, combinationId);
+                    if (combinationId > handleIndex) {
+                        combinationId = combinationId++;
+                    }
+
+                    if (handleIndex >= combinationId) {
+                        const updatedHandle = `${nodeData.id}-handle-${handleIndex - 1}`;
+
+                        const sourceHandleToFind = `${nodeData.id}-handle-${handleIndex}`
+                        const updatedTargetEdge = prevEdges.find((e) => e.sourceHandle === sourceHandleToFind).target;
+                        console.log("updatedTargetEdge", updatedTargetEdge);
+                        return {
+                            ...edge,
+                            sourceHandle: updatedHandle,
+                            target: updatedTargetEdge ? updatedTargetEdge : edge.target,
+                        };
+                    }
+                    index++;
+                }
+
+                // Wenn die Kante nicht entfernt oder aktualisiert werden muss, unverändert zurückgeben
+                return edge;
+            }).filter((edge) => edge !== null); // Entfernen der gelöschten Kanten
+
+            return updatedEdges;
+        });
+
+        return updatedNodes;
     });
 };
+
+
+
 
 // Updates nodeproperties
 const updateNodeProperty = (setNodes, nodeData, property, value) => {
@@ -148,7 +198,7 @@ const updateNodeProperty = (setNodes, nodeData, property, value) => {
 const useAudioUsage = (audioPaths) => {
     const [audioUsage, setAudioUsage] = useState({});
     const params = useParams();
-    
+
     useEffect(() => {
         const fetchAudioUsage = async () => {
             const usage = {};
@@ -169,27 +219,28 @@ const isAudioUsed = async (audioName, params) => {
     const flow = await fetchFlow(params)
 
     for (const node of flow.nodes) {
-        for (const value of Object.values(node.data)) {
-            if (Array.isArray(value)) {
-                for (const item of value) {
-                    if (typeof item === 'object' && item.backgroundAudio && typeof item.backgroundAudio === 'string' && item.backgroundAudio.includes(audioName)) {
+        if (node.data) {
+            for (const value of Object.values(node.data)) {
+                if (Array.isArray(value)) {
+                    for (const item of value) {
+                        if (item && typeof item === 'object' && item.backgroundAudio && typeof item.backgroundAudio === 'string' && item.backgroundAudio.includes(audioName)) {
+                            return true;
+                        } else if (typeof item === 'string' && item.includes(audioName)) {
+                            return true;
+                        }
+                    }
+                } else {
+                    if (typeof value === 'object' && value.backgroundAudio && typeof value.backgroundAudio === 'string' && value.backgroundAudio.includes(audioName)) {
                         return true;
-                    } else if (typeof item === 'string' && item.includes(audioName)) {
+                    } else if (typeof value === 'string' && value.includes(audioName)) {
                         return true;
                     }
-                }
-            } else {
-                if (typeof value === 'object' && value.backgroundAudio && typeof value.backgroundAudio === 'string' && value.backgroundAudio.includes(audioName)) {
-                    return true;
-                } else if (typeof value === 'string' && value.includes(audioName)) {
-                    return true;
                 }
             }
         }
     }
     return false;
-}
-
+};
 
 const updateBackgroundAudio = (setNodes, nodeData, backgroundAudioFor, selectedAudio, showAudio) => {
     setNodes((prevNodes) => {
@@ -197,7 +248,7 @@ const updateBackgroundAudio = (setNodes, nodeData, backgroundAudioFor, selectedA
             if (node.id === nodeData.id) {
                 let updatedBackgroundAudio = [...node.data.backgroundAudio];
 
-                if (!showAudio) { 
+                if (!showAudio) {
                     updatedBackgroundAudio = updatedBackgroundAudio.filter(audio => audio.audio !== backgroundAudioFor);
                 } else {
                     const existingAudioIndex = updatedBackgroundAudio.findIndex(audio => audio.audio === backgroundAudioFor);

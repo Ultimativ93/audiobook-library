@@ -177,12 +177,7 @@ Nach Priorität:
 
 
             - !!! (2):
-                - MuAns knoten, Edges werden noch falsch gelöscht.                                                                                                                      O
-                - Editor: wenn mit offenen Drawer edges gezogen werden, werden die Nodes im Editor farbe deselektiert. Beim erneuten anwählen keine Farbe.                              O
-                - TimeNode, bei remove answer wird audio nicht zurückgesetzt                                                                                                            O
-                - Fehler in TimeNode beim setzen von AnswerProcessAudio
-                - Drawer wenn eine Edge hinzugefügt wurde und dann neue antrworten hinzugefügt werden, schließt sich der Drawer. Liegt an drawerUpdate, aber ohne das                   O
-                    werden die neuen Antworten in Combinations nicht angezeigt.
+                - SelectAnswerProcess Audio Lengths, wird nur einmal erstellt, sobald eine Frage ausgewählt wurde. Bei erneuter Auswahl keine Aktualisierung.                           O
                 - Reaction Node no Reaction handle, edge wird immer verschoben, wenn eine neue Period hinzugefügt wird.                                                                 O
                 - PlayerReaction: Hier müssen wir noch das Interaktionssignal angeben, bevor das Audio abgespielt wird.
                 - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        O
@@ -208,8 +203,10 @@ Nach Priorität:
                     abgespielt werden können. 
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
                 - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               O
-                - Namen der Nodes wie gewünscht ändern                                                                                                                                  O
+                - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                                                 O
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
+                - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
+                - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
 
             - ! (3):
                 - Drawer onClose ohne Transition.                                                                                                                                       O
@@ -291,5 +288,9 @@ Erledigt:
                 - Derzeit haben wir noch einen remove Answer. Das sollten wir löschen, wenn wir nicht noch zusätzliche Antworten hinzufügen wollen.                                     X
                 - TimeNode: Hier sollten wir auch noch die Länge der Zeit anzeigen lassen, damit der User das bis zum Ende auch setzen kann                                             X
                 - Startnode kann wieder den Drawer öffnen.                                                                                                                              X
-
-
+                - MuAns knoten, Edges werden noch falsch gelöscht.                                                                                                                      X
+                - Editor: wenn mit offenen Drawer edges gezogen werden, werden die Nodes im Editor farbe deselektiert. Beim erneuten anwählen keine Farbe.                              X
+                - TimeNode, bei remove answer wird audio nicht zurückgesetzt                                                                                                            X
+                - Fehler in TimeNode beim setzen von AnswerProcessAudio                                                                                                                 X
+                - Drawer wenn eine Edge hinzugefügt wurde und dann neue antrworten hinzugefügt werden, schließt sich der Drawer. Liegt an drawerUpdate, aber ohne das                   X
+                    werden die neuen Antworten in Combinations nicht angezeigt.

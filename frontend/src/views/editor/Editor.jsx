@@ -60,7 +60,6 @@ const Editor = () => {
     const onConnect = useCallback((params) => {
         const { source, target, sourceHandle } = params;
         const isSourceConnected = edges.some(edge => edge.source === source && edge.sourceHandle === sourceHandle);
-
         if (isSourceConnected) {
             return;
         }
@@ -126,7 +125,7 @@ const Editor = () => {
     }, [nodes, edges, previousNodes, previousEdges]);
 
     //console.log("nodes", nodes);
-    console.log("edges", edges);
+    //console.log("edges", edges);
     //console.log("isDrawer Open", isDrawerOpen);
 
     // Updates Nodes in Drawer
@@ -160,7 +159,7 @@ const Editor = () => {
                 onConnect={onConnect}
                 onInit={setRfInstance}
                 nodeTypes={nodeTypes}
-                onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen)}
+                onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen, setSelectedNodes)}
                 onSelectionChange={handleSelectionChangeCallback}
                 className='editor-flow'
                 onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)}

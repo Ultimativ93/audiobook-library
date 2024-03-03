@@ -114,7 +114,6 @@ const removeCombination = (setNodes, setEdges, prevEdges, nodeData, combinationI
             if (node.id === nodeData.id) {
                 const updatedCombinations = (node.data.answerCombinations || []).filter((combination) => combination.id !== combinationId);
 
-                // Entfernen der gelöschten Combination und Aktualisieren der verbleibenden Combinations
                 return {
                     ...node,
                     data: {
@@ -126,56 +125,64 @@ const removeCombination = (setNodes, setEdges, prevEdges, nodeData, combinationI
             return node;
         });
 
+        const { updatedEdges, deletedEdgeIds } = updateEdges(prevEdges, nodeData.id, combinationId);
 
-        // Aktualisieren der Edges
-        setEdges((prevEdges) => {
-            let index = 0;
-            const updatedEdges = prevEdges.map((edge) => {
-                // Überprüfen, ob die Kante mit dem zu entfernenden Handle verknüpft ist
-                if (edge.sourceHandle === `${nodeData.id}-handle-${combinationId}`) {
-                    console.log("Edge sourceHandle gleich nodeDataid handle Combination id");
-                    // Wenn ja, die Kante entfernen
-                    return null;
-                } else if (edge.sourceHandle.includes(`${nodeData.id}-handle-`)) {
-                    // Wenn das Handle aktualisiert werden muss
-                    const handleParts = edge.sourceHandle.split('-');
-                    const handleIndex = parseInt(handleParts[handleParts.length - 1], 10);
+        setEdges(updatedEdges);
 
-                    // Überprüfen, ob das Handle höher oder gleich dem gelöschten Handle ist
-                    console.log("prevEdges", prevEdges);
-                    console.log("handleIndex, combinationId", handleIndex, combinationId);
-                    if (combinationId > handleIndex) {
-                        combinationId = combinationId++;
-                    }
-
-                    if (handleIndex >= combinationId) {
-                        const updatedHandle = `${nodeData.id}-handle-${handleIndex - 1}`;
-
-                        const sourceHandleToFind = `${nodeData.id}-handle-${handleIndex}`
-                        const updatedTargetEdge = prevEdges.find((e) => e.sourceHandle === sourceHandleToFind).target;
-                        console.log("updatedTargetEdge", updatedTargetEdge);
-                        return {
-                            ...edge,
-                            sourceHandle: updatedHandle,
-                            target: updatedTargetEdge ? updatedTargetEdge : edge.target,
-                        };
-                    }
-                    index++;
-                }
-
-                // Wenn die Kante nicht entfernt oder aktualisiert werden muss, unverändert zurückgeben
-                return edge;
-            }).filter((edge) => edge !== null); // Entfernen der gelöschten Kanten
-
-            return updatedEdges;
-        });
+        if (deletedEdgeIds.length > 0) {
+            setEdges((prevEdges) => prevEdges.filter((edge) => !deletedEdgeIds.includes(edge.id)));
+        }
 
         return updatedNodes;
     });
 };
 
+// Klappt noch
+const updateEdges = (prevEdges, nodeId, combinationId) => {
+    let deletedEdgeIds = [];
+    let updatedEdges = [];
+    combinationId = combinationId - 1;
 
+    console.log("prevEdges, nodeId, combinationId", prevEdges, nodeId, combinationId);
+    const remainingCombinations = prevEdges.filter(edge => edge.sourceHandle.startsWith(`${nodeId}-handle-`)).length;
+    console.log("remainingCombinations, ", remainingCombinations);
 
+    if (remainingCombinations-1 <= combinationId) {
+        console.log("dekrementieren combinationId")
+        combinationId--;
+    }
+    
+    prevEdges.forEach((edge) => {
+        console.log("Edge", edge);
+
+        if (edge.sourceHandle === `${nodeId}-handle-${combinationId}` || remainingCombinations === 1) {
+            console.log("Deleting Edge with source handle:", edge.sourceHandle);
+            deletedEdgeIds.push(edge.id);
+        }
+
+        const handleParts = edge.sourceHandle.split('-');
+        const handleIndex = parseInt(handleParts[handleParts.length - 1], 10);
+        console.log("handleIndex, combinationId", handleIndex, combinationId);
+
+        if (handleIndex >= combinationId) {
+
+            const targetParts = edge.target.split('-');
+            const targetIndex = parseInt(targetParts[targetParts.length - 1], 10);
+            const updatedTarget = `${targetParts.slice(0, -1).join('-')}${targetIndex}`;
+            const updatedSourceHandle = `${nodeId}-handle-${handleIndex-1}`
+            console.log("updatedSourceHandle", updatedSourceHandle);
+            console.log("updatedTarget, edge", updatedTarget, edge);
+            edge.sourceHandle = updatedSourceHandle;
+            edge.target = updatedTarget;
+        }
+
+        updatedEdges.push(edge);
+    });
+
+    console.log("Deleted edge IDs:", deletedEdgeIds);
+    console.log("Updated edges:", updatedEdges);
+    return { updatedEdges, deletedEdgeIds };
+};
 
 // Updates nodeproperties
 const updateNodeProperty = (setNodes, nodeData, property, value) => {
@@ -198,7 +205,7 @@ const updateNodeProperty = (setNodes, nodeData, property, value) => {
 const useAudioUsage = (audioPaths) => {
     const [audioUsage, setAudioUsage] = useState({});
     const params = useParams();
-
+    
     useEffect(() => {
         const fetchAudioUsage = async () => {
             const usage = {};
@@ -217,7 +224,6 @@ const useAudioUsage = (audioPaths) => {
 
 const isAudioUsed = async (audioName, params) => {
     const flow = await fetchFlow(params)
-
     for (const node of flow.nodes) {
         if (node.data) {
             for (const value of Object.values(node.data)) {

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
 import { removeAnswer, updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
@@ -14,7 +14,11 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const audioUsage = useAudioUsage(audioPaths);
 
     const handleAddAnswer = () => {
-        setAnswers([...answers, { answer: '', time: '' }]);
+        const newAnswer = { answer: `Answer ${answers.length + 1}`, time: '' };
+        const updatedAnswers = [...answers, newAnswer];
+        setAnswers(updatedAnswers);
+        updateNodeProperty(setNodes, nodeData, 'answers', updatedAnswers);
+
         setAnswerAudios([...answerAudios, '']);
         setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
     };
@@ -30,17 +34,32 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         const newAnswers = [...answers];
         newAnswers.splice(index, 1);
         setAnswers(newAnswers);
+
+        const newAnswerAudios = [...answerAudios];
+        newAnswerAudios.splice(index, 1);
+        setAnswerAudios(newAnswerAudios);
+
+        updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
+        updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
+
         removeAnswer(setNodes, setEdges, edges, nodeData, index, setAnswers);
     };
 
     const handleInputChange = (index, value, type) => {
+        console.log("wir setzen ein neues Audio: ", value, audioUsage)
+
         const newAnswers = [...answers];
         const newAnswerAudios = [...answerAudios];
 
         if (newAnswers[index] === undefined) {
             newAnswers[index] = '';
         }
+
         if (newAnswerAudios[index] === undefined) {
+            newAnswerAudios[index] = '';
+        }
+
+        if (value === undefined || value === '') {
             newAnswerAudios[index] = '';
         }
 
@@ -65,12 +84,19 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                 updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
             }, 500);
         }
+
+        if (type === 'answer' && value.trim() === '') {
+            newAnswerAudios[index] = '';
+            setAnswerAudios(newAnswerAudios);
+            updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
+        }
     };
+
 
     const handleInputBlur = (index, type) => {
         const answerValue = type === 'answer' ? answers[index]?.answer : answerAudios[index];
         if (!answerValue) return;
-    
+
         const trimmedAnswer = answerValue.trim();
         if (trimmedAnswer === '') {
             handleRemoveAnswer(index);
@@ -80,27 +106,28 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const handleToggleBackgroundAudio = (index) => {
         const newAnswerBackgroundAudio = [...answerBackgroundAudio];
         newAnswerBackgroundAudio[index] = !newAnswerBackgroundAudio[index];
-
         setAnswerBackgroundAudio(newAnswerBackgroundAudio);
     };
 
+    console.log("nodeData in selectimeanswer", nodeData)
+
     return (
         <>
-            <h4 style={{ marginTop:'5px'}}>Timebased Answers</h4>
+            <h4 style={{ marginTop: '5px' }}>Timebased Answers</h4>
             {answers.map((answer, index) => (
                 <Flex key={index} direction="column" align="start">
                     <Flex align="center">
                         <Input
                             placeholder="Answer .."
-                            value={answer.answer}
+                            value={answer.answer || `Answer ${index + 1}`}
                             onChange={(e) => handleAnswerChange(index, 'answer', e.target.value)}
                             flex="5"
-                            style={{ marginTop:'5px'}}
+                            style={{ marginTop: '5px' }}
                         />
                         <Spacer />
                         <Select
                             placeholder='Answer Audio ..'
-                            value={answerAudios[index] || ''}
+                            value={answerAudios[index] || 'Answer'}
                             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
                             flex="4"
                         >
@@ -138,13 +165,13 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                         colorScheme="red"
                         size="sm"
                         onClick={() => handleRemoveAnswer(index)}
-                        style={{ marginTop:'5px'}}
+                        style={{ marginTop: '5px' }}
                     >
                         Remove Answer
                     </Button>
                 </Flex>
             ))}
-            <Button colorScheme='blue' size='sm' style={{ marginTop:'5px'}} onClick={handleAddAnswer}>
+            <Button colorScheme='blue' size='sm' style={{ marginTop: '5px' }} onClick={handleAddAnswer}>
                 Add Answer
             </Button>
         </>

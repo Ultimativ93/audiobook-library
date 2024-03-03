@@ -51,8 +51,8 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...commonAttributes,
                         label: 'Time Added',
                         answers: [
-                            { answer: "", time: "" },
-                            { answer: "", time: "" }
+                            { answer: "Answer 1", time: "" },
+                            { answer: "Answer 2", time: "" }
                         ],
                         answerAudios: [],
                         answerProcessAudio: '',
@@ -85,7 +85,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...commonAttributes,
                         label: 'Reaction Added',
                         answerPeriods: [
-                            { start: '00:00', end: '00:00', answer: '' },
+                            { start: '00:00', end: '00:00', answer: 'Answer 1' },
                         ],
                         answerProcessAudio: '',
                         answerProcessAudioLength: '',

@@ -11,7 +11,7 @@ const TimeNode = ({ data, isConnectable }) => {
         updateNodeInternals(data.id);
     }, [data.answers, data.id, updateNodeInternals]);
 
-    const nonEmptyAnswers = data.answers.filter(answer => answer !== '');
+    const nonEmptyAnswers = data.answers.filter(answer => answer.answer !== '');
 
     return (
         <div className="time-node" ref={nodeRef}>

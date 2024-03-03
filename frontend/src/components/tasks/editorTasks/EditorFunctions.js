@@ -66,7 +66,6 @@ export const handleFlowClick = (event, handleCloseDrawer, setSelectedNodeData, s
         handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes);
         setSelectedNodeData(null);
         setSelectedNodes([]);
-
     }
 };
 
@@ -114,7 +113,7 @@ export const handleNodeChangesAndSave = (nodes, edges, previousNodes, previousEd
     }
 };
 
-export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeData, selectedNodeData, isDrawerOpen) => {
+export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen, setSelectedNodes) => {
     if (event.ctrlKey) {
         return;
     }
@@ -122,9 +121,11 @@ export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeDat
     if (node.id === '1' && node.data.label === 'Start') return;
 
     if (!isDrawerOpen) {
-        console.log("öffne Drawer", selectedNodeData)
+        console.log("öffne Drawer")
         setIsDrawerOpen(true);
     }
+
+    setSelectedNodes([node.id]);
 
     setSelectedNodeData(node);
 };

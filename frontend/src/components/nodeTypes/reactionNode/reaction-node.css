@@ -34,5 +34,8 @@
   
   .reaction-node .react-flow__handle:hover .handle-label {
     display: block;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
   }
   

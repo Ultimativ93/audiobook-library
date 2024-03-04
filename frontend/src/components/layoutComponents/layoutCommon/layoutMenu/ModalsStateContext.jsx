@@ -7,6 +7,7 @@ export const ModalsStateProvider = ({ children }) => {
     isSetupModalOpen: false,
     isUploadModalOpen: false,
     isPreviewModalOpen: false,
+    isPublishModalOpen: false,
   });
 
   return (

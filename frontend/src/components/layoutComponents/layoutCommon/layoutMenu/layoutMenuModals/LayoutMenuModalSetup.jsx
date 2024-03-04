@@ -23,7 +23,7 @@ const LayoutMenuModalSetup = ({ isModalSetupOpen, setModalsState, audiobookTitle
     }, []);
 
     return (
-        <Modal isOpen={isModalSetupOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isSetupModalOpen: false }))}>
+        <Modal isOpen={isModalSetupOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isSetupModalOpen: false }))} size="5xl">
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Setup Audiobook</ModalHeader>

@@ -1,0 +1,164 @@
+import axios from 'axios';
+import {
+    validateMuChoi,
+    validateEndNode,
+    validateBridgeNode,
+    validateTimeNode,
+    validateMuAns,
+    validateReactNode,
+    validateInputNode,
+    validateEdgeMuChoi,
+    validateEdgeEndNode,
+    validateEdgeBridgeNode,
+    validateEdgeTimeNode,
+    validateEdgeMuAns,
+    validateEdgeReactNode,
+    validateEdgeInputNode,
+    validateEdgeStart,
+} from '../editorTasks/ValidateFlow';
+
+export const fetchThumbnail = async (audiobookTitle) => {
+    try {
+        const fetchedPaths = await axios.get('http://localhost:3005/graficPaths', {
+            params: {
+                audiobookTitle: audiobookTitle
+            }
+        });
+        const graficPaths = fetchedPaths.data;
+        return graficPaths;
+    } catch (error) {
+        console.error('Error fetching thumbnails.', error);
+        return;
+    }
+};
+
+export const fetchThumbnailImage = async (graphicPath) => {
+    try {
+        const response = await axios.get(`http://localhost:3005/getGraphic?graphicPath=${graphicPath}`, {
+            responseType: 'blob'
+        });
+
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+            reader.onloadend = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(response.data);
+        });
+    } catch (error) {
+        console.error('Error fetching thumbnail image.', error);
+        return null;
+    }
+};
+
+export const validateNodesAndEdges = (nodes, edges) => {
+    const invalidNodes = new Map();
+    const invalidEdges = [];
+
+    nodes.forEach(node => {
+        let errorMessage = null;
+
+        switch (node.type) {
+            case 'muChoi':
+                errorMessage = validateMuChoi(node);
+                break;
+            case 'endNode':
+                errorMessage = validateEndNode(node);
+                break;
+            case 'bridgeNode':
+                errorMessage = validateBridgeNode(node);
+                break;
+            case 'timeNode':
+                errorMessage = validateTimeNode(node);
+                break;
+            case 'muAns':
+                errorMessage = validateMuAns(node);
+                break;
+            case 'reactNode':
+                errorMessage = validateReactNode(node);
+                break;
+            case 'inputNode':
+                errorMessage = validateInputNode(node);
+                break;
+            default:
+                break;
+        }
+
+        if (errorMessage) {
+            invalidNodes.set(node.type, errorMessage);
+        }
+    });
+
+    edges.forEach(edge => {
+        let errorMessage = null;
+
+        switch (edge.source) {
+            case 'muChoi':
+                errorMessage = validateEdgeMuChoi(edge, edges);
+                break;
+            case 'endNode':
+                errorMessage = validateEdgeEndNode(edge, edges);
+                break;
+            case 'bridgeNode':
+                errorMessage = validateEdgeBridgeNode(edge, edges);
+                break;
+            case 'timeNode':
+                errorMessage = validateEdgeTimeNode(edge, edges);
+                break;
+            case 'muAns':
+                errorMessage = validateEdgeMuAns(edge, edges);
+                break;
+            case 'reactNode':
+                errorMessage = validateEdgeReactNode(edge, edges);
+                break;
+            case 'inputNode':
+                errorMessage = validateEdgeInputNode(edge, edges);
+                break;
+            case 'start':
+                errorMessage = validateEdgeStart(edge, edges);
+                break;
+            default:
+                break;
+        }
+
+        if (errorMessage) {
+            invalidEdges.push([edge.source, errorMessage]);
+        }
+    });
+
+    if (invalidNodes.size > 0 || invalidEdges.length > 0) {
+        console.error("Validation failed:");
+        invalidNodes.forEach((message, nodeType) => {
+            console.error(`${nodeType}: ${message}`);
+        });
+        invalidEdges.forEach(([nodeType, message]) => {
+            console.error(`${nodeType}: ${message}`);
+        });
+        return false;
+    } else {
+        console.log("Validation successful.");
+        return true;
+    }
+};
+
+export const uploadValidatedFlow = async (audiobookTitle, rfInstance, thumbnail, description) => {
+    if (!rfInstance) return;
+
+    const flow = rfInstance.toObject();
+    try {
+        const response = await axios.post('http://localhost:3005/saveValidatedFlow', {
+            flow,
+            flowKey : audiobookTitle,
+            thumbnail: thumbnail,
+            description: description,
+        });
+        if (response.status === 200) {
+            console.log('ValidatedFlow successfully sent to the server.');
+        } else {
+            console.error('Error sendin flow to the server.');
+        }
+    } catch (error) {
+        console.error('Error in try uploadValidateFlow:', error);
+    }
+}

@@ -177,13 +177,7 @@ Nach Priorität:
 
 
             - !!! (2):
-                - SelectAnswerProcess Audio Lengths, wird nur einmal erstellt, sobald eine Frage ausgewählt wurde. Bei erneuter Auswahl keine Aktualisierung.                           O
-                - Reaction Node no Reaction handle, edge wird immer verschoben, wenn eine neue Period hinzugefügt wird.                                                                 O
-                - PlayerReaction: Hier müssen wir noch das Interaktionssignal angeben, bevor das Audio abgespielt wird.
-                - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        O
-                - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                          O
-                - Wir haben das jetzt im Editor als Modal-Menu. Falls wir die Route nichtmehr brauchen, aus App.js löschen !!!                                                          O
-                - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.   O
+                - Keywords, ungefähre Länge, wieviele Knoten, etc. in LayoutMenuModalPublish einarbeiten und auch in die db                                                             O
                 - UserProjects: Get All User Projects (all flows), set some details (title), set Edit Button and delete, status (editing, pending, etc),                                O
                     sort for name, length, show how many nodes, how many errors (missing files or not connected nodes), we need a                                                       O
                     standard thumbnail, that gets set aslong as the thumbnail hasnt been set.                            
@@ -207,6 +201,7 @@ Nach Priorität:
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
                 - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
+                - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
 
             - ! (3):
                 - Drawer onClose ohne Transition.                                                                                                                                       O
@@ -241,6 +236,11 @@ Nach Priorität:
                     und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
                 - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
                 - Responsive für die meisten größen                                                                                                                                     O
+                - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                          O
+                - LayoutMenuModalPublish: Stylen, sollte noch einen Bereich geben wo vom Admin geguckt wird, ob das Hörbuch und Thumbnail so in Ordnung ist. Wir werden aber die        O
+                    validierten Flows einfach erstmal auf einer Seite darstellen, von wo aus sich dann der Editor öffnet.               
+                - LayoutMenuModalPublish: Weiterleitung nach erfolgreichem hochladen zum Hörbuch.
+                - Bewertungen, Hörbuchlänge, Keywords, Kommentare, User etc. muss noch zu validatedFlows hinzugefügt werden.
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.
@@ -294,3 +294,11 @@ Erledigt:
                 - Fehler in TimeNode beim setzen von AnswerProcessAudio                                                                                                                 X
                 - Drawer wenn eine Edge hinzugefügt wurde und dann neue antrworten hinzugefügt werden, schließt sich der Drawer. Liegt an drawerUpdate, aber ohne das                   X
                     werden die neuen Antworten in Combinations nicht angezeigt.
+                - SelectAnswerProcess Audio Lengths, wird nur einmal erstellt, sobald eine Frage ausgewählt wurde. Bei erneuter Auswahl keine Aktualisierung.                           X
+                - ReactNode keine Beschriftung für die Handles.                                                                                                                         X
+                - Reaction Node no Reaction handle, edge wird immer verschoben, wenn eine neue Period hinzugefügt wird.                                                                 X
+                - PlayerReaction: Hier müssen wir noch das Interaktionssignal angeben, bevor das Audio abgespielt wird.                                                                 X
+                - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        X
+                - Wir haben das jetzt im Editor als Modal-Menu. Falls wir die Route nichtmehr brauchen, aus App.js löschen !!!                                                          X
+                - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.   X
+

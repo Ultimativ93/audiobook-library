@@ -18,8 +18,10 @@ const ShowAudioLength = ({ nodeData, setNodes, audioName }) => {
     }, [audioName])
 
     useEffect(() => {
-        
-    }, [audioLength])
+        if (audioLength) {
+            updateNodeProperty(setNodes, nodeData, 'answerProcessAudioLength', audioLength);
+        }
+    }, [audioLength, setNodes, nodeData])
 
     const convertToTime = (newAudioLength) => {
         const minutes = Math.floor(newAudioLength / 60);
@@ -28,7 +30,6 @@ const ShowAudioLength = ({ nodeData, setNodes, audioName }) => {
         const formatedSeconds = remainingSeconds.toString().padStart(2, '0');
         const formatedAudioLength = formattedMinutes + ':' + formatedSeconds;
         setAudioLength(formatedAudioLength);
-        updateNodeProperty(setNodes, nodeData, 'answerProcessAudioLength', formatedAudioLength);
     }
 
     return (

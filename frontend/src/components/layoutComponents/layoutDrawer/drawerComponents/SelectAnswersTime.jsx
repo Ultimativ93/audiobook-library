@@ -13,6 +13,10 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const audioPaths = FetchAudio(audiobookTitle);
     const audioUsage = useAudioUsage(audioPaths);
 
+    useEffect(() => {
+        setAnswers(nodeData.data.answers)
+    }, [nodeData])
+
     const handleAddAnswer = () => {
         const newAnswer = { answer: `Answer ${answers.length + 1}`, time: '' };
         const updatedAnswers = [...answers, newAnswer];
@@ -108,8 +112,6 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         newAnswerBackgroundAudio[index] = !newAnswerBackgroundAudio[index];
         setAnswerBackgroundAudio(newAnswerBackgroundAudio);
     };
-
-    console.log("nodeData in selectimeanswer", nodeData)
 
     return (
         <>

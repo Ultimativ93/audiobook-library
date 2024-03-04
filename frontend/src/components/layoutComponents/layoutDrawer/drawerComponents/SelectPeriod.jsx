@@ -5,7 +5,7 @@ import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
-const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
   const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
@@ -64,9 +64,47 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
   };
 
   const handleAddPeriod = () => {
-    const newPeriods = [...periods, { answer: `Period ${periods.length + 1}`, start: '', end: '' }];
-    setPeriods(newPeriods);
+    console.log("NodeData", nodeData);
+    const numAnswerPeriods = nodeData.data.answerPeriods.length;
+    const numEdges = edges.length;
+    let lastPeriodHasEdge = null;
+
+    console.log("numAnswerPeriods !== numEdges", numAnswerPeriods, numEdges);
+
+    if ((numAnswerPeriods !== numEdges) || (numAnswerPeriods === numEdges)) {
+      lastPeriodHasEdge = true;
+    }
+
+    const newPeriods = [...periods, { start: '', end: '', answer: `Period ${periods.length + 1}` }];
+
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
+    setPeriods(newPeriods);
+
+    console.log("lastperiodHasEdge", lastPeriodHasEdge);
+
+    if (lastPeriodHasEdge) {
+      const lastHandleId = `${nodeData.id}-handle-${periods.length}`;
+      console.log("lastHandleId", lastHandleId);
+      const edge = edges.find(edge => edge.sourceHandle === lastHandleId);
+      console.log("edge", edge);
+      if (edge) {
+        const updatedEdges = edges.map(edg => {
+          if (edg === edge) {
+            return { ...edg, sourceHandle: `${nodeData.id}-handle-${periods.length + 1}` };
+          }
+          return edg;
+        });
+
+        // Sortieren der Kanten nach der Länge des Source-Handle-Index
+        updatedEdges.sort((a, b) => {
+          const indexA = parseInt(a.sourceHandle.split('-').pop());
+          const indexB = parseInt(b.sourceHandle.split('-').pop());
+          return indexA - indexB;
+        });
+
+        setEdges(updatedEdges);
+      }
+    }
   };
 
   const handlePeriodChange = (index, field, value) => {
@@ -81,7 +119,15 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
     newPeriods.splice(index, 1);
     setPeriods(newPeriods);
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
-  };
+
+    const handleIdToRemove = `${nodeData.id}-handle-${index}`;
+    const edgeToRemove = edges.find(edge => edge.sourceHandle === handleIdToRemove);
+
+    if (edgeToRemove) {
+        const updatedEdges = edges.filter(edg => edg !== edgeToRemove);
+        setEdges(updatedEdges);
+    }
+};
 
   const handleRemoveAnswer = (index) => {
     const newAnswerAudios = [...answerAudios];
@@ -92,22 +138,22 @@ const SelectPeriod = ({ nodeData, setNodes, audiobookTitle }) => {
 
   const handleInputBlur = (index, type) => {
     const audio = answerAudios[index];
-    if (!audio) return; 
+    if (!audio) return;
 
     const trimmedAudio = audio.trim();
     if (trimmedAudio === '') {
-        handleRemoveAnswer(index);
+      handleRemoveAnswer(index);
     }
-};
+  };
 
   return (
     <>
-      <h4 style={{ marginTop:'5px'}}>Period Based Reactions</h4>
+      <h4 style={{ marginTop: '5px' }}>Period Based Reactions</h4>
       {periods.map((period, index) => (
         <Flex key={index} direction="column" align="start">
           <Flex align="center">
             <Input
-              placeholder={`Period ${index + 1}`} 
+              placeholder={`Period ${index + 1}`}
               value={period.answer}
               onChange={(e) => handlePeriodChange(index, 'answer', e.target.value)}
               flex="5"

@@ -44,6 +44,14 @@ class Database {
                     console.log('Created table "details" or it already exists')
                 }
             })
+
+            this.db.run('CREATE TABLE IF NOT EXISTS validatedFlows (id INTEGER PRIMARY KEY, flowData TEXT, flowKey TEXT, thumbnail TEXT, description TEXT)', (err) => {
+                if (err) {
+                    console.log('Error while creating table validatedFlows: ', err);
+                } else {
+                    console.log('Created table "validatedFlows" or it already exists');
+                }
+            })
         });
     }
 
@@ -234,6 +242,39 @@ class Database {
             });
         });
     }
+
+    // Save validated Flow to the database
+    saveValidatedFlow(flow, flowKey, thumbnail, description) {
+        console.log('Saving validated flow to database: ', flow);
+    
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT id FROM validatedFlows WHERE flowKey = ?', [flowKey], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                }
+    
+                if (row) {
+                    this.db.run('UPDATE validatedFlows SET flowData = ?, thumbnail = ?, description = ? WHERE flowKey = ?', [JSON.stringify(flow), thumbnail, description, flowKey], (updateErr) => {
+                        if (updateErr) {
+                            reject(updateErr.message);
+                        } else {
+                            console.log('Validated flow successfully updated in the database:', flow);
+                            resolve(row.id);
+                        }
+                    });
+                } else {
+                    this.db.run('INSERT INTO validatedFlows (flowData, flowKey, thumbnail, description) VALUES (?, ?, ?, ?)', [JSON.stringify(flow), flowKey, thumbnail, description], (insertErr) => {
+                        if (insertErr) {
+                            reject(insertErr.message);
+                        } else {
+                            console.log('Updated Flow successfully added to the database: ', flow);
+                        }
+                    });
+                }
+            });
+        });
+    }    
 
     // Gets flow with from the table flow
     getFlow(flowKey) {

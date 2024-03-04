@@ -75,6 +75,19 @@ router.post('/saveFlow', async (ctx) => {
     }
 });
 
+router.post('/saveValidatedFlow', async (ctx) => {
+    const { flow, flowKey, thumbnail, description } = ctx.request.body;
+    try {
+        const savedFlowId = await db.saveValidatedFlow(flow, flowKey, thumbnail, description);
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Flow saved successfully', savedFlowId}
+    } catch (error) {
+        console.error('Error saving Validated Flow: ', error);
+        ctx.status = 500;
+        ctx.body = { success: false, message: 'Internal Server Error while saving Validated Flow' };
+    }
+});
+
 router.post('/deletePaths', async (ctx) => {
     const audiobookTitle = ctx.request.body;
     console.log("Audiobook Title to delete audioPaths:", audiobookTitle);
@@ -224,6 +237,29 @@ router.get('/audioPaths', async (ctx) => {
         ctx.body = 'Internal Server Error, paths';
     }
 });
+
+router.get('/graficPaths', async (ctx) => {
+    const { audiobookTitle } = ctx.request.query;
+    try {
+        const allFilePaths = await db.getAllFilePaths(audiobookTitle);
+
+        const graficFilePaths = allFilePaths.filter(file => {
+            const fileName = file.audioName.toLowerCase();
+            return(
+                fileName.endsWith('.png') ||
+                fileName.endsWith('.jpeg') ||
+                fileName.endsWith('.jpg')
+            );
+        });
+
+        ctx.status = 200;
+        ctx.body = graficFilePaths;
+    } catch (error) {
+        console.error('Error getting grafic paths:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error, paths';
+    }
+})
 
 router.get('/getDataFromFlow', async (ctx) => {
     const { flowKey } = ctx.request.query;
@@ -392,7 +428,6 @@ router.get('/getGraphic', async (ctx) => {
         ctx.body = 'Internal Server Error';
     }
 });
-
 
 router.get('/', async (ctx) => {
     ctx.body = 'Hallo Welt von Koa';

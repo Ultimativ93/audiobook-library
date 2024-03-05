@@ -1,14 +1,53 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Input, Button, Stack, Checkbox, Textarea, Select, Flex } from '@chakra-ui/react';
 
 import { handleInputChange, handleCheckBoxChange, handleInputChangeSecondLevel, handleAddContributor, handleRemoveContributor, handleCheckSetup } from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 import { handleChangeDetails } from '../../components/tasks/setupTasks/FetchDetails';
+import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
 
-const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setModalsState }) => {
+const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setModalsState, audiobookTitle }) => {
+    const [graficPaths, setGraficPaths] = useState([]);
+    const [thumbnailImage, setThumbnailImage] = useState(null);
+    
     const isFieldEmpty = (field) => {
         return field === 'string' && field.trim() === '';
     };
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const fetchedThumbnails = await fetchThumbnail(audiobookTitle);
+                setGraficPaths(fetchedThumbnails);
+            } catch (error) {
+                console.error('Error fetching thumbnails.', error);
+            }
+        };
+
+        fetchData();
+    }, [audiobookTitle]);
+
+    useEffect(() => {
+        const fetchImage = async () => {
+            if (graficPaths.length > 0 && existingAudiobookDetails.thumbnail) {
+                try {
+                    const selectedGraphic = graficPaths.find(graphic => graphic.audioName === existingAudiobookDetails.thumbnail);
+                    if (selectedGraphic) {
+                        const imageData = await fetchThumbnailImage(selectedGraphic.audioPath);
+                        setThumbnailImage(imageData);
+                    } else {
+                        console.error('Selected graphic not found in graficPaths.');
+                    }
+                } catch (error) {
+                    console.error('Error fetching thumbnail image.', error);
+                }
+            } else {
+                setThumbnailImage(null);
+            }
+        };
+    
+        fetchImage();
+    }, [existingAudiobookDetails.thumbnail, graficPaths]);
+    
     return (<>
         {existingAudiobookDetails && (
             <div className='audiobook-setup-contents'>
@@ -44,6 +83,21 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
                         onChange={(e) => handleInputChange(e.target.value, 'author', existingAudiobookDetails, setExistingAudiobookDetails)}
                         borderColor={isFieldEmpty(existingAudiobookDetails.author) ? 'red' : 'default'}
                     />
+
+                    <p>Select Thumbnail</p>
+                    <Select
+                        placeholder='Select Thumbnail..'
+                        value={existingAudiobookDetails.thumbnail}
+                        onChange={(e) => handleInputChange(e.target.value, 'thumbnail', existingAudiobookDetails, setExistingAudiobookDetails)}
+                        size='md'
+                    >
+                        {graficPaths.map((grafic, index) => (
+                                <option key={index} value={grafic.audioName}>
+                                    {grafic.audioName}
+                                </option>
+                            ))}
+                    </Select>
+                    <img style={{ width: 200, height: 200 }} src={thumbnailImage} alt={`Thumbnail-${audiobookTitle}`} />
 
                     <p>Choose Input Selection</p>
                     <Stack direction="row" flexWrap="wrap">
@@ -122,23 +176,19 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
                     </Select>
                 </div>
                 <div className='audiobook-setup-contents-buttons'>
-                <Button colorScheme='blue' onClick={() => {
-                            console.log("Button clicked")
-                            if (existingAudiobookDetails) {
-                                console.log("Existing: ", existingAudiobookDetails);
-                                const isAudiobook = handleCheckSetup(existingAudiobookDetails)
-                                console.log("Hier drutner")
-                                if (isAudiobook) {
-                                    console.log("Alles richtig")
-                                    const detailsSaved = handleChangeDetails(isAudiobook);
-                                    if (detailsSaved) {
-                                        setModalsState(false);
-                                    } else {
-                                        alert("Something went wrong. Try again please or contact support!")
-                                    }
+                    <Button colorScheme='blue' onClick={() => {
+                        if (existingAudiobookDetails) {
+                            const isAudiobook = handleCheckSetup(existingAudiobookDetails)
+                            if (isAudiobook) {
+                                const detailsSaved = handleChangeDetails(isAudiobook);
+                                if (detailsSaved) {
+                                    setModalsState(false);
+                                } else {
+                                    alert("Something went wrong. Try again please or contact support!")
                                 }
                             }
-                        }}>Continue Editing</Button>
+                        }
+                    }}>Continue Editing</Button>
                     <Button colorScheme='red' onClick={() => setModalsState(false)}>Cancel</Button>
                 </div>
             </div>

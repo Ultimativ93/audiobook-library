@@ -14,6 +14,7 @@ const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle }) => {
 
     if (!isChecked) {
       updateNodeProperty(setNodes, nodeData, 'interactionSignalAudio', '');
+      console.log("nodeData", nodeData);
     }
   };
 

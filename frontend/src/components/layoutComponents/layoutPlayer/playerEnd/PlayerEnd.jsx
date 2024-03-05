@@ -4,7 +4,7 @@ import { Button } from '@chakra-ui/react';
 
 import "./player-end.css"
 
-const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode }) => {
+const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode, setFirstNodePlayed }) => {
     const [isEnd, setIsEnd] = useState(null);
     const navigate = useNavigate();
 
@@ -32,6 +32,7 @@ const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode }) => {
                     const connectedNode = flow.nodes.find(node => node.id === connectedEdge.target);
                     if (connectedNode) {
                         console.log("wir versuchen das", connectedNode.id);
+                        setFirstNodePlayed(false);
                         setCurrentNode(flow.nodes.findIndex(node => node.id === connectedNode.id));
                     }
                 }

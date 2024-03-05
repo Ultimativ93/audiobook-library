@@ -1,5 +1,3 @@
-// Editor.jsx
-
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
 import { useParams, useLocation } from 'react-router-dom';
@@ -146,10 +144,12 @@ const Editor = () => {
         }
     }, [nodes]);
 
+    console.log("selectedNodes", selectedNodes);
+
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
-            <LayoutEditorButtons onSave={onSave} onRestore={onRestoreCallback} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} />
+            <LayoutEditorButtons onSave={onSave} onRestore={onRestoreCallback} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes}/>
 
             <ReactFlow
                 nodes={nodes}

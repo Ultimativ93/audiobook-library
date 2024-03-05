@@ -8,6 +8,8 @@ import '../userProjects/user-projects.css';
 import FetchDetails from '../../components/tasks/projectsTasks/FetchDetails';
 import UserProjectsDeleteModal from '../../components/layoutComponents/layoutUserProjects/UserProjectsDeleteModal';
 import UserProjectsAddModal from '../../components/layoutComponents/layoutUserProjects/UserProjectAddModal';
+import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
+import { handleFetchFlows } from '../../components/tasks/setupTasks/FetchDetails';
 
 const UserProjects = () => {
   const [details, setDetails] = useState(null);
@@ -15,8 +17,24 @@ const UserProjects = () => {
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const [newAudiobook, setNewAudiobook] = useState(false);
+  const [thumbnailImages, setThumbnailImages] = useState({});
+  const [flows, setFlows] = useState({});
 
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchFlows = async () => {
+      try {
+        const flowsData = await handleFetchFlows();
+        console.log("FlowData: ", flowsData.allFlows)
+        setFlows(flowsData.allFlows);
+      } catch (error) {
+        console.error('Error fetching flows:', error);
+      }
+    };
+
+    fetchFlows();
+  }, []);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -30,17 +48,33 @@ const UserProjects = () => {
     };
 
     fetchDetails();
-  }, []);
+  }, [location.state?.new]);
 
-  // Reload details after deletions of a project.
-  const reloadDetails = async () => {
-    try {
-      const detailsData = await FetchDetails();
-      setDetails(detailsData);
-    } catch (error) {
-      console.error('Error reloading details:', error);
-    }
-  };
+  useEffect(() => {
+    const fetchThumbnails = async () => {
+      if (details) {
+        const images = {};
+        for (const detail of details) {
+          const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
+          const thumbnailURL = parsedDetailData && parsedDetailData.thumbnail ? parsedDetailData.thumbnail : '';
+          if (thumbnailURL) {
+            try {
+              const paths = await fetchThumbnail(detail.audiobookTitle);
+              if (paths && paths.length > 0) {
+                const imageData = await fetchThumbnailImage(paths[0].audioPath);
+                images[detail.id] = imageData;
+              }
+            } catch (error) {
+              console.error('Error fetching thumbnail image:', error);
+            }
+          }
+        }
+        setThumbnailImages(images);
+      }
+    };
+
+    fetchThumbnails();
+  }, [details]);
 
   // Handle delete project
   const handleDeleteButtonClick = (audiobookTitle) => {
@@ -61,15 +95,18 @@ const UserProjects = () => {
       </Button>
 
       <div className='user-projects'>
-        {details && details.map((detail) => {
+        {details && details.map((detail, index) => {
           const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
+          const thumbnailImage = thumbnailImages[detail.id];
+          const flow = flows[index];
+          console.log("flow in map", flow);
 
           return (
             <Card key={detail.id} className='user-projects-card'>
               <Image
                 className='user-projects-card-image'
-                src={process.env.PUBLIC_URL + '/grafics/Standard-Thumbnail-small.png'}
-                alt='Standard Thumbnail'
+                src={thumbnailImage ? thumbnailImage : process.env.PUBLIC_URL + '/grafics/Standard-Thumbnail-small.png'}
+                alt='Thumbnail'
                 borderRadius='lg'
               />
               <CardBody>
@@ -77,6 +114,9 @@ const UserProjects = () => {
                   <Heading size='md'>{detail.audiobookTitle}</Heading>
                   <Text>
                     {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(" ").slice(0, 20).join(" ") : ''}
+                  </Text>
+                  <Text>
+                    {flow ? `Number of nodes: ${JSON.parse(flow.flowData).nodes.length}` : 'Fetching flow...'}
                   </Text>
                 </Stack>
               </CardBody>
@@ -103,13 +143,12 @@ const UserProjects = () => {
                 </ButtonGroup>
               </CardFooter>
             </Card>
-
           );
         })}
       </div>
 
       {isModalDeleteOpen && (
-        <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} reloadDetails={reloadDetails} />
+        <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} />
       )}
 
       {isModalAddOpen && (

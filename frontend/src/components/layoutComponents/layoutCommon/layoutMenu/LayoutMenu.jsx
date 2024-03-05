@@ -8,7 +8,7 @@ import LayoutMenuModalUpload from './layoutMenuModals/layoutMenuModalUpload/Layo
 import LayoutMenuModalPreview from './layoutMenuModals/layoutMenuModalPreview/LayoutMenuModalPreview';
 import LayoutMenuModalPublish from './layoutMenuModals/layoutMenuModalPublish/LayoutMenuModalPublish';
 
-const LayoutMenu = ({ audiobookTitle, nodes, edges, rfInstance }) => {
+const LayoutMenu = ({ audiobookTitle, nodes, edges, rfInstance, selectedNodes }) => {
     const { modalsState, setModalsState } = useModalsState();
 
     const toggleModal = (modalName) => {
@@ -31,13 +31,7 @@ const LayoutMenu = ({ audiobookTitle, nodes, edges, rfInstance }) => {
                 <MenuItem onClick={() => toggleModal('isPreviewModalOpen')}>
                     Preview
                 </MenuItem>
-                <MenuItem style={{ backgroundColor: 'grey' }}>
-                    <Link to="/player">Player</Link>
-                </MenuItem>
-                <MenuItem style={{ backgroundColor: 'grey' }}>
-                    <Link to={`/editor/${audiobookTitle}`}>Editor</Link>
-                </MenuItem>
-                <MenuItem style={{ backgroundColor: 'grey' }}>
+                <MenuItem>
                     <Link to="/user-projects">Projects</Link>
                 </MenuItem>
                 <MenuItem onClick={() => toggleModal('isPublishModalOpen')}>
@@ -47,7 +41,7 @@ const LayoutMenu = ({ audiobookTitle, nodes, edges, rfInstance }) => {
 
             <LayoutMenuModalSetup isModalSetupOpen={modalsState.isSetupModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
             <LayoutMenuModalUpload isModalUploadOpen={modalsState.isUploadModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
-            <LayoutMenuModalPreview isPreviewModalOpen={modalsState.isPreviewModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
+            <LayoutMenuModalPreview isPreviewModalOpen={modalsState.isPreviewModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} selectedNodes={selectedNodes} />
             <LayoutMenuModalPublish isPublishModalOpen={modalsState.isPublishModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} />
         </Menu>
     );

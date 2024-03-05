@@ -142,7 +142,7 @@ export const validateNodesAndEdges = (nodes, edges) => {
     }
 };
 
-export const uploadValidatedFlow = async (audiobookTitle, rfInstance, thumbnail, description) => {
+export const uploadValidatedFlow = async (audiobookTitle, rfInstance, thumbnail, description, length, keywords, title) => {
     if (!rfInstance) return;
 
     const flow = rfInstance.toObject();
@@ -152,6 +152,9 @@ export const uploadValidatedFlow = async (audiobookTitle, rfInstance, thumbnail,
             flowKey : audiobookTitle,
             thumbnail: thumbnail,
             description: description,
+            length: length,
+            keywords: keywords,
+            title: title,
         });
         if (response.status === 200) {
             console.log('ValidatedFlow successfully sent to the server.');
@@ -160,5 +163,19 @@ export const uploadValidatedFlow = async (audiobookTitle, rfInstance, thumbnail,
         }
     } catch (error) {
         console.error('Error in try uploadValidateFlow:', error);
+    }
+}
+
+export const getValidatedFlowTitle = async (title) => {
+    try {
+        const response = await axios.get('http://localhost:3005/getValidateFlowTitle', {
+            params: {
+                title: title
+            }
+        });
+        return response.data.exists;
+    } catch (error) {
+        console.error('Error getting flow title validation:', error);
+        return false;
     }
 }

@@ -7,7 +7,6 @@ const handleUploadDetails = async (audiobookDetails) => {
         });
 
         if (response.status === 200) {
-            console.log('Audiobook details successfully saved on the server.');
             return true;
         } else {
             console.error('Error saving audiobook details on the server.');
@@ -20,7 +19,6 @@ const handleUploadDetails = async (audiobookDetails) => {
 };
 
 const handleGetDetails = async (audiobookTitle) => {
-    console.log("audioBookTitle in getDetails", audiobookTitle)
     try {
         const response = await axios.get('http://localhost:3005/getAudiobookDetails', {
             params: {
@@ -28,7 +26,6 @@ const handleGetDetails = async (audiobookTitle) => {
             }
         });
         if (response.status === 200) {
-            console.log('Audiobook details successfully fetched from the server.');
             return response.data;
         } else {
             console.error('Error fetching audiobook details from the server.');
@@ -41,14 +38,12 @@ const handleGetDetails = async (audiobookTitle) => {
 }
 
 const handleChangeDetails = async (audiobookDetails) => {
-    console.log("AudiobookDetails in handleChangeDetails", audiobookDetails);
     try {
         const response = await axios.post('http://localhost:3005/changeDetails', {
             audiobookTitle: audiobookDetails.title,
             audiobookDetails: audiobookDetails
         });
         if (response.status === 200) {
-            console.log('Audiobook details successfully changed on the server');
             return response.data;
         } else {
             console.error('Error changing audiobook details on the server.');
@@ -74,9 +69,24 @@ const handleIsNewTitle = async (newAudiobook) => {
     }
 }
 
+const handleFetchFlows = async () => {
+    try {
+        const response = await axios.get('http://localhost:3005/getAllFlows');
+        if(response.status === 200) {
+            return response.data;
+        } else {
+            console.error('Error in fetching all flows from the server.')
+        }
+    } catch (error) {
+        console.error('Error in handleFetchFlows:', error);
+        throw error;
+    }
+}
+
 export {
     handleUploadDetails,
     handleGetDetails,
     handleChangeDetails,
     handleIsNewTitle,
+    handleFetchFlows,
 }

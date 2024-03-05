@@ -13,7 +13,7 @@ import PlayerTime from '../../components/layoutComponents/layoutPlayer/playerTim
 
 import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/playerTasks/PlayerLogic';
 
-const Player = () => {
+const Player = ({ selectedNodes }) => {
   const [flow, setFlow] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);
   const [currentNode, setCurrentNode] = useState(1);
@@ -32,6 +32,7 @@ const Player = () => {
   const [answerProcessAnswersAudioPlayed, setAnswerProcessAnswersAudioPlayed] = useState(false);
   const [backgroundAudioPlayed, setBackgroundAudioPlayed] = useState(false);
   const [isInValidPeriod, setIsInValidPeriod] = useState(false);
+  const [firstNodePlayed, setFirstNodePlayed] = useState(false);
   const [index, setIndex] = useState(0);
 
   const audioRef = useRef();
@@ -41,7 +42,7 @@ const Player = () => {
 
   const location = useLocation();
 
-  //console.log("Flow", flow);
+  console.log("selectedNodes im Player", selectedNodes);
 
   // Set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
   useEffect(() => {
@@ -86,7 +87,21 @@ const Player = () => {
   // Set the current Node to the node connected with the start node
   useEffect(() => {
     const fetchData = async () => {
-      if (flow != null && flow.nodes != null && flow.nodes.length > 1 && currentNode != null) {
+      console.log("FLOW: ", flow)
+      if ((selectedNodes.length > 0) && flow != null && flow.nodes != null && flow.nodes.length > 1) {
+        // Wenn selectedNodes vorhanden ist, setze den currentNode auf den ausgewählten Knoten
+        const selectedNodeIndex = flow.nodes.findIndex(node => node.id === selectedNodes[0]);
+        if (selectedNodeIndex !== -1) {
+          setCurrentNode(selectedNodeIndex);
+          const path = await getAudioPathFromName(flow.nodes[selectedNodeIndex].data.audioStory);
+          const audioBlobResponse = await getAudioFromPath(path);
+          setAudioBlob(audioBlobResponse);
+          setCurrentNodeProps(flow.nodes[selectedNodeIndex].data);
+        } else {
+          console.error("Selected node not found in the flow");
+        }
+      } else if (flow != null && flow.nodes != null && flow.nodes.length > 1 && currentNode != null) {
+        // Andernfalls, wenn keine selectedNodes vorhanden sind, verfahre wie gewohnt
         const startNode = flow.nodes.find(node => node.id === '1');
         if (startNode) {
           const connectedEdge = flow.edges.find(edge => edge.source === startNode.id);
@@ -219,7 +234,7 @@ const Player = () => {
     if (flow && flow.nodes && currentNodeProps) {
       const targetNodeIndex = flow.nodes.findIndex((node) => node.id === currentNodeProps.id);
       const targetNodeType = flow.nodes[targetNodeIndex].type;
-
+      setFirstNodePlayed(true);
       console.log("In handleAudioEnded", questionAudioPlayed, currentNodeProps);
 
       // Check if all answer audios have been played
@@ -375,7 +390,7 @@ const Player = () => {
         if (answerAudioBlob && questionAudioPlayed) {
           answerProcessAudioRef.current.src = answerAudioBlob;
           answerProcessAudioRef.current.play();
- 
+
           if (loadedAnswerProcessBackgroundAudio) {
             answerProcessBackgroundAudioRef.current.oncanplaythrough = () => {
               answerProcessBackgroundAudioRef.current.play();
@@ -491,6 +506,7 @@ const Player = () => {
           currentNodeProps={currentNodeProps}
           flow={flow}
           setCurrentNode={setCurrentNode}
+          setFirstNodePlayed={setFirstNodePlayed}
         />
       )}
 
@@ -542,6 +558,7 @@ const Player = () => {
           <audio
             ref={audioRef}
             controls
+            autoPlay={firstNodePlayed}
             src={audioBlob}
             onEnded={handleAudioEndedWithBackgroundStop}
             onPlay={() => playBackgroundAudio()}

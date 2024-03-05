@@ -7,7 +7,7 @@ import Player from '../../../../../../views/player/Player';
 import { fetchFlow } from '../../../../../tasks/editorTasks/FetchFlow';
 import { validateMuChoi, validateEndNode, validateBridgeNode, validateTimeNode, validateMuAns, validateReactNode, validateInputNode, validateEdgeMuChoi, validateEdgeEndNode, validateEdgeBridgeNode, validateEdgeTimeNode, validateEdgeMuAns, validateEdgeReactNode, validateEdgeInputNode, validateEdgeStart } from '../../../../../tasks/editorTasks/ValidateFlow';
 
-const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookTitle }) => {
+const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookTitle, selectedNodes }) => {
     const [flowToCheck, setFlowToCheck] = useState();
     const [validationResults, setValidationResults] = useState({ nodes: [], edges: [] });
     const [playable, setPlayable] = useState(false);
@@ -119,7 +119,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                     <Spacer />
                     {playable && (
                         <div className="player-container">
-                            <Player />
+                            <Player selectedNodes={selectedNodes}/>
                         </div>
                     )}
                 </ModalBody>

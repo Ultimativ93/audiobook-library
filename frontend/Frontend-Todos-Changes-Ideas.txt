@@ -177,24 +177,7 @@ Nach Priorität:
 
 
             - !!! (2):
-                - Keywords, ungefähre Länge, wieviele Knoten, etc. in LayoutMenuModalPublish einarbeiten und auch in die db                                                             O
-                - UserProjects: Get All User Projects (all flows), set some details (title), set Edit Button and delete, status (editing, pending, etc),                                O
-                    sort for name, length, show how many nodes, how many errors (missing files or not connected nodes), we need a                                                       O
-                    standard thumbnail, that gets set aslong as the thumbnail hasnt been set.                            
-                - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                   O
-                - ValidateFlow: TimeNode kann man noch Buchstaben eingeben, hier nur das richtige Zeitformat möglich machen                                                             O
-                - ReactionNode: Ebenfalls keine Buchstaben erlauben, und einstellen, dass sich die Zeiten nicht überschneiden dürfen.                                                   O
-                - Allgemein: Es wird noch nicht validiert: Interaction Signal, Repeat Question Audio, InputSelection(kommt noch raus)                                                   O
-                - MuAns Knoten: Bug beim auswählen von Audio beheben. Wenn audio nicht gesetzt und man nochmal "Answer Audio" auswählt, dann wird eine Antwort gelöscht.                O
-                - Antwort Kombinationen werden erst nach wegklicken aktualisiert. Sollten aber direkt aktualisiert werden wenn eine Antwort hinzugefügt wurde.                          O
-                - Beim erstellen eines neuen Projektes und dann beim bearbeiten im Editor, beim aktualisieren, werden die Nodes zwar im Hintergrund gespeichert, aber nicht             O
-                    angezeigt. Bug !!!
-                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
-                - Fehler beim schließen der Perview, wenn audio gerade abgespielt wird.                                                                                                 O
-                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
-                - Player: Bei einem neuen Knoten sollte auch direkt das nächste Story Audio abgespielt werden.                                                                          O
-                - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       O
-                    abgespielt werden können. 
+                - PreviewModal: Buttons ob von Anfang an oder von selected Node abgespielt werden soll.                                                                                 O
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
                 - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               O
                 - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                                                 O
@@ -202,6 +185,10 @@ Nach Priorität:
                 - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
                 - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
+                - Stylen des Editors, UserProjects, Home, Modals, Buttons, etc.                                                                                                         O
+                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
+                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
+                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
 
             - ! (3):
                 - Drawer onClose ohne Transition.                                                                                                                                       O
@@ -211,7 +198,6 @@ Nach Priorität:
                 - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
                     belassen.
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
-                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
                 - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
                 - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
                 - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
@@ -238,14 +224,22 @@ Nach Priorität:
                 - Responsive für die meisten größen                                                                                                                                     O
                 - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                          O
                 - LayoutMenuModalPublish: Stylen, sollte noch einen Bereich geben wo vom Admin geguckt wird, ob das Hörbuch und Thumbnail so in Ordnung ist. Wir werden aber die        O
-                    validierten Flows einfach erstmal auf einer Seite darstellen, von wo aus sich dann der Editor öffnet.               
-                - LayoutMenuModalPublish: Weiterleitung nach erfolgreichem hochladen zum Hörbuch.
-                - Bewertungen, Hörbuchlänge, Keywords, Kommentare, User etc. muss noch zu validatedFlows hinzugefügt werden.
+                    validierten Flows einfach erstmal auf einer Seite darstellen, von wo aus sich dann der Editor öffnet.             
+                - LayoutMenuModalPublish: Weiterleitung nach erfolgreichem hochladen zum Hörbuch.                                                                                       O
+                - Bewertungen, Hörbuchlänge, Keywords, Kommentare, User etc. muss noch zu validatedFlows hinzugefügt werden.                                                            O
+                - StandardThumbnail: Neu erstellen, mit unseren Farben und passend zum Thema.                                                                                           O
+                - UserProjects: Status (Editing, Pending, Submitted), nach Länge und Namen sortieren und vielleicht nach Status wenn Zeit                                               O
+                - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                   O
+                - Im Player Insgesamte Spielzeit anzeigen, also wie lange man das Hörbuch schon hört.                                                                                   O
 
             - Für Erklärungen:
-                - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.
+                - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.                       O
 
+            - Noch entfernen wenn keine Zeit:
+                - InputSelection: In AudiobookSetup, NodeTypeDataFormat, aus den Nodes                                                                                                  O
 
+            - Überprüfen:
+                - Wenn PlayerAudio spielt, besonders in Time und Reaciton, gucken ob es fehler beim schließen von Preview gibt.                                                         O
 __________________________________________________________________________________________________________________________________________________________________________________________
 
 Erledigt:
@@ -301,4 +295,24 @@ Erledigt:
                 - Heißt jetzt LayoutLinks und wird nicht mehr benutzt, falls wir das nicht mehr benötigen, später rausschmeißen.                                                        X
                 - Wir haben das jetzt im Editor als Modal-Menu. Falls wir die Route nichtmehr brauchen, aus App.js löschen !!!                                                          X
                 - UploadBereich Editor: wir brauchen noch einen Upload bereich im Editor, wo auf Fehler hingewiesen wird und auch Dinge wie "Thumbnail" etc. hochgeladen werden kann.   X
+                - Keywords, Titel?,  ungefähre Länge, etc. in LayoutMenuModalPublish einarbeiten und auch in die db                                                                     X
+                - Gesetzte Thumbnails werden in UserProjects angezeigt, ansonsten StandarThumbnail bild.                                                                                X
+                - UserProjects: Get All User Projects (all flows) X, set some details (title) X, set Edit Button and delete X,                                                          X
+                    , show how many nodes X, we need a standard thumbnail X, that gets set aslong as the thumbnail hasnt been set.
+                - ValidateFlow: TimeNode kann man noch Buchstaben eingeben, hier nur das richtige Zeitformat möglich machen                                                             X
+                - ReactionNode: Ebenfalls keine Buchstaben erlauben, und einstellen, dass sich die Zeiten nicht überschneiden dürfen.                                                   X
+                - Allgemein: Es wird noch nicht validiert: Interaction Signal                                                                                                           X
+                - MuAns Knoten: Bug beim auswählen von Audio beheben. Wenn audio nicht gesetzt und man nochmal "Answer Audio" auswählt, dann wird eine Antwort gelöscht.                X
+                - SelectAnswers: Beim deselektieren von Audio wird das audio nicht gelöscht.                                                                                            X
+                - Antwort Kombinationen werden erst nach wegklicken aktualisiert. Sollten aber direkt aktualisiert werden wenn eine Antwort hinzugefügt wurde.                          X
+                - Beim erstellen eines neuen Projektes und dann beim bearbeiten im Editor, beim aktualisieren, werden die Nodes zwar im Hintergrund gespeichert, aber nicht             X
+                    angezeigt. Bug !!!
+                - Fehler beim schließen der Perview, wenn audio gerade abgespielt wird.                                                                                                 X
+                - Player: Bei einem neuen Knoten sollte auch direkt das nächste Story Audio abgespielt werden.                                                                          x
+                - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       X
+                    abgespielt werden können. 
+
+
+
+
 

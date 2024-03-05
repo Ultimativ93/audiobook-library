@@ -29,8 +29,8 @@ const validateMuChoi = (node) => {
         }
     }
 
-    if (node.data.interactionSignal) {
-        if ((node.data.interactionSignalAudio === '' || !node.data.interactionSignalAudio) && (!node.data.interactionSignal || node.data.interactionSignal === '')) {
+    if (node.data.interactionSignal === 'true' && node.data.interactionSignal !== '') {
+        if (!node.data.interactionSignalAudio && !node.data.interactionSignalAudio !== '') {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
     }
@@ -98,17 +98,17 @@ const validateTimeNode = (node) => {
                 if (answer.time === '00:00') {
                     missingData.push(`Time in answer ${index + 1} has to be at least 1 second delayed.`)
                 }
-                
+
                 // Get audio length in seconds
                 const audioLengthInSeconds = node.data.answerProcessAudioLength.split(':')
                     .map(Number)
                     .reduce((acc, val, index) => acc + val * (index === 0 ? 60 : 1), 0);
-                
+
                 // Get answer time in seconds
                 const answerTimeInSeconds = answer.time.split(':')
                     .map(Number)
                     .reduce((acc, val, index) => acc + val * (index === 0 ? 60 : 1), 0);
-                
+
                 if (answerTimeInSeconds > audioLengthInSeconds) {
                     missingData.push(`Answer time in answer ${index + 1} exceeds the length of the audio.`);
                 }
@@ -122,13 +122,14 @@ const validateTimeNode = (node) => {
         }
     }
 
-    if (node.data.interactionSignal) {
-        if (!node.data.interactionSignalAudio) {
+    if (node.data.interactionSignal === 'true' && node.data.interactionSignal !== '') {
+        if (!node.data.interactionSignalAudio && !node.data.interactionSignalAudio !== '') {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
     }
 
     if (!node.data.answerProcessAudio) {
+
         missingData.push(`Answer Process Audio is missing.`)
     }
 
@@ -175,8 +176,8 @@ const validateMuAns = (node) => {
         }
     }
 
-    if (node.data.interactionSignal) {
-        if (!node.data.interactionSignalAudio) {
+    if (node.data.interactionSignal === 'true' && node.data.interactionSignal !== '') {
+        if (!node.data.interactionSignalAudio && !node.data.interactionSignalAudio !== '') {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
     }
@@ -227,13 +228,13 @@ const validateReactNode = (node) => {
         const isValidTimeFormat = (time) => {
             return timePattern.test(time);
         }
-        
+
         const periodToSecond = (period) => {
             const [minutes, seconds] = period.split(':').map(Number);
             const totalSeconds = minutes * 60 + seconds;
             return totalSeconds;
         }
-        
+
         const endPeriodLargerThanStart = (period) => {
             const startPeriodSeconds = periodToSecond(period.start);
             const endPeriodSeconds = periodToSecond(period.end);
@@ -243,7 +244,7 @@ const validateReactNode = (node) => {
         const audioLengthInSeconds = periodToSecond(node.data.answerProcessAudioLength);
 
         const periods = node.data.answerPeriods;
-        
+
         periods.forEach((period, index) => {
             if (period.start && period.end) {
                 const validStartTime = isValidTimeFormat(period.start);
@@ -264,7 +265,7 @@ const validateReactNode = (node) => {
                         const previousPeriod = periods[index - 1];
                         const previousEndTime = periodToSecond(previousPeriod.end);
                         const currentStartTime = periodToSecond(period.start);
-                        
+
                         if (previousEndTime > currentStartTime) {
                             missingData.push(`Answer period ${index + 1} overlaps with the previous period.`);
                         }
@@ -282,8 +283,8 @@ const validateReactNode = (node) => {
         }
     }
 
-    if (node.data.interactionSignal) {
-        if (!node.data.interactionSignalAudio) {
+    if (node.data.interactionSignal === 'true' && node.data.interactionSignal !== '') {
+        if (!node.data.interactionSignalAudio && !node.data.interactionSignalAudio !== '') {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
     }
@@ -320,8 +321,8 @@ const validateInputNode = (node) => {
         }
     }
 
-    if (node.data.interactionSignal) {
-        if (!node.data.interactionSignalAudio) {
+    if (node.data.interactionSignal === 'true' && node.data.interactionSignal !== '') {
+        if (!node.data.interactionSignalAudio && !node.data.interactionSignalAudio !== '') {
             missingData.push(`Interaction Signal Audio is missing.`)
         }
     }

@@ -45,7 +45,7 @@ class Database {
                 }
             })
 
-            this.db.run('CREATE TABLE IF NOT EXISTS validatedFlows (id INTEGER PRIMARY KEY, flowData TEXT, flowKey TEXT, thumbnail TEXT, description TEXT)', (err) => {
+            this.db.run('CREATE TABLE IF NOT EXISTS validatedFlows (id INTEGER PRIMARY KEY, flowData TEXT, flowKey TEXT, thumbnail TEXT, description TEXT, length TEXT, keywords TEXT, title TEXT)', (err) => {
                 if (err) {
                     console.log('Error while creating table validatedFlows: ', err);
                 } else {
@@ -244,18 +244,18 @@ class Database {
     }
 
     // Save validated Flow to the database
-    saveValidatedFlow(flow, flowKey, thumbnail, description) {
+    saveValidatedFlow(flow, flowKey, thumbnail, description, length, keywords, title) {
         console.log('Saving validated flow to database: ', flow);
-    
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT id FROM validatedFlows WHERE flowKey = ?', [flowKey], (err, row) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-    
+
                 if (row) {
-                    this.db.run('UPDATE validatedFlows SET flowData = ?, thumbnail = ?, description = ? WHERE flowKey = ?', [JSON.stringify(flow), thumbnail, description, flowKey], (updateErr) => {
+                    this.db.run('UPDATE validatedFlows SET flowData = ?, thumbnail = ?, description = ?, length = ?, keywords = ?, title = ? WHERE flowKey = ?', [JSON.stringify(flow), thumbnail, description, length, keywords, title, flowKey], (updateErr) => {
                         if (updateErr) {
                             reject(updateErr.message);
                         } else {
@@ -264,7 +264,7 @@ class Database {
                         }
                     });
                 } else {
-                    this.db.run('INSERT INTO validatedFlows (flowData, flowKey, thumbnail, description) VALUES (?, ?, ?, ?)', [JSON.stringify(flow), flowKey, thumbnail, description], (insertErr) => {
+                    this.db.run('INSERT INTO validatedFlows (flowData, flowKey, thumbnail, description, length, keywords, title) VALUES (?, ?, ?, ?, ?, ?, ?)', [JSON.stringify(flow), flowKey, thumbnail, description, length, keywords, title], (insertErr) => {
                         if (insertErr) {
                             reject(insertErr.message);
                         } else {
@@ -274,7 +274,29 @@ class Database {
                 }
             });
         });
-    }    
+    }
+
+    // Get Title of a validatedFlow
+    getValidatedFlowTitle(title) {
+        console.log('Checking if title exists:', title);
+
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT id FROM validatedFlows WHERE flowKey = ?', [title], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                }
+
+                if (row) {
+                    console.log('Title already exists:', title);
+                    resolve(true);
+                } else {
+                    console.log('Title does not exist:', title);
+                    resolve(false);
+                }
+            });
+        });
+    }
 
     // Gets flow with from the table flow
     getFlow(flowKey) {
@@ -285,6 +307,19 @@ class Database {
                 } else {
                     const flow = row ? JSON.parse(row.flowData) : null;
                     resolve(flow);
+                }
+            });
+        });
+    }
+
+    // Get all flows from the flows table
+    getAllFlows() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT id, flowData, flowKey FROM flows', [], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
                 }
             });
         });

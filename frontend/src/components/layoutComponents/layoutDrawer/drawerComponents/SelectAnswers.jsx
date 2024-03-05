@@ -43,10 +43,12 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
       setAnswerAudios([...answerAudios, '']);
       setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
       updateNodeProperty(setNodes, nodeData, 'answers', updatedAnswers);
+      updateNodeProperty(setNodes, nodeData, 'answerAudios', [...answerAudios, '']);
     }
   };
 
   const handleInputChange = (index, value, type) => {
+    console.log("IN HANDLE INPUT CHANGE", value)
     const newAnswers = [...answers];
     const newAnswerAudios = [...answerAudios];
     const newAnswerBackgroundAudio = [...answerBackgroundAudio];
@@ -62,6 +64,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
       newAnswers[index] = value;
     } else if (type === 'answerAudio') {
       newAnswerAudios[index] = value;
+      updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
     }
 
     setAnswers(newAnswers);
@@ -72,14 +75,15 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     }
 
     if (value.trim() === '') {
-      handleInputBlur(index, type);
+      
     } else {
       timeoutRef.current = setTimeout(() => {
         updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
-        updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
       }, 500);
     }
   };
+
+  console.log("nodeData", nodeData);
 
   const handleRemoveAnswer = (index) => {
     const newAnswers = [...answers];
@@ -104,16 +108,6 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
   };
 
-
-  const handleInputBlur = (index, type) => {
-    if (type === 'answer') {
-      const trimmedAnswer = (answers[index] || '').trim();
-      if (trimmedAnswer === '') {
-        handleRemoveAnswer(index);
-      }
-    }
-  };
-
   const handleToggleBackgroundAudio = (index) => {
     const newAnswerBackgroundAudio = [...answerBackgroundAudio];
     newAnswerBackgroundAudio[index] = !newAnswerBackgroundAudio[index];
@@ -121,8 +115,6 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
-  //console.log("nodeData in SelectAnswers:", nodeData);
-  //console.log("nodeData answers", nodeData.data.answers)
   return (
     <>
       <h4>Answers</h4>
@@ -132,15 +124,14 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
             placeholder='Answer .. '
             value={answer}
             onChange={(e) => handleInputChange(index, e.target.value, 'answer')}
-            onBlur={() => handleInputBlur(index, 'answer')}
             flex="5"
           />
           <Spacer />
           <Select
+            key={answerAudios[index] || ''}
             placeholder='Answer Audio ..'
             value={answerAudios[index] || ''}
             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
-            onBlur={() => handleInputBlur(index, 'answerAudio')}
             flex="5"
           >
             {audioPaths.map((audio, idx) => {

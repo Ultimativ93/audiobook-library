@@ -29,7 +29,7 @@ const LayoutMenuModalSetup = ({ isModalSetupOpen, setModalsState, audiobookTitle
                 <ModalHeader>Setup Audiobook</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <ExistingAudiobookSetup existingAudiobookDetails={existingAudiobookDetails} setExistingAudiobookDetails={setExistingAudiobookDetails} setModalsState={setModalsState} />
+                    <ExistingAudiobookSetup existingAudiobookDetails={existingAudiobookDetails} setExistingAudiobookDetails={setExistingAudiobookDetails} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
                 </ModalBody>
             </ModalContent>
         </Modal>

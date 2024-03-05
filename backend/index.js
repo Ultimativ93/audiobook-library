@@ -76,9 +76,9 @@ router.post('/saveFlow', async (ctx) => {
 });
 
 router.post('/saveValidatedFlow', async (ctx) => {
-    const { flow, flowKey, thumbnail, description } = ctx.request.body;
+    const { flow, flowKey, thumbnail, description, length, keywords, title } = ctx.request.body;
     try {
-        const savedFlowId = await db.saveValidatedFlow(flow, flowKey, thumbnail, description);
+        const savedFlowId = await db.saveValidatedFlow(flow, flowKey, thumbnail, description, length, keywords, title);
         ctx.status = 200;
         ctx.body = { success: true, message: 'Flow saved successfully', savedFlowId}
     } catch (error) {
@@ -87,6 +87,31 @@ router.post('/saveValidatedFlow', async (ctx) => {
         ctx.body = { success: false, message: 'Internal Server Error while saving Validated Flow' };
     }
 });
+
+router.get('/getValidateFlowTitle', async (ctx) => {
+    const { title } = ctx.request.query;
+    try {
+        const titleExists = await db.getValidatedFlowTitle(title);
+        ctx.status = 200;
+        ctx.body = { exists: titleExists };
+    } catch (error) {
+        console.error('Error validating flow title:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'Internal Server Error while validating flow title' };
+    }
+});
+
+router.get('/getAllFlows', async (ctx) => {
+    try {
+        const allFlows = await db.getAllFlows();
+        ctx.status = 200;
+        ctx.body = { allFlows: allFlows}
+    } catch (error) {
+        console.error('Error fetching all flows:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'Internal Server Error while fetching all flows' };
+    }
+})
 
 router.post('/deletePaths', async (ctx) => {
     const audiobookTitle = ctx.request.body;

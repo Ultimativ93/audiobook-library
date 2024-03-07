@@ -1,5 +1,6 @@
 import axios from 'axios';
 import isEqual from 'lodash/isEqual';
+import Dagre, { layout } from '@dagrejs/dagre';
 
 export const saveFlow = async (rfInstance, audiobookTitle) => {
     if (!rfInstance) return;
@@ -80,7 +81,7 @@ export const colorSelectedNodes = (selectedNodes) => {
         nodesElement.forEach(nodeElement => {
             const nodeId = nodeElement.dataset.id;
             const isSelected = selectedNodes.includes(nodeId);
-            nodeElement.style.setProperty('--node-background-color', isSelected ? 'orange' : 'initial');
+            nodeElement.style.setProperty('--node-background-color', isSelected ? '#FF5A3D' : 'initial');
         });
     };
 
@@ -128,4 +129,41 @@ export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeDat
     setSelectedNodes([node.id]);
 
     setSelectedNodeData(node);
+};
+
+// Function to layout the elements with Dagre
+export const getLayoutedElements = (nodes, edges, options) => {
+    const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+
+    g.setGraph({ rankdir: options.direction });
+
+    edges.forEach((edge) => g.setEdge(edge.source, edge.target));
+    nodes.forEach((node) => g.setNode(node.id, node));
+
+    Dagre.layout(g);
+
+    return {
+        nodes: nodes.map((node) => {
+            const { x, y} = g.node(node.id);
+
+            return { ...node, position: { x, y }};
+        }),
+        edges,
+    };
+};
+
+export const onLayout = (nodes, edges, setNodes, setEdges, fitView, direction) => {
+    console.log("Layouting");
+    const layouted = getLayoutedElements(nodes, edges, { direction });
+    
+    console.log("nodes in onLayout", nodes);
+    
+    setNodes(layouted.nodes);
+    setEdges(layouted.edges);
+
+    console.log("layoutedNodes", layouted.nodes);
+    console.log("layoutedEdges", layouted.edges);
+    window.requestAnimationFrame(() => {
+        fitView();
+    });
 };

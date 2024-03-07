@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 
 import './layout-menu-modal-preview.css';
 
@@ -119,7 +119,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                     <Spacer />
                     {playable && (
                         <div className="player-container">
-                            <Player selectedNodes={selectedNodes}/>
+                            <Player selectedNodes={selectedNodes} />
                         </div>
                     )}
                 </ModalBody>

@@ -22,7 +22,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...commonAttributes,
                         ...customData,
                         inputSelections,
-                        label: 'Multiple Choice added',
+                        label: 'Choice Added',
                         answers: ["Answer 1", "Answer 2"],
                         answerAudios: [],
                         id: String(asignId),
@@ -68,7 +68,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     position: { x: 100, y: 350 },
                     data: {
                         ...commonAttributes,
-                        label: 'Multiple Answers Added',
+                        label: 'Multiple Response Added',
                         answers: ["Answer 1", "Answer 2"],
                         answerAudios: [],
                         answerCombinations: [],

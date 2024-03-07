@@ -177,20 +177,19 @@ Nach Priorität:
 
 
             - !!! (2):
-                - PreviewModal: Buttons ob von Anfang an oder von selected Node abgespielt werden soll.                                                                                 O
+                - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                     O
+                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
+                - Stylen des Editors, UserProjects, Home, Modals, Buttons, etc.                                                                                                         O
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
-                - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               O
-                - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                                                 O
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
                 - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
                 - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
-                - Stylen des Editors, UserProjects, Home, Modals, Buttons, etc.                                                                                                         O
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
-                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
-                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
+
 
             - ! (3):
+                - Farben aus App.js rausholen und importieren lassen                                                                                                                    O
                 - Drawer onClose ohne Transition.                                                                                                                                       O
                 - Undo/Redo Buttons                                                                                                                                                     O
                 - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
@@ -231,6 +230,10 @@ Nach Priorität:
                 - UserProjects: Status (Editing, Pending, Submitted), nach Länge und Namen sortieren und vielleicht nach Status wenn Zeit                                               O
                 - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                   O
                 - Im Player Insgesamte Spielzeit anzeigen, also wie lange man das Hörbuch schon hört.                                                                                   O
+                - PreviewModal: Buttons ob von Anfang an oder von selected Node abgespielt werden soll.                                                                                 O
+                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
+                - OnLayout/Sort: Sollte der viewport noch 20-30px nach unten verschoben werden.                                                                                         O
+                - Umbennungen der Nodes im Code (MuChoi -> Choice, Multiple Answer -> Multiple Response)                                                                                O
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.                       O
@@ -311,7 +314,7 @@ Erledigt:
                 - Player: Bei einem neuen Knoten sollte auch direkt das nächste Story Audio abgespielt werden.                                                                          x
                 - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       X
                     abgespielt werden können. 
-
+                - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               X
 
 
 

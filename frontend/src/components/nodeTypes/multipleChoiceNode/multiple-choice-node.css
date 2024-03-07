@@ -1,19 +1,23 @@
 .multiple-choice-node {
   height: 75px;
-  width: 175px;
+  width: 200px;
   padding: 5px;
-  border-radius: 5px;
-  background: var(--node-background-color, #542C4D);
+  border-radius: 4px;
+  background: var(--node-background-color, #C7796B);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.multiple-choice-node .node-label {
+.multiple-choice-node label {
   display: block;
   color: #fff;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 500;
+  word-wrap: break-word;
+  margin: 8px;
+  text-align: center;
 }
 
 .multiple-choice-node .react-flow__handle {

@@ -1,41 +1,44 @@
 .reaction-node {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    height: 50px;
-    width: 200px;
-    border-radius: 5px;
-    background: var(--node-background-color, #81D6BE);
-    color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  height: 75px;
+  width: 200px;
+  border-radius: 4px;
+  background: var(--node-background-color, #6D9476);
+  color: white;
 }
 
 .reaction-node label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 14px;
-    word-wrap: break-word;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  word-wrap: break-word;
+  margin: 8px;
+  text-align: center;
 }
 
+
 .reaction-node .handle-label {
-    display: none;
-    position: absolute;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    padding: 5px 20px;
-    border-radius: 5px;
-    font-size: 12px;
-  }
-  
-  .reaction-node .react-flow__handle:hover .handle-label {
-    display: block;
-    top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
+  display: none;
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.reaction-node .react-flow__handle:hover .handle-label {
+  display: block;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}

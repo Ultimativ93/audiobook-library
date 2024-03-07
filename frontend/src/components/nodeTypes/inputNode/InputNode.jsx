@@ -23,10 +23,10 @@ const InputNode = ({ data, isConnectable }) => {
           let handleStyle = {};
           let labelText = '';
           if (index === 0) {
-            handleStyle = { backgroundColor: 'red' };
+            handleStyle = { backgroundColor: '#e60000' };
             labelText = 'Wrong Answer';
           } else if (index === 1) {
-            handleStyle = { backgroundColor: 'green' };
+            handleStyle = { backgroundColor: '#32af00' };
             labelText = 'Correct Answer';
           } else {
             labelText = 'No Answer';

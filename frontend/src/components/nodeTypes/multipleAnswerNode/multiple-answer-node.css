@@ -3,10 +3,10 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    height: 50px;
+    height: 75px;
     width: 200px;
-    border-radius: 5px;
-    background: var(--node-background-color, #245A76);
+    border-radius: 4px;
+    background: var(--node-background-color, #6D9394);
     color: white;
     font-size: 14px;
 }
@@ -16,7 +16,11 @@
     justify-content: center;
     align-items: center;
     color: white;
+    font-size: 18px;
+    font-weight: 500;
     word-wrap: break-word;
+    margin: 8px;
+    text-align: center;
 }
 
 .multiple-answer-node .handle-label {

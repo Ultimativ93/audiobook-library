@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
-import { useParams, useLocation } from 'react-router-dom';
-import { saveFlow, restoreFlow, handleCloseDrawer, handleNodesChange, handleFlowClick, colorSelectedNodes, handleNodeChangesAndSave, handleNodeClick, updateDrawer } from '../../components/tasks/editorTasks/EditorFunctions';
+import { useParams, useLocation, useFormAction } from 'react-router-dom';
+import { saveFlow, restoreFlow, handleCloseDrawer, handleNodesChange, handleFlowClick, colorSelectedNodes, handleNodeChangesAndSave, handleNodeClick, updateDrawer, getLayoutedElements, onLayout } from '../../components/tasks/editorTasks/EditorFunctions';
 
 import LayoutEditorDrawer from '../../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
 import LayoutEditorButtons from '../../components/layoutComponents/layoutEditor/layoutEditorButtons/LayoutEditorButtons';
@@ -43,6 +43,7 @@ const Editor = () => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [selectedNodeData, setSelectedNodeData] = useState(null);
     const { setViewport } = useReactFlow();
+    const { fitView } = useReactFlow();
     const [selectedNodes, setSelectedNodes] = useState([]);
     const [isNodeSelected, setIsNodeSelected] = useState(false);
     const [previousNodes, setPreviousNodes] = useState([]);
@@ -144,12 +145,12 @@ const Editor = () => {
         }
     }, [nodes]);
 
-    console.log("selectedNodes", selectedNodes);
+    //console.log("selectedNodes", selectedNodes);
 
     return (
         <>
             <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
-            <LayoutEditorButtons onSave={onSave} onRestore={onRestoreCallback} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes}/>
+            <LayoutEditorButtons onSave={onSave} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} onLayout={onLayout} setNodes={setNodes} setEdges={setEdges} fitView={fitView} />
 
             <ReactFlow
                 nodes={nodes}
@@ -161,8 +162,9 @@ const Editor = () => {
                 nodeTypes={nodeTypes}
                 onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen, setSelectedNodes)}
                 onSelectionChange={handleSelectionChangeCallback}
-                className='editor-flow'
                 onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)}
+                fitView
+                className='editor-flow'
             >
                 <Background />
             </ReactFlow>

@@ -32,7 +32,7 @@ const ReactionNode = ({ data, isConnectable }) => {
 
                     const handleStyle = {
                         left: `${leftPosition}px`,
-                        backgroundColor: index === nonEmptyAnswers.length - 1 ? 'red' : '#ffbd03',
+                        backgroundColor: index === nonEmptyAnswers.length - 1 ? '#e60000' : '#423f40',
                     };
 
                     return (

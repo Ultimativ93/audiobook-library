@@ -14,7 +14,7 @@ const SelectNodeLabel = ({ nodeData, setNodes }) => {
     const handleLabelChange = (event) => {
         const newValue = event.target.value;
         console.log("newValue length", newValue.length);
-        if (newValue.length <= 40) {
+        if (newValue.length <= 30) {
             setLabel(newValue);
             updateNodeProperty(setNodes, nodeData, 'label', newValue);
             setIsError(false);
@@ -34,7 +34,7 @@ const SelectNodeLabel = ({ nodeData, setNodes }) => {
             />
             {isError && (
                 <Box mt={1}>
-                    <Text color="red.500" fontSize="sm">The label must be 40 characters or less.</Text>
+                    <Text color="red.500" fontSize="sm">The label must be 30 characters or less.</Text>
                 </Box>
             )}
         </>

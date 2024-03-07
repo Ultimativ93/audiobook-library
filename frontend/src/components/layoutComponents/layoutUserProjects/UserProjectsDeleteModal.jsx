@@ -5,6 +5,7 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { handleDeleteProject } from '../../tasks/projectsTasks/DeleteDetails';
 
 const UserProjectsDeleteModal = ({ isModalDeleteOpen, setIsModalDeleteOpen, selectedProject, reloadDetails }) => {
+ 
     // Handle Project Deletion
     const handleProjectDeletion = async () => {
         const isDeleted = await handleDeleteProject(selectedProject);

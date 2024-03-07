@@ -87,6 +87,17 @@ const UserProjects = () => {
     setIsModalAddOpen(true);
   }
 
+  // Reload on Delete
+  const reloadDetails = async () => {
+    try {
+      const detailsData = await FetchDetails();
+      setDetails(detailsData);
+      setNewAudiobook(location.state?.new || false);
+    } catch (error) {
+      console.error('Error fetching details:', error);
+    }
+  };
+
   return (
     <div className='user-projects-wrapper'>
 
@@ -99,7 +110,6 @@ const UserProjects = () => {
           const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
           const thumbnailImage = thumbnailImages[detail.id];
           const flow = flows[index];
-          console.log("flow in map", flow);
 
           return (
             <Card key={detail.id} className='user-projects-card'>
@@ -148,7 +158,7 @@ const UserProjects = () => {
       </div>
 
       {isModalDeleteOpen && (
-        <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} />
+        <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} reloadDetails={reloadDetails}/>
       )}
 
       {isModalAddOpen && (

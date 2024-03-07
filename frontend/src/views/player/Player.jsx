@@ -89,7 +89,6 @@ const Player = ({ selectedNodes }) => {
     const fetchData = async () => {
       console.log("FLOW: ", flow)
       if ((selectedNodes.length > 0) && flow != null && flow.nodes != null && flow.nodes.length > 1) {
-        // Wenn selectedNodes vorhanden ist, setze den currentNode auf den ausgewählten Knoten
         const selectedNodeIndex = flow.nodes.findIndex(node => node.id === selectedNodes[0]);
         if (selectedNodeIndex !== -1) {
           setCurrentNode(selectedNodeIndex);
@@ -101,7 +100,6 @@ const Player = ({ selectedNodes }) => {
           console.error("Selected node not found in the flow");
         }
       } else if (flow != null && flow.nodes != null && flow.nodes.length > 1 && currentNode != null) {
-        // Andernfalls, wenn keine selectedNodes vorhanden sind, verfahre wie gewohnt
         const startNode = flow.nodes.find(node => node.id === '1');
         if (startNode) {
           const connectedEdge = flow.edges.find(edge => edge.source === startNode.id);

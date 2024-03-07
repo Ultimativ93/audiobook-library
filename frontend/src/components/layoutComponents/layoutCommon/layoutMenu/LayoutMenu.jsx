@@ -20,7 +20,7 @@ const LayoutMenu = ({ audiobookTitle, nodes, edges, rfInstance, selectedNodes })
 
     return (
         <Menu>
-            <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} variant='outline' />
+            <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} colorScheme='darkButtons' size="md"  />
             <MenuList>
                 <MenuItem onClick={() => toggleModal('isUploadModalOpen')}>
                     Upload Data

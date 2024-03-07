@@ -16,7 +16,7 @@ const MultipleChoiceNode = ({ data, isConnectable }) => {
   // Add handles for each answer
   const handles = nonEmptyAnswers.map((answer, index) => {
     const handleId = `${data.id}-handle-${index}`;
-    const totalWidth = 175;
+    const totalWidth = 200;
     const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
     return (
       <Handle

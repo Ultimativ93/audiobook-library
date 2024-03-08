@@ -1,7 +1,19 @@
 
-/* Slide-Out-Animation */
 .drawer-content-closed {
     transform: translateX(100%);
     opacity: 0;
     transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.drawer-content-open {
+    margin-top: 70px;
+}
+
+.chakra-tabs__tab[aria-selected="true"] {
+    font-weight: bold;
+}
+
+.drawer-header {
+    background-color: #cfcfcf;
+    color: rgb(58, 58, 58);
 }

@@ -114,7 +114,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     };
 
     return (
-        <>
+        <div className='select-answers-time-container'>
             <h4 style={{ marginTop: '5px' }}>Timebased Answers</h4>
             {answers.map((answer, index) => (
                 <Flex key={index} direction="column" align="start">
@@ -125,6 +125,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             onChange={(e) => handleAnswerChange(index, 'answer', e.target.value)}
                             flex="5"
                             style={{ marginTop: '5px' }}
+                            focusBorderColor='darkButtons'
                         />
                         <Spacer />
                         <Select
@@ -132,6 +133,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             value={answerAudios[index] || 'Answer'}
                             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
                             flex="4"
+                            focusBorderColor='darkButtons'
                         >
                             {audioPaths.map((audio, idx) => {
                                 const color = audioUsage[audio.audioName] ? 'green' : 'orange';
@@ -161,6 +163,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             value={answer.time}
                             onChange={(e) => handleAnswerChange(index, 'time', e.target.value)}
                             flex="2"
+                            focusBorderColor='darkButtons'
                         />
                     </Flex>
                     <Button
@@ -173,10 +176,10 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                     </Button>
                 </Flex>
             ))}
-            <Button colorScheme='blue' size='sm' style={{ marginTop: '5px' }} onClick={handleAddAnswer}>
+            <Button colorScheme='darkButtons' size='sm' style={{ marginTop: '5px' }} onClick={handleAddAnswer}>
                 Add Answer
             </Button>
-        </>
+        </div>
     );
 };
 

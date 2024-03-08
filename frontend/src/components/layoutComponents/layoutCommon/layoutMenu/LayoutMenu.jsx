@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, MenuButton, IconButton, MenuList, MenuItem } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+
 import { useModalsState } from '../../layoutCommon/layoutMenu/ModalsStateContext';
 import LayoutMenuModalSetup from './layoutMenuModals/LayoutMenuModalSetup';
 import LayoutMenuModalUpload from './layoutMenuModals/layoutMenuModalUpload/LayoutMenuModalUpload';
@@ -20,7 +21,7 @@ const LayoutMenu = ({ audiobookTitle, nodes, edges, rfInstance, selectedNodes })
 
     return (
         <Menu>
-            <MenuButton as={IconButton} aria-label='Options' icon={<HamburgerIcon />} colorScheme='darkButtons' size="md"  />
+            <MenuButton as={IconButton} aria-label='Options' boxSize={10} icon={<HamburgerIcon />} colorScheme='darkButtons' size="md"  />
             <MenuList>
                 <MenuItem onClick={() => toggleModal('isUploadModalOpen')}>
                     Upload Data

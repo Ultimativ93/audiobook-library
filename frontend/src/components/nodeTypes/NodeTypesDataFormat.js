@@ -4,7 +4,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
     const asignId = parseInt(ids, 10) + 1;
 
     const inputSelections = {
-        mouse: '', touch: '', speak: '', keyboard: '', touchKeyboard: '', shake: ''
+        mouse: '', touch: '', speak: '', keyboard: '', shake: ''
     }
 
     const commonAttributes = {

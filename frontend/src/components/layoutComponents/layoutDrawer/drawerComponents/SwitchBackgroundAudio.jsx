@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Select } from '@chakra-ui/react';
 
+import './drawer-components.css';
+
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { useAudioUsage, updateBackgroundAudio } from '../LayoutDrawerFunctions';
 
@@ -17,11 +19,10 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
     };
 
     const handleSwitchChange = (event) => {
-        setShowAudio(event.target.checked);
-        if (!event.target.checked) {
-            updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, '', false);
-        }
-    }
+        const isChecked = event.target.checked;
+        setShowAudio(isChecked);
+        updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedAudio, isChecked);
+    };
 
     useEffect(() => {
         if (nodeData.data && Array.isArray(nodeData.data.backgroundAudio)) {
@@ -40,20 +41,22 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
     }, [backgroundAudioFor, nodeData]);
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className='switch-background-audio-container'>
             <Switch
                 isChecked={showAudio}
                 onChange={(event) => handleSwitchChange(event)}
                 style={{ marginRight: '5px' }}
+                colorScheme='darkButtons'
             />
             <div>
-                <h4 style={{ margin: '0', marginBottom: '2px', fontSize: '10px' }}>Background Audio</h4>
+                <h4>Background Audio</h4>
             </div>
             {showAudio && (
                 <Select
-                    placeholder={`Background Audio: ${backgroundAudioFor}`}
+                    placeholder={`Bg Audio: ${backgroundAudioFor}`}
                     value={selectedAudio}
                     onChange={handleAudioChange}
+                    focusBorderColor='darkButtons'
                 >
                     {audioPaths.map((audio, index) => {
                         const color = audioUsage[audio.audioName] ? 'green' : 'orange';
@@ -65,12 +68,12 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
                             >
                                 {audio.audioName}
                             </option>
-                        )
+                        );
                     })}
                 </Select>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default SwitchBackgroundAudio;

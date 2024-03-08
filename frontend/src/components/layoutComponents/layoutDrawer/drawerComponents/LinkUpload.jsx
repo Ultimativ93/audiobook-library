@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
+import { DownloadIcon } from '@chakra-ui/icons';
 import { useModalsState } from '../../layoutCommon/layoutMenu/ModalsStateContext';
+
+import "./drawer-components.css";
 
 const LinkUpload = () => {
   const { setModalsState } = useModalsState();
@@ -14,7 +17,7 @@ const LinkUpload = () => {
 
   return (
     <div>
-      <Button colorScheme="blue" size="sm" mt="2" onClick={openUploadModal}>Upload Data</Button>
+      <Button rightIcon={<DownloadIcon />} colorScheme="lightButtons" size="sm" mt="2" onClick={openUploadModal}>Upload Data</Button>
     </div>
   );
 };

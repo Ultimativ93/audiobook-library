@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
+import './drawer-components.css';
+
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
@@ -95,7 +97,6 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
           return edg;
         });
 
-        // Sortieren der Kanten nach der Länge des Source-Handle-Index
         updatedEdges.sort((a, b) => {
           const indexA = parseInt(a.sourceHandle.split('-').pop());
           const indexB = parseInt(b.sourceHandle.split('-').pop());
@@ -124,10 +125,10 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
     const edgeToRemove = edges.find(edge => edge.sourceHandle === handleIdToRemove);
 
     if (edgeToRemove) {
-        const updatedEdges = edges.filter(edg => edg !== edgeToRemove);
-        setEdges(updatedEdges);
+      const updatedEdges = edges.filter(edg => edg !== edgeToRemove);
+      setEdges(updatedEdges);
     }
-};
+  };
 
   const handleRemoveAnswer = (index) => {
     const newAnswerAudios = [...answerAudios];
@@ -147,7 +148,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
   };
 
   return (
-    <>
+    <div className='select-period-container'>
       <h4 style={{ marginTop: '5px' }}>Period Based Reactions</h4>
       {periods.map((period, index) => (
         <Flex key={index} direction="column" align="start">
@@ -156,6 +157,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
               placeholder={`Period ${index + 1}`}
               value={period.answer}
               onChange={(e) => handlePeriodChange(index, 'answer', e.target.value)}
+              focusBorderColor='darkButtons'
               flex="5"
             />
             <Spacer />
@@ -164,6 +166,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
               value={answerAudios[index] || ''}
               onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
               onBlur={() => handleInputBlur(index, 'answerAudio')}
+              focusBorderColor='darkButonns'
               flex="7"
             >
               {audioPaths.map((audio, idx) => {
@@ -180,6 +183,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
 
               })}
             </Select>
+            <Spacer />
             <SwitchBackgroundAudio
               backgroundAudioFor={`answer-${index}`}
               nodeData={nodeData}
@@ -193,6 +197,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
               placeholder='00:00'
               value={period.start}
               onChange={(e) => handlePeriodChange(index, 'start', e.target.value)}
+              focusBorderColor='darkButtons'
               flex="5"
             />
             <Spacer />
@@ -200,6 +205,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
               placeholder='00:00'
               value={period.end}
               onChange={(e) => handlePeriodChange(index, 'end', e.target.value)}
+              focusBorderColor='darkButtons'
               flex="5"
             />
           </Flex>
@@ -207,15 +213,21 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
             colorScheme="red"
             size="sm"
             onClick={() => handleRemovePeriod(index)}
+            className="remove-period-button"
           >
             Remove Period
           </Button>
         </Flex>
       ))}
-      <Button colorScheme="blue" size="sm" onClick={handleAddPeriod}>
+      <Button
+        colorScheme="darkButtons"
+        size="sm"
+        onClick={handleAddPeriod}
+        className="add-period-button"
+      >
         Add Period
       </Button>
-    </>
+    </div>
   );
 };
 

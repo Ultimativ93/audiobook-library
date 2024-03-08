@@ -24,20 +24,21 @@ const SelectNodeLabel = ({ nodeData, setNodes }) => {
     };
 
     return (
-        <>
+        <div className='select-node-label-container'>
             <h4>Select Node Label</h4>
             <Input
                 placeholder='Node name..'
                 value={label}
                 onChange={handleLabelChange}
                 borderColor={isError ? 'red.500' : 'gray.200'}
+                focusBorderColor='darkButtons'
             />
             {isError && (
                 <Box mt={1}>
                     <Text color="red.500" fontSize="sm">The label must be 30 characters or less.</Text>
                 </Box>
             )}
-        </>
+        </div>
     );
 };
 

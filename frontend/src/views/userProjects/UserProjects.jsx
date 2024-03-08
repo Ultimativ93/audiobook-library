@@ -8,6 +8,7 @@ import '../userProjects/user-projects.css';
 import FetchDetails from '../../components/tasks/projectsTasks/FetchDetails';
 import UserProjectsDeleteModal from '../../components/layoutComponents/layoutUserProjects/UserProjectsDeleteModal';
 import UserProjectsAddModal from '../../components/layoutComponents/layoutUserProjects/UserProjectAddModal';
+import Footer from '../../components/layoutComponents/layoutCommon/footer/Footer';
 import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
 import { handleFetchFlows } from '../../components/tasks/setupTasks/FetchDetails';
 
@@ -99,73 +100,75 @@ const UserProjects = () => {
   };
 
   return (
-    <div className='user-projects-wrapper'>
+    <>
+      <div className='user-projects-wrapper'>
 
-      <Button colorScheme='blue' leftIcon={<AddIcon />} onClick={() => handleAddProject()}>
-        Create New Audiobook
-      </Button>
+        <Button colorScheme='blue' leftIcon={<AddIcon />} onClick={() => handleAddProject()}>
+          Create New Audiobook
+        </Button>
 
-      <div className='user-projects'>
-        {details && details.map((detail, index) => {
-          const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
-          const thumbnailImage = thumbnailImages[detail.id];
-          const flow = flows[index];
+        <div className='user-projects'>
+          {details && details.map((detail, index) => {
+            const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
+            const thumbnailImage = thumbnailImages[detail.id];
+            const flow = flows[index];
 
-          return (
-            <Card key={detail.id} className='user-projects-card'>
-              <Image
-                className='user-projects-card-image'
-                src={thumbnailImage ? thumbnailImage : process.env.PUBLIC_URL + '/grafics/Standard-Thumbnail-small.png'}
-                alt='Thumbnail'
-                borderRadius='lg'
-              />
-              <CardBody>
-                <Stack>
-                  <Heading size='md'>{detail.audiobookTitle}</Heading>
-                  <Text>
-                    {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(" ").slice(0, 20).join(" ") : ''}
-                  </Text>
-                  <Text>
-                    {flow ? `Number of nodes: ${JSON.parse(flow.flowData).nodes.length}` : 'Fetching flow...'}
-                  </Text>
-                </Stack>
-              </CardBody>
-              <CardFooter>
-                <ButtonGroup>
-                  <Button
-                    variant='solid'
-                    colorScheme='blue'
-                    size='sm'
-                  >
-                    <Link to={`/editor/${detail.audiobookTitle}`} state={{ new: newAudiobook }}>
-                      Start
-                    </Link>
-                  </Button>
-                  <Button
-                    variant='solid'
-                    colorScheme='red'
-                    size='sm'
-                    leftIcon={<DeleteIcon />}
-                    onClick={() => { handleDeleteButtonClick(detail.audiobookTitle) }}
-                  >
-                    Delete
-                  </Button>
-                </ButtonGroup>
-              </CardFooter>
-            </Card>
-          );
-        })}
+            return (
+              <Card key={detail.id} className='user-projects-card'>
+                <Image
+                  className='user-projects-card-image'
+                  src={thumbnailImage ? thumbnailImage : process.env.PUBLIC_URL + '/graphics/Standard-Thumbnail-small.png'}
+                  alt='Thumbnail'
+                  borderRadius='lg'
+                />
+                <CardBody>
+                  <Stack>
+                    <Heading size='md'>{detail.audiobookTitle}</Heading>
+                    <Text>
+                      {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(" ").slice(0, 20).join(" ") : ''}
+                    </Text>
+                    <Text>
+                      {flow ? `Number of nodes: ${JSON.parse(flow.flowData).nodes.length}` : 'Fetching flow...'}
+                    </Text>
+                  </Stack>
+                </CardBody>
+                <CardFooter>
+                  <ButtonGroup>
+                    <Button
+                      variant='solid'
+                      colorScheme='blue'
+                      size='sm'
+                    >
+                      <Link to={`/editor/${detail.audiobookTitle}`} state={{ new: newAudiobook }}>
+                        Start
+                      </Link>
+                    </Button>
+                    <Button
+                      variant='solid'
+                      colorScheme='red'
+                      size='sm'
+                      leftIcon={<DeleteIcon />}
+                      onClick={() => { handleDeleteButtonClick(detail.audiobookTitle) }}
+                    >
+                      Delete
+                    </Button>
+                  </ButtonGroup>
+                </CardFooter>
+              </Card>
+            );
+          })}
+        </div>
+
+        {isModalDeleteOpen && (
+          <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} reloadDetails={reloadDetails} />
+        )}
+
+        {isModalAddOpen && (
+          <UserProjectsAddModal isModalAddOpen={isModalAddOpen} setIsModalAddOpen={setIsModalAddOpen} />
+        )}
       </div>
-
-      {isModalDeleteOpen && (
-        <UserProjectsDeleteModal isModalDeleteOpen={isModalDeleteOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} selectedProject={selectedProject} reloadDetails={reloadDetails}/>
-      )}
-
-      {isModalAddOpen && (
-        <UserProjectsAddModal isModalAddOpen={isModalAddOpen} setIsModalAddOpen={setIsModalAddOpen} />
-      )}
-
-    </div>
+      
+    </>
   );
 };
 

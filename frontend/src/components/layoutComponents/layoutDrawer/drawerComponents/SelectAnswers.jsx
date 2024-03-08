@@ -116,7 +116,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   };
 
   return (
-    <>
+    <div className='select-answer-container'>
       <h4>Answers</h4>
       {answers.map((answer, index) => (
         <Flex key={index} alignItems="center">
@@ -124,6 +124,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
             placeholder='Answer .. '
             value={answer}
             onChange={(e) => handleInputChange(index, e.target.value, 'answer')}
+            focusBorderColor='darkButtons'
             flex="5"
           />
           <Spacer />
@@ -132,7 +133,9 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
             placeholder='Answer Audio ..'
             value={answerAudios[index] || ''}
             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
+            focusBorderColor='darkButtons'
             flex="5"
+            
           >
             {audioPaths.map((audio, idx) => {
               const color = audioUsage[audio.audioName] ? 'green' : 'orange';
@@ -166,10 +169,10 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
           </Button>
         </Flex>
       ))}
-      <Button colorScheme='blue' size='sm' onClick={handleAddAnswer}>
+      <Button colorScheme='darkButtons' size='sm' onClick={handleAddAnswer}>
         Add Answer
       </Button>
-    </>
+    </div>
   );
 };
 

@@ -23,6 +23,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                             setSelectedAnswerProcessAudio(event.target.value);
                             updateNodeProperty(setNodes, nodeData, 'answerProcessAudio', event.target.value);
                         }}
+                        focusBorderColor='darkButtons'
                     >
                         {audioPaths.map((audio, index) => {
                             const color = audioUsage[audio.audioName] ? 'green' : 'orange';

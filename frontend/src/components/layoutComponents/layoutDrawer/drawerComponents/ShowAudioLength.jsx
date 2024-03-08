@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+
+import "./drawer-components.css";
 
 import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../tasks/playerTasks/PlayerLogic';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
@@ -33,9 +35,9 @@ const ShowAudioLength = ({ nodeData, setNodes, audioName }) => {
     }
 
     return (
-        <div style={{marginLeft: '15px'}}>
-            <h4>Audio Length</h4>
-            {audioLength}
+        <div className='show-audio-length'>
+            <h4>Audio Length:</h4>
+            <p>{audioLength}</p>
         </div>
     )
 }

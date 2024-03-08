@@ -14,6 +14,7 @@ import TimeNode from '../../components/nodeTypes/timeNode/TimeNode';
 import MultipleAnswerNode from '../../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
 import ReactionNode from '../../components/nodeTypes/reactionNode/ReactionNode';
 import InputNode from '../../components/nodeTypes/inputNode/InputNode';
+import Footer from '../../components/layoutComponents/layoutCommon/footer/Footer';
 
 import 'reactflow/dist/style.css';
 import '../editor/editor.css'
@@ -149,25 +150,25 @@ const Editor = () => {
 
     return (
         <>
-            <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
-            <LayoutEditorButtons onSave={onSave} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} onLayout={onLayout} setNodes={setNodes} setEdges={setEdges} fitView={fitView} />
+                <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
+                <LayoutEditorButtons onSave={onSave} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} onLayout={onLayout} setNodes={setNodes} setEdges={setEdges} fitView={fitView} />
 
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={handleNodesChange(nodes, onNodesChange, handleCloseDrawer, setIsDrawerOpen, setSelectedNodeData, selectedNodes)}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onInit={setRfInstance}
-                nodeTypes={nodeTypes}
-                onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen, setSelectedNodes)}
-                onSelectionChange={handleSelectionChangeCallback}
-                onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)}
-                fitView
-                className='editor-flow'
-            >
-                <Background />
-            </ReactFlow>
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={handleNodesChange(nodes, onNodesChange, handleCloseDrawer, setIsDrawerOpen, setSelectedNodeData, selectedNodes)}
+                    onEdgesChange={onEdgesChange}
+                    onConnect={onConnect}
+                    onInit={setRfInstance}
+                    nodeTypes={nodeTypes}
+                    onNodeClick={(event, node) => handleNodeClick(event, node, setIsDrawerOpen, setSelectedNodeData, isDrawerOpen, setSelectedNodes)}
+                    onSelectionChange={handleSelectionChangeCallback}
+                    onClick={(event) => handleFlowClick(event, handleCloseDrawer, setSelectedNodeData, setIsDrawerOpen, selectedNodes, setSelectedNodes)}
+                    fitView
+                    className='editor-flow'
+                >
+                    <Background />
+                </ReactFlow>
         </>
     );
 };

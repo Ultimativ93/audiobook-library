@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Select } from '@chakra-ui/react';
 
+import './drawer-components.css';
+
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
@@ -11,7 +13,7 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
     const audioUsage = useAudioUsage(audioPaths);
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div className='select-interaction-signal-audio'>
             <div style={{ marginRight: '20px' }}>
                 <Select
                     placeholder='Select Interaction Audio ...'

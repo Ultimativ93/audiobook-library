@@ -19,23 +19,25 @@ const SelectCorrectAnswer = ({ nodeData, setNodes }) => {
     }
     
     return (
-        <>
+        <div className='select-correct-answer'>
             <h4 style={{ marginTop:'5px'}}>Set Correct Answer</h4>
             <Input
                 placeholder='Correct Answer ..'
                 value={correctAnswer}
                 onChange={(e) => handleInputChange(e.target.value)}
+                focusBorderColor='darkButtons'
             />
             {correctAnswer && (
                 <Button
                     colorScheme='red'
                     size='sm'
                     onClick={() => handleRemoveAnswer()}
+                    focusBorderColor='darkButtons'
                 >
                     Remove Answer
                 </Button>
             )}
-        </>
+        </div>
     )
 };
 

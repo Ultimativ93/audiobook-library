@@ -1,3 +1,37 @@
-.layout-editor-buttons Button {
+.buttons-center {
+    background-color: #2d2d2e;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px 10px;
+    margin-top: 13px;
+}
+
+.buttons-left {
+    margin-top: 10px;
+}
+
+.buttons-center Button.chakra-button {
+    width: 85px;
+}
+
+.layout-editor-buttons Button.chakra-button {
     margin: 4px;
+}
+
+.logo-button-container {
+    width: fit-content;
+    padding: 0;
+}
+
+.logo-button-container > a > div {
+    width: 100px;
+    height: auto;
+    padding: 5px;
+}
+
+.logo-button-container > a > div > img {
+    width: 100%;
+    height: auto;
 }

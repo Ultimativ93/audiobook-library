@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
 import { DrawerBody } from '@chakra-ui/react';
 
+import '../../drawerComponents/drawer-components.css';
+
 import { updateAnswerCombination, removeCombination } from '../../LayoutDrawerFunctions';
 
 const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
@@ -12,7 +14,7 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
         const initialCombinations = nodeData.data?.answerCombinations || [];
         setAnswerCombinations(initialCombinations);
         setSelectedAnswers([]);
-      }, [nodeData.data.answerCombinations, nodeData, setSelectedAnswers]);
+    }, [nodeData.data.answerCombinations, nodeData, setSelectedAnswers]);
 
     useEffect(() => {
         const initialCombinations = nodeData.data?.answerCombinations || [];
@@ -66,38 +68,38 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
 
     const uniqueCombinations = Array.from(new Set(answerCombinations.map(JSON.stringify))).map(JSON.parse);
 
-    //console.log("nodeData in MuAnsFromatCombination", nodeData);
     return (<>
         <DrawerBody>
-            <div>
+            <div className='select-combination-container'>
                 <h4>Answer Combinations</h4>
                 <div>
                     {nodeData.data?.answers.map((answer, index) => (
                         <div
                             key={index}
-                            style={{
-                                padding: '10px',
-                                margin: '5px',
-                                border: '1px solid #ccc',
-                                backgroundColor: selectedAnswers.includes(answer) ? 'lightblue' : 'white',
-                                cursor: 'pointer',
-                                display: 'inline-block',
-                                borderRadius: 5,
-                            }}
+                            className={`answer-container ${selectedAnswers.includes(answer) ? 'selected-answer' : ''}`}
                             onClick={() => toggleAnswerSelection(answer)}
                         >
                             {answer}
                         </div>
                     ))}
                 </div>
-                <Button colorScheme='blue' onClick={handleSaveCombination}>Save Combination</Button>
-                <div>
+                <Button colorScheme='darkButtons' onClick={handleSaveCombination}>Save Combination</Button>
+                <div className='select-combination-saved-combinations'>
                     <h4>Saved Combinations:</h4>
                     {uniqueCombinations.length > 0 ? (
                         uniqueCombinations.map((combination, index) => (
                             <div key={index}>
                                 <p>ID: {combination.id}</p>
-                                <p>Answers: {combination.answers ? combination.answers.join(', ') : 'N/A'}</p>
+                                <p>
+                                    Answers: {combination.answers ? combination.answers.map((answer, index) => (
+                                        <span
+                                            key={index}
+                                            className={`answer-button ${selectedAnswers.includes(answer) ? 'selected-answer-button' : ''}`}
+                                        >
+                                            {answer}
+                                        </span>
+                                    )) : 'No combination set.'}
+                                </p>
                                 <Button colorScheme='red' onClick={() => handleRemoveCombination(combination.id)}>Remove</Button>
                             </div>
                         ))

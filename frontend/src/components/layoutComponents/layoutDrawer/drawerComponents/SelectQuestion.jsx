@@ -1,6 +1,8 @@
 import React from 'react'
 import { Input } from '@chakra-ui/react';
 
+import './drawer-components.css'
+
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
 const SelectQuestion = ({ nodeData, setNodes }) => {
@@ -10,14 +12,15 @@ const SelectQuestion = ({ nodeData, setNodes }) => {
     };
 
     return (
-        <>
+        <div className="question-container">
             <h4>Set Question</h4>
             <Input
                 placeholder='Question ..'
                 defaultValue={nodeData.data.question}
                 onChange={handleQuestionChange}
+                focusBorderColor='darkButtons'
             />
-        </>
+        </div>
     )
 }
 

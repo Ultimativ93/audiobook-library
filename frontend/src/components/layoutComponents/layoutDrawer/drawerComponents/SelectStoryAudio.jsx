@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Select } from '@chakra-ui/react';
 
+import './drawer-components.css';
+
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
@@ -15,10 +17,10 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     }, [nodeData.data.audioStory]);
 
     return (
-        <>
+        <div className='select-story-audio-container'>
             <h4>Story Audio</h4>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ marginRight: '20px' }}>
+            <div className='select-story-audio'>
+                <div style={{ marginRight: '15px' }}>
                     <Select
                         placeholder='Select Story Audio ...'
                         value={selectedStoryAudio}
@@ -26,6 +28,7 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                             setSelectedAudioStory(event.target.value);
                             updateNodeProperty(setNodes, nodeData, 'audioStory', event.target.value);
                         }}
+                        focusBorderColor='darkButtons'
                     >
                         {audioPaths.map((audio, index) => {
                             const color = audioUsage[audio.audioName] ? 'green' : 'orange';
@@ -45,7 +48,7 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                     <SwitchBackgroundAudio backgroundAudioFor={'audioStory'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

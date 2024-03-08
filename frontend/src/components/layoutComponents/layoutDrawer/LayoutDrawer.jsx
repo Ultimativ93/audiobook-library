@@ -6,6 +6,7 @@ import './layout-drawer.css'
 import DrawerFormatProviderGeneral from './layoutDrawerFormats/drawerFormatProviderGeneral/DrawerFormatProviderGeneral';
 import DrawerFormatProviderQuestions from './layoutDrawerFormats/drawerFormatProviderQuestions/DrawerFormatProviderQuestions';
 import MuAnsFromatCombination from './layoutDrawerFormats/drawerFormatProviderCombination/MuAnsFromatCombination';
+import { customTheme } from '../../tasks/appTasks/AppTasks';
 
 const components = {
     Drawer: {
@@ -23,7 +24,10 @@ const components = {
     },
 };
 
-const theme = extendTheme({ components });
+const extendedTheme = extendTheme({
+  ...customTheme,
+  components
+});
 
 const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
     const [activeTab, setActiveTab] = useState('general');
@@ -47,7 +51,7 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
     }
     
     return (
-        <ChakraProvider theme={theme}>
+        <ChakraProvider theme={extendedTheme}>
             <Drawer
                 isOpen={isOpen}
                 placement='right'
@@ -58,12 +62,12 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                 variant="alwaysOpen"
             >
                 <DrawerOverlay display='none' />
-                <DrawerContent width={500} className={`drawer-content ${isOpen ? 'drawer-content-open' : 'drawer-content-closed'}`}>
+                <DrawerContent className={`drawer-content ${isOpen ? 'drawer-content-open' : 'drawer-content-closed'}`}>
                     <DrawerCloseButton />
-                    <DrawerHeader borderBottomWidth='1px'>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
+                    <DrawerHeader className="drawer-header" borderBottomWidth='1px'>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
                     <DrawerBody>
-                        <Tabs index={activeTab === 'general' ? 0 : activeTab === 'questions' ? 1 : 2} onChange={(index) => setActiveTab(index === 0 ? 'general' : index === 1 ? 'questions' : 'combination')}>
-                            <TabList>
+                        <Tabs colorScheme='darkButtons' index={activeTab === 'general' ? 0 : activeTab === 'questions' ? 1 : 2} onChange={(index) => setActiveTab(index === 0 ? 'general' : index === 1 ? 'questions' : 'combination')}>
+                            <TabList >
                                 <Tab>General Options</Tab>
                                 {(nodeData.type !== 'endNode' && nodeData.type !== 'bridgeNode') && <Tab>Question Options</Tab>}
                                 {nodeData.type === 'muAns' && <Tab>Combination Options</Tab>}

@@ -30,3 +30,7 @@
 .react-flow__handle.source {
   margin-bottom: -2px;
 }
+
+.body {
+  overflow: hidden;
+}

@@ -177,16 +177,18 @@ Nach Priorität:
 
 
             - !!! (2):
-                - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                     O
-                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
+                - OverFlow muss im Editor hidden sein, überall sonst aber nicht.                                                                                                        O
+                - UserProjects Footer am Ende der Seite, jede Seite hight mit whitespace füllen - Footer height                                                                         O
                 - Stylen des Editors, UserProjects, Home, Modals, Buttons, etc.                                                                                                         O
+                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
                 - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
                 - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
-
+                - Tutorial Seite                                                                                                                                                        O
+                - Home Seite, darstellen abspielbarer Hörbücher.                                                                                                                        O
 
             - ! (3):
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    O
@@ -315,7 +317,7 @@ Erledigt:
                 - Ein Hörbuch sollte auch nur in gewissen Bereichen abspielbar sein, also das man mehrere Nodes anwählt und wenn diese abspielbar sind, dann sollte es im preview       X
                     abgespielt werden können. 
                 - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               X
-
+                - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                     X
 
 
 

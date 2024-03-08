@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { Checkbox, Stack } from '@chakra-ui/react';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
+import './drawer-components.css';
+
 const SelectInputSelections = ({ nodeData, setNodes }) => {
     const inputSelectionsRef = useRef(nodeData.data.inputSelections || {
         mouse: false,
@@ -37,9 +39,9 @@ const SelectInputSelections = ({ nodeData, setNodes }) => {
     }, [nodeData.data.inputSelections]);
 
     return (
-        <>
+        <div className='select-input-selections-container'>
             <h4 style={{ marginTop:'5px'}}>Select Input Selections</h4>
-            <Stack direction="row" flexWrap="wrap">
+            <Stack direction='row' flexWrap='wrap'>
                 {Object.keys(inputSelectionsRef.current).map((key, index) => (
                     <Checkbox
                         key={index}
@@ -50,7 +52,7 @@ const SelectInputSelections = ({ nodeData, setNodes }) => {
                     </Checkbox>
                 ))}
             </Stack>
-        </>
+        </div>
     );
 };
 

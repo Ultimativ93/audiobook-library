@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import ReactFlow, { useNodesState, useEdgesState, addEdge, useReactFlow, Background } from 'reactflow';
-import { useParams, useLocation, useFormAction } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { saveFlow, restoreFlow, handleCloseDrawer, handleNodesChange, handleFlowClick, colorSelectedNodes, handleNodeChangesAndSave, handleNodeClick, updateDrawer, getLayoutedElements, onLayout } from '../../components/tasks/editorTasks/EditorFunctions';
 
 import LayoutEditorDrawer from '../../components/layoutComponents/layoutEditor/LayoutEditorDrawer';
@@ -14,7 +14,6 @@ import TimeNode from '../../components/nodeTypes/timeNode/TimeNode';
 import MultipleAnswerNode from '../../components/nodeTypes/multipleAnswerNode/MultipleAnswerNode';
 import ReactionNode from '../../components/nodeTypes/reactionNode/ReactionNode';
 import InputNode from '../../components/nodeTypes/inputNode/InputNode';
-import Footer from '../../components/layoutComponents/layoutCommon/footer/Footer';
 
 import 'reactflow/dist/style.css';
 import '../editor/editor.css'

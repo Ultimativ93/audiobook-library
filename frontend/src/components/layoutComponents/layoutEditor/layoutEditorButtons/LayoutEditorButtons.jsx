@@ -13,7 +13,7 @@ const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfIn
         <div className="layout-editor-buttons-container">
             <Panel className="layout-editor-buttons buttons-left" position="top-left">
                 <LayoutMenu audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} />
-                <Button className="logo-button-container" colorScheme="darkButtons" borderRadius={'2px'} size="sm">
+                <Button className="logo-button-container" colorScheme="highlightColor" borderRadius={'2px'} size="sm">
                     <Link to="/">
                         <div>
                             <img src={process.env.PUBLIC_URL + '/graphics/Earcade-Logo.png'} alt="Earcade Logo" style={{ width: '100%', height: 'auto' }} />

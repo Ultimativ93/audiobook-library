@@ -191,13 +191,13 @@ Nach Priorität:
                 - Home Seite, darstellen abspielbarer Hörbücher.                                                                                                                        O
 
             - ! (3):
-                - Farben aus App.js rausholen und importieren lassen                                                                                                                    O
                 - Drawer onClose ohne Transition.                                                                                                                                       O
                 - Undo/Redo Buttons                                                                                                                                                     O
                 - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
                 - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
                 - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
                     belassen.
+                - H4 von den DrawerComponents zu p umändern.                                                                                                                            O
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
                 - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
                 - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
@@ -207,6 +207,7 @@ Nach Priorität:
                     name des flows und der dazugehörigen Audiopaths geändert werden.
                 - Hier muss noch abgefangen werden, dass wenn man sich eine grafik/ein Audio angesehen/gehört hat, und man dann ein anderes audio/grafik anwählt, dass dieses           O
                     dann auch angezeigt/abspielbar wird.
+                - Team + Contact erstellen und stylen                                                                                                                                   O
                 - UploadTasks: + Button hat noch keine Funktion, sollte eigentlich Ordner hinzufügen, dann brauchen wir aber auch eine Ordnerstruktur                                   O
                 - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                               O
                 - Bei Playable Flows, bei upload in der Datenbank als spielbar abspeichern und diese auf einer Seite sammeln (erstmal alle die abspielbar sind)                         O
@@ -319,5 +320,7 @@ Erledigt:
                 - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               X
                 - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                     X
 
+            -!:
+                - Farben aus App.js rausholen und importieren lassen                                                                                                                    X
 
 

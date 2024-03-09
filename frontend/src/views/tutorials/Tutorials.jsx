@@ -4,7 +4,9 @@ import './tutorials.css';
 
 const Tutorials = () => {
   return (
-    <div>Here we will add a tutorial page for the Editor.</div>
+    <div className='tutorials-container'>
+      Here we will add a tutorial page for the Editor.
+      </div>
   )
 }
 

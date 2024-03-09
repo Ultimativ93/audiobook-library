@@ -8,6 +8,7 @@ export const ModalsStateProvider = ({ children }) => {
     isUploadModalOpen: false,
     isPreviewModalOpen: false,
     isPublishModalOpen: false,
+    isMenuModalOpen: false,
   });
 
   return (

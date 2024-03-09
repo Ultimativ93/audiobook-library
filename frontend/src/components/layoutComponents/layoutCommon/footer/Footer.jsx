@@ -1,11 +1,10 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import './footer.css';
 
 const Footer = () => {
     const location = useLocation();
-    console.log("Location header", location);
 
     return (
         !location.pathname.includes("/editor") && (
@@ -14,26 +13,23 @@ const Footer = () => {
                     <div className='footer-section'>
                         <h4>About Us</h4>
                         <ul>
-                            <li>Company</li>
-                            <li>Team</li>
+                            <Link to="/team"><li>Team</li></Link>
                             <li>Careers</li>
-                            <li>Contact Us</li>
+                            <Link to="/contact"><li>Contact Us</li></Link>
                         </ul>
                     </div>
                     <div className='footer-section'>
                         <h4>Services</h4>
                         <ul>
-                            <li>Service 1</li>
-                            <li>Service 2</li>
+                            <Link to="/"><li>Interactive Audiobooks</li></Link>
+                            <Link to="/user-projects"><li>Editor</li></Link>
                         </ul>
                     </div>
                     <div className='footer-section'>
-                        <h4>Resources</h4>
+                        <h4>Help</h4>
                         <ul>
-                            <li>Resource 1</li>
-                            <li>Resource 2</li>
-                            <li>Resource 3</li>
-                            <li>Resource 4</li>
+                            <Link to="/tutorials"><li>Tutorials</li></Link>
+                            <li>FAQ</li>
                         </ul>
                     </div>
                     <div className='footer-section'>

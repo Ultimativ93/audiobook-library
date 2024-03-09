@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Image, Stack, Heading, Text, ButtonGroup, Button, CardBody, CardFooter } from '@chakra-ui/react';
-import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
+import { Card, Image, Stack, Heading, Text, ButtonGroup, Button, CardBody, CardFooter, Tooltip } from '@chakra-ui/react';
+import { DeleteIcon, AddIcon, QuestionIcon } from '@chakra-ui/icons';
 import { Link, useLocation } from 'react-router-dom';
 
 import '../userProjects/user-projects.css';
@@ -8,7 +8,7 @@ import '../userProjects/user-projects.css';
 import FetchDetails from '../../components/tasks/projectsTasks/FetchDetails';
 import UserProjectsDeleteModal from '../../components/layoutComponents/layoutUserProjects/UserProjectsDeleteModal';
 import UserProjectsAddModal from '../../components/layoutComponents/layoutUserProjects/UserProjectAddModal';
-import Footer from '../../components/layoutComponents/layoutCommon/footer/Footer';
+
 import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
 import { handleFetchFlows } from '../../components/tasks/setupTasks/FetchDetails';
 
@@ -102,12 +102,26 @@ const UserProjects = () => {
   return (
     <>
       <div className='user-projects-wrapper'>
-
-        <Button colorScheme='blue' leftIcon={<AddIcon />} onClick={() => handleAddProject()}>
-          Create New Audiobook
-        </Button>
-
         <div className='user-projects'>
+
+          <Card>
+            <CardBody>
+              <Stack className='user-projects-create-project' spacing={4} direction="column" align="center" justifyContent='center'>
+                <Button colorScheme='highlightColor' leftIcon={<AddIcon />} onClick={() => handleAddProject()}>
+                  Create New Audiobook
+                </Button>
+                <Tooltip bg='darkButtons' label="New? Get some information about the Editor!" placement="bottom" width="220px" textAlign='center'>
+                  <Link to="/tutorials">
+                    <Button colorScheme='lightButtons' rightIcon={<QuestionIcon />}>
+                      Tutorials
+                    </Button>
+                  </Link>
+                </Tooltip>
+              </Stack>
+            </CardBody>
+          </Card>
+
+
           {details && details.map((detail, index) => {
             const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
             const thumbnailImage = thumbnailImages[detail.id];
@@ -136,7 +150,7 @@ const UserProjects = () => {
                   <ButtonGroup>
                     <Button
                       variant='solid'
-                      colorScheme='blue'
+                      colorScheme='highlightColor'
                       size='sm'
                     >
                       <Link to={`/editor/${detail.audiobookTitle}`} state={{ new: newAudiobook }}>
@@ -145,7 +159,7 @@ const UserProjects = () => {
                     </Button>
                     <Button
                       variant='solid'
-                      colorScheme='red'
+                      colorScheme='darkButtons'
                       size='sm'
                       leftIcon={<DeleteIcon />}
                       onClick={() => { handleDeleteButtonClick(detail.audiobookTitle) }}
@@ -167,7 +181,7 @@ const UserProjects = () => {
           <UserProjectsAddModal isModalAddOpen={isModalAddOpen} setIsModalAddOpen={setIsModalAddOpen} />
         )}
       </div>
-      
+
     </>
   );
 };

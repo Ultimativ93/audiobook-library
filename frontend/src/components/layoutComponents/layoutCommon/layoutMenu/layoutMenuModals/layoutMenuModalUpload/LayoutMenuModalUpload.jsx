@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button, Select } from '@chakra-ui/react';
-import { DeleteIcon, ArrowRightIcon, ViewIcon } from '@chakra-ui/icons';
+import { DeleteIcon, ArrowRightIcon, ViewIcon, DownloadIcon, AttachmentIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useDropzone } from 'react-dropzone';
 
 import '../layoutMenuModalUpload/layout-menu-modal-upload.css';
@@ -139,6 +139,17 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
         setProjectFiles(files => sortFiles(files));
     }, [sortBy]);
 
+    const getFileTypeIcon = (filePath) => {
+        const fileType = filePath.split('.').pop().toLowerCase();
+        if (fileType === 'mp3' || fileType === 'aac' || fileType === 'wav' || fileType === 'ogg' || fileType === 'm4a') {
+            return <ChevronRightIcon name="ChevronRightIcon" />;
+        } else if (fileType === 'png' || fileType === 'jpg' || fileType === 'jpeg') {
+            return <ViewIcon name="ViewIcon" />;
+        } else {
+            return <AttachmentIcon name="AttachmentIcon" />;
+        }
+    };
+
     return (
         <>
             <Modal isOpen={isModalUploadOpen} size='5xl' onClose={() => setModalsState(prevState => ({ ...prevState, isUploadModalOpen: false }))}>
@@ -151,62 +162,68 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                             <div className="layout-menu-modal-upload-left">
                                 <div {...getRootProps({ className: 'dropzone' })}>
                                     <input {...getInputProps()} />
-                                    <div className='layout-menu-modal-upload-dropzone'>Drag 'n' drop some files here, or click to select files</div>
+                                    <div className='layout-menu-modal-upload-dropzone'>
+                                        <p>Drag some files here, or click to select files.</p>
+                                        <DownloadIcon style={{ fontSize: 64, color: 'white', marginLeft: '10px' }} />
+                                    </div>
                                 </div>
                                 {uploadSuccess ? (
-                                    <p>Your files have been successfully uploaded to the server!</p>
+                                    <p style={{ color: 'black', fontWeight: 'bold', marginTop: '20px' }}>Your files have been successfully uploaded to the server!</p>
                                 ) : (
                                     <aside>
-                                        <h4>Files</h4>
+                                        <h4 style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Files</h4>
                                         <ul>
                                             {acceptedFiles.map(file => (
                                                 <li key={file.path}>
-                                                    {file.path} - {file.size} bytes
+                                                    <span style={{ color: 'black', marginRight: '10px' }}>{getFileTypeIcon(file.path)}</span>
+                                                    <span style={{ color: 'black' }}>{file.path}</span> - <span style={{ color: 'black' }}>{file.size} bytes</span>
                                                 </li>
                                             ))}
                                         </ul>
-                                        <h4>Rejected files</h4>
-                                        <ul>
+                                        <h4 style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</h4>
+                                        <ul style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
                                             {fileRejections.map(({ file, errors }) => (
                                                 <li key={file.path}>
-                                                    {file.path} - {file.size} bytes
+                                                    <span style={{ color: 'black', marginRight: '10px', marginTop: '10px' }}>{getFileTypeIcon(file.path)}</span>
+                                                    <span style={{ color: 'black' }}>{file.path}</span> - <span style={{ color: 'black' }}>{file.size} bytes</span>
                                                     <ul>
                                                         {errors.map(e => (
-                                                            <li key={e.code}>{e.message}</li>
+                                                            <p key={e.code} style={{ color: '#E53E3E', marginLeft: '25px', marginTop: '5px' }}>{e.message}</p>
                                                         ))}
                                                     </ul>
                                                 </li>
                                             ))}
                                         </ul>
+
                                     </aside>
                                 )}
-                                {acceptedFiles.length !== 0 && !uploadSuccess && (<Button colorScheme='blue' onClick={handleButtonClick}>Upload</Button>)}
+                                {acceptedFiles.length !== 0 && !uploadSuccess && (<Button colorScheme='highlightColor' onClick={handleButtonClick}>Upload</Button>)}
                             </div>
 
                             <div className="layout-menu-modal-upload-right-wrapper">
                                 <div className="layout-menu-modal-upload-right">
                                     <div className="layout-menu-modal-upload-right-buttons">
                                         <div className="layout-menu-modal-upload-right-buttons-left">
-                                            <Button size='sm' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
+                                            <Button size='sm' colorScheme='darkButtons' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
                                             {showAudio && (
-                                                <Button size='sm' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
+                                                <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
                                                     Hide Audio
                                                 </Button>
                                             )}
                                             {!showAudio && (
-                                                <Button size='sm' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
+                                                <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
                                                     Play Audio
                                                 </Button>
                                             )}
-                                            {showGraphic && (<Button size='sm' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
+                                            {showGraphic && (<Button size='sm' colorScheme='darkButtons' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
                                                 Hide Graphic
                                             </Button>)}
-                                            {!showGraphic && (<Button size='sm' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
+                                            {!showGraphic && (<Button size='sm' colorScheme='darkButtons' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
                                                 Show Graphic
                                             </Button>)}
                                         </div>
                                         <div className="layout-menu-modal-upload-right-buttons-right">
-                                            <Select size='sm' placeholder="Sort By" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                                            <Select size='sm' placeholder="Sort By" value={sortBy} onChange={(e) => setSortBy(e.target.value)} focusBorderColor='darkButtons'>
                                                 <option value='byName'>Sort By Name</option>
                                                 <option value='byDataType'>Sort By Data Type</option>
                                             </Select>
@@ -215,7 +232,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                     <hr />
                                     <div className="layout-menu-modal-upload-right-content">
                                         {projectFiles.map((file, index) => (
-                                            <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? 'lightblue' : 'transparent' }}>
+                                            <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : 'transparent' }}>
                                                 <p onClick={() => handleFileClick(file)}>{file}</p>
                                             </div>
                                         ))}

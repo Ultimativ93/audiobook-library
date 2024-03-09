@@ -33,6 +33,18 @@ export const customTheme = extendTheme({
         800: "#1e282e",
         900: "#040e13",
       },
+
+      menuButtons: {
+        500: '#fff',
+        600: '#bfbfbf',
+        700: '#8c8c8c',
+      },
+
+      highlightColor: {
+        500: '#FF5A3D',
+        600: '#e54201',
+        700: '#fe3d1b',
+      },
   
       choiceColor: {
         500: "#c06859",

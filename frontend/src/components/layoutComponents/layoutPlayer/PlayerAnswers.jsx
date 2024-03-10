@@ -17,7 +17,7 @@ const PlayerAnswers = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
                     <p>Answers:</p>
                     <ul>
                         {currentNodeProps.answers.map((answer, index) => (
-                            <Button colorScheme='blue' style={{ margin: 10 }} key={index} onClick={() => handleButtonClick(index)}>
+                            <Button colorScheme='highlightColor' style={{ margin: 10 }} key={index} onClick={() => handleButtonClick(index)}>
                                 {answer}
                             </Button>
                         ))}

@@ -14,7 +14,7 @@ const LinkSetup = () => {
 
     return (
         <div>
-            <Button colorScheme='blue' size="sm" mt="2" onClick={openSetupModal}>Edit Setup</Button>
+            <Button colorScheme='lightButtons' size="sm" mt="2" onClick={openSetupModal}>Edit Setup</Button>
         </div>
     )
 }

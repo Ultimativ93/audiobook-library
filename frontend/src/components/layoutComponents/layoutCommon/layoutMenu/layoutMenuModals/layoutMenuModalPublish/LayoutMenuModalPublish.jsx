@@ -23,7 +23,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
             try {
                 const fetchedThumbnails = await fetchThumbnail(audiobookTitle);
                 setGraficPaths(fetchedThumbnails);
-                
+
                 const details = await handleGetDetails(audiobookTitle);
                 if (details) {
                     if (details.thumbnail) {
@@ -87,7 +87,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
             }
         } else if (type === 'length') {
             const value = e.target.value;
-            setPublishData({ ...publishData, length: value})
+            setPublishData({ ...publishData, length: value })
         } else if (type === 'title') {
             const value = e.target.value;
             const titleExists = await getValidatedFlowTitle(value);
@@ -130,9 +130,6 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
         }
     }
 
-    //console.log("PublishData", publishData);
-    //console.log("graficPaths", graficPaths);
-
     return (
         <Modal isOpen={isPublishModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPublishModalOpen: false }))} size="5xl">
             <ModalOverlay />
@@ -141,23 +138,27 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                 <ModalHeader>Publish Audiobook: {publishData.title ? publishData.title : audiobookTitle}</ModalHeader>
                 <ModalBody className="modal-body">
                     <div className="modal-publish-title">
-                        <h4>Set a title if you want a different title than your project title:</h4>
-                        <Input 
+                        <p>Set a title if you want a different title than your project title:</p>
+                        <Input
                             type="text"
                             placeholder='Set Audiobook Title..'
                             value={publishData.title}
                             onChange={(e) => handleInputChange(e, 'title')}
                             borderColor={isWrongTitle ? 'red' : 'inherit'}
+                            width='50%'
+                            focusBorderColor='darkButtons'
                         />
                         {isWrongTitle && <p style={{ color: 'red' }}>The title is already used, or it has the wrong format.</p>}
                     </div>
 
                     <div className="modal-publish-thumbnail-container">
-                        <h4>Select Thumbnail:</h4>
+                        <p>Select Thumbnail:</p>
                         <Select
                             placeholder='Select Thumbnail..'
                             value={publishData.thumbnail}
                             onChange={(e) => handleInputChange(e, 'thumbnailGrafic')}
+                            width='50%'
+                            focusBorderColor='darkButtons'
                         >
                             {graficPaths.map((grafic, index) => (
                                 <option key={index} value={grafic.audioName}>
@@ -168,43 +169,51 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                     </div>
 
                     <div className="modal-publish-description">
-                        <h4>Set Short Description:</h4>
+                        <p>Set Short Description:</p>
                         <Input
                             type="text"
                             placeholder="Description.."
                             value={publishData.description}
                             onChange={(e) => handleInputChange(e, 'description')}
                             borderColor={isDescriptionTooLong ? 'red' : 'inherit'}
+                            width='80%'
+                            focusBorderColor='darkButtons'
                         />
                         {isDescriptionTooLong && <p style={{ color: 'red' }}>Description is too long (max 80 characters)</p>}
                     </div>
 
                     <div className="modal-publish-keywords">
-                        <h4>Set keywords for your audiobook:</h4>
+                        <p>Set keywords for your audiobook:</p>
                         <Input
                             type="text"
                             placeholder="Keywords.."
                             value={publishData.keywords}
                             onChange={(e) => handleInputChange(e, 'keywords')}
+                            width='80%'
+                            focusBorderColor='darkButtons'
                         />
-                        {keywordValidation && <p style={{ color: 'red'}}>Enter at least 5 keywords (separated with ",").</p>}
+                        {keywordValidation && <p style={{ color: 'red' }}>Enter at least 5 keywords (separated with ",").</p>}
                     </div>
 
                     <div className="modal-publish-audiobook-length">
-                        <h4>Set approximate length of audiobook:</h4>
+                        <p>Set approximate length of audiobook:</p>
                         <Input
                             type="number"
                             placeholder="Approximate length in minutes.."
                             value={publishData.length}
                             onChange={(e) => handleInputChange(e, 'length')}
+                            width='50%'
+                            focusBorderColor='darkButtons'
                         />
                     </div>
 
-                    <div className="modal-publish-preview">
-                        {thumbnailImage && <img src={thumbnailImage} alt="Thumbnail" />}
-                        <div className="audiobook-info">
-                            <h5>Title: {publishData.title ? publishData.title : audiobookTitle}</h5>
-                            <p>{publishData.description}</p>
+                    <div className="modal-publish-container">
+                        <div className="modal-publish-preview">
+                            {thumbnailImage && <img src={thumbnailImage} alt="Thumbnail" />}
+                            <div className="audiobook-info">
+                                <h5>Title: {publishData.title ? publishData.title : audiobookTitle}</h5>
+                                <p>{publishData.description}</p>
+                            </div>
                         </div>
                     </div>
 
@@ -214,8 +223,8 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                     </div>
 
                     <div className="modal-publish-submit">
-                        <Button colorScheme='blue' onClick={() => handleSubmit()}>Submit</Button>
-                        <Button colorScheme='red'>Cancel</Button>
+                        <Button colorScheme='highlightColor' onClick={() => handleSubmit()}>Submit</Button>
+                        <Button colorScheme='darkButtons'>Cancel</Button>
                     </div>
                     {validated && (
                         <p>Flow successfully submitted!</p>

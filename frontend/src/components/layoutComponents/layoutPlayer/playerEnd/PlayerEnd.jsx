@@ -48,8 +48,8 @@ const PlayerEnd = ({ currentNodeProps, flow, setCurrentNode, setFirstNodePlayed 
         <>
             {isEnd && (
                 <div className="player-end">
-                    <Button colorScheme='green' onClick={(e) => handleToStart()}>Back to Start</Button>
-                    <Button colorScheme='blue'onClick={(e) => handleToHome()}>Back to Home</Button>
+                    <Button colorScheme='highlightColor' onClick={(e) => handleToStart()}>Back to Start</Button>
+                    <Button colorScheme='darkButtons'onClick={(e) => handleToHome()}>Back to Home</Button>
                 </div>
 
             )}

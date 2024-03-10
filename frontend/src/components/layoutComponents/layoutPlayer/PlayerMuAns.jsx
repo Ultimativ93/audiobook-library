@@ -20,7 +20,7 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
 
     const handleSubmitCombination = () => {
         if (currentNodeProps && currentNodeProps.answerCombinations && currentNodeProps.answerCombinations.length > 0) {
-          const selectedAnswersString = selectedAnswers.sort().join(','); // Sortiere und konvertiere die ausgewählten Antworten zu einem String
+          const selectedAnswersString = selectedAnswers.sort().join(',');
       
           const matchingCombinationIndex = currentNodeProps.answerCombinations.findIndex((combination) => {
             const combinationAnswersString = combination.answers.sort().join(',');
@@ -28,7 +28,6 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
           });
       
           if (matchingCombinationIndex !== -1) {
-            // Führe handleButtonClickLogic mit dem gefundenen Index aus
             handleButtonClickLogic(matchingCombinationIndex, flow, currentNodeProps, setCurrentNode);
           } else {
             alert('This combination doest work! Bad!');
@@ -47,7 +46,7 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
                     <ul>
                         {currentNodeProps.answers.map((answer, index) => (
                             <Button
-                                colorScheme={clickedAnswers.includes(answer) ? 'orange' : 'blue'}
+                                colorScheme={clickedAnswers.includes(answer) ? 'darkButtons' : 'highlightColor'}
                                 style={{ margin: 10 }}
                                 key={index}
                                 onClick={() => handleButtonClick(answer)}
@@ -57,7 +56,7 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
                         ))}
                     </ul>
 
-                    <Button colorScheme='green' onClick={handleSubmitCombination}>
+                    <Button colorScheme='highlightColor' onClick={handleSubmitCombination}>
                         Submit Combination
                     </Button>
                 </div>

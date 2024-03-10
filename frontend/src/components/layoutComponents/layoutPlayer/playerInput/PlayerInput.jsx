@@ -32,10 +32,11 @@ const PlayerInput = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
                             name="answer"
                             placeholder='Type correct answer'
                             style={{ width: '300px', backgroundColor: 'white' }}
+                            focusBorderColor='darkButtons'
                         />
                         <div className="player-input-buttons">
-                            <Button type="submit" colorScheme='blue'>Submit Answer</Button>
-                            <Button colorScheme='red' onClick={handleButtonNoAnswer}>I dont know the answer</Button>
+                            <Button type="submit" colorScheme='highlightColor'>Submit Answer</Button>
+                            <Button colorScheme='darkButtons' onClick={handleButtonNoAnswer}>I dont know the answer</Button>
                         </div>
                     </form>
                 </div>

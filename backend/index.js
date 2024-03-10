@@ -97,9 +97,34 @@ router.get('/getValidateFlowTitle', async (ctx) => {
     } catch (error) {
         console.error('Error validating flow title:', error);
         ctx.status = 500;
-        ctx.body = { error: 'Internal Server Error while validating flow title' };
+        ctx.body = { error: 'Internal Server Error while validating flow title.' };
     }
 });
+
+router.get('/getValidatedFlow', async (ctx) => {
+    const { title } = ctx.request.query;
+    try {
+        const validatedFlow = await db.getValidatedFlow(title);
+        ctx.status = 200;
+        ctx.body = { validatedFlow: validatedFlow}
+    } catch (error) {
+        console.error('Error fetching validated flow:', error)
+        ctx.status = 500;
+        ctx.body = { error: 'Internal Server Error while validating flow title.'};
+    }
+})
+
+router.get('/getAllValidatedFlows', async (ctx) => {
+    try {
+        const allValidatedFlows = await db.getAllValidatedFlows();
+        ctx.status = 200;
+        ctx.body = { allValidatedFlows: allValidatedFlows} 
+    } catch (error) {
+        console.error('Error fetchin all validated flows:', error);
+        ctx.status = 500;
+        ctx.body = { error: 'Internal Server Error while fetching all validated flows.'}
+    }
+})
 
 router.get('/getAllFlows', async (ctx) => {
     try {
@@ -109,7 +134,7 @@ router.get('/getAllFlows', async (ctx) => {
     } catch (error) {
         console.error('Error fetching all flows:', error);
         ctx.status = 500;
-        ctx.body = { error: 'Internal Server Error while fetching all flows' };
+        ctx.body = { error: 'Internal Server Error while fetching all flows.' };
     }
 })
 

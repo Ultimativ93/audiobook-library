@@ -47,6 +47,7 @@ const SelectInputSelections = ({ nodeData, setNodes }) => {
                         key={index}
                         isChecked={inputSelectionsRef.current[key].isSelected}
                         onChange={() => handleCheckBoxChange(key)}
+                        colorScheme='darkButtons'
                     >
                         {key}
                     </Checkbox>

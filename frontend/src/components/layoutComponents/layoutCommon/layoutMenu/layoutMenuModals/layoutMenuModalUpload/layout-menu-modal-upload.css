@@ -25,7 +25,7 @@
     margin-left: 20px;
     border: 2px solid black;
     border-radius: 10px;
-    height: 82%;
+    min-height: 82%;
 }
 
 .layout-menu-modal-upload-right-buttons {
@@ -67,4 +67,8 @@
     margin-top: 20px;
     justify-content: center;
     align-self: center;
+}
+
+.layout-menu-modal-upload-right-buttons-left Button {
+    margin-right: 5px;
 }

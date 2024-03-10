@@ -46,12 +46,14 @@ const Player = ({ selectedNodes }) => {
 
   // Set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
   useEffect(() => {
-    const flowKey = location.pathname.split('/').pop();
-    console.log("Flowkey im Player: ", flowKey);
+    const flowKey = decodeURIComponent(location.pathname.split('/').pop()).replace(/%20/g, ' ').substring(0); // `%20` durch Leerzeichen ersetzen und das erste Zeichen entfernen
+    console.log("Flowkey im Player:", flowKey);
     FetchFlow(flowKey).then((flowData) => {
       setFlow(flowData);
     });
   }, []);
+
+
 
   // Set the currentNodeProps after first node after the startnode
   useEffect(() => {
@@ -88,7 +90,7 @@ const Player = ({ selectedNodes }) => {
   useEffect(() => {
     const fetchData = async () => {
       console.log("FLOW: ", flow)
-      if ((selectedNodes.length > 0) && flow != null && flow.nodes != null && flow.nodes.length > 1) {
+      if ((selectedNodes && selectedNodes.length && selectedNodes.length > 0) && flow != null && flow.nodes != null && flow.nodes.length > 1) {
         const selectedNodeIndex = flow.nodes.findIndex(node => node.id === selectedNodes[0]);
         if (selectedNodeIndex !== -1) {
           setCurrentNode(selectedNodeIndex);
@@ -250,7 +252,7 @@ const Player = ({ selectedNodes }) => {
         // If is not an end, play answers, question and interaction Signal
         if (currentNodeProps.isEnd !== 'true') {
           // Play next answer audio
-          if (targetNodeType === 'bridgeNode' || (!answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
+          if (targetNodeType !== 'bridgeNode' || (!answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
             console.log("playAnswerProcessAudio");
             playAnswerProcessAudio()
           } else if (targetNodeType === 'bridgeNode' || (answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
@@ -556,6 +558,7 @@ const Player = ({ selectedNodes }) => {
           <audio
             ref={audioRef}
             controls
+            controlsList="nodownload"
             autoPlay={firstNodePlayed}
             src={audioBlob}
             onEnded={handleAudioEndedWithBackgroundStop}

@@ -51,7 +51,7 @@ const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, 
                 {validPeriod && answerProcessAudioPlaying && (
                     <Button
                         onClick={() => handleButtonClick(currentNodeProps.answerPeriods.indexOf(validPeriod))}
-                        colorScheme='blue'
+                        colorScheme='highlightColor'
                     >
                         {validPeriod.answer}
                     </Button>

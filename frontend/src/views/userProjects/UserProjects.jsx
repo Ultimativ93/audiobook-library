@@ -68,7 +68,7 @@ const UserProjects = () => {
             } catch (error) {
               console.error('Error fetching thumbnail image:', error);
             }
-          }
+          };
         }
         setThumbnailImages(images);
       }

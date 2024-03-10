@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Stack, Checkbox, Textarea, Select, Flex } from '@chakra-ui/react';
 
+import './existing-audiobook-setup.css';
+
 import {
     handleInputChange,
     handleCheckBoxChange,
@@ -8,10 +10,10 @@ import {
     handleAddContributor,
     handleRemoveContributor,
     handleCheckSetup
-} from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
+} from '../../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 
-import { handleChangeDetails } from '../../components/tasks/setupTasks/FetchDetails';
-import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
+import { handleChangeDetails } from '../../../components/tasks/setupTasks/FetchDetails';
+import { fetchThumbnail, fetchThumbnailImage } from '../../../components/tasks/publishTasks/PublishFunctions';
 
 const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setModalsState, audiobookTitle }) => {
     const [graficPaths, setGraficPaths] = useState([]);
@@ -178,6 +180,7 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
                             </Button>
                         </div>
 
+                        <p>Category</p>
                         <Select
                             placeholder='Select Category .. '
                             value={existingAudiobookDetails?.category}

@@ -1,14 +1,38 @@
 .modal-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-body {
-    text-align: center;
-  }
-  
-  .player-container {
-    width: 800px;
-    height: auto;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.player-container {
+  width: 800px;
+  height: auto;
+  margin: auto;
+  justify-content: center;
+}
+
+.modal-body p {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body ul {
+  list-style-type: none; 
+  padding-left: 0;
+}
+
+.modal-body ul li {
+  text-align: left;
+  margin-left: 1.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.modal-body ul li:before {
+  content: "•"; 
+  margin-right: 0.5rem;
+}

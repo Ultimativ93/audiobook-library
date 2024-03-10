@@ -27,7 +27,7 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visi
                     <div key={index} style={{ display: shouldDisplay ? 'block' : 'none' }}>
                         <Button
                             onClick={() => handleButtonClick(currentNodeProps.answers.indexOf(answer))}
-                            colorScheme='blue'
+                            colorScheme='highlightColor'
                         >
                             {answer.answer}
                         </Button>

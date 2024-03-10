@@ -298,6 +298,20 @@ class Database {
         });
     }
 
+    // Get validatedFlow from the table validatedFlows
+    getValidatedFlow(title) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT id, flowData, flowKey, thumbnail, description, length, keywords, title FROM validatedFlows WHERE flowKey = ?', [title], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
     // Gets flow with from the table flow
     getFlow(flowKey) {
         return new Promise((resolve, reject) => {
@@ -316,6 +330,19 @@ class Database {
     getAllFlows() {
         return new Promise((resolve, reject) => {
             this.db.all('SELECT id, flowData, flowKey FROM flows', [], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    // Get all validated Flows from the validatedFlows table
+    getAllValidatedFlows() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT id, flowData, flowKey, thumbnail, description, length, keywords, title FROM validatedFlows', [], (err, rows) => {
                 if (err) {
                     reject(err.message);
                 } else {

@@ -1,0 +1,67 @@
+.audiobook-wrapper {
+    min-height: 90vh;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column; /* Layout in Spaltenanordnung */
+    align-items: center; /* Horizontal zentrieren */
+    margin: 20px;
+}
+
+.details-image-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.details-container {
+    width: 45%;
+    height: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.details-container h2 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.details-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.details-container li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #555;
+    text-align: left;
+}
+
+.details-container li strong {
+    font-weight: bold;
+}
+
+.image-container {
+    width: 45%;
+    height: auto;
+    max-height: 80vh;
+    overflow: hidden;
+}
+
+.audiobook-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.player-container {
+    width: 60%;
+    height: 100% !important;
+    margin-top: 20px;
+}

@@ -171,7 +171,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                     <p style={{ color: 'black', fontWeight: 'bold', marginTop: '20px' }}>Your files have been successfully uploaded to the server!</p>
                                 ) : (
                                     <aside>
-                                        <h4 style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Files</h4>
+                                        <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Files</p>
                                         <ul>
                                             {acceptedFiles.map(file => (
                                                 <li key={file.path}>
@@ -180,7 +180,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                 </li>
                                             ))}
                                         </ul>
-                                        <h4 style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</h4>
+                                        <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</p>
                                         <ul style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
                                             {fileRejections.map(({ file, errors }) => (
                                                 <li key={file.path}>
@@ -204,7 +204,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                 <div className="layout-menu-modal-upload-right">
                                     <div className="layout-menu-modal-upload-right-buttons">
                                         <div className="layout-menu-modal-upload-right-buttons-left">
-                                            <Button size='sm' colorScheme='darkButtons' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
+                                            <Button size='sm' colorScheme='darkButtons' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles}/>
                                             {showAudio && (
                                                 <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
                                                     Hide Audio

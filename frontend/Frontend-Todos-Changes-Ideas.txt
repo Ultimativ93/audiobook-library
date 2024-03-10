@@ -189,6 +189,7 @@ Nach Priorität:
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
                 - Tutorial Seite                                                                                                                                                        O
                 - Home Seite, darstellen abspielbarer Hörbücher.                                                                                                                        O
+                - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              O
 
             - ! (3):
                 - Drawer onClose ohne Transition.                                                                                                                                       O

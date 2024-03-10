@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 
-import ExistingAudiobookSetup from '../../../../../views/audioBookSetup/ExistingAudiobookSetup';
+import ExistingAudiobookSetup from '../../../../../views/audioBookSetup/existingAudiobookSetup/ExistingAudiobookSetup';
 import { handleGetDetails } from '../../../../tasks/setupTasks/FetchDetails';
 
 const LayoutMenuModalSetup = ({ isModalSetupOpen, setModalsState, audiobookTitle }) => {

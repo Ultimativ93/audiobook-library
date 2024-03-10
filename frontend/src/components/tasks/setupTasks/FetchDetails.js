@@ -75,7 +75,7 @@ const handleFetchFlows = async () => {
         if(response.status === 200) {
             return response.data;
         } else {
-            console.error('Error in fetching all flows from the server.')
+            console.error('Error in fetching all flows from the server.');
         }
     } catch (error) {
         console.error('Error in handleFetchFlows:', error);

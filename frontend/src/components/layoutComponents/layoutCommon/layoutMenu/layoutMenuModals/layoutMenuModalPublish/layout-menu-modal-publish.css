@@ -1,8 +1,21 @@
 .modal-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    margin: 20px;
+    text-align: left;
+}
+
+.modal-body {
+    width: 100%;
+    text-align: left;
+}
+
+.modal-publish-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .modal-publish-preview {
@@ -15,9 +28,10 @@
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    margin: 10px;
+    margin: 10px 0;
     position: relative;
 }
+
 
 .modal-publish-preview img {
     max-width: 100%;
@@ -37,7 +51,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center; /* Optional: Zentriere den Text horizontal */
+    text-align: left;
 }
 
 .audiobook-info h5 {
@@ -53,6 +67,23 @@
 
 .modal-publish-links {
     display: flex;
-    justify-content: center;
-    margin: 10px;
+    justify-content: flex-start;
+    margin: 10px 0;
+}
+
+.modal-publish-links Button,
+.modal-publish-submit Button {
+    margin-right: 10px;
+}
+
+.modal-publish-submit {
+    margin-top: 20px;
+}
+
+.modal-publish-title,
+.modal-publish-thumbnail-container,
+.modal-publish-description,
+.modal-publish-keywords,
+.modal-publish-audiobook-length {
+    margin-bottom: 10px; /* Hier Margin hinzugefügt */
 }

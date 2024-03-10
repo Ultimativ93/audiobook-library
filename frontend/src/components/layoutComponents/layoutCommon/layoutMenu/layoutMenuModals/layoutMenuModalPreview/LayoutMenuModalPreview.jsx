@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
+import { Spacer, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button } from '@chakra-ui/react';
 
 import './layout-menu-modal-preview.css';
 
@@ -88,6 +88,21 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
         validateFlow();
     }, [flowToCheck]);
 
+    const downloadValidationResults = () => {
+        const nodeResultsText = validationResults.nodes.join('\n');
+        const edgeResultsText = validationResults.edges.join('\n');
+        const textToDownload = `Node Validation Results:\n${nodeResultsText}\n\nEdge Validation Results:\n${edgeResultsText}`;
+
+        const element = document.createElement("a");
+        const file = new Blob([textToDownload], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        element.download = `${audiobookTitle}_validation_results.txt`;
+        document.body.appendChild(element);
+        element.click();
+    };
+
+    console.log("ValidationResults", validationResults.nodes.length)
+
     return (
         <Modal isOpen={isPreviewModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPreviewModalOpen: false }))} size="5xl">
             <ModalOverlay />
@@ -95,7 +110,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                 <ModalCloseButton />
                 <ModalHeader>Preview Audiobook</ModalHeader>
                 <ModalBody className="modal-body">
-                    <h2>Node Validation Results:</h2>
+                    <p>Node Validation Results:</p>
                     {validationResults.nodes && validationResults.nodes.length === 0 ? (
                         <p>No missing Data, everything looks good!</p>
                     ) : (
@@ -106,7 +121,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                         </ul>
                     )}
                     <br />
-                    <h2>Edge Validation Results:</h2>
+                    <p>Edge Validation Results:</p>
                     {validationResults.edges && validationResults.edges.length > 0 ? (
                         <ul>
                             {validationResults.edges.map((edge, index) => (
@@ -117,11 +132,18 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                         <p>No invalid edges found.</p>
                     )}
                     <Spacer />
+                    {validationResults.nodes.length > 0 || validationResults.edges.length > 0 ? (
+                        <Button onClick={downloadValidationResults} colorScheme="darkButtons" mt="4">
+                            Download Validation Results
+                        </Button>
+                    ) : null}
+
                     {playable && (
                         <div className="player-container">
                             <Player selectedNodes={selectedNodes} />
                         </div>
                     )}
+
                 </ModalBody>
             </ModalContent>
         </Modal>

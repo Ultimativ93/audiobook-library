@@ -10,9 +10,11 @@ router.post('/upload', async (ctx) => {
     console.log('Upload route hit');
     console.log('Uploaded files:', ctx.request.files);
     console.log('Audiobook Name in Backend: ', ctx.request.body.audiobookTitle)
+    console.log('Category in Backend: ', ctx.request.body.category)
 
     const files = ctx.request.files && (Array.isArray(ctx.request.files.files) ? ctx.request.files.files : [ctx.request.files.files]);
     const audiobookTitle = ctx.request.body.audiobookTitle;
+    const category = ctx.request.body.category;
     if (files && files.length > 0) {
         try {
             const databaseResponses = [];
@@ -22,7 +24,7 @@ router.post('/upload', async (ctx) => {
 
                 const fileName = file.originalFilename;
 
-                const databaseResponse = await db.addFilePath(file.filepath, fileName, audiobookTitle);
+                const databaseResponse = await db.addFilePath(file.filepath, fileName, audiobookTitle, category);
                 databaseResponses.push(databaseResponse);
             }
 
@@ -40,6 +42,21 @@ router.post('/upload', async (ctx) => {
         ctx.status = 400;
         ctx.type = 'application/json';
         ctx.body = { success: false, message: 'Bad Request: No files provided' };
+    }
+});
+
+// Change Category of and audio file
+router.post('/updateCategory', async (ctx) => {
+    try {
+        console.log("trying updating category");
+        const { fileName, category, audiobookTitle } = ctx.request.body;
+        const changedCategory = await db.changeCategory(fileName, category, audiobookTitle)
+        ctx.status = 200;
+        ctx.body = { success: true, message: 'Category updated successfully.', changedCategory}
+    } catch (error) {
+        console.error('Error updating category:', error);
+        ctx.status = 500;
+        ctx.body = { success: false, message: 'Internal Server Error while updating category'};
     }
 });
 
@@ -255,8 +272,7 @@ router.get('/audioPaths', async (ctx) => {
                 fileName.endsWith('.mp3') ||
                 fileName.endsWith('.aac') ||
                 fileName.endsWith('.ogg') ||
-                fileName.endsWith('.mpeg') ||
-                fileName.endsWith('.wav')
+                fileName.endsWith('.mpeg')
             );
         });
 
@@ -292,13 +308,14 @@ router.get('/graficPaths', async (ctx) => {
     }
 })
 
+// Get names and categorys from the files in a flow
 router.get('/getDataFromFlow', async (ctx) => {
     const { flowKey } = ctx.request.query;
     console.log("in get", flowKey);
     try {
-        const allFileNames = await db.getAllFileNames(flowKey);
+        const allFileData = await db.getAllFileNames(flowKey);
         ctx.status = 200;
-        ctx.body = allFileNames;
+        ctx.body = allFileData; 
     } catch (error) {
         console.error('Error getting data from flow: ', error);
         ctx.status = 500;

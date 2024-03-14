@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const handleUpload = async (selectedFiles, audiobookTitle, setUploadSuccess) => {
+const handleUpload = async (selectedFiles, audiobookTitle, category, setUploadSuccess) => {
     try {
         const existingFiles = await checkExistingFiles(selectedFiles, audiobookTitle);
 
@@ -17,6 +17,7 @@ const handleUpload = async (selectedFiles, audiobookTitle, setUploadSuccess) => 
             formData.append('files', file);
         });
         formData.append('audiobookTitle', audiobookTitle);
+        formData.append('category', category);
 
         const response = await fetch('http://localhost:3005/upload', {
             method: 'POST',
@@ -41,6 +42,7 @@ const handleUpload = async (selectedFiles, audiobookTitle, setUploadSuccess) => 
         setUploadSuccess(false);
     }
 };
+
 
 const checkExistingFiles = async (files, audiobookTitle) => {
     const existingFiles = [];
@@ -115,10 +117,19 @@ const fetchGraphicUrl = async (fileName, setGraphicUrl) => {
     }
 }
 
+const changeCategory = async (file, selectedCategory, audiobookTitle) => {
+    try {
+        await axios.post('http://localhost:3005/updateCategory', { fileName: file, category: selectedCategory, audiobookTitle: audiobookTitle });
+    } catch (error) {
+        console.error('Error updating category:', error);
+    }
+};
+
 export {
     handleUpload,
     checkExistingFiles,
     handleFileDelete,
     fetchAudioUrl,
     fetchGraphicUrl,
+    changeCategory,
 };

@@ -19,7 +19,7 @@ class Database {
     initialize() {
         this.db.serialize(() => {
             // Creating table audioPaths
-            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT, audiobookTitle TEXT,  audioType TEXT)', (err) => {
+            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT, audiobookTitle TEXT,  audioCategory TEXT)', (err) => {
                 if (err) {
                     console.log('Error while creating table audioFiles: ', err);
                 } else {
@@ -56,12 +56,13 @@ class Database {
     }
 
     // Adding an audioPath and audioName into audioPaths in the database
-    addFilePath(filePath, audioName, audiobookTitle) {
+    addFilePath(filePath, audioName, audiobookTitle, category) {
         console.log('Adding file path to database:', filePath);
         console.log('Adding audio name to database:', audioName);
+        console.log('Adding category to database:', category);
 
         return new Promise((resolve, reject) => {
-            this.db.run('INSERT INTO audioPaths (audioPath, audioName, audiobookTitle) VALUES (?, ?, ?)', [filePath, audioName, audiobookTitle], function (err) {
+            this.db.run('INSERT INTO audioPaths (audioPath, audioName, audiobookTitle, audioCategory) VALUES (?, ?, ?, ?)', [filePath, audioName, audiobookTitle, category], function (err) {
                 if (err) {
                     reject(err.message);
                 } else {
@@ -72,6 +73,24 @@ class Database {
             });
         });
     }
+
+    // Change Category of an audioFile
+    changeCategory(fileName, category, audiobookTitle) {
+        console.log('Updating category', fileName, category);
+    
+        return new Promise((resolve, reject) => {
+            this.db.run('UPDATE audioPaths SET audioCategory = ? WHERE audioName = ? AND audiobookTitle = ?', [category, fileName, audiobookTitle], function (err) {
+                if (err) {
+                    console.error('Error updating category:', err);
+                    reject(err);
+                } else {
+                    console.log(`Category updated for file ${fileName}`);
+                    resolve(category);
+                }
+            });
+        });
+    }
+    
 
     // Deleting audioPaths and audioNames from audioPaths in the database
     deletePath(audiobookTitle) {
@@ -185,7 +204,7 @@ class Database {
     // Get all audioPath from audioPaths
     getAllFilePaths(audiobookTitle) {
         return new Promise((resolve, reject) => {
-            this.db.all('SELECT audioPath, audioName FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
+            this.db.all('SELECT audioPath, audioName, audioCategory FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
                 if (err) {
                     reject(err.message);
                 } else {
@@ -402,16 +421,17 @@ class Database {
         });
     }
 
+    // Get All File names and category
     getAllFileNames(audiobookTitle) {
         console.log("AudiobookTitle", audiobookTitle);
-
+    
         return new Promise((resolve, reject) => {
-            this.db.all('SELECT audioName FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
+            this.db.all('SELECT audioName, audioCategory FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
                 if (err) {
                     reject(err.message);
                 } else {
-                    const fileNames = rows.map(row => row.audioName);
-                    resolve(fileNames);
+                    const fileData = rows.map(row => ({ name: row.audioName, category: row.audioCategory }));
+                    resolve(fileData);
                 }
             });
         });

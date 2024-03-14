@@ -11,18 +11,7 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
     const [showAudio, setShowAudio] = useState(false);
     const audioPaths = FetchAudio(audiobookTitle);
     const audioUsage = useAudioUsage(audioPaths);
-
-    const handleAudioChange = (event) => {
-        const selectedValue = event.target.value;
-        setSelectedAudio(selectedValue);
-        updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedValue, showAudio);
-    };
-
-    const handleSwitchChange = (event) => {
-        const isChecked = event.target.checked;
-        setShowAudio(isChecked);
-        updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedAudio, isChecked);
-    };
+    const [audioIsUsed, setAudioIsUsed] = useState(false); // Zustand für die Anzeige des Hakens
 
     useEffect(() => {
         if (nodeData.data && Array.isArray(nodeData.data.backgroundAudio)) {
@@ -38,7 +27,32 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
             setSelectedAudio('');
             setShowAudio(false);
         }
-    }, [backgroundAudioFor, nodeData]);
+
+        // Überprüfen, ob das ausgewählte Audio verwendet wird
+        if (selectedAudio) {
+            setAudioIsUsed(audioUsage[selectedAudio]);
+        } else {
+            setAudioIsUsed(false);
+        }
+    }, [backgroundAudioFor, nodeData, selectedAudio, audioUsage]);
+
+    const handleAudioChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedAudio(selectedValue);
+        updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedValue, showAudio);
+
+        // Überprüfen, ob das ausgewählte Audio verwendet wird
+        setAudioIsUsed(audioUsage[selectedValue]);
+    };
+
+    const handleSwitchChange = (event) => {
+        const isChecked = event.target.checked;
+        setShowAudio(isChecked);
+        updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedAudio, isChecked);
+    };
+
+
+    const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'background' || audio.audioCategory === 'universal');
 
     return (
         <div className='switch-background-audio-container'>
@@ -58,15 +72,16 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
                     onChange={handleAudioChange}
                     focusBorderColor='darkButtons'
                 >
-                    {audioPaths.map((audio, index) => {
-                        const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                    {filteredAudioPaths.map((audio, index) => {
+                        const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                         return (
                             <option
                                 key={index}
                                 value={audio.audioName}
-                                style={{ color: color }}
+                                style={{ backgroundColor: color }}
                             >
                                 {audio.audioName}
+                                {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                             </option>
                         );
                     })}

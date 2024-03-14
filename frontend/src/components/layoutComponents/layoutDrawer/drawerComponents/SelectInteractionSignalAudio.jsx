@@ -12,6 +12,8 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
     const [selectedAudio, setSelectedAudio] = useState(nodeData.data.interactionSignalAudio || '');
     const audioUsage = useAudioUsage(audioPaths);
 
+    const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'interaction' || audio.audioCategory === 'universal');
+
     return (
         <div className='select-interaction-signal-audio'>
             <div style={{ marginRight: '20px' }}>
@@ -23,15 +25,16 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
                         updateNodeProperty(setNodes, nodeData, 'interactionSignalAudio', event.target.value);
                     }}
                 >
-                    {audioPaths.map((audio, index) => {
-                        const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                    {filteredAudioPaths.map((audio, index) => {
+                        const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                         return (
                             <option
                                 key={index}
                                 value={audio.audioName}
-                                style={{ color: color }}
+                                style={{ backgroundColor: color }}
                             >
                                 {audio.audioName}
+                                {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                             </option>
                         )
                     })}

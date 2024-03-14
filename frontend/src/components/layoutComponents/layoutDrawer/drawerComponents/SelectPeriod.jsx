@@ -66,44 +66,10 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
   };
 
   const handleAddPeriod = () => {
-    console.log("NodeData", nodeData);
-    const numAnswerPeriods = nodeData.data.answerPeriods.length;
-    const numEdges = edges.length;
-    let lastPeriodHasEdge = null;
-
-    console.log("numAnswerPeriods !== numEdges", numAnswerPeriods, numEdges);
-
-    if ((numAnswerPeriods !== numEdges) || (numAnswerPeriods === numEdges)) {
-      lastPeriodHasEdge = true;
-    }
-
     const newPeriods = [...periods, { start: '', end: '', answer: `Insert Period ${periods.length + 1}` }];
-
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
     setPeriods(newPeriods);
-
-    if (lastPeriodHasEdge) {
-      const lastHandleId = `${nodeData.id}-handle-${periods.length}`;
-      console.log("lastHandleId", lastHandleId);
-      const edge = edges.find(edge => edge.sourceHandle === lastHandleId);
-      console.log("edge", edge);
-      if (edge) {
-        const updatedEdges = edges.map(edg => {
-          if (edg === edge) {
-            return { ...edg, sourceHandle: `${nodeData.id}-handle-${periods.length + 1}` };
-          }
-          return edg;
-        });
-
-        updatedEdges.sort((a, b) => {
-          const indexA = parseInt(a.sourceHandle.split('-').pop());
-          const indexB = parseInt(b.sourceHandle.split('-').pop());
-          return indexA - indexB;
-        });
-
-        setEdges(updatedEdges);
-      }
-    }
+    setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
   };
 
   const handlePeriodChange = (index, field, value) => {
@@ -118,21 +84,13 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
     newPeriods.splice(index, 1);
     setPeriods(newPeriods);
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
-
-    const handleIdToRemove = `${nodeData.id}-handle-${index}`;
-    const edgeToRemove = edges.find(edge => edge.sourceHandle === handleIdToRemove);
-
-    if (edgeToRemove) {
-      const updatedEdges = edges.filter(edg => edg !== edgeToRemove);
-      setEdges(updatedEdges);
-    }
-  };
-
-  const handleRemoveAnswer = (index) => {
     const newAnswerAudios = [...answerAudios];
     newAnswerAudios.splice(index, 1);
     setAnswerAudios(newAnswerAudios);
     updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
+    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+    newAnswerBackgroundAudio.splice(index, 1);
+    setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
   const handleInputBlur = (index, type) => {
@@ -141,9 +99,11 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
 
     const trimmedAudio = audio.trim();
     if (trimmedAudio === '') {
-      handleRemoveAnswer(index);
+      handleRemovePeriod(index);
     }
   };
+
+  const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'answer' || audio.audioCategory === 'universal');
 
   return (
     <div className='select-period-container'>
@@ -164,21 +124,21 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
               value={answerAudios[index] || ''}
               onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
               onBlur={() => handleInputBlur(index, 'answerAudio')}
-              focusBorderColor='darkButonns'
+              focusBorderColor='darkButtons'
               flex="7"
             >
-              {audioPaths.map((audio, idx) => {
-                const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+              {filteredAudioPaths.map((audio, idx) => {
+                const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                 return (
                   <option
                     key={idx}
                     value={audio.audioName}
-                    style={{ color: color }}
+                    style={{ backgroundColor: color }}
                   >
                     {audio.audioName}
+                    {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                   </option>
                 )
-
               })}
             </Select>
             <Spacer />

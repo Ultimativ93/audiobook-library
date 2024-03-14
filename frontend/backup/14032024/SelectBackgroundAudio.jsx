@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Switch, Select } from '@chakra-ui/react';
 
-import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
-import { useAudioUsage, updateBackgroundAudio } from '../LayoutDrawerFunctions';
+import FetchAudio from '../../src/components/tasks/editorTasks/FetchAudio';
+import { useAudioUsage, updateBackgroundAudio } from '../../src/components/layoutComponents/layoutDrawer/LayoutDrawerFunctions';
 
 const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobookTitle }) => {
     const [selectedAudio, setSelectedAudio] = useState('');

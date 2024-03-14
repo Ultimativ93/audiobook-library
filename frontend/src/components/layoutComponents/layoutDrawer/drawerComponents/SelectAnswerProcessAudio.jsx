@@ -11,6 +11,8 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     const [selectedAnswerProcessAudio, setSelectedAnswerProcessAudio] = useState(nodeData.data.answerProcessAudio || '');
     const audioUsage = useAudioUsage(audioPaths);
 
+    const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'answerProcessAudio' || audio.audioCategory === 'universal');
+
     return (
         <>
             <h4>Setlect Answer Process Audio</h4>
@@ -25,15 +27,16 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                         }}
                         focusBorderColor='darkButtons'
                     >
-                        {audioPaths.map((audio, index) => {
-                            const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                        {filteredAudioPaths.map((audio, index) => {
+                            const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                             return (
                                 <option
                                     key={index}
                                     value={audio.audioName}
-                                    style={{ color: color }}
+                                    style={{ backgroundColor: color }}
                                 >
                                     {audio.audioName}
+                                    {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                                 </option>
                             );
                         })}

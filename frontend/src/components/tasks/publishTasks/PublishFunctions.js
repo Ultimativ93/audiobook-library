@@ -128,13 +128,7 @@ export const validateNodesAndEdges = (nodes, edges) => {
     });
 
     if (invalidNodes.size > 0 || invalidEdges.length > 0) {
-        console.error("Validation failed:");
-        invalidNodes.forEach((message, nodeType) => {
-            console.error(`${nodeType}: ${message}`);
-        });
-        invalidEdges.forEach(([nodeType, message]) => {
-            console.error(`${nodeType}: ${message}`);
-        });
+        console.log("Validation failed.")
         return false;
     } else {
         console.log("Validation successful.");

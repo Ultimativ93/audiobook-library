@@ -12,6 +12,8 @@ const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
     const [selectedQuestionAudio, setSelectedQuestionAudio] = useState(nodeData.data.questionAudio || '');
     const audioUsage = useAudioUsage(audioPaths);
 
+    const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'question' || audio.audioCategory === 'universal');
+
     return (
         <div className='question-audio-container'>
             <h4>Select Question Audio</h4>
@@ -26,15 +28,16 @@ const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                         }}
                         focusBorderColor='darkButtons'
                     >
-                        {audioPaths.map((audio, index) => {
-                            const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                        {filteredAudioPaths.map((audio, index) => {
+                            const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                             return (
                                 <option
                                     key={index}
                                     value={audio.audioName}
-                                    style={{ color: color }}
+                                    style={{ backgroundColor: color }}
                                 >
                                     {audio.audioName}
+                                    {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                                 </option>
                             );
                         })}

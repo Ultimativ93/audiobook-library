@@ -14,7 +14,9 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
 
     useEffect(() => {
         setSelectedAudioStory(nodeData.data.audioStory || '');
-    }, [nodeData.data.audioStory]);
+    }, [nodeData.data.audioStory, audiobookTitle]);
+
+    const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'story' || audio.audioCategory === 'universal');
 
     return (
         <div className='select-story-audio-container'>
@@ -30,15 +32,16 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                         }}
                         focusBorderColor='darkButtons'
                     >
-                        {audioPaths.map((audio, index) => {
-                            const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                        {filteredAudioPaths.map((audio, index) => {
+                            const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                             return (
                                 <option
                                     key={index}
                                     value={audio.audioName}
-                                    style={{ color: color }}
+                                    style={{ backgroundColor: color }}
                                 >
                                     {audio.audioName}
+                                    {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                                 </option>
                             );
                         })}

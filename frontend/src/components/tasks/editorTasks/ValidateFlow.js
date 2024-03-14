@@ -35,7 +35,7 @@ const validateMuChoi = (node) => {
         }
     }
 
-    return missingData.length > 0 ? `Missing data for Multiple Choice Node with Label: ${node.data.label}: ${missingData.join(", ")}` : null;
+    return missingData.length > 0 ? `Missing data for Choice Node with Label: ${node.data.label}: ${missingData.join(", ")}` : null;
 };
 
 const validateEndNode = (node) => {
@@ -182,7 +182,7 @@ const validateMuAns = (node) => {
         }
     }
 
-    return missingData.length > 0 ? `Missing data for Multiple Answer Node ${node.data.label}: ${missingData.join(", ")}` : null;
+    return missingData.length > 0 ? `Missing data for Multiple Response Node ${node.data.label}: ${missingData.join(", ")}` : null;
 }
 
 const validateReactNode = (node) => {

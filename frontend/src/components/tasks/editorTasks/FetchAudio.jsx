@@ -13,6 +13,7 @@ const FetchAudio = (flowKey) => {
                     }
                 });
                 setAudioPaths(response.data);
+                console.log("Response.data", response.data);
             } catch (error) {
                 console.error('Error fetching audio paths:', error);
             }

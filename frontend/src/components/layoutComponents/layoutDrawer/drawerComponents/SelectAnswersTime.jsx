@@ -113,6 +113,9 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         setAnswerBackgroundAudio(newAnswerBackgroundAudio);
     };
 
+    // Filter audioPaths for 'answer' and 'universal' categories
+    const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'answer' || audio.audioCategory === 'universal');
+
     return (
         <div className='select-answers-time-container'>
             <h4 style={{ marginTop: '5px' }}>Timebased Answers</h4>
@@ -135,15 +138,16 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             flex="4"
                             focusBorderColor='darkButtons'
                         >
-                            {audioPaths.map((audio, idx) => {
-                                const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+                            {filteredAudioPaths.map((audio, idx) => {
+                                const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
                                 return (
                                     <option
                                         key={idx}
                                         value={audio.audioName}
-                                        style={{ color: color }}
+                                        style={{ backgroundColor: color }}
                                     >
                                         {audio.audioName}
+                                        {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                                     </option>
                                 )
                             })}

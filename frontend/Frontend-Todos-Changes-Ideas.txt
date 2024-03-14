@@ -174,11 +174,9 @@ ________________________________________________________________________________
 
 Nach Priorität:
             - !!!!! (1):
-                - Gelöschtes Audio, warnung wenn es nicht verknüpft ist                                                                                                                 O
-                - Verwendete Audio nicht nur mit Farbe markieren                                                                                                                        O
-                - Audios nach Art (Background/Frage) sortieren, wo verwendet, Länge, selber sortieren nach Schlagwörtern vielleicht                                                     O
+                - Gelöschtes Audio, warnung wenn es nicht verknüpft ist    -> können wir bei Publish machen, also löschen wenn nicht verwendet und gepublished wird                     O
                 - MediaManager
-                    - Name, Typ, Länge, Uploaddatum, mono/stereo (Sterep ausschließen), verknüpft oder nicht, Datein umbennenen                                                         O
+                    - Name, Typ, Länge, Uploaddatum, mono/stereo (Stereo ausschließen), verknüpft oder nicht, Datein umbennenen                                                         O
 
             - !!! (2):
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
@@ -189,9 +187,9 @@ Nach Priorität:
                 - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              O
                 - Nach Upload sollten Daten auch im Drawer angezeigt werden (refresh)                                                                                                   O
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
-                - Validation anpassen, MultipleAnswer = MultipleResponse, Muchoi = Choice                                                                                               O
 
             - ! (3):
+                - Node löschen Button                                                                                                                                                   O
                 - Drawer onClose ohne Transition.                                                                                                                                       O
                 - Undo/Redo Buttons                                                                                                                                                     O
                 - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
@@ -270,6 +268,8 @@ Erledigt:
                 - index.js routes auslagern in controller                                                                                                                               X
                 - Statt Answer 1/2 Insert Answer 1, 2                                                                                                                                   X
                 - Von Publish -> Preview Fehler anzeigen lassen / Nicht Submit solange Fehler   aufeinander velrinken Publish>Preview Preview>Publish                                   X
+                - Verwendete Audio nicht nur mit Farbe markieren                                                                                                                        X
+                - Audios nach Art (Background/Frage) sortieren, wo verwendet, Länge, selber sortieren nach Schlagwörtern vielleicht                                                     X
 
             -!!!:
                 - FetchDetails: in handleIsNewTitle abfangen das keine Leerzeichen, ,.!/ gesetzt werden könnne.                                                                         X
@@ -338,8 +338,9 @@ Erledigt:
                 - Publish Data fetchen, falls schon hochgeladen                                                                                                                         X
                 - Interne Notiz der Node                                                                                                                                                X
                 - ID Bride Added 1/2/3   Also hochzählen wenn Nodes hinzugefütgt werden im Label                                                                                        X
+                - Validation anpassen, MultipleAnswer = MultipleResponse, Muchoi = Choice                                                                                               X
 
-
+                
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X

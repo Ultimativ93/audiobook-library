@@ -145,6 +145,7 @@ const Editor = () => {
         }
     }, [nodes]);
 
+    console.log("Nodes", nodes);
 
     return (
         <div className='editor-wrapper'>

@@ -48,17 +48,8 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   };
 
   const handleInputChange = (index, value, type) => {
-    console.log("IN HANDLE INPUT CHANGE", value)
     const newAnswers = [...answers];
     const newAnswerAudios = [...answerAudios];
-    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
-
-    if (newAnswers[index] === undefined) {
-      newAnswers[index] = '';
-    }
-    if (newAnswerAudios[index] === undefined) {
-      newAnswerAudios[index] = '';
-    }
 
     if (type === 'answer') {
       newAnswers[index] = value;
@@ -82,8 +73,6 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
       }, 500);
     }
   };
-
-  console.log("nodeData", nodeData);
 
   const handleRemoveAnswer = (index) => {
     const newAnswers = [...answers];
@@ -115,6 +104,8 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
+  const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'answer' || audio.audioCategory === 'universal');
+
   return (
     <div className='select-answer-container'>
       <h4>Answers</h4>
@@ -135,17 +126,17 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
             focusBorderColor='darkButtons'
             flex="5"
-            
           >
-            {audioPaths.map((audio, idx) => {
-              const color = audioUsage[audio.audioName] ? 'green' : 'orange';
+            {filteredAudioPaths.map((audio, idx) => {
+              const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';
               return (
                 <option
                   key={idx}
                   value={audio.audioName}
-                  style={{ color: color }}
+                  style={{ backgroundColor: color }}
                 >
                   {audio.audioName}
+                  {audioUsage[audio.audioName] ? <span style={{ color: 'green', marginLeft: '10px' }}> ✓</span> : null}
                 </option>
               )
             })}

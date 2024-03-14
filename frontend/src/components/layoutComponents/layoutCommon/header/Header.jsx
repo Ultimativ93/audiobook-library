@@ -23,8 +23,6 @@ const Header = () => {
         return location.pathname === path;
     };
 
-    console.log("Is Editor Route", isEditorRoute)
-
     return (
         <div className='header-container'>
            

@@ -62,7 +62,6 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
     }, [publishData.thumbnail, graficPaths]);
 
     useEffect(() => {
-        console.log("Nodes, Edges", nodes, edges);
         const validateFlow = () => {
             const isValidated = validateNodesAndEdges(nodes, edges);
             setValidationResults(isValidated);
@@ -70,8 +69,6 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
 
         validateFlow();
     }, [nodes, edges]);
-
-    console.log("ValidationResults Hier:", validationResults);
 
     const handleInputChange = async (e, type) => {
         if (type === 'thumbnailGrafic') {

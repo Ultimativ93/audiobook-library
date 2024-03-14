@@ -79,7 +79,7 @@ const Editor = () => {
     // Callback to add a new node
     const onAdd = useCallback((nodeType) => {
         const lastNodeId = nodes.length > 0 ? nodes[nodes.length - 1].id : 0;
-        const newNode = NodeTypesDataFormat(nodeType, lastNodeId);
+        const newNode = NodeTypesDataFormat(nodeType, lastNodeId, nodes);
         setNodes((prevNodes) => prevNodes.concat(newNode));
     }, [setNodes, nodes.length]);
 
@@ -106,6 +106,10 @@ const Editor = () => {
         setSelectedNodes(ids);
         setIsNodeSelected(ids.length > 0);
         colorSelectedNodes(ids);
+
+        if (ids.includes('1')) {
+            handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodeData);
+        }
     }, []);
 
     // useEffect to handle color changes of selected nodes
@@ -122,10 +126,6 @@ const Editor = () => {
         setPreviousNodes(nodes);
         setPreviousEdges(edges);
     }, [nodes, edges, previousNodes, previousEdges]);
-
-    //console.log("nodes", nodes);
-    //console.log("edges", edges);
-    //console.log("isDrawer Open", isDrawerOpen);
 
     // Updates Nodes in Drawer
     useEffect(() => {
@@ -145,10 +145,9 @@ const Editor = () => {
         }
     }, [nodes]);
 
-    //console.log("selectedNodes", selectedNodes);
 
     return (
-        <>
+        <div className='editor-wrapper'>
                 <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
                 <LayoutEditorButtons onSave={onSave} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} onLayout={onLayout} setNodes={setNodes} setEdges={setEdges} fitView={fitView} />
 
@@ -168,7 +167,7 @@ const Editor = () => {
                 >
                     <Background />
                 </ReactFlow>
-        </>
+        </div>
     );
 };
 

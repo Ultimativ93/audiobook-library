@@ -68,7 +68,14 @@
 .modal-publish-links {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     margin: 10px 0;
+}
+
+.modal-publish-links p {
+    margin-bottom: 0;
+    margin-right: 10px;
+    margin-top: 4px;
 }
 
 .modal-publish-links Button,
@@ -85,5 +92,5 @@
 .modal-publish-description,
 .modal-publish-keywords,
 .modal-publish-audiobook-length {
-    margin-bottom: 10px; /* Hier Margin hinzugefügt */
+    margin-bottom: 10px;
 }

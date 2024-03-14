@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@chakra-ui/react';
 
 import "../../../views/player/player.css";
+
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
 const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
@@ -40,22 +41,20 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
     return (
         <>
             {visible && currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
-                <div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <p className="question">Question: {currentNodeProps.question}</p>
-                    <p>Answers: </p>
-                    <ul>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
                         {currentNodeProps.answers.map((answer, index) => (
                             <Button
-                                colorScheme={clickedAnswers.includes(answer) ? 'darkButtons' : 'highlightColor'}
-                                style={{ margin: 10 }}
                                 key={index}
+                                colorScheme={clickedAnswers.includes(answer) ? 'darkButtons' : 'highlightColor'}
                                 onClick={() => handleButtonClick(answer)}
+                                style={{ margin: '10px' }}
                             >
                                 {answer}
                             </Button>
                         ))}
-                    </ul>
-
+                    </div>
                     <Button colorScheme='highlightColor' onClick={handleSubmitCombination}>
                         Submit Combination
                     </Button>

@@ -26,7 +26,6 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             'audio/mpeg': ['.mpeg'],
             'audio/mp3': ['.mp3'],
             'audio/aac': ['.aac'],
-            'audio/wav': ['.wav'],
             'audio/ogg': ['.ogg'],
             'audio/m4a': ['.m4a'],
         },
@@ -155,7 +154,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             <Modal isOpen={isModalUploadOpen} size='5xl' onClose={() => setModalsState(prevState => ({ ...prevState, isUploadModalOpen: false }))}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Upload Data</ModalHeader>
+                    <ModalHeader>Media Manager</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <div className="layout-menu-modal-upload-wrapper">

@@ -174,22 +174,22 @@ ________________________________________________________________________________
 
 Nach Priorität:
             - !!!!! (1):
-
+                - Gelöschtes Audio, warnung wenn es nicht verknüpft ist                                                                                                                 O
+                - Verwendete Audio nicht nur mit Farbe markieren                                                                                                                        O
+                - Audios nach Art (Background/Frage) sortieren, wo verwendet, Länge, selber sortieren nach Schlagwörtern vielleicht                                                     O
+                - MediaManager
+                    - Name, Typ, Länge, Uploaddatum, mono/stereo (Sterep ausschließen), verknüpft oder nicht, Datein umbennenen                                                         O
 
             - !!! (2):
-                - OverFlow muss im Editor hidden sein, überall sonst aber nicht.                                                                                                        O
-                - UserProjects Footer am Ende der Seite, jede Seite hight mit whitespace füllen - Footer height                                                                         O
-                - Stylen des Editors, UserProjects, Home, Modals, Buttons, etc.                                                                                                         O
-                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 O
-                - Suchen nach Audio in den InputFields                                                                                                                                  O
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
                 - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
                 - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
-                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
                 - Tutorial Seite                                                                                                                                                        O
-                - Home Seite, darstellen abspielbarer Hörbücher.                                                                                                                        O
                 - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              O
+                - Nach Upload sollten Daten auch im Drawer angezeigt werden (refresh)                                                                                                   O
+                - Suchen nach Audio in den InputFields                                                                                                                                  O
+                - Validation anpassen, MultipleAnswer = MultipleResponse, Muchoi = Choice                                                                                               O
 
             - ! (3):
                 - Drawer onClose ohne Transition.                                                                                                                                       O
@@ -198,6 +198,8 @@ Nach Priorität:
                 - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
                 - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
                     belassen.
+                - LayoutMenu wird nicht mehr benötigt, da wir die Modals direkt in LayoutEditorButtons ausgelagert haben, löschen                                                       O
+                - Delete Button für Nodes hinzufügen, damit nicht nur über Tastatur gelöscht werden kann                                                                                O
                 - H4 von den DrawerComponents zu p umändern.                                                                                                                            O
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
                 - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
@@ -238,6 +240,9 @@ Nach Priorität:
                 - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
                 - OnLayout/Sort: Sollte der viewport noch 20-30px nach unten verschoben werden.                                                                                         O
                 - Umbennungen der Nodes im Code (MuChoi -> Choice, Multiple Answer -> Multiple Response)                                                                                O
+                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
+                - Statt zwei Server (Backend Frontend) nur einen Server, server so konfigurieren das nur public sichtbar ist                                                            O
+                - Statt SQLite, MySql fürs veröffentlichen benutzen, da scallable und mulituser                                                                                         O
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.                       O
@@ -259,7 +264,12 @@ Erledigt:
                 - Im Editor überschneidende Periods abfangen, oder zumindest nochmal bedenken ob wir das gut finden oder nicht                                                          X
                 - Abfangen dass ein Projektname nicht doppelt vorkommen darf, leer sein darf, keine Sonderzeichen.                                                                      X
                 - Beim erstellen eines neuen Projekts, sollte auch der Title an den Editor weitergegeben werden, sonnst fehler.                                                         X
-
+                - Arrange statt sort -> umbennenen                                                                                                                                      X
+                - Knoten erzeugen Button auf Editor Fläche auslagern                                                                                                                    X
+                - Menu Button in Headerleiste entfernen, Menü überall gleich                                                                                                            X
+                - index.js routes auslagern in controller                                                                                                                               X
+                - Statt Answer 1/2 Insert Answer 1, 2                                                                                                                                   X
+                - Von Publish -> Preview Fehler anzeigen lassen / Nicht Submit solange Fehler   aufeinander velrinken Publish>Preview Preview>Publish                                   X
 
             -!!!:
                 - FetchDetails: in handleIsNewTitle abfangen das keine Leerzeichen, ,.!/ gesetzt werden könnne.                                                                         X
@@ -320,6 +330,16 @@ Erledigt:
                     abgespielt werden können. 
                 - Sortieren eines unaufgeräumten flows durch Button press                                                                                                               X
                 - Namen der Nodes wie gewünscht ändern , also MuChoi zu Choice etc.                                                                                                     X
+                - OverFlow muss im Editor hidden sein, überall sonst aber nicht.                                                                                                        X
+                - UserProjects Footer am Ende der Seite, jede Seite hight mit whitespace füllen - Footer height                                                                         X
+                - Stylen des Editors, UserProjects, Home, Modals, Buttons, etc.                                                                                                         X
+                - Stylen des Players, Question, Antworten, Buttons etc.                                                                                                                 X
+                - Home Seite, darstellen abspielbarer Hörbücher.                                                                                                                        X
+                - Publish Data fetchen, falls schon hochgeladen                                                                                                                         X
+                - Interne Notiz der Node                                                                                                                                                X
+                - ID Bride Added 1/2/3   Also hochzählen wenn Nodes hinzugefütgt werden im Label                                                                                        X
+
+
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X

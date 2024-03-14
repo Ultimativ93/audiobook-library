@@ -1,3 +1,8 @@
+.editor-wrapper {
+  min-height: 900px;
+  height: 100%;
+}
+
 .react-flow__node {
   background-color: #616153;
   border-radius: 4px;

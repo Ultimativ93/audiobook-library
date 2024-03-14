@@ -23,6 +23,8 @@ const SelectNodeLabel = ({ nodeData, setNodes }) => {
         }
     };
 
+    console.log("nodeLable", nodeData)
+
     return (
         <div className='select-node-label-container'>
             <h4>Select Node Label</h4>

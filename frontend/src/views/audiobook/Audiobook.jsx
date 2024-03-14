@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Image } from '@chakra-ui/react';
-import { useFetcher, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Image, Link } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+import Player from '../player/Player';
 
 import './audiobook.css';
 
 import { fetchValidatedFlow } from '../../components/tasks/audiobookTasks/AudiobookFunctions';
 import { handleGetDetails } from '../../components/tasks/setupTasks/FetchDetails';
 import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
-import Player from '../player/Player';
 
 const Audiobook = () => {
     const [validatedFlow, setValidatedFlow] = useState({});
     const [flowDetails, setFlowDetails] = useState({});
     const [thumbnailImage, setThumbnailImage] = useState({});
+    const [showFullDescription, setShowFullDescription] = useState(false);
+    const [descriptionHeight, setDescriptionHeight] = useState(9999);
+    const descriptionRef = useRef(null);
 
     const { audiobookTitle } = useParams();
 
@@ -57,45 +60,43 @@ const Audiobook = () => {
         fetchedThumbnail();
     }, [validatedFlow.thumbnail]);
 
+    useEffect(() => {
+        if (descriptionRef.current && !showFullDescription) {
+            setDescriptionHeight(descriptionRef.current.clientHeight);
+        }
+    }, [descriptionRef, showFullDescription]);
+
+    const handleToggleDescription = () => {
+        setShowFullDescription(!showFullDescription);
+    };
+
     console.log("validatedFlow, flowDetails:", validatedFlow, flowDetails);
 
     return (
         <div className='audiobook-wrapper'>
             <div className="details-image-container">
-                <div className="details-container">
-                    <h2>Audiobook Details</h2>
-                    <ul>
-                        <li>
-                            <strong>Title:</strong> {flowDetails.title}
-                        </li>
-                        <li>
-                            <strong>Author:</strong> {flowDetails.author}
-                        </li>
-                        <li>
-                            <strong>Category:</strong> {flowDetails.category}
-                        </li>
-                        <li>
-                            <strong>Description:</strong> {flowDetails.description}
-                        </li>
-                        {flowDetails.contributors && (
-                            <li>
-                                <strong>Contributors:</strong> {flowDetails.contributors.map(contributor => `${contributor.name} (${contributor.role})`).join(', ')}
-                            </li>
-                        )}
-                        <li>
-                            <strong>Length:</strong> {validatedFlow.length}
-                        </li>
-                        <li>
-                            <strong>Number of Nodes:</strong> {validatedFlow.flowData && JSON.parse(validatedFlow.flowData).nodes.length}
-                        </li>
-                    </ul>
-                </div>
                 <div className="image-container">
                     <Image
                         className='audiobook-image'
                         src={thumbnailImage}
                         alt={`Thumbnailimage-${validatedFlow.title || validatedFlow.flowKey}`}
                     />
+                </div>
+                <div className="details-container">
+                    <h1>{flowDetails.title} (2024)</h1>
+                    <p><strong>Author:</strong> {flowDetails.author}</p>
+                    <p><strong>Category:</strong> <Link to={`/category/${flowDetails.category}`}>{flowDetails.category}</Link></p>
+                    {flowDetails.contributors && (
+                        <p><strong>Contributors:</strong> {flowDetails.contributors.map(contributor => `${contributor.name} (${contributor.role})`).join(', ')}</p>
+                    )}
+                    <p><strong>Length:</strong> {validatedFlow.length}</p>
+                    <p><strong>Number of Nodes:</strong> {validatedFlow.flowData && JSON.parse(validatedFlow.flowData).nodes.length}</p>
+                    <div ref={descriptionRef} textAlign='left'>
+                        <strong>Description:</strong>
+                        {showFullDescription ? flowDetails.description : (flowDetails.description && flowDetails.description.slice(0, 150))}
+                        {!showFullDescription && <button color='lightblue' onClick={handleToggleDescription}>... More</button>}
+                        {showFullDescription && <button color='lightblue' onClick={handleToggleDescription}> Show less</button>}
+                    </div>
                 </div>
             </div>
             <div className="player-container">

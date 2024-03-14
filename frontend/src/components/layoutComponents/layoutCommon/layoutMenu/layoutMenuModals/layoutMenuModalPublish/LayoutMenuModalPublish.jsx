@@ -5,6 +5,7 @@ import './layout-menu-modal-publish.css';
 
 import LinkUpload from '../../../../layoutDrawer/drawerComponents/LinkUpload';
 import LinkSetup from '../../layoutMenuComponents/LinkSetup';
+import LinkPreview from '../../layoutMenuComponents/LinkPreview';
 
 import { handleGetDetails, handleChangeDetails } from '../../../../../tasks/setupTasks/FetchDetails';
 import { fetchThumbnail, fetchThumbnailImage, validateNodesAndEdges, uploadValidatedFlow, getValidatedFlowTitle } from '../../../../../tasks/publishTasks/PublishFunctions';
@@ -14,9 +15,9 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
     const [graficPaths, setGraficPaths] = useState([]);
     const [thumbnailImage, setThumbnailImage] = useState(null);
     const [isDescriptionTooLong, setIsDescriptionTooLong] = useState(false);
-    const [validated, setValidated] = useState(false);
     const [keywordValidation, setKeywordValidation] = useState(false);
     const [isWrongTitle, setIsWrongTitle] = useState(false);
+    const [validationResults, setValidationResults] = useState({ nodes: [], edges: [] });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,8 +62,16 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
     }, [publishData.thumbnail, graficPaths]);
 
     useEffect(() => {
-        setValidated(false);
-    }, [publishData]);
+        console.log("Nodes, Edges", nodes, edges);
+        const validateFlow = () => {
+            const isValidated = validateNodesAndEdges(nodes, edges);
+            setValidationResults(isValidated);
+        };
+
+        validateFlow();
+    }, [nodes, edges]);
+
+    console.log("ValidationResults Hier:", validationResults);
 
     const handleInputChange = async (e, type) => {
         if (type === 'thumbnailGrafic') {
@@ -108,25 +117,22 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
         }
 
         if (!publishData.length) {
-            alert('Please set a approximately length');
+            alert('Please set an approximate length');
             return;
         }
 
         if (!publishData.keywords) {
-            alert('Please set at leat 5 keywords');
+            alert('Please set at least 5 keywords');
             return;
         }
 
-        const isValidated = validateNodesAndEdges(nodes, edges);
-
-        if (!isValidated) {
+        if (validationResults.nodes.length > 0 || validationResults.edges.length > 0) {
             alert('Please check the validation of your Audiobook in "Preview".')
             return;
         }
 
-        if (publishData.thumbnail && publishData.description && publishData.length && publishData.keywords && isValidated) {
+        if (publishData.thumbnail && publishData.description && publishData.length && publishData.keywords && validationResults.nodes.length === 0 && validationResults.edges.length === 0) {
             uploadValidatedFlow(audiobookTitle, rfInstance, publishData.thumbnail, publishData.description, publishData.length, publishData.keywords, publishData.title);
-            setValidated(true);
         }
     }
 
@@ -220,15 +226,18 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                     <div className="modal-publish-links">
                         <LinkUpload />
                         <LinkSetup />
+                        {!validationResults && (
+                            <>
+                                <p style={{ color: 'red', justifyContent: 'center', alignContent: 'center' }}>The audiobook is still faulty. Please check the validation in the preview.</p>
+                                <LinkPreview />
+                            </>
+                        )}
                     </div>
 
                     <div className="modal-publish-submit">
-                        <Button colorScheme='highlightColor' onClick={() => handleSubmit()}>Submit</Button>
+                        <Button colorScheme={!validationResults ? 'gray' : 'highlightColor'} onClick={() => handleSubmit()} isDisabled={!validationResults}>Submit</Button>
                         <Button colorScheme='darkButtons'>Cancel</Button>
                     </div>
-                    {validated && (
-                        <p>Flow successfully submitted!</p>
-                    )}
                 </ModalBody>
             </ModalContent>
         </Modal>

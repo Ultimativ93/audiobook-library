@@ -17,7 +17,7 @@ const LinkUpload = () => {
 
   return (
     <div>
-      <Button rightIcon={<DownloadIcon />} colorScheme="lightButtons" size="sm" mt="2" onClick={openUploadModal}>Upload Data</Button>
+      <Button rightIcon={<DownloadIcon />} colorScheme="lightButtons" size="sm" mt="2" onClick={openUploadModal}>Media Manager</Button>
     </div>
   );
 };

@@ -19,7 +19,7 @@ class Database {
     initialize() {
         this.db.serialize(() => {
             // Creating table audioPaths
-            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT, audiobookTitle TEXT)', (err) => {
+            this.db.run('CREATE TABLE IF NOT EXISTS audioPaths (id INTEGER PRIMARY KEY, audioPath TEXT, audioName TEXT, audiobookTitle TEXT,  audioType TEXT)', (err) => {
                 if (err) {
                     console.log('Error while creating table audioFiles: ', err);
                 } else {

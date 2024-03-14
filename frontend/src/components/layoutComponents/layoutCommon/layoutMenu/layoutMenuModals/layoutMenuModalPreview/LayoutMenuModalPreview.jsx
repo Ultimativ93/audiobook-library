@@ -6,6 +6,7 @@ import './layout-menu-modal-preview.css';
 import Player from '../../../../../../views/player/Player';
 import { fetchFlow } from '../../../../../tasks/editorTasks/FetchFlow';
 import { validateMuChoi, validateEndNode, validateBridgeNode, validateTimeNode, validateMuAns, validateReactNode, validateInputNode, validateEdgeMuChoi, validateEdgeEndNode, validateEdgeBridgeNode, validateEdgeTimeNode, validateEdgeMuAns, validateEdgeReactNode, validateEdgeInputNode, validateEdgeStart } from '../../../../../tasks/editorTasks/ValidateFlow';
+import LinkPublish from '../../layoutMenuComponents/LinkPublish';
 
 const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookTitle, selectedNodes }) => {
     const [flowToCheck, setFlowToCheck] = useState();
@@ -13,6 +14,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
     const [playable, setPlayable] = useState(false);
 
     useEffect(() => {
+        setPlayable(false);
         const fetchData = async () => {
             if (audiobookTitle !== 'null' && audiobookTitle !== undefined) {
                 try {
@@ -101,8 +103,6 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
         element.click();
     };
 
-    console.log("ValidationResults", validationResults.nodes.length)
-
     return (
         <Modal isOpen={isPreviewModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPreviewModalOpen: false }))} size="5xl">
             <ModalOverlay />
@@ -141,8 +141,12 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                     {playable && (
                         <div className="player-container">
                             <Player selectedNodes={selectedNodes} />
+                            <LinkPublish />
+                            <p style={{ textAlign: 'center' }}>The audiobook is now ready for publishing.</p>
                         </div>
                     )}
+
+
 
                 </ModalBody>
             </ModalContent>

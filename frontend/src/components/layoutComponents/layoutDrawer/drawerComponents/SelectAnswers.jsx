@@ -37,7 +37,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   const handleAddAnswer = () => {
     const lastAnswer = answers[answers.length - 1];
     if (lastAnswer !== '') {
-      const newAnswer = `Answer ${answers.length + 1}`;
+      const newAnswer = `Insert Answer ${answers.length + 1}`;
       const updatedAnswers = [...answers, newAnswer];
       setAnswers(updatedAnswers);
       setAnswerAudios([...answerAudios, '']);

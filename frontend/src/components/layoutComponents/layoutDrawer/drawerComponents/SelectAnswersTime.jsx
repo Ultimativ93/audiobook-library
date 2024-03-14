@@ -18,7 +18,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     }, [nodeData])
 
     const handleAddAnswer = () => {
-        const newAnswer = { answer: `Answer ${answers.length + 1}`, time: '' };
+        const newAnswer = { answer: `Insert Answer ${answers.length + 1}`, time: '' };
         const updatedAnswers = [...answers, newAnswer];
         setAnswers(updatedAnswers);
         updateNodeProperty(setNodes, nodeData, 'answers', updatedAnswers);

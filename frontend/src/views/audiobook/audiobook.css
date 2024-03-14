@@ -2,15 +2,16 @@
     min-height: 90vh;
     background-color: #f9f9f9;
     display: flex;
-    flex-direction: column; /* Layout in Spaltenanordnung */
-    align-items: center; /* Horizontal zentrieren */
-    margin: 20px;
+    flex-direction: column;
+    align-items: center;
 }
 
 .details-image-container {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
+    height: auto;
+    margin-top: 30px;
 }
 
 .details-container {
@@ -18,49 +19,60 @@
     height: auto;
     padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
     overflow-y: auto;
 }
 
-.details-container h2 {
-    margin-bottom: 20px;
-    font-size: 1.8rem;
-    color: #333;
-}
-
-.details-container ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.details-container li {
+.details-container h1 {
     margin-bottom: 10px;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
+    color: #333;
+    text-align: left;
+}
+
+.details-container p {
+    margin-bottom: 5px;
+    font-size: 1rem;
     color: #555;
     text-align: left;
 }
 
-.details-container li strong {
+.details-container p strong {
     font-weight: bold;
 }
 
+.details-container p:last-child {
+    margin-top: 5px;
+}
+
+.details-container p:nth-child(4) {
+    color: #303030;
+}
+
+.details-container button {
+    color: rgb(59, 59, 255);
+}
+
 .image-container {
-    width: 45%;
-    height: auto;
-    max-height: 80vh;
+    width: 300px;
+    height: 300px;
     overflow: hidden;
+    margin-bottom: auto;
 }
 
 .audiobook-image {
     width: 100%;
     height: auto;
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
 }
 
-.player-container {
+.audiobook-wrapper .player-container {
     width: 60%;
     height: 100% !important;
     margin-top: 20px;

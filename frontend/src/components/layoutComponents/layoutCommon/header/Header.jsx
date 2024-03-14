@@ -1,4 +1,3 @@
-// Header.js
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
@@ -7,7 +6,7 @@ import './header.css';
 
 const Header = () => {
     const location = useLocation();
-    const [isEditorRoute, setIsEditorRoute] = useState(false);
+    const [isEditorRoute, setIsEditorRoute] = useState();
 
     useEffect(() => {
         setIsEditorRoute(location.pathname.includes("/editor"));
@@ -24,9 +23,11 @@ const Header = () => {
         return location.pathname === path;
     };
 
+    console.log("Is Editor Route", isEditorRoute)
+
     return (
         <div className='header-container'>
-            {!isEditorRoute && (
+           
                 <div className='header-content'>
 
                     <Button className="logo-button-container" colorScheme="highlightColor" borderRadius={'2px'} size="sm">
@@ -53,13 +54,12 @@ const Header = () => {
                         <Button className={isActiveRoute("/team") ? 'active' : ''} colorScheme='transparent'>Team</Button>
                     </Link>
 
-                    {(location.pathname.includes("/user-projects") || location.pathname.includes("/tutorials")) && (
+                    {(location.pathname.includes("/user-projects") || location.pathname.includes("/tutorials") || location.pathname.includes("/editor")) && (
                         <Link className='header-tutorials' to="/tutorials">
                             <Button className={isActiveRoute("/tutorials") ? 'active' : ''} colorScheme='transparent'>Tutorials</Button>
                         </Link>
                     )}
                 </div>
-            )}
         </div>
     );
 };

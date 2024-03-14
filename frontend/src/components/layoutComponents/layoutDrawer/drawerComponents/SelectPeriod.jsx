@@ -77,12 +77,10 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
       lastPeriodHasEdge = true;
     }
 
-    const newPeriods = [...periods, { start: '', end: '', answer: `Period ${periods.length + 1}` }];
+    const newPeriods = [...periods, { start: '', end: '', answer: `Insert Period ${periods.length + 1}` }];
 
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
     setPeriods(newPeriods);
-
-    console.log("lastperiodHasEdge", lastPeriodHasEdge);
 
     if (lastPeriodHasEdge) {
       const lastHandleId = `${nodeData.id}-handle-${periods.length}`;

@@ -1,15 +1,28 @@
-const NodeTypesDataFormat = (nodeType, ids) => {
-
-    console.log("In nodeTypeDataFormat ids: ", ids)
-    const asignId = parseInt(ids, 10) + 1;
-
+const NodeTypesDataFormat = (nodeType, ids, nodes) => {
     const inputSelections = {
         mouse: '', touch: '', speak: '', keyboard: '', shake: ''
-    }
+    };
 
     const commonAttributes = {
-        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudio: [],
-    }
+        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudio: [], note: '', 
+    };
+
+    const getLastCount = () => {
+        let lastCount = 0;
+        nodes.forEach(node => {
+            if (node.type === nodeType) {
+                const labelParts = node.data.label.split(' ');
+                const nodeCount = parseInt(labelParts[labelParts.length - 1]);
+                if (!isNaN(nodeCount) && nodeCount > lastCount) {
+                    lastCount = nodeCount;
+                }
+            }
+        });
+        return lastCount;
+    };
+
+    let count = getLastCount() + 1;
+    const asignId = parseInt(ids, 10) + 1;
 
     const generateNodeTypeData = (type, customData = {}) => {
         switch (type) {
@@ -22,8 +35,8 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                         ...commonAttributes,
                         ...customData,
                         inputSelections,
-                        label: 'Choice Added',
-                        answers: ["Answer 1", "Answer 2"],
+                        label: `Choice ${count++}`,
+                        answers: ["Insert Answer 1", "Insert Answer 2"],
                         answerAudios: [],
                         id: String(asignId),
                     }
@@ -37,7 +50,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     data: {
                         ...commonAttributes,
                         ...customData,
-                        label: 'Bridge Added',
+                        label: `Bridge ${count++}`,
                         id: String(asignId),
                     }
                 };
@@ -49,17 +62,17 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     position: { x: 100, y: 300 },
                     data: {
                         ...commonAttributes,
-                        label: 'Time Added',
+                        label: `Time ${count++}`,
                         answers: [
-                            { answer: "Answer 1", time: "" },
-                            { answer: "Answer 2", time: "" }
+                            { answer: "Insert Answer 1", time: "" },
+                            { answer: "Insert Answer 2", time: "" }
                         ],
                         answerAudios: [],
                         answerProcessAudio: '',
                         answerProcessAudioLength: '',
                         id: String(asignId),
                     }
-                }
+                };
             case 'muAns':
                 console.log('in muAns');
                 return {
@@ -68,8 +81,8 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     position: { x: 100, y: 350 },
                     data: {
                         ...commonAttributes,
-                        label: 'Multiple Response Added',
-                        answers: ["Answer 1", "Answer 2"],
+                        label: `Multiple Response ${count++}`,
+                        answers: ["Insert Answer 1", "Insert Answer 2"],
                         answerAudios: [],
                         answerCombinations: [],
                         id: String(asignId),
@@ -83,9 +96,9 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     position: { x: 100, y: 375 },
                     data: {
                         ...commonAttributes,
-                        label: 'Reaction Added',
+                        label: `Reaction ${count++}`,
                         answerPeriods: [
-                            { start: '00:00', end: '00:00', answer: 'Answer 1' },
+                            { start: '00:00', end: '00:00', answer: 'Insert Period 1' },
                         ],
                         answerProcessAudio: '',
                         answerProcessAudioLength: '',
@@ -100,11 +113,11 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     position: { x: 100, y: 390 },
                     data: {
                         ...commonAttributes,
-                        label: 'Input Added',
+                        label: `Input ${count++}`,
                         correctAnswer: '',
                         id: String(asignId),
                     },
-                }
+                };
             case 'dialogNode':
                 console.log('in dialogNode');
                 return {
@@ -115,7 +128,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     groupType: 'dialog',
                     data: {
                         ...commonAttributes,
-                        label: 'Dialog Added',
+                        label: `Dialog ${count++}`,
                         id: String(asignId),
                     }
                 };
@@ -127,7 +140,7 @@ const NodeTypesDataFormat = (nodeType, ids) => {
                     position: { x: 100, y: 500 },
                     data: {
                         ...commonAttributes,
-                        label: 'End Added',
+                        label: `Ending ${count++}`,
                         id: String(asignId),
                         isEnd: 'true',
                     }
@@ -138,6 +151,6 @@ const NodeTypesDataFormat = (nodeType, ids) => {
     };
 
     return generateNodeTypeData(nodeType);
-}
+};
 
 export default NodeTypesDataFormat;

@@ -248,11 +248,11 @@ const Player = ({ selectedNodes }) => {
           console.log("All answer audios played.");
         }
       } else {
-        console.log("Trying to play next answer questionPlayed: ", questionAudioPlayed, currentNodeProps);
+        console.log("Trying to play next answer questionPlayed: ", questionAudioPlayed, currentNodeProps, targetNodeType);
         // If is not an end, play answers, question and interaction Signal
         if (currentNodeProps.isEnd !== 'true') {
           // Play next answer audio
-          if (targetNodeType !== 'bridgeNode' || (!answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
+          if ((targetNodeType !== 'bridgeNode' && targetNodeType !== 'muChoi') && (!answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {
             console.log("playAnswerProcessAudio");
             playAnswerProcessAudio()
           } else if (targetNodeType === 'bridgeNode' || (answerProcessAudioPlayed && (questionAudioPlayed && (targetNodeType === 'reactNode' || targetNodeType === 'timeNode')))) {

@@ -83,7 +83,7 @@ const Audiobook = () => {
                     />
                 </div>
                 <div className="details-container">
-                    <h1>{flowDetails.title} (2024)</h1>
+                    <h1>{validatedFlow.title || flowDetails.title} (2024)</h1>
                     <p><strong>Author:</strong> {flowDetails.author}</p>
                     <p><strong>Category:</strong> <Link to={`/category/${flowDetails.category}`}>{flowDetails.category}</Link></p>
                     {flowDetails.contributors && (

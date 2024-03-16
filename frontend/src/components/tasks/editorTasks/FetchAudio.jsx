@@ -1,29 +1,18 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const FetchAudio = (flowKey) => {
-    const [audioPaths, setAudioPaths] = useState([]);
-
-    useEffect(() => {
-        const fetchAudioPaths = async () => {
-            try {
-                const response = await axios.get('http://localhost:3005/audioPaths', {
-                    params: {
-                        audiobookTitle: flowKey
-                    }
-                });
-                setAudioPaths(response.data);
-                console.log("Response.data", response.data);
-            } catch (error) {
-                console.error('Error fetching audio paths:', error);
+const FetchAudio = async (flowKey) => {
+    try {
+        const response = await axios.get('http://localhost:3005/audioPaths', {
+            params: {
+                audiobookTitle: flowKey
             }
-        };
-
-        fetchAudioPaths();
-    }, [flowKey]);
-
-    return audioPaths;
+        });
+        console.log("AudioPaths in FetchAudio", response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching audio paths:', error);
+        return [];
+    }
 };
-
 
 export default FetchAudio;

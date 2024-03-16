@@ -11,10 +11,12 @@ router.post('/upload', async (ctx) => {
     console.log('Uploaded files:', ctx.request.files);
     console.log('Audiobook Name in Backend: ', ctx.request.body.audiobookTitle)
     console.log('Category in Backend: ', ctx.request.body.category)
+    console.log('Upload Date: ', ctx.request.body.uploadDate)
 
     const files = ctx.request.files && (Array.isArray(ctx.request.files.files) ? ctx.request.files.files : [ctx.request.files.files]);
     const audiobookTitle = ctx.request.body.audiobookTitle;
     const category = ctx.request.body.category;
+    const uploadDate = ctx.request.body.uploadDate;
     if (files && files.length > 0) {
         try {
             const databaseResponses = [];
@@ -24,7 +26,7 @@ router.post('/upload', async (ctx) => {
 
                 const fileName = file.originalFilename;
 
-                const databaseResponse = await db.addFilePath(file.filepath, fileName, audiobookTitle, category);
+                const databaseResponse = await db.addFilePath(file.filepath, fileName, audiobookTitle, category, uploadDate);
                 databaseResponses.push(databaseResponse);
             }
 
@@ -232,10 +234,10 @@ router.post('/saveAudiobookDetails', async (ctx) => {
 
 router.post('/deleteFile', async (ctx) => {
     const { file, audiobookTitle } = ctx.request.body;
-    console.log("Deleting file:", file, "for audiobookTitle:", audiobookTitle);
+    console.log("Deleting file:", file.name, "for audiobookTitle:", audiobookTitle);
 
     try {
-        const filePath = await db.getFilePath(file);
+        const filePath = await db.getFilePath(file.name, audiobookTitle);
 
         if (!filePath) {
             console.error('File not found in the database:', file);
@@ -246,7 +248,7 @@ router.post('/deleteFile', async (ctx) => {
 
         fs.unlinkSync(filePath);
 
-        await db.deleteFilePath(file);
+        await db.deleteFilePath(file.name, audiobookTitle);
 
         console.log('File deleted successfully:', file);
         ctx.status = 200;
@@ -363,10 +365,11 @@ router.get('/getAllDetails', async (ctx) => {
 })
 
 router.get('/getAudioName', async (ctx) => {
-    const { audioName } = ctx.request.query;
+    const { audioName, audiobookTitle } = ctx.request.query;
+    console.log("audioName in getAudioName, audiobookTitle", audioName, audiobookTitle)
 
     try {
-        const audioNameFromPath = await db.getFilePath(audioName);
+        const audioNameFromPath = await db.getFilePath(audioName, audiobookTitle);
         if (audioNameFromPath) {
             ctx.status = 200;
             ctx.body = audioNameFromPath;
@@ -422,6 +425,27 @@ router.get('/getAudiobookDetails', async (ctx) => {
     }
 });
 
+router.post('/changeAudioName', async (ctx) => {
+    const { audiobookTitle, audioName, newAudioName } = ctx.request.body;
+    console.log("Audiobook Title in changeAudioName, audioName", audiobookTitle, audioName);
+    try {
+        const changedName = await db.changeAudioName(audiobookTitle, audioName, newAudioName)
+
+        if (changedName) {
+            ctx.status = 200;
+            ctx.body = changedName;
+        } else {
+            console.warn('No audioName found for the audiobookTitle and audioName', audiobookTitle, audioName)
+            ctx.status = 404;
+            ctx.body = `No audioName found for the audiobookTitle and audioName ${audiobookTitle}, ${audioName}`
+        }
+    } catch (error) {
+        console.error('Error changing audioName in changeAudioName', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error'
+    }
+})
+
 router.post('/changeDetails', async (ctx) => {
     const { audiobookDetails, audiobookTitle } = ctx.request.body;
     console.log("Audiobook Title in changeDetails:", audiobookTitle);
@@ -444,9 +468,9 @@ router.post('/changeDetails', async (ctx) => {
 })
 
 router.get('/getGraphicName', async (ctx) => {
-    const { graphicName } = ctx.request.query;
+    const { graphicName, audiobookTitle } = ctx.request.query;
     try {
-        const graphicPath = await db.getFilePath(graphicName);
+        const graphicPath = await db.getFilePath(graphicName, audiobookTitle);
         if (graphicPath) {
             ctx.status = 200;
             ctx.body = graphicPath;

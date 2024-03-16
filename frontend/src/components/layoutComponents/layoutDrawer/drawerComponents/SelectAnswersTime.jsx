@@ -10,12 +10,21 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
     const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
     const timeoutRef = useRef(null);
-    const audioPaths = FetchAudio(audiobookTitle);
+    const [audioPaths, setAudioPaths] = useState([]);
     const audioUsage = useAudioUsage(audioPaths);
 
     useEffect(() => {
-        setAnswers(nodeData.data.answers)
-    }, [nodeData])
+        const fetchAudioPaths = async () => {
+            const paths = await FetchAudio(audiobookTitle);
+            setAudioPaths(paths);
+        };
+
+        fetchAudioPaths();
+    }, [audiobookTitle]);
+
+    useEffect(() => {
+        setAnswers(nodeData.data.answers);
+    }, [nodeData]);
 
     const handleAddAnswer = () => {
         const newAnswer = { answer: `Insert Answer ${answers.length + 1}`, time: '' };
@@ -50,8 +59,6 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     };
 
     const handleInputChange = (index, value, type) => {
-        console.log("wir setzen ein neues Audio: ", value, audioUsage)
-
         const newAnswers = [...answers];
         const newAnswerAudios = [...answerAudios];
 
@@ -95,7 +102,6 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
             updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
         }
     };
-
 
     const handleInputBlur = (index, type) => {
         const answerValue = type === 'answer' ? answers[index]?.answer : answerAudios[index];

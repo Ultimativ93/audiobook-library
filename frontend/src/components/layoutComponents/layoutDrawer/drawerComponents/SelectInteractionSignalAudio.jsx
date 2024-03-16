@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select } from '@chakra-ui/react';
 
 import './drawer-components.css';
@@ -8,9 +8,18 @@ import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 
 const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) => {
-    const audioPaths = FetchAudio(audiobookTitle);
-    const [selectedAudio, setSelectedAudio] = useState(nodeData.data.interactionSignalAudio || '');
+    const [audioPaths, setAudioPaths] = useState([]);
     const audioUsage = useAudioUsage(audioPaths);
+    const [selectedAudio, setSelectedAudio] = useState(nodeData.data.interactionSignalAudio || '');
+
+    useEffect(() => {
+        const fetchAudioPaths = async () => {
+            const paths = await FetchAudio(audiobookTitle);
+            setAudioPaths(paths);
+        };
+
+        fetchAudioPaths();
+    }, [audiobookTitle]);
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'interaction' || audio.audioCategory === 'universal');
 

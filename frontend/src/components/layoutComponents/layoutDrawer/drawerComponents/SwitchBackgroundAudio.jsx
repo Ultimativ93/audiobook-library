@@ -9,9 +9,18 @@ import { useAudioUsage, updateBackgroundAudio } from '../LayoutDrawerFunctions';
 const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobookTitle }) => {
     const [selectedAudio, setSelectedAudio] = useState('');
     const [showAudio, setShowAudio] = useState(false);
-    const audioPaths = FetchAudio(audiobookTitle);
+    const [audioPaths, setAudioPaths] = useState([]);
     const audioUsage = useAudioUsage(audioPaths);
-    const [audioIsUsed, setAudioIsUsed] = useState(false); // Zustand für die Anzeige des Hakens
+    const [audioIsUsed, setAudioIsUsed] = useState(false);
+
+    useEffect(() => {
+        const fetchAudioPaths = async () => {
+            const paths = await FetchAudio(audiobookTitle);
+            setAudioPaths(paths);
+        };
+
+        fetchAudioPaths();
+    }, [audiobookTitle]);
 
     useEffect(() => {
         if (nodeData.data && Array.isArray(nodeData.data.backgroundAudio)) {
@@ -28,7 +37,6 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
             setShowAudio(false);
         }
 
-        // Überprüfen, ob das ausgewählte Audio verwendet wird
         if (selectedAudio) {
             setAudioIsUsed(audioUsage[selectedAudio]);
         } else {
@@ -40,8 +48,6 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
         const selectedValue = event.target.value;
         setSelectedAudio(selectedValue);
         updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedValue, showAudio);
-
-        // Überprüfen, ob das ausgewählte Audio verwendet wird
         setAudioIsUsed(audioUsage[selectedValue]);
     };
 

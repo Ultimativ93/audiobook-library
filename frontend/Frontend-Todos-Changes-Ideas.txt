@@ -174,9 +174,10 @@ ________________________________________________________________________________
 
 Nach Priorität:
             - !!!!! (1):
-                - Gelöschtes Audio, warnung wenn es nicht verknüpft ist    -> können wir bei Publish machen, also löschen wenn nicht verwendet und gepublished wird                     O
                 - MediaManager
-                    - Name, Typ, Länge, Uploaddatum, mono/stereo (Stereo ausschließen), verknüpft oder nicht, Datein umbennenen                                                         O
+                    - Name X, Typ X, Länge X, Uploaddatum, mono/stereo (Stereo ausschließen) X, verknüpft oder nicht X, Dateien umbennenen                                              O
+                - Loop Background Audio, mit Hinweis im Tutorial                                                                                                                        O    
+                - Wir wollten gerade nach dem Datum sortieren im LayoutMenuModalUpload                                                                                                  O
 
             - !!! (2):
                 - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
@@ -270,6 +271,13 @@ Erledigt:
                 - Von Publish -> Preview Fehler anzeigen lassen / Nicht Submit solange Fehler   aufeinander velrinken Publish>Preview Preview>Publish                                   X
                 - Verwendete Audio nicht nur mit Farbe markieren                                                                                                                        X
                 - Audios nach Art (Background/Frage) sortieren, wo verwendet, Länge, selber sortieren nach Schlagwörtern vielleicht                                                     X
+                - DataManager: show grafic und show audio funktionieren nicht mehr.                                                                                                     X
+                - Gelöschtes Audio, warnung wenn es nicht verknüpft ist    -> können wir bei Publish machen, also löschen wenn nicht verwendet und gepublished wird                     X
+                - AudioLength in Reaction und Time funktionieren jetzt wieder nicht                                                                                                     X
+                - isAudioUsed führt zu einer Dauerschleife, ruft durchgehen fetchFlow auf, wodurch wir enorm viel Speicher nutzen.                                                      X
+                - Gerade alle Daten gelöscht um zu gucken was wir dann für Fehler bekommen und es sind einige im MediaManager                                                           X
+                - Audios lassen sich gerade wieder nicht anwählen im Data Upload/DataManager                                                                                            X
+
 
             -!!!:
                 - FetchDetails: in handleIsNewTitle abfangen das keine Leerzeichen, ,.!/ gesetzt werden könnne.                                                                         X
@@ -340,9 +348,7 @@ Erledigt:
                 - ID Bride Added 1/2/3   Also hochzählen wenn Nodes hinzugefütgt werden im Label                                                                                        X
                 - Validation anpassen, MultipleAnswer = MultipleResponse, Muchoi = Choice                                                                                               X
 
-                
+
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X
-
-

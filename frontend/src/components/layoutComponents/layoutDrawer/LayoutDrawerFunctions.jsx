@@ -64,7 +64,6 @@ const updateAnswerCombination = (setNodes, nodeData, updatedCombination) => {
     setNodes((prevNodes) => {
         return prevNodes.map((node) => {
             if (node.id === nodeData.id) {
-                // Check if the combination already exists
                 const existingCombination = node.data.answerCombinations || [];
 
                 const isCombinationExist = existingCombination.find((combination) => {

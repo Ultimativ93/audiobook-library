@@ -173,3 +173,25 @@ export const getValidatedFlowTitle = async (title) => {
         return false;
     }
 }
+
+export const deleteUnusedAudio = async (audiobookTitle, audioUsage) => {
+    console.log("AudiobookTitle, audioUsage", audiobookTitle, audioUsage);
+    try {
+        for (const audioFile in audioUsage) {
+            if (!audioUsage[audioFile]) {
+                await handleFileDelete(audioFile, audiobookTitle);
+            }
+        }
+    } catch (error) {
+        console.error('Error deleting unused audio files:', error);
+    }
+}
+
+const handleFileDelete = async (file, audiobookTitle) => {
+    try {
+        const response = await axios.post('http://localhost:3005/deleteFile', { file, audiobookTitle });
+        console.log('File deleted successfully:', response.data);
+    } catch (error) {
+        console.error('Error deleting file:', error);
+    }
+}

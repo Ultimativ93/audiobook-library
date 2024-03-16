@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button, Select } from '@chakra-ui/react';
-import { DeleteIcon, ArrowRightIcon, ViewIcon, DownloadIcon } from '@chakra-ui/icons';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button, Select, IconButton, Input } from '@chakra-ui/react';
+import { DeleteIcon, ArrowRightIcon, ViewIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
 import { useDropzone } from 'react-dropzone';
 
 import '../layoutMenuModalUpload/layout-menu-modal-upload.css';
 
-import { handleUpload, handleFileDelete, fetchAudioUrl, fetchGraphicUrl, changeCategory } from "../../../../../tasks/uploadTasks/UploadTasks";
+import { handleUpload, handleFileDelete, fetchAudioUrl, fetchGraphicUrl, changeCategory, sortFiles, handleChangeName } from "../../../../../tasks/uploadTasks/UploadTasks";
 import { useAudioUsage } from '../../../../layoutDrawer/LayoutDrawerFunctions';
+import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../../../tasks/playerTasks/PlayerLogic';
+import FetchAudio from '../../../../../tasks/editorTasks/FetchAudio';
 
-const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTitle }) => {
+const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTitle, nodes, setNodes }) => {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [projectFiles, setProjectFiles] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -18,7 +20,63 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
     const [showAudio, setShowAudio] = useState(false);
     const [graphicUrls, setGraphicUrls] = useState([]);
     const [showGraphic, setShowGraphic] = useState(false);
+    const [audioPaths, setAudioPaths] = useState([])
+    const [audioLengths, setAudioLengths] = useState({})
     const [category, setCategory] = useState('universal');
+    const [localFileRejections, setLocalFileRejections] = useState([]);
+    const [editedName, setEditedName] = useState('');
+    const [oldEditedName, setOldEditedName] = useState('');
+    const [editMode, setEditMode] = useState({});
+
+    const audioUsage = useAudioUsage(audioPaths);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const fetchedAudio = await FetchAudio(audiobookTitle);
+            setAudioPaths(fetchedAudio);
+        };
+
+        fetchData();
+    }, [audiobookTitle]);
+
+    useEffect(() => {
+        setProjectFiles(files => sortFiles(files, sortBy, audioLengths, audioUsage));
+    }, [sortBy]);
+
+    const fetchAudioLengths = async () => {
+        const lengths = {};
+        for (const file of projectFiles) {
+            if (file.name.endsWith('.mp3') || file.name.endsWith('.aac') || file.name.endsWith('.wav') || file.name.endsWith('.ogg') || file.name.endsWith('.m4a')) {
+                try {
+                    const audioPath = await getAudioPathFromName(file.name, audiobookTitle);
+                    if (audioPath) {
+                        const audioBlob = await getAudioFromPath(audioPath);
+                        const duration = await getCurrentAudioLength(audioBlob);
+                        if (duration !== null) {
+                            lengths[file.name] = formatTime(Math.floor(duration));
+                        } else {
+                            console.error('Failed to get audio length for file:', file.name);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching audio length:', error);
+                }
+            }
+        }
+        setAudioLengths(lengths);
+    };
+
+    useEffect(() => {
+        fetchAudioLengths();
+    }, [projectFiles]);
+
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+        return `${formattedMinutes}:${formattedSeconds}`;
+    };
 
     const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -30,14 +88,55 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             'audio/aac': ['.aac'],
             'audio/ogg': ['.ogg'],
             'audio/m4a': ['.m4a'],
+            'audio/wav': ['.wav'],
         },
         maxFiles: 30,
-        onDropAccepted: () => setUploadSuccess(false),
+        onDropAccepted: async (acceptedFiles) => {
+            const checkFiles = async () => {
+                for (const file of acceptedFiles) {
+                    if (file.type.startsWith('audio/') && (await checkAudioChannels(file))) {
+                        setLocalFileRejections(prevRejections => [...prevRejections, { file, errors: [{ code: "stereo", message: "Bitte laden Sie nur Mono-Audio-Dateien hoch." }] }]);
+                        setUploadSuccess(false);
+                        return;
+                    }
+                }
+            };
+
+            const checkAudioChannels = async (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const context = new AudioContext();
+                        const audioData = event.target.result;
+                        context.decodeAudioData(audioData, (buffer) => {
+                            if (buffer.numberOfChannels > 1) {
+                                resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        }, () => reject());
+                    };
+                    reader.readAsArrayBuffer(file);
+                });
+            };
+
+            checkFiles();
+        },
         onDropRejected: () => setUploadSuccess(false),
     });
 
     const handleButtonClick = () => {
-        handleUpload(acceptedFiles, audiobookTitle, category, setUploadSuccess);
+        const existingFileNames = projectFiles.map(file => file.name);
+        const duplicateFiles = acceptedFiles.filter(file => existingFileNames.includes(file.name));
+
+        const uniqueFiles = acceptedFiles.filter(file => !existingFileNames.includes(file.name));
+        handleUpload(uniqueFiles, audiobookTitle, category, setUploadSuccess);
+
+        const rejectedFiles = duplicateFiles.map(file => ({
+            file,
+            errors: [{ code: "duplicate", message: `The file "${file.name}" already exists in the project.` }]
+        }));
+        setLocalFileRejections(rejectedFiles);
     }
 
     const handleFileClick = async (file) => {
@@ -58,37 +157,22 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
         setShowGraphic(false);
     }
 
-    const sortFiles = (files) => {
-        const sortedFiles = [...files];
-        if (sortBy === 'byName') {
-            sortedFiles.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (sortBy === 'byDataType') {
-            sortedFiles.sort((a, b) => {
-                const extA = a.name.split('.').pop();
-                const extB = b.name.split('.').pop();
-                return extA.localeCompare(extB);
-            });
-        } else if (sortBy === 'byCategory') {
-            sortedFiles.sort((a, b) => {
-                if (a.category === b.category) {
-                    return a.name.localeCompare(b.name);
-                } else {
-                    return a.category.localeCompare(b.category);
-                }
-            });
-        }
-        return sortedFiles;
-    };
-
     const handlePlayClick = () => {
         if (showAudio) {
             setShowAudio(false);
         } else {
-            const audioFiles = selectedFiles.filter(file => file.endsWith('.mp3') || file.endsWith('.aac') || file.endsWith('.wav') || file.endsWith('.ogg') || file.endsWith('.m4a'));
+            const audioFiles = selectedFiles.filter(file => {
+                if (typeof file === 'string') {
+                    return file.name.endsWith('.mp3') || file.name.endsWith('.aac') || file.name.endsWith('.wav') || file.name.endsWith('.ogg') || file.name.endsWith('.m4a');
+                } else if (typeof file === 'object' && file.name) {
+                    return file.name.endsWith('.mp3') || file.name.endsWith('.aac') || file.name.endsWith('.wav') || file.name.endsWith('.ogg') || file.name.endsWith('.m4a');
+                }
+                return false;
+            });
             if (audioFiles.length === 1) {
                 setShowAudio(true);
                 setShowGraphic(false);
-                fetchAudioUrl(audioFiles[0], (audioUrl) => setAudioUrls([audioUrl]));
+                fetchAudioUrl(audioFiles[0].name, audiobookTitle, (audioUrl) => setAudioUrls([audioUrl]));
             } else if (audioFiles.length === 0) {
                 alert("Please select an audio file to play.");
             } else {
@@ -101,11 +185,11 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
         if (showGraphic) {
             setShowGraphic(false);
         } else {
-            const graphicFiles = selectedFiles.filter(file => file.endsWith('.png') || file.endsWith('.PNG') || file.endsWith('.jpg') || file.endsWith('.JPG') || file.endsWith('.jpeg') || file.endsWith('.jpeg'));
+            const graphicFiles = selectedFiles.filter(file => file.name.endsWith('.png') || file.name.endsWith('.PNG') || file.name.endsWith('.jpg') || file.name.endsWith('.JPG') || file.name.endsWith('.jpeg') || file.name.endsWith('.jpeg'));
             if (graphicFiles.length === 1) {
                 setShowGraphic(true);
                 setShowAudio(false);
-                fetchGraphicUrl(graphicFiles[0], (graphicUrl) => setGraphicUrls([graphicUrl]));
+                fetchGraphicUrl(graphicFiles[0].name, audiobookTitle, (graphicUrl) => setGraphicUrls([graphicUrl]));
             } else if (graphicFiles.length === 0) {
                 alert("Please select a graphic file to display.");
             } else {
@@ -116,7 +200,6 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
     }
 
     const handleCategoryChange = (file, selectedCategory) => {
-        console.log("File, selectedCategory", file, selectedCategory);
         const updatedProjectFiles = projectFiles.map(item => {
             if (item.name === file.name) {
                 return { ...item, category: selectedCategory };
@@ -127,7 +210,56 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
         setProjectFiles(updatedProjectFiles);
     };
 
-    const audioUsage = useAudioUsage(projectFiles.map(file => ({ audioName: file.name })));
+    const handleEditClick = (file) => {
+        setEditMode(prevState => ({ ...prevState, [file.name]: !prevState[file.name] }));
+        setEditedName(file.name);
+        setOldEditedName(file.name);
+    }
+
+    const handleNameChange = (e, file) => {
+        setEditedName(e.target.value);
+        console.log("nameChange", e.target.value);
+    }
+
+    const handleNameConfirmation = async (file) => {
+        console.log("wir sind hier")
+        if (editedName !== '') {
+            console.log("jetzt hier")
+            const newNodes = nodes.map(node => {
+                const updatedData = { ...node.data };
+
+                for (const key in updatedData) {
+                    if (Object.prototype.hasOwnProperty.call(updatedData, key)) {
+                        if ((key.includes('Audio') || key.includes('audio')) && updatedData[key] === oldEditedName) {
+                            updatedData[key] = editedName;
+                        }
+                    }
+                }
+
+                return updatedData !== node.data ? { ...node, data: updatedData } : node;
+            });
+
+            setNodes(newNodes);
+
+            const response = await handleChangeName(audiobookTitle, oldEditedName, editedName);
+            if (response) {
+                console.log("Wurde geändert", response.data);
+
+                const updatedProjectFiles = projectFiles.map(f => {
+                    if (f.name === oldEditedName) {
+                        return { ...f, name: editedName };
+                    }
+                    return f;
+                });
+                setProjectFiles(updatedProjectFiles);
+            } else {
+                console.error("Error while changing Name on the Server.");
+            }
+            setEditMode(prevState => ({ ...prevState, [file.name]: false }));
+        }
+    }
+
+    console.log("Nodes im ModalUpload", nodes);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -143,13 +275,16 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                 console.error('Error fetching data with flowkey: ', error);
             }
         };
-
         fetchData();
-    }, [audiobookTitle, uploadSuccess, category]);
+    }, [audiobookTitle, uploadSuccess, category, acceptedFiles]);
 
     useEffect(() => {
         if (uploadSuccess) {
-            setSelectedFiles([]);
+            setTimeout(() => {
+                setUploadSuccess(false);
+                setSelectedFiles([]);
+                setLocalFileRejections([]);
+            }, 5000);
         }
     }, [uploadSuccess]);
 
@@ -175,7 +310,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                             </div>
                             {uploadSuccess ? (
                                 <p style={{ color: 'black', fontWeight: 'bold', marginTop: '20px' }}>Your files have been successfully uploaded to the server!</p>
-                            ) : (
+                            ) :
                                 <aside>
                                     <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Files</p>
                                     <ul>
@@ -195,9 +330,9 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                             </li>
                                         ))}
                                     </ul>
-                                    <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</p>
+                                    {localFileRejections.length > 0 && <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</p>}
                                     <ul style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
-                                        {fileRejections.map(({ file, errors }) => (
+                                        {localFileRejections.map(({ file, errors }) => (
                                             <li key={file.path}>
                                                 <span style={{ color: 'black', marginRight: '10px', marginTop: '10px' }}>{file.path}</span>
                                                 <span style={{ color: 'black' }}>{file.path} - {file.size} bytes</span>
@@ -211,8 +346,8 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                     </ul>
 
                                 </aside>
-                            )}
-                            {acceptedFiles.length !== 0 && !uploadSuccess && (<Button colorScheme='highlightColor' onClick={handleButtonClick}>Upload</Button>)}
+                            }
+                            {acceptedFiles.length !== 0 && !uploadSuccess && localFileRejections.length <= 0 && (<Button colorScheme='highlightColor' onClick={handleButtonClick}>Upload</Button>)}
                         </div>
 
                         <div className="layout-menu-modal-upload-right-wrapper">
@@ -238,10 +373,13 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                         </Button>)}
                                     </div>
                                     <div className="layout-menu-modal-upload-right-buttons-right">
-                                        <Select size='sm' placeholder="Sort By" value={sortBy} onChange={(e) => setSortBy(e.target.value)} focusBorderColor='darkButtons'>
-                                            <option value='byName'>Sort By Name</option>
-                                            <option value='byDataType'>Sort By Data Type</option>
-                                            <option value='byCategory'>Sort by Category</option>
+                                        <Select size='sm' value={sortBy} onChange={(e) => setSortBy(e.target.value)} focusBorderColor='darkButtons'>
+                                            <option value='byName'>Sort by name</option>
+                                            <option value='byDataType'>Sort by data type</option>
+                                            <option value='byCategory'>Sort by category</option>
+                                            <option value='byLength'>Sort by length</option>
+                                            <option value='byUsed'>Sort by used files</option>
+                                            <option value='byDate'>Sort by uploaddate</option>
                                         </Select>
                                         <Select size='sm' value={category} onChange={(e) => setCategory(e.target.value)} focusBorderColor='darkButtons'>
                                             <option value="universal">Universal</option>
@@ -259,11 +397,20 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                         .filter(file => category === 'universal' || file.category === category)
                                         .map((file, index) => (
                                             <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : (audioUsage[file.name] ? '#C6F6D5' : 'transparent'), display: 'flex', alignItems: 'center' }}>
-                                                <p onClick={() => handleFileClick(file)} style={{ marginRight: '10px', flex: '1' }}>
-                                                    {file.name}
-                                                    {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
-                                                </p>
-                                                <div style={{ marginLeft: 'auto', width: '150px' }}>
+                                                <IconButton icon={<EditIcon />} onClick={() => handleEditClick(file)} size='sm' margin='5px' />
+                                                {!editMode[file.name] && (
+                                                    <p onClick={() => handleFileClick(file)} style={{ marginRight: '10px', flex: '1' }}>
+                                                        {file.name}
+                                                        {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
+                                                    </p>
+                                                )}
+                                                {editMode[file.name] && (
+                                                    <input type="text" value={editedName} onChange={(e) => handleNameChange(e, file)} />
+                                                )}
+                                                {audioLengths[file.name] && (
+                                                    <span style={{ color: 'black', marginRight: '10px' }}>Length: {audioLengths[file.name]}</span>
+                                                )}
+                                                <div style={{ width: '150px' }}>
                                                     <Select size="sm" value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons">
                                                         <option value="question">Question Audio</option>
                                                         <option value="story">Story Audio</option>
@@ -274,7 +421,14 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                         <option value="answerProcessAudio">Answer Process Audio</option>
                                                     </Select>
                                                 </div>
+                                                {editMode[file.name] && (
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <Button size='sm' colorScheme='darkButtons' onClick={() => handleNameConfirmation(file)}>Confirm</Button>
+                                                        <Button size='sm' colorScheme='darkButtons' onClick={() => setEditMode(prevState => ({ ...prevState, [file.name]: false }))}>Cancel</Button>
+                                                    </div>
+                                                )}
                                             </div>
+
                                         ))}
                                 </div>
                             </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Select } from '@chakra-ui/react';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
@@ -7,9 +7,23 @@ import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import ShowAudioLength from './ShowAudioLength';
 
 const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
-    const audioPaths = FetchAudio(audiobookTitle);
+    const [audioPaths, setAudioPaths] = useState([]);
+    
     const [selectedAnswerProcessAudio, setSelectedAnswerProcessAudio] = useState(nodeData.data.answerProcessAudio || '');
     const audioUsage = useAudioUsage(audioPaths);
+
+    useEffect(() => {
+        const fetchAudioPaths = async () => {
+            const paths = await FetchAudio(audiobookTitle);
+            setAudioPaths(paths);
+        };
+
+        fetchAudioPaths();
+    }, [audiobookTitle]);
+
+    useEffect(() => {
+        setSelectedAnswerProcessAudio(nodeData.data.answerProcessAudio || '');
+    }, [nodeData.data.answerProcessAudio]);
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'answerProcessAudio' || audio.audioCategory === 'universal');
 
@@ -47,7 +61,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                 </div>
                 <div>
                     {selectedAnswerProcessAudio && (
-                        <ShowAudioLength nodeData={nodeData} setNodes={setNodes} audioName={selectedAnswerProcessAudio} />
+                        <ShowAudioLength nodeData={nodeData} setNodes={setNodes} audioName={selectedAnswerProcessAudio} audiobookTitle={audiobookTitle}/>
                     )}
                 </div>
             </div>

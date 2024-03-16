@@ -8,14 +8,24 @@ import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
 const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
-    const audioPaths = FetchAudio(audiobookTitle);
+    const [audioPaths, setAudioPaths] = useState([]);
     const [selectedStoryAudio, setSelectedAudioStory] = useState(nodeData.data.audioStory || '');
     const audioUsage = useAudioUsage(audioPaths);
 
     useEffect(() => {
-        setSelectedAudioStory(nodeData.data.audioStory || '');
-    }, [nodeData.data.audioStory, audiobookTitle]);
+        const fetchAudioPaths = async () => {
+            const paths = await FetchAudio(audiobookTitle);
+            setAudioPaths(paths);
+        };
 
+        fetchAudioPaths();
+    }, [audiobookTitle]);
+
+    useEffect(() => {
+        setSelectedAudioStory(nodeData.data.audioStory || '');
+    }, [nodeData.data.audioStory]);
+
+    console.log("Audiopaths !!!!!!!!!!", audioPaths);
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'story' || audio.audioCategory === 'universal');
 
     return (

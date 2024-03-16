@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const getAudioPathFromName = async (audioName) => {
+const getAudioPathFromName = async (audioName, audiobookTitle) => {
     try {
-        const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${audioName}`)
+        console.log("audioName in getAudioPathFromName", audioName);
+        const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${audioName}&audiobookTitle=${audiobookTitle}`)
         if (response.status === 200) {
             return response.data;
         } else {
@@ -61,11 +62,11 @@ const getCurrentAudioLength = async (audioBlob) => {
     }
 };
 
+
 const handleButtonClickLogic = (index, flow, currentNodeProps, setCurrentNode) => {
     const outgoingEdges = flow.edges.filter((edge) => edge.source === currentNodeProps.id);
     console.log("Outgoing Edges: ", outgoingEdges);
 
-    // Find the edge with the matching target (if sourceHandle is null)
     const targetEdge = outgoingEdges.find((edge) => edge.sourceHandle === null || edge.sourceHandle === `${currentNodeProps.id}-handle-${index}`);
     console.log("targetEdge: ", targetEdge);
 

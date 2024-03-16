@@ -52,7 +52,7 @@ const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfIn
             </div>
 
             <LayoutMenuModalSetup isModalSetupOpen={modalsState.isSetupModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
-            <LayoutMenuModalUpload isModalUploadOpen={modalsState.isUploadModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
+            <LayoutMenuModalUpload isModalUploadOpen={modalsState.isUploadModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} setNodes={setNodes}/>
             <LayoutMenuModalPreview isPreviewModalOpen={modalsState.isPreviewModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} selectedNodes={selectedNodes} />
             <LayoutMenuModalPublish isPublishModalOpen={modalsState.isPublishModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} />
 

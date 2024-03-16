@@ -5,6 +5,7 @@ const handleUpload = async (selectedFiles, audiobookTitle, category, setUploadSu
         const existingFiles = await checkExistingFiles(selectedFiles, audiobookTitle);
 
         const newFiles = selectedFiles.filter(file => !existingFiles.includes(file.name));
+        const uploadDate = new Date();
 
         if (newFiles.length === 0) {
             console.log('All files already exist, skipping upload.');
@@ -18,13 +19,12 @@ const handleUpload = async (selectedFiles, audiobookTitle, category, setUploadSu
         });
         formData.append('audiobookTitle', audiobookTitle);
         formData.append('category', category);
+        formData.append('uploadDate', uploadDate)
 
         const response = await fetch('http://localhost:3005/upload', {
             method: 'POST',
             body: formData,
         });
-
-        console.log('Response:', response);
 
         const responseData = await response.json();
         console.log('Response Data:', responseData);
@@ -77,6 +77,7 @@ const handleFileDelete = async (file, audiobookTitle, setProjectFiles) => {
 const fetchDataFromServer = async (audiobookTitle) => {
     try {
         const response = await axios.get(`http://localhost:3005/getDataFromFlow?flowKey=${audiobookTitle}`);
+        console.log("Response DATA in fetchDataFromServer: ", response.data)
         return response.data;
     } catch (error) {
         console.error('Error fetching data with flowkey:', error);
@@ -84,9 +85,9 @@ const fetchDataFromServer = async (audiobookTitle) => {
     }
 };
 
-const fetchAudioUrl = async (fileName, setAudioUrl) => {
+const fetchAudioUrl = async (fileName, audiobookTitle, setAudioUrl) => {
     try {
-        const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${fileName}`);
+        const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${fileName}&audiobookTitle=${audiobookTitle}`);
         const audioPath = response.data;
 
         const audioBlobResponse = await axios.get(`http://localhost:3005/getAudio?audioPath=${encodeURIComponent(audioPath)}`, {
@@ -102,9 +103,9 @@ const fetchAudioUrl = async (fileName, setAudioUrl) => {
     }
 }
 
-const fetchGraphicUrl = async (fileName, setGraphicUrl) => {
+const fetchGraphicUrl = async (fileName, audiobookTitle, setGraphicUrl) => {
     try {
-        const response = await axios.get(`http://localhost:3005/getGraphicName?graphicName=${fileName}`);
+        const response = await axios.get(`http://localhost:3005/getGraphicName?graphicName=${fileName}&audiobookTitle=${audiobookTitle}`);
         const graphicPath = response.data;
         const graphicBlobResponse = await axios.get(`http://localhost:3005/getGraphic?graphicPath=${encodeURIComponent(graphicPath)}`, {
             responseType: 'blob'
@@ -125,6 +126,93 @@ const changeCategory = async (file, selectedCategory, audiobookTitle) => {
     }
 };
 
+const sortFiles = (files, sortBy, audioLengths, audioUsage) => {
+    const sortedFiles = [...files];
+    if (sortBy === 'byName') {
+        sortedFiles.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'byDataType') {
+        sortedFiles.sort((a, b) => {
+            const extA = a.name.split('.').pop();
+            const extB = b.name.split('.').pop();
+            return extA.localeCompare(extB);
+        });
+    } else if (sortBy === 'byCategory') {
+        sortedFiles.sort((a, b) => {
+            if (a.category === b.category) {
+                return a.name.localeCompare(b.name);
+            } else {
+                return a.category.localeCompare(b.category);
+            }
+        });
+    } else if (sortBy === 'byLength') {
+        sortedFiles.sort((a, b) => {
+            const isAudioFileA = a.name.endsWith('.mp3') || a.name.endsWith('.aac') || a.name.endsWith('.wav') || a.name.endsWith('.ogg') || a.name.endsWith('.m4a');
+            const isAudioFileB = b.name.endsWith('.mp3') || b.name.endsWith('.aac') || b.name.endsWith('.wav') || b.name.endsWith('.ogg') || b.name.endsWith('.m4a');
+
+            if (isAudioFileA && isAudioFileB) {
+                const lengthA = formatTimeInSeconds(audioLengths[a.name]);
+                const lengthB = formatTimeInSeconds(audioLengths[b.name]);
+                return lengthA - lengthB;
+            } else if (isAudioFileA) {
+                return -1;
+            } else if (isAudioFileB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    } else if (sortBy === 'byUsed') {
+        sortedFiles.sort((a, b) => {
+            const isAudioFileA = a.name.endsWith('.mp3') || a.name.endsWith('.aac') || a.name.endsWith('.wav') || a.name.endsWith('.ogg') || a.name.endsWith('.m4a');
+            const isAudioFileB = b.name.endsWith('.mp3') || b.name.endsWith('.aac') || b.name.endsWith('.wav') || b.name.endsWith('.ogg') || b.name.endsWith('.m4a');
+    
+            if (isAudioFileA && isAudioFileB) {
+                const isUsedA = audioUsage[a.name] || false;
+                const isUsedB = audioUsage[b.name] || false;
+    
+                if (isUsedA && isUsedB) {
+                    return 0;
+                } else if (isUsedA) {
+                    return -1;
+                } else if (isUsedB) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else if (isAudioFileA) {
+                return -1;
+            } else if (isAudioFileB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    } else if (sortBy === 'byDate') {
+        sortedFiles.sort((a, b) => {
+            const dateA = new Date(a.uploadDate);
+            const dateB = new Date(b.uploadDate);
+            return dateA - dateB;
+        });
+    }
+    return sortedFiles;
+};
+
+const formatTimeInSeconds = (time) => {
+    const [minutes, seconds] = time.split(':').map(Number);
+    return minutes * 60 + seconds;
+};
+
+const handleChangeName = async (audiobookTitle, audioName, newAudioName) => {
+    console.log("audioName in handleChange und newAudioName", audioName, newAudioName)
+    try {
+        const response = await axios.post('http://localhost:3005/changeAudioName', { audiobookTitle, audioName, newAudioName })
+        console.log("Response in handleChangeName", response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error changing audioName', error);
+    }
+}
+
 export {
     handleUpload,
     checkExistingFiles,
@@ -132,4 +220,7 @@ export {
     fetchAudioUrl,
     fetchGraphicUrl,
     changeCategory,
+    sortFiles,
+    formatTimeInSeconds,
+    handleChangeName,
 };

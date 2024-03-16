@@ -42,18 +42,14 @@ const Player = ({ selectedNodes }) => {
 
   const location = useLocation();
 
-  console.log("selectedNodes im Player", selectedNodes);
-
-  // Set the flowkey to the query, and fetch the flow from the server. Add validation for this case !!!!!
+  // Set the flowkey to the query, and fetch the flow from the server.
   useEffect(() => {
-    const flowKey = decodeURIComponent(location.pathname.split('/').pop()).replace(/%20/g, ' ').substring(0); // `%20` durch Leerzeichen ersetzen und das erste Zeichen entfernen
+    const flowKey = decodeURIComponent(location.pathname.split('/').pop()).replace(/%20/g, ' ').substring(0);
     console.log("Flowkey im Player:", flowKey);
     FetchFlow(flowKey).then((flowData) => {
       setFlow(flowData);
     });
   }, []);
-
-
 
   // Set the currentNodeProps after first node after the startnode
   useEffect(() => {

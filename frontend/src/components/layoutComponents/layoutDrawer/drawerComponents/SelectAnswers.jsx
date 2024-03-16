@@ -10,8 +10,17 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
   const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
   const timeoutRef = useRef(null);
-  const audioPaths = FetchAudio(audiobookTitle);
+  const [audioPaths, setAudioPaths] = useState([]);
   const audioUsage = useAudioUsage(audioPaths);
+
+  useEffect(() => {
+    const fetchAudioPaths = async () => {
+      const paths = await FetchAudio(audiobookTitle);
+      setAudioPaths(paths);
+    };
+
+    fetchAudioPaths();
+  }, [audiobookTitle]);
 
   useEffect(() => {
     if (!arraysEqual(answers, nodeData.data.answers || [])) {
@@ -104,6 +113,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
   };
 
+  // Filter audioPaths for 'answer' and 'universal' categories
   const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'answer' || audio.audioCategory === 'universal');
 
   return (

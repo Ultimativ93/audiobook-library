@@ -5,17 +5,21 @@ import "./drawer-components.css";
 import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../tasks/playerTasks/PlayerLogic';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
-const ShowAudioLength = ({ nodeData, setNodes, audioName }) => {
+const ShowAudioLength = ({ nodeData, setNodes, audioName, audiobookTitle }) => {
     const [audioLength, setAudioLength] = useState();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const audioPath = await getAudioPathFromName(audioName);
-            const audioBlob = await getAudioFromPath(audioPath);
-            const newAudioLength = await getCurrentAudioLength(audioBlob);
-            convertToTime(newAudioLength.toFixed(2));
+    const fetchData = async () => {
+        const audioPath = await getAudioPathFromName(audioName, audiobookTitle);
+        const audioBlob = await getAudioFromPath(audioPath);
+        console.log("audioBlob in here", audioBlob)
+        const newAudioLength = await getCurrentAudioLength(audioBlob);
+        console.log("newAudioLength", newAudioLength)
+        if (newAudioLength !== null) {
+            convertToTime(newAudioLength);
         }
+    }
 
+    useEffect(() => {
         fetchData();
     }, [audioName])
 
@@ -23,7 +27,7 @@ const ShowAudioLength = ({ nodeData, setNodes, audioName }) => {
         if (audioLength) {
             updateNodeProperty(setNodes, nodeData, 'answerProcessAudioLength', audioLength);
         }
-    }, [audioLength, setNodes, nodeData])
+    }, [audioLength])
 
     const convertToTime = (newAudioLength) => {
         const minutes = Math.floor(newAudioLength / 60);

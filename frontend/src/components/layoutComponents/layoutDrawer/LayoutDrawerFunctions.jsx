@@ -107,11 +107,14 @@ const updateAnswerCombination = (setNodes, nodeData, updatedCombination) => {
     });
 };
 
+// Remove Combinations of a MuAns node
 const removeCombination = (setNodes, setEdges, prevEdges, nodeData, combinationId) => {
     setNodes((prevNodes) => {
         const updatedNodes = prevNodes.map((node) => {
             if (node.id === nodeData.id) {
-                const updatedCombinations = (node.data.answerCombinations || []).filter((combination) => combination.id !== combinationId);
+                const updatedCombinations = (node.data.answerCombinations || [])
+                    .filter((combination) => combination.id !== combinationId)
+                    .map((combination, idx) => ({ ...combination, id: (idx+1).toString() }));
 
                 return {
                     ...node,
@@ -123,64 +126,47 @@ const removeCombination = (setNodes, setEdges, prevEdges, nodeData, combinationI
             }
             return node;
         });
-
-        const { updatedEdges, deletedEdgeIds } = updateEdges(prevEdges, nodeData.id, combinationId);
-
-        setEdges(updatedEdges);
-
-        if (deletedEdgeIds.length > 0) {
-            setEdges((prevEdges) => prevEdges.filter((edge) => !deletedEdgeIds.includes(edge.id)));
-        }
-
         return updatedNodes;
     });
+
+    updateEdgesAfterCombinationRemoval(setEdges, prevEdges, nodeData, combinationId);
 };
 
-// Klappt noch
-const updateEdges = (prevEdges, nodeId, combinationId) => {
-    let deletedEdgeIds = [];
-    let updatedEdges = [];
-    combinationId = combinationId - 1;
+// Update Edges of a MuAns node after combination deletion
+const updateEdgesAfterCombinationRemoval = (setEdges, prevEdges, nodeData, combinationId) => {
+    let removedHandles = [];
 
-    console.log("prevEdges, nodeId, combinationId", prevEdges, nodeId, combinationId);
-    const remainingCombinations = prevEdges.filter(edge => edge.sourceHandle.startsWith(`${nodeId}-handle-`)).length;
-    console.log("remainingCombinations, ", remainingCombinations);
-
-    if (remainingCombinations-1 <= combinationId) {
-        console.log("dekrementieren combinationId")
-        combinationId--;
-    }
-    
+    console.log("Combination Id", combinationId)
     prevEdges.forEach((edge) => {
-        console.log("Edge", edge);
-
-        if (edge.sourceHandle === `${nodeId}-handle-${combinationId}` || remainingCombinations === 1) {
-            console.log("Deleting Edge with source handle:", edge.sourceHandle);
-            deletedEdgeIds.push(edge.id);
+        if (edge.sourceHandle && edge.sourceHandle.split('-').pop() === (combinationId - 1).toString()) {
+            console.log("hier drin!!!")
+            removedHandles.push(edge.sourceHandle);
         }
-
-        const handleParts = edge.sourceHandle.split('-');
-        const handleIndex = parseInt(handleParts[handleParts.length - 1], 10);
-        console.log("handleIndex, combinationId", handleIndex, combinationId);
-
-        if (handleIndex >= combinationId) {
-
-            const targetParts = edge.target.split('-');
-            const targetIndex = parseInt(targetParts[targetParts.length - 1], 10);
-            const updatedTarget = `${targetParts.slice(0, -1).join('-')}${targetIndex}`;
-            const updatedSourceHandle = `${nodeId}-handle-${handleIndex-1}`
-            console.log("updatedSourceHandle", updatedSourceHandle);
-            console.log("updatedTarget, edge", updatedTarget, edge);
-            edge.sourceHandle = updatedSourceHandle;
-            edge.target = updatedTarget;
-        }
-
-        updatedEdges.push(edge);
     });
 
-    console.log("Deleted edge IDs:", deletedEdgeIds);
-    console.log("Updated edges:", updatedEdges);
-    return { updatedEdges, deletedEdgeIds };
+    const newEdges = prevEdges.filter((edge) => !removedHandles.includes(edge.sourceHandle));
+
+    setEdges(newEdges);
+
+    const handleIndices = newEdges.map((edge) => {
+        if (edge.sourceHandle !== null) {
+            return parseInt(edge.sourceHandle.split('-').pop());
+        }
+        return null;
+    }).filter((idx) => idx !== null);
+
+    const minIndex = Math.min(...handleIndices);
+    if (minIndex !== 0) {
+        newEdges.forEach((edge) => {
+            if (edge.sourceHandle !== null) {
+                const currentIndex = parseInt(edge.sourceHandle.split('-').pop());
+                const newIndex = currentIndex - minIndex;
+                edge.sourceHandle = `${nodeData.id}-handle-${newIndex}`;
+            }
+        });
+
+        setEdges(newEdges);
+    }
 };
 
 // Updates nodeproperties
@@ -204,7 +190,7 @@ const updateNodeProperty = (setNodes, nodeData, property, value) => {
 const useAudioUsage = (audioPaths) => {
     const [audioUsage, setAudioUsage] = useState({});
     const params = useParams();
-    
+
     useEffect(() => {
         const fetchAudioUsage = async () => {
             const usage = {};

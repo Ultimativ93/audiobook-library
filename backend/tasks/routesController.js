@@ -446,6 +446,27 @@ router.post('/changeAudioName', async (ctx) => {
     }
 })
 
+router.post('/changeDetailsGraphicName', async (ctx) => {
+    const { audiobookTitle, audioName, newAudioName } = ctx.request.body;
+    console.log("Audiobook Title in changeDetailsGraphicName, audioName, newAudioname", audiobookTitle, audioName, newAudioName);
+    try {
+        const changedName = await db.changeDetailsGraphicName(audiobookTitle, audioName, newAudioName);
+
+        if (changedName) {
+            ctx.status = 200;
+            ctx.body = changedName;
+        } else {
+            console.warn('No graphic found for the audiobookTitle and audioName in details', audiobookTitle, audioName);
+            ctx.status = 404;
+            ctx.body =  `No graphic found for the audiobookTitle and audioName in details ${audiobookTitle}, ${audioName}`;
+        }
+    } catch (error) {
+        console.error('Error changing graphic name in changeDetailsGraphicName', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error'
+    }
+})
+
 router.post('/changeDetails', async (ctx) => {
     const { audiobookDetails, audiobookTitle } = ctx.request.body;
     console.log("Audiobook Title in changeDetails:", audiobookTitle);

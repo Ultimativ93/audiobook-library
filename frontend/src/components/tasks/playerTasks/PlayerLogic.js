@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const getAudioPathFromName = async (audioName, audiobookTitle) => {
     try {
-        console.log("audioName in getAudioPathFromName", audioName);
         const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${audioName}&audiobookTitle=${audiobookTitle}`)
         if (response.status === 200) {
             return response.data;

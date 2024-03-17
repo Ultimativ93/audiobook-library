@@ -25,7 +25,6 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         setSelectedAudioStory(nodeData.data.audioStory || '');
     }, [nodeData.data.audioStory]);
 
-    console.log("Audiopaths !!!!!!!!!!", audioPaths);
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'story' || audio.audioCategory === 'universal');
 
     return (

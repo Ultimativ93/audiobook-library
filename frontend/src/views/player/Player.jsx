@@ -470,6 +470,7 @@ const Player = ({ selectedNodes }) => {
             ref={backgroundAudioRef}
             src={backgroundAudio}
             onEnded={() => setBackgroundAudioPlayed(true)}
+            loop
           />
         )}
       </div>
@@ -485,6 +486,7 @@ const Player = ({ selectedNodes }) => {
         <audio
           ref={answerProcessBackgroundAudioRef}
           src={answerProcessBackgroundAudio}
+          loop
         />
       </div>
 

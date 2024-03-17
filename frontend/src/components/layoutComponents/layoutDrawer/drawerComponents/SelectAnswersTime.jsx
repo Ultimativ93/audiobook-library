@@ -45,18 +45,36 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
 
     const handleRemoveAnswer = (index) => {
         const newAnswers = [...answers];
-        newAnswers.splice(index, 1);
-        setAnswers(newAnswers);
-
         const newAnswerAudios = [...answerAudios];
+        const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+        
+        // Entfernen Sie das Element aus den Arrays
+        newAnswers.splice(index, 1);
         newAnswerAudios.splice(index, 1);
+        newAnswerBackgroundAudio.splice(index, 1);
+        
+        const removedHandleId = `${nodeData.id}-handle-${index}`;
+        const newEdges = edges.filter(edge => {
+            if (edge.sourceHandle === removedHandleId) {
+                return false;
+            } else if (edge.sourceHandle && edge.sourceHandle.includes('-handle-')) {
+                const handleIndex = parseInt(edge.sourceHandle.split('-').pop());
+                if (handleIndex > index) {
+                    edge.sourceHandle = `${nodeData.id}-handle-${handleIndex - 1}`;
+                }
+            }
+            return true;
+        });
+        
+        setAnswers(newAnswers);
         setAnswerAudios(newAnswerAudios);
-
+        setAnswerBackgroundAudio(newAnswerBackgroundAudio);
+        setEdges(newEdges);
+        
         updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
         updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
-
-        removeAnswer(setNodes, setEdges, edges, nodeData, index, setAnswers);
-    };
+        updateNodeProperty(setNodes, nodeData, 'answerBackgroundAudio', newAnswerBackgroundAudio);
+    }; 
 
     const handleInputChange = (index, value, type) => {
         const newAnswers = [...answers];

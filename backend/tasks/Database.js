@@ -108,6 +108,44 @@ class Database {
         });
     }
 
+    // Change graphic name in details
+    changeDetailsGraphicName(audiobookTitle, audioName, newAudioName) {
+        console.log(`Changing graphic name from ${audioName} to ${newAudioName} for audiobook ${audiobookTitle} in details`);
+
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT detailData FROM details WHERE audiobookTitle = ?', [audiobookTitle], (err, row) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                if (!row || !row.detailData) {
+                    reject(new Error(`No details found for audiobookTitle ${audiobookTitle}`));
+                    return;
+                }
+
+                const detailData = JSON.parse(row.detailData);
+
+                if (detailData.thumbnail && detailData.thumbnail === audioName) {
+                    detailData.thumbnail = newAudioName;
+
+                    const updatedDetailData = JSON.stringify(detailData);
+
+                    this.db.run('UPDATE details SET detailData = ? WHERE audiobookTitle = ?', [updatedDetailData, audiobookTitle], (updateErr) => {
+                        if (updateErr) {
+                            reject(updateErr);
+                            return;
+                        }
+
+                        resolve(true);
+                    });
+                } else {
+                    resolve(false);
+                }
+            });
+        });
+    }
+
     // Deleting audioPaths and audioNames from audioPaths in the database
     deletePath(audiobookTitle) {
         console.log('Deleting audioPaths with audiobookTitle:', audiobookTitle);

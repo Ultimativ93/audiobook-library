@@ -173,21 +173,18 @@ TODOS: X : erledigt, O : offen, mit !!!!! (fünf !) : besonders wichtig, mit !!!
 __________________________________________________________________________________________________________________________________________________________________________________________
 
 Nach Priorität:
-            - !!!!! (1):
-                - MediaManager
-                    - Name X, Typ X, Länge X, Uploaddatum, mono/stereo (Stereo ausschließen) X, verknüpft oder nicht X, Dateien umbennenen                                              O
-                - Loop Background Audio, mit Hinweis im Tutorial                                                                                                                        O    
-                - Wir wollten gerade nach dem Datum sortieren im LayoutMenuModalUpload                                                                                                  O
+            - !!!!! (1):   
 
             - !!! (2):
-                - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                O
-                - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  O
+                - Reaction Node Antworten löschen und Edges aktualisieren.                                                                                                              O
+                - Gucken ob answer audio und background answer audio (falls gesetzt) ebenfalls gelöscht werden wenn antworten gelöscht werden.                                          O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
                 - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
                 - Tutorial Seite                                                                                                                                                        O
                 - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              O
                 - Nach Upload sollten Daten auch im Drawer angezeigt werden (refresh)                                                                                                   O
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
+                - Remove Audio bei answer delete (Choice, Multiple, Reaction, Time)                                                                                                     O
 
             - ! (3):
                 - Node löschen Button                                                                                                                                                   O
@@ -198,11 +195,11 @@ Nach Priorität:
                 - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
                     belassen.
                 - LayoutMenu wird nicht mehr benötigt, da wir die Modals direkt in LayoutEditorButtons ausgelagert haben, löschen                                                       O
-                - Delete Button für Nodes hinzufügen, damit nicht nur über Tastatur gelöscht werden kann                                                                                O
                 - H4 von den DrawerComponents zu p umändern.                                                                                                                            O
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
                 - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
                 - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
+                - Hinweis im Tutorial das Background audio gelooped werden kann.                                                                                                        O
                 - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
                 - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.                                                                                       O
                 - ExistingAudiobookSetup: Wir haben es bisher so programmiert, dass man den bestehenden Audiobook Titel nicht ändern darf, ansonsten muss auch der                      O
@@ -277,7 +274,11 @@ Erledigt:
                 - isAudioUsed führt zu einer Dauerschleife, ruft durchgehen fetchFlow auf, wodurch wir enorm viel Speicher nutzen.                                                      X
                 - Gerade alle Daten gelöscht um zu gucken was wir dann für Fehler bekommen und es sind einige im MediaManager                                                           X
                 - Audios lassen sich gerade wieder nicht anwählen im Data Upload/DataManager                                                                                            X
-
+                - Wir wollten gerade nach dem Datum sortieren im LayoutMenuModalUpload                                                                                                  X
+                - MediaManager
+                    - Name X, Typ X, Länge X, Uploaddatum, mono/stereo (Stereo ausschließen) X, verknüpft oder nicht X, Audio Dateien umbennenen X                                      X
+                    - Grafik Datein umbennen, dafür dann auch Detail ändern, damit alles stimmt.                                                                                        X
+                - Loop Background Audio,                                                                                                                                                X 
 
             -!!!:
                 - FetchDetails: in handleIsNewTitle abfangen das keine Leerzeichen, ,.!/ gesetzt werden könnne.                                                                         X
@@ -347,8 +348,13 @@ Erledigt:
                 - Interne Notiz der Node                                                                                                                                                X
                 - ID Bride Added 1/2/3   Also hochzählen wenn Nodes hinzugefütgt werden im Label                                                                                        X
                 - Validation anpassen, MultipleAnswer = MultipleResponse, Muchoi = Choice                                                                                               X
-
-
+                - Handle lable schiebt sich über die Handles wenn der Text zu lang ist, anpassen für alle Nodes                                                                         X
+                - MuChoi/Choice: Wenn Antworten gelöscht werden, müssen sich die Edges neu anordnen, ohne das sie das target wechseln.                                                  X
+                - MuAns Node: wenn Antworten gelöscht werden, müssen auch die Combinations gelöscht werden, die diese Antwort enthalten. Oder validieren                                X
+                - MuAns/Repsonse/MulitpleResponse: Wenn Combinationen gelöscht werden, sollen auch die Edges richtig gelöscht werden und aktualisiert werden                            X
+                - SelectAnswerTime werden zwar die edges gelöscht aber nicht die antworten angucken                                                                                     X
+                - SelectAnswersTime: Beim löschen von Antworten, werden die Edges verschoben, also das target wechselt.                                                                 X
+                - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  X
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X

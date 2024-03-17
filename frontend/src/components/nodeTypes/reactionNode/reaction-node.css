@@ -22,11 +22,10 @@
   text-align: center;
 }
 
-
 .reaction-node .handle-label {
   display: none;
   position: absolute;
-  top: -50px;
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.7);
@@ -37,8 +36,5 @@
 }
 
 .reaction-node .react-flow__handle:hover .handle-label {
-  display: block;
-  top: -50px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;;
 }

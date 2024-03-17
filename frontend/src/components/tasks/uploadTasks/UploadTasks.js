@@ -203,13 +203,24 @@ const formatTimeInSeconds = (time) => {
 };
 
 const handleChangeName = async (audiobookTitle, audioName, newAudioName) => {
-    console.log("audioName in handleChange und newAudioName", audioName, newAudioName)
+    console.log("audioName in handleChange and newAudioName", audioName, newAudioName)
     try {
         const response = await axios.post('http://localhost:3005/changeAudioName', { audiobookTitle, audioName, newAudioName })
         console.log("Response in handleChangeName", response.data);
         return response.data;
     } catch (error) {
         console.error('Error changing audioName', error);
+    }
+}
+
+const handleChangeNameInDetails = async (audiobookTitle, audioName, newAudioName) => {
+    console.log("audioName in handleChangeNameInDetails and newAudioName", audioName, newAudioName);
+    try {
+        const response = await axios.post('http://localhost:3005/changeDetailsGraphicName', { audiobookTitle, audioName, newAudioName })
+        console.log("Response in handleChangeNameInDetails", response.data);
+        return response.data;
+    } catch (error) {
+        console.error('Error changing graphic name', error);
     }
 }
 
@@ -223,4 +234,5 @@ export {
     sortFiles,
     formatTimeInSeconds,
     handleChangeName,
+    handleChangeNameInDetails,
 };

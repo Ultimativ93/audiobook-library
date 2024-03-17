@@ -1,5 +1,5 @@
 .multiple-choice-node {
-  height: 75px;
+  height: auto; /* Ändern Sie die Höhe auf automatisch */
   width: 200px;
   padding: 5px;
   border-radius: 4px;
@@ -8,6 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative; /* Fügen Sie eine relative Position hinzu */
 }
 
 .multiple-choice-node label {
@@ -28,7 +29,7 @@
 .multiple-choice-node .handle-label {
   display: none;
   position: absolute;
-  top: -50px;
+  bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(0, 0, 0, 0.7);
@@ -40,7 +41,4 @@
 
 .multiple-choice-node .react-flow__handle:hover .handle-label {
   display: block;
-  top: -50px;
-  left: 50%;
-  transform: translateX(-50%);
 }

@@ -7,7 +7,6 @@ const FetchAudio = async (flowKey) => {
                 audiobookTitle: flowKey
             }
         });
-        console.log("AudioPaths in FetchAudio", response.data);
         return response.data;
     } catch (error) {
         console.error('Error fetching audio paths:', error);

@@ -128,7 +128,6 @@ export const validateNodesAndEdges = (nodes, edges) => {
     });
 
     if (invalidNodes.size > 0 || invalidEdges.length > 0) {
-        console.log("Validation failed.")
         return false;
     } else {
         console.log("Validation successful.");

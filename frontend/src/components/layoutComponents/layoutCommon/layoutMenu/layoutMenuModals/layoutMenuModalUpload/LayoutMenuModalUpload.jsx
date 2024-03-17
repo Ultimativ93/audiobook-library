@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 
 import '../layoutMenuModalUpload/layout-menu-modal-upload.css';
 
-import { handleUpload, handleFileDelete, fetchAudioUrl, fetchGraphicUrl, changeCategory, sortFiles, handleChangeName } from "../../../../../tasks/uploadTasks/UploadTasks";
+import { handleUpload, handleFileDelete, fetchAudioUrl, fetchGraphicUrl, changeCategory, sortFiles, handleChangeName, handleChangeNameInDetails } from "../../../../../tasks/uploadTasks/UploadTasks";
 import { useAudioUsage } from '../../../../layoutDrawer/LayoutDrawerFunctions';
 import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../../../tasks/playerTasks/PlayerLogic';
 import FetchAudio from '../../../../../tasks/editorTasks/FetchAudio';
@@ -218,32 +218,35 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
 
     const handleNameChange = (e, file) => {
         setEditedName(e.target.value);
-        console.log("nameChange", e.target.value);
     }
 
     const handleNameConfirmation = async (file) => {
-        console.log("wir sind hier")
         if (editedName !== '') {
-            console.log("jetzt hier")
-            const newNodes = nodes.map(node => {
-                const updatedData = { ...node.data };
+            if (!file.name.match(/\.(png|jpg|jpeg|PNG|JPG|JPEG)$/)) {
+                const newNodes = nodes.map(node => {
+                    const updatedData = { ...node.data };
 
-                for (const key in updatedData) {
-                    if (Object.prototype.hasOwnProperty.call(updatedData, key)) {
-                        if ((key.includes('Audio') || key.includes('audio')) && updatedData[key] === oldEditedName) {
-                            updatedData[key] = editedName;
+                    for (const key in updatedData) {
+                        if (Object.prototype.hasOwnProperty.call(updatedData, key)) {
+                            if ((key.includes('Audio') || key.includes('audio')) && updatedData[key] === oldEditedName) {
+                                updatedData[key] = editedName;
+                            }
                         }
                     }
+
+                    return updatedData !== node.data ? { ...node, data: updatedData } : node;
+                });
+
+                setNodes(newNodes);
+            } else {
+                const response = await handleChangeNameInDetails(audiobookTitle, oldEditedName, editedName);
+                if (response) {
+                    console.log('Name of the graphic was successfully changed in Details', response.data)
                 }
-
-                return updatedData !== node.data ? { ...node, data: updatedData } : node;
-            });
-
-            setNodes(newNodes);
-
+            }
             const response = await handleChangeName(audiobookTitle, oldEditedName, editedName);
             if (response) {
-                console.log("Wurde geändert", response.data);
+                console.log('Name was successfully changed in the database', response.data);
 
                 const updatedProjectFiles = projectFiles.map(f => {
                     if (f.name === oldEditedName) {
@@ -258,8 +261,6 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             setEditMode(prevState => ({ ...prevState, [file.name]: false }));
         }
     }
-
-    console.log("Nodes im ModalUpload", nodes);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -397,7 +398,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                         .filter(file => category === 'universal' || file.category === category)
                                         .map((file, index) => (
                                             <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : (audioUsage[file.name] ? '#C6F6D5' : 'transparent'), display: 'flex', alignItems: 'center' }}>
-                                                <IconButton icon={<EditIcon />} onClick={() => handleEditClick(file)} size='sm' margin='5px' />
+                                                <IconButton icon={<EditIcon />} onClick={() => handleEditClick(file)} colorScheme='highlightColor' size='xs' margin='5px' />
                                                 {!editMode[file.name] && (
                                                     <p onClick={() => handleFileClick(file)} style={{ marginRight: '10px', flex: '1' }}>
                                                         {file.name}
@@ -405,25 +406,27 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                     </p>
                                                 )}
                                                 {editMode[file.name] && (
-                                                    <input type="text" value={editedName} onChange={(e) => handleNameChange(e, file)} />
+                                                    <input type="text" colorScheme='darkButtons' value={editedName} onChange={(e) => handleNameChange(e, file)} style={{ paddingLeft: '5px' }} />
                                                 )}
-                                                {audioLengths[file.name] && (
+                                                {audioLengths[file.name] && !editMode[file.name] && (
                                                     <span style={{ color: 'black', marginRight: '10px' }}>Length: {audioLengths[file.name]}</span>
                                                 )}
-                                                <div style={{ width: '150px' }}>
-                                                    <Select size="sm" value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons">
-                                                        <option value="question">Question Audio</option>
-                                                        <option value="story">Story Audio</option>
-                                                        <option value="interaction">Interaction Signal Audio</option>
-                                                        <option value="background">Background Audio</option>
-                                                        <option value="answer">Answer Audio</option>
-                                                        <option value="universal">Universal</option>
-                                                        <option value="answerProcessAudio">Answer Process Audio</option>
-                                                    </Select>
-                                                </div>
+                                                {!editMode[file.name] && (
+                                                    <div style={{ width: '150px' }}>
+                                                        <Select size="sm" value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons" style={{ justifyContent: 'flex-end', flex: '1', alignItems: 'center' }}>
+                                                            <option value="question">Question Audio</option>
+                                                            <option value="story">Story Audio</option>
+                                                            <option value="interaction">Interaction Signal Audio</option>
+                                                            <option value="background">Background Audio</option>
+                                                            <option value="answer">Answer Audio</option>
+                                                            <option value="universal">Universal</option>
+                                                            <option value="answerProcessAudio">Answer Process Audio</option>
+                                                        </Select>
+                                                    </div>
+                                                )}
                                                 {editMode[file.name] && (
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                        <Button size='sm' colorScheme='darkButtons' onClick={() => handleNameConfirmation(file)}>Confirm</Button>
+                                                    <div style={{ display: 'flex', justifyContent: 'flex-end', flex: '1' }}>
+                                                        <Button size='sm' colorScheme='highlightColor' style={{ marginRight: '8px' }} onClick={() => handleNameConfirmation(file)}>Confirm</Button>
                                                         <Button size='sm' colorScheme='darkButtons' onClick={() => setEditMode(prevState => ({ ...prevState, [file.name]: false }))}>Cancel</Button>
                                                     </div>
                                                 )}

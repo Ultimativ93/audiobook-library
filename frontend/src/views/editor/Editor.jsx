@@ -145,6 +145,7 @@ const Editor = () => {
         }
     }, [nodes]);
 
+    console.log("Edges", edges);
     console.log("Nodes", nodes);
 
     return (

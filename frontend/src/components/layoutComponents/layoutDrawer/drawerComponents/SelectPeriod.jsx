@@ -22,7 +22,7 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
     };
 
     fetchAudioPaths();
-  }, [audiobookTitle]);
+  }, [audiobookTitle, nodeData]);
 
   useEffect(() => {
     if (!arraysEqual(answerAudios, nodeData.data.answerAudios || [])) {
@@ -79,7 +79,16 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
     setPeriods(newPeriods);
     setAnswerBackgroundAudio([...answerBackgroundAudio, false]);
-  };
+
+    const lastHandleIndex = periods.length;
+    const lastHandleId = `${nodeData.id}-handle-${lastHandleIndex}`;
+    console.log("lastHandleId", lastHandleId)
+    const lastEdge = edges.find(edge => edge.sourceHandle === lastHandleId);
+    if (lastEdge) {
+        lastEdge.sourceHandle = `${nodeData.id}-handle-${lastHandleIndex + 1}`;
+        setEdges([...edges]);
+    }
+};
 
   const handlePeriodChange = (index, field, value) => {
     const updatedPeriods = [...periods];
@@ -89,18 +98,54 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
   };
 
   const handleRemovePeriod = (index) => {
+    console.log("index", index)
     const newPeriods = [...periods];
     newPeriods.splice(index, 1);
     setPeriods(newPeriods);
     updateNodeProperty(setNodes, nodeData, 'answerPeriods', newPeriods);
+
     const newAnswerAudios = [...answerAudios];
     newAnswerAudios.splice(index, 1);
     setAnswerAudios(newAnswerAudios);
     updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
-    const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+
+    const newAnswerBackgroundAudio = [...nodeData.data.backgroundAudio];
     newAnswerBackgroundAudio.splice(index, 1);
+
+    newAnswerBackgroundAudio.forEach(audio => {
+      if (audio.audio.includes('answer-')) {
+        const parts = audio.audio.split('-');
+        const audioIndex = parseInt(parts[1]);
+        if (audioIndex > index) {
+          parts[1] = (audioIndex - 1).toString();
+          audio.audio = parts.join('-');
+        }
+      }
+    });
+
+    updateNodeProperty(setNodes, nodeData, 'backgroundAudio', newAnswerBackgroundAudio);
     setAnswerBackgroundAudio(newAnswerBackgroundAudio);
+    updateEdgesAfterPeriodRemoval(index);
   };
+
+  const updateEdgesAfterPeriodRemoval = (index) => {
+    const removedHandleId = `${nodeData.id}-handle-${index}`;
+    console.log("removedHandleId", removedHandleId);
+    const newEdges = edges.filter(edge => {
+      if (edge.sourceHandle === removedHandleId) {
+        return false;
+      } else if (edge.sourceHandle && edge.sourceHandle.includes('-handle-')) {
+        const handleIndex = parseInt(edge.sourceHandle.split('-').pop());
+        if (handleIndex > index) {
+          edge.sourceHandle = `${nodeData.id}-handle-${handleIndex - 1}`;
+        }
+      }
+      return true;
+    });
+
+    setEdges(newEdges);
+  };
+
 
   const handleInputBlur = (index, type) => {
     const audio = answerAudios[index];

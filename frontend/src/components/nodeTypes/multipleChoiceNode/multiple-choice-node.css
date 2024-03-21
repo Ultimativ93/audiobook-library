@@ -1,5 +1,5 @@
 .multiple-choice-node {
-  height: auto; /* Ändern Sie die Höhe auf automatisch */
+  height: 75px;
   width: 200px;
   padding: 5px;
   border-radius: 4px;
@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative; /* Fügen Sie eine relative Position hinzu */
+  position: relative;
 }
 
 .multiple-choice-node label {

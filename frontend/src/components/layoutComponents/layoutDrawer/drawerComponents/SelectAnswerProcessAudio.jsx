@@ -19,7 +19,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodeData]);
 
     useEffect(() => {
         setSelectedAnswerProcessAudio(nodeData.data.answerProcessAudio || '');

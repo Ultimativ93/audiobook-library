@@ -20,7 +20,7 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodeData]);
 
     useEffect(() => {
         if (nodeData.data && Array.isArray(nodeData.data.backgroundAudio)) {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
-import { removeAnswer, updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
@@ -20,7 +20,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodeData]);
 
     useEffect(() => {
         setAnswers(nodeData.data.answers);
@@ -46,12 +46,22 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
     const handleRemoveAnswer = (index) => {
         const newAnswers = [...answers];
         const newAnswerAudios = [...answerAudios];
-        const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+        const newAnswerBackgroundAudio = [...nodeData.data.backgroundAudio];
         
-        // Entfernen Sie das Element aus den Arrays
         newAnswers.splice(index, 1);
         newAnswerAudios.splice(index, 1);
         newAnswerBackgroundAudio.splice(index, 1);
+
+        newAnswerBackgroundAudio.forEach(audio => {
+            if (audio.audio.includes('answer-')) {
+              const parts = audio.audio.split('-');
+              const audioIndex = parseInt(parts[1]);
+              if (audioIndex > index) {
+                parts[1] = (audioIndex - 1).toString();
+                audio.audio = parts.join('-');
+              }
+            }
+          });
         
         const removedHandleId = `${nodeData.id}-handle-${index}`;
         const newEdges = edges.filter(edge => {
@@ -73,7 +83,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         
         updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
         updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
-        updateNodeProperty(setNodes, nodeData, 'answerBackgroundAudio', newAnswerBackgroundAudio);
+        updateNodeProperty(setNodes, nodeData, 'backgroundAudio', newAnswerBackgroundAudio);
     }; 
 
     const handleInputChange = (index, value, type) => {

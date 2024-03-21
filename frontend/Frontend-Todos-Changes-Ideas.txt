@@ -176,15 +176,13 @@ Nach Priorität:
             - !!!!! (1):   
 
             - !!! (2):
-                - Reaction Node Antworten löschen und Edges aktualisieren.                                                                                                              O
-                - Gucken ob answer audio und background answer audio (falls gesetzt) ebenfalls gelöscht werden wenn antworten gelöscht werden.                                          O
                 - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
                 - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
                 - Tutorial Seite                                                                                                                                                        O
                 - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              O
                 - Nach Upload sollten Daten auch im Drawer angezeigt werden (refresh)                                                                                                   O
                 - Suchen nach Audio in den InputFields                                                                                                                                  O
-                - Remove Audio bei answer delete (Choice, Multiple, Reaction, Time)                                                                                                     O
+                - Benutztes Adudio, warnungn beim löschen                                                                                                                               O
 
             - ! (3):
                 - Node löschen Button                                                                                                                                                   O
@@ -199,27 +197,20 @@ Nach Priorität:
                 - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
                 - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
                 - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
-                - Hinweis im Tutorial das Background audio gelooped werden kann.                                                                                                        O
+                - Hinweis im Tutorial das Background audio gelooped wird.                                                                                                        O
                 - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
                 - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.                                                                                       O
-                - ExistingAudiobookSetup: Wir haben es bisher so programmiert, dass man den bestehenden Audiobook Titel nicht ändern darf, ansonsten muss auch der                      O
-                    name des flows und der dazugehörigen Audiopaths geändert werden.
-                - Hier muss noch abgefangen werden, dass wenn man sich eine grafik/ein Audio angesehen/gehört hat, und man dann ein anderes audio/grafik anwählt, dass dieses           O
-                    dann auch angezeigt/abspielbar wird.
                 - Team + Contact erstellen und stylen                                                                                                                                   O
                 - UploadTasks: + Button hat noch keine Funktion, sollte eigentlich Ordner hinzufügen, dann brauchen wir aber auch eine Ordnerstruktur                                   O
                 - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                               O
-                - Bei Playable Flows, bei upload in der Datenbank als spielbar abspeichern und diese auf einer Seite sammeln (erstmal alle die abspielbar sind)                         O
                 - AudioBookSetup, gucken ob es noch benötigt wird. (NewAudiobookSetup, ExistingAudiobookSetup)                                                                          O
                 - ValidateFlow: sollte dann im Editor auch anzeigen, welche Nodes noch Fehlerhaft sind, und im Drawer welche Felder ausgewählt werden müssen.                           O
                 - Editor: Bei einem neuen Projekt, wird noch der flow direkt versucht zu fetchen, hier könnten wir erstmal saven und dann restoren, dann bekommen wir auch keinen       O
                     Fehler
-                - Sicherheit: Im Upload, später noch eine antiviren library benutzen, oder anders absichern                                                                             O
-                - Menü geht erst beim erneuten klicken auf das Menü zu, anpassen                                                                                                        O
-                - Sortieren der Nodes hinzufügen                                                                                                                                        O  
+                - Sicherheit: Im Upload, später noch eine antiviren library benutzen, oder anders absichern                                                                             O 
                 - StateVariablen in ModalStateContext auslagern wenn noch Zeit ist, diese Datei sollte dann auch nochmal umbenant werden zu StateLibrary oder StateContext              O
                 - Save Button laden lassen, wenn gespeichert wird.                                                                                                                      O
-                - Wenn eine Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab             O
+                - Wenn Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab                  O
                     und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
                 - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
                 - Responsive für die meisten größen                                                                                                                                     O
@@ -355,6 +346,17 @@ Erledigt:
                 - SelectAnswerTime werden zwar die edges gelöscht aber nicht die antworten angucken                                                                                     X
                 - SelectAnswersTime: Beim löschen von Antworten, werden die Edges verschoben, also das target wechselt.                                                                 X
                 - Beim löschen von Answers, werden zwar die Antworten gelöscht, aber die Edges noch nicht oder in falscher Reihenfolge                                                  X
+                - Reaction Node Antworten löschen und Edges aktualisieren.                                                                                                              X
+                - Gucken ob answer audio und background answer audio (falls gesetzt) ebenfalls gelöscht werden wenn antworten gelöscht werden.                                          X
+                - Remove Audio bei answer delete (Choice, Multiple, Reaction, Time)                                                                                                     X
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X
+                - Bei Playable Flows, bei upload in der Datenbank als spielbar abspeichern und diese auf einer Seite sammeln (erstmal alle die abspielbar sind)                         X
+                - ExistingAudiobookSetup: Wir haben es bisher so programmiert, dass man den bestehenden Audiobook Titel nicht ändern darf, ansonsten muss auch der                      X
+                    name des flows und der dazugehörigen Audiopaths geändert werden.
+                - Hier muss noch abgefangen werden, dass wenn man sich eine grafik/ein Audio angesehen/gehört hat, und man dann ein anderes audio/grafik anwählt, dass dieses           X
+                    dann auch angezeigt/abspielbar wird.
+                - Menü geht erst beim erneuten klicken auf das Menü zu, anpassen                                                                                                        X
+                - Sortieren der Nodes hinzufügen                                                                                                                                        X 
+

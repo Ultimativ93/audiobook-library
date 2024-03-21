@@ -19,7 +19,7 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodeData]);
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'interaction' || audio.audioCategory === 'universal');
 

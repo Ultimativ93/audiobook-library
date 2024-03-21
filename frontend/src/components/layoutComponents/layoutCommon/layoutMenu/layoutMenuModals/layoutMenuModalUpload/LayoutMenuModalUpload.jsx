@@ -37,7 +37,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
         };
 
         fetchData();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodes]);
 
     useEffect(() => {
         setProjectFiles(files => sortFiles(files, sortBy, audioLengths, audioUsage));

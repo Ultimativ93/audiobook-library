@@ -20,7 +20,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     };
 
     fetchAudioPaths();
-  }, [audiobookTitle]);
+  }, [audiobookTitle, nodeData]);
 
   useEffect(() => {
     if (!arraysEqual(answers, nodeData.data.answers || [])) {
@@ -87,14 +87,32 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
     if (nodeData.type !== 'muAns') {
       const newAnswers = [...answers];
       const newAnswerAudios = [...answerAudios];
-      const newAnswerBackgroundAudio = [...answerBackgroundAudio];
+      const newAnswerBackgroundAudio = [...nodeData.data.backgroundAudio];
+      console.log("newAnswerBackgroundAudio", newAnswerBackgroundAudio);
 
+      const deletedBackgroundAudio = newAnswerBackgroundAudio[index];
+      console.log("deletedBackgroundAudio", deletedBackgroundAudio);
+
+      newAnswers.splice(index, 1);
       newAnswerAudios.splice(index, 1);
-      newAnswerBackgroundAudio.splice(index, 1);
+
+      if (deletedBackgroundAudio && deletedBackgroundAudio.audio.includes('answer-')) {
+        newAnswerBackgroundAudio.splice(index, 1);
+        console.log("newAnswerBackgroundAudio", newAnswerBackgroundAudio);
+
+        for (let i = index; i < newAnswerBackgroundAudio.length; i++) {
+          if (newAnswerBackgroundAudio[i] && newAnswerBackgroundAudio[i].audio.includes('answer-')) {
+            const parts = newAnswerBackgroundAudio[i].audio.split('-');
+            parts[1] = (parseInt(parts[1]) - 1).toString();
+            newAnswerBackgroundAudio[i].audio = parts.join('-');
+          }
+        }
+      }
 
       const removedHandleId = `${nodeData.id}-handle-${index}`;
       const newEdges = edges.filter(edge => {
         if (edge.sourceHandle === removedHandleId) {
+          return false;
         } else if (edge.sourceHandle && edge.sourceHandle.includes('-handle-')) {
           const handleIndex = parseInt(edge.sourceHandle.split('-').pop());
           if (handleIndex > index) {
@@ -106,14 +124,17 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
 
       setAnswers(newAnswers);
       setAnswerAudios(newAnswerAudios);
-      setAnswerBackgroundAudio(newAnswerBackgroundAudio);
       setEdges(newEdges);
 
       updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
       updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
+      updateNodeProperty(setNodes, nodeData, 'backgroundAudio', newAnswerBackgroundAudio);
     } else if (nodeData.type === 'muAns') {
       const removedAnswer = answers[index];
       const updatedAnswers = answers.filter(answer => answer !== removedAnswer);
+      const updatedAnswerAudios = answerAudios.filter((audio, i) => i !== index);
+      const updatedAnswerBackgroundAudio = [...nodeData.data.backgroundAudio]
+
       let updatedCombinations = [];
 
       if (nodeData.data.answerCombinations) {
@@ -160,7 +181,26 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) 
         setEdges(newEdges);
       }
 
+      updatedAnswerBackgroundAudio.splice(index, 1);
+
+      updatedAnswerBackgroundAudio.forEach(audio => {
+        if (audio.audio.includes('answer-')) {
+          const parts = audio.audio.split('-');
+          const audioIndex = parseInt(parts[1]);
+          if (audioIndex > index) {
+            parts[1] = (audioIndex - 1).toString();
+            audio.audio = parts.join('-');
+          }
+        }
+      });
+
+      setAnswers(updatedAnswers);
+      setAnswerAudios(updatedAnswerAudios);
+      setAnswerBackgroundAudio(updatedAnswerBackgroundAudio);
+
       updateNodeProperty(setNodes, nodeData, 'answers', updatedAnswers);
+      updateNodeProperty(setNodes, nodeData, 'answerAudios', updatedAnswerAudios);
+      updateNodeProperty(setNodes, nodeData, 'backgroundAudio', updatedAnswerBackgroundAudio)
       updateNodeProperty(setNodes, nodeData, 'answerCombinations', updatedCombinations);
     }
   }

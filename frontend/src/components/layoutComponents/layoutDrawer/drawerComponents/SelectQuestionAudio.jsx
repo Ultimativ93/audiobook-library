@@ -19,7 +19,7 @@ const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodeData]);
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'question' || audio.audioCategory === 'universal');
 

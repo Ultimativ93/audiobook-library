@@ -19,7 +19,7 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle]);
+    }, [audiobookTitle, nodeData]);
 
     useEffect(() => {
         setSelectedAudioStory(nodeData.data.audioStory || '');

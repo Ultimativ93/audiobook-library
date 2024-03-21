@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Select, Input, ModalFooter } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 import './layout-menu-modal-publish.css';
 
@@ -9,11 +10,11 @@ import LinkSetup from '../../layoutMenuComponents/LinkSetup';
 import LinkPreview from '../../layoutMenuComponents/LinkPreview';
 import FetchAudio from '../../../../../tasks/editorTasks/FetchAudio';
 
-import { handleGetDetails, handleChangeDetails } from '../../../../../tasks/setupTasks/FetchDetails';
-import { fetchThumbnail, fetchThumbnailImage, validateNodesAndEdges, uploadValidatedFlow, getValidatedFlowTitle, deleteUnusedAudio } from '../../../../../tasks/publishTasks/PublishFunctions';
+import { handleGetDetails, handleChangeDetailsThumbnail } from '../../../../../tasks/setupTasks/FetchDetails';
+import { fetchAllGraphicNames, fetchThumbnailImage, validateNodesAndEdges, uploadValidatedFlow, getValidatedFlowTitle, deleteUnusedAudio, getThumbnailPath } from '../../../../../tasks/publishTasks/PublishFunctions';
 import { useAudioUsage } from '../../../../layoutDrawer/LayoutDrawerFunctions';
 
-const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookTitle, nodes, edges, rfInstance }) => {
+const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookTitle, nodes, edges, rfInstance, fileChange, setFileChange }) => {
     const [publishData, setPublishData] = useState({ thumbnail: '', description: '' });
     const [graficPaths, setGraficPaths] = useState([]);
     const [audioPaths, setAudioPaths] = useState([]);
@@ -30,7 +31,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedThumbnails = await fetchThumbnail(audiobookTitle);
+                const fetchedThumbnails = await fetchAllGraphicNames(audiobookTitle);
                 setGraficPaths(fetchedThumbnails);
                 const details = await handleGetDetails(audiobookTitle);
                 if (details) {
@@ -42,16 +43,17 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                 console.error('Error fetching thumbnails or details.', error);
             }
         };
-
+        console.log("FETCHING")
         fetchData();
-    }, [audiobookTitle]);
+        setFileChange(false);
+    }, [audiobookTitle, fileChange]);
 
     useEffect(() => {
         const fetchData = async () => {
             const fetchedAudio = await FetchAudio(audiobookTitle);
             setAudioPaths(fetchedAudio);
         };
-        
+
         fetchData();
     }, [audiobookTitle]);
 
@@ -61,7 +63,8 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                 try {
                     const selectedGraphic = graficPaths.find(graphic => graphic.audioName === publishData.thumbnail);
                     if (selectedGraphic) {
-                        const imageData = await fetchThumbnailImage(selectedGraphic.audioPath);
+                        const thumbnailPath = await getThumbnailPath(audiobookTitle, selectedGraphic.audioName);
+                        const imageData = await fetchThumbnailImage(thumbnailPath);
                         setThumbnailImage(imageData);
                     } else {
                         console.error('Selected graphic not found in graficPaths.');
@@ -89,6 +92,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
     const handleInputChange = async (e, type) => {
         if (type === 'thumbnailGrafic') {
             const value = e.target.value;
+            handleChangeDetailsThumbnail(audiobookTitle, value, publishData.thumbnail);
             setPublishData({ ...publishData, thumbnail: value });
         } else if (type === 'description') {
             const value = e.target.value;
@@ -157,13 +161,15 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                         <p>By uploading the audiobook, any unused audio files on the server will be deleted. Are you sure you want to proceed?</p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="highlightColor" mr={3} onClick={() => {
-                            uploadValidatedFlow(audiobookTitle, rfInstance, publishData.thumbnail, publishData.description, publishData.length, publishData.keywords, publishData.title);
-                            deleteUnusedAudio(audiobookTitle, audioUsage);
-                            onConfirmationModalClose();
-                        }}>
-                            Yes, proceed
-                        </Button>
+                        <Link to={`/audiobook/${audiobookTitle}`}>
+                            <Button colorScheme="highlightColor" mr={3} onClick={() => {
+                                uploadValidatedFlow(audiobookTitle, rfInstance, publishData.thumbnail, publishData.description, publishData.length, publishData.keywords, publishData.title);
+                                deleteUnusedAudio(audiobookTitle, audioUsage);
+                                onConfirmationModalClose();
+                            }}>
+                                Yes, proceed
+                            </Button>
+                        </Link>
                         <Button variant="ghost" onClick={onConfirmationModalClose}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>

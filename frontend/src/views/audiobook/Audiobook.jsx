@@ -46,9 +46,10 @@ const Audiobook = () => {
         const fetchedThumbnail = async () => {
             if (validatedFlow && validatedFlow.thumbnail) {
                 try {
+                    
                     const paths = await fetchThumbnail(validatedFlow.flowKey);
-                    if (paths && paths.length > 0) {
-                        const imageData = await fetchThumbnailImage(paths[0].audioPath);
+                    if (paths) {
+                        const imageData = await fetchThumbnailImage(paths);
                         setThumbnailImage(imageData);
                     }
                 } catch (error) {
@@ -69,8 +70,6 @@ const Audiobook = () => {
     const handleToggleDescription = () => {
         setShowFullDescription(!showFullDescription);
     };
-
-    console.log("validatedFlow, flowDetails:", validatedFlow, flowDetails);
 
     return (
         <div className='audiobook-wrapper'>

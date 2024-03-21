@@ -125,8 +125,10 @@ class Database {
                 }
 
                 const detailData = JSON.parse(row.detailData);
-
-                if (detailData.thumbnail && detailData.thumbnail === audioName) {
+                console.log("DETAIL DATA", detailData)
+                console.log("DETAILDATA.THUMBNAIL", detailData.thumbnail);
+                if (detailData.thumbnail || detailData.thumbnail !== '' || detailData.thumbnail === '') {
+                    console.log("HIER DRIN")
                     detailData.thumbnail = newAudioName;
 
                     const updatedDetailData = JSON.stringify(detailData);
@@ -267,6 +269,36 @@ class Database {
             });
         });
     }
+
+    // Get thumbnail path from details.
+    getThumbnailName(audiobookTitle) {
+        console.log('Getting thumbnail path for audiobook title:', audiobookTitle);
+    
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT detailData FROM details WHERE audiobookTitle = ?', [audiobookTitle], (err, row) => {
+                if (err) {
+                    reject(err.message);
+                    return;
+                }
+    
+                if (!row || !row.detailData) {
+                    reject(new Error(`No details found for audiobookTitle ${audiobookTitle}`));
+                    return;
+                }
+    
+                const detailData = JSON.parse(row.detailData);
+                const thumbnailPath = detailData.thumbnail;
+    
+                if (!thumbnailPath) {
+                    reject(new Error(`No thumbnail found for audiobookTitle ${audiobookTitle}`));
+                    return;
+                }
+    
+                resolve(thumbnailPath);
+            });
+        });
+    }
+    
 
     // Get single audioPath from audioPaths for a specific audiobookTitle
     getFilePath(audioName, audiobookTitle) {
@@ -492,6 +524,19 @@ class Database {
             });
         });
     }
+
+    getAllGraficFileNames(audiobookTitle) {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT audioName FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+    
 
     // Closing database
     close() {

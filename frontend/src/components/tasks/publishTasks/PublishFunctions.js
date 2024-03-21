@@ -17,15 +17,26 @@ import {
     validateEdgeStart,
 } from '../editorTasks/ValidateFlow';
 
+export const fetchAllGraphicNames = async (audiobookTitle) => {
+    try {
+        const fetchedPaths = await axios.get(`http://localhost:3005/getAllGraficNames?audiobookTitle=${audiobookTitle}`);
+        const graficPaths = fetchedPaths.data;
+        return graficPaths;
+    } catch (error) {
+        console.error('Error fetching all grafics.', error);
+        return;
+    }
+}
+
 export const fetchThumbnail = async (audiobookTitle) => {
     try {
-        const fetchedPaths = await axios.get('http://localhost:3005/graficPaths', {
+        const fetchedPath = await axios.get('http://localhost:3005/graficThumbnail', {
             params: {
                 audiobookTitle: audiobookTitle
             }
         });
-        const graficPaths = fetchedPaths.data;
-        return graficPaths;
+        const graficPath = fetchedPath.data;
+        return graficPath;
     } catch (error) {
         console.error('Error fetching thumbnails.', error);
         return;
@@ -173,6 +184,21 @@ export const getValidatedFlowTitle = async (title) => {
     }
 }
 
+export const getThumbnailPath = async (audiobookTitle, graficName) => {
+    try {
+        const response = await axios.get('http://localhost:3005/getAudioName', {
+            params: {
+                audiobookTitle: audiobookTitle,
+                audioName: graficName
+            }
+        })
+        return response.data;
+    } catch (error) {
+        console.error('Error getting Thumbnail path:', error);
+        return;
+    }
+}
+
 export const deleteUnusedAudio = async (audiobookTitle, audioUsage) => {
     console.log("AudiobookTitle, audioUsage", audiobookTitle, audioUsage);
     try {
@@ -188,9 +214,11 @@ export const deleteUnusedAudio = async (audiobookTitle, audioUsage) => {
 
 const handleFileDelete = async (file, audiobookTitle) => {
     try {
+        console.log("file to delete", file, audiobookTitle)
         const response = await axios.post('http://localhost:3005/deleteFile', { file, audiobookTitle });
         console.log('File deleted successfully:', response.data);
     } catch (error) {
         console.error('Error deleting file:', error);
     }
 }
+

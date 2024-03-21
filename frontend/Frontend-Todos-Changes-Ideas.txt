@@ -176,15 +176,10 @@ Nach Priorität:
             - !!!!! (1):   
 
             - !!! (2):
-                - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  O
-                - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              O
                 - Tutorial Seite                                                                                                                                                        O
-                - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              O
-                - Nach Upload sollten Daten auch im Drawer angezeigt werden (refresh)                                                                                                   O
-                - Suchen nach Audio in den InputFields                                                                                                                                  O
-                - Benutztes Adudio, warnungn beim löschen                                                                                                                               O
 
             - ! (3):
+                - RoutesController logs entfernen/anpassen                                                                                                                              O
                 - Node löschen Button                                                                                                                                                   O
                 - Drawer onClose ohne Transition.                                                                                                                                       O
                 - Undo/Redo Buttons                                                                                                                                                     O
@@ -230,6 +225,7 @@ Nach Priorität:
                 - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
                 - Statt zwei Server (Backend Frontend) nur einen Server, server so konfigurieren das nur public sichtbar ist                                                            O
                 - Statt SQLite, MySql fürs veröffentlichen benutzen, da scallable und mulituser                                                                                         O
+                - Suchen nach Audio in den InputFields                                                                                                                                  O
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.                       O
@@ -349,6 +345,16 @@ Erledigt:
                 - Reaction Node Antworten löschen und Edges aktualisieren.                                                                                                              X
                 - Gucken ob answer audio und background answer audio (falls gesetzt) ebenfalls gelöscht werden wenn antworten gelöscht werden.                                          X
                 - Remove Audio bei answer delete (Choice, Multiple, Reaction, Time)                                                                                                     X
+                - useAudioUsage sollte direkt anzeigen, dass die Audios benutzt werden                                                                                                  X
+                - ReactionNode, Probleme beim removen einer Period. Dabei wird, wenn es eine Edge von noReaction gibt, die Edge verschoben                                              X
+                - Benutztes Adudio, warnungn beim löschen                                                                                                                               X
+                - Nach Upload sollten Daten auch im Drawer angezeigt werden (refresh)                                                                                                   X
+                - ChangeDetails wird noch nicht ausgeführt in Publish, wenn ein Thumbnail ausgewählt wird.                                                                              X
+                - Fehler beim löschen eines Projektes  files werden nicht gelöscht                                                                                                      X
+                - Delete von unused files funktioniert nicht mehr                                                                                                                       X
+                - Player funktioniert nicht mehr.                                                                                                                                       X
+                - Bilder werden nicht richtig aktualisiert in Audiobook                                                                                                                 X
+                - Publish Daten werden nicht gespeichert, Daten werden nicht angezeigt wenn hochgeladen                                                                                 X
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X

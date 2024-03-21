@@ -7,13 +7,13 @@ import SelectInteraktionSignal from '../../drawerComponents/SelectInteractionSig
 import LinkUpload from '../../drawerComponents/LinkUpload';
 import SetNote from '../../drawerComponents/SetNote';
 
-const MuChoiFormatGeneral = ({ nodeData, setNodes, audiobookTitle }) => {
+const MuChoiFormatGeneral = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange  }) => {
 
     return (
             <DrawerBody>
                 <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
-                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>
-                <SelectInteraktionSignal nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>
+                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                <SelectInteraktionSignal nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
                 <SetNote nodeData={nodeData} setNodes={setNodes} />
                 <LinkUpload />
             </DrawerBody> 

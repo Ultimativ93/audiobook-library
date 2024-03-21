@@ -48,6 +48,7 @@ const Editor = () => {
     const [isNodeSelected, setIsNodeSelected] = useState(false);
     const [previousNodes, setPreviousNodes] = useState([]);
     const [previousEdges, setPreviousEdges] = useState([]);
+    const [fileChange, setFileChange] = useState(false);
 
     // Get parameters from URL
     const { audiobookTitleParam } = useParams();
@@ -129,11 +130,14 @@ const Editor = () => {
 
     // Updates Nodes in Drawer
     useEffect(() => {
+        console.log("nodes haben sich verändert")
         if (selectedNodes.length > 0) {
             const selectedNodeId = selectedNodes[0];
             const selectedNode = nodes.find(node => node.id === selectedNodeId);
+            console.log("selectedNodeData !!!!!!!!!!!!", selectedNodeData);
             if (selectedNode) {
                 setSelectedNodeData(selectedNode);
+                console.log("nodeData aktualisiert")
                 //setIsDrawerOpen(true);
             } else {
                 //setIsDrawerOpen(false);
@@ -143,15 +147,15 @@ const Editor = () => {
             //setIsDrawerOpen(false);
             //setSelectedNodeData(null);
         }
-    }, [nodes]);
+    }, [nodes, selectedNodes]);
 
     console.log("Edges", edges);
     console.log("Nodes", nodes);
 
     return (
         <div className='editor-wrapper'>
-                <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
-                <LayoutEditorButtons onSave={onSave} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} onLayout={onLayout} setNodes={setNodes} setEdges={setEdges} fitView={fitView} />
+                <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
+                <LayoutEditorButtons onSave={onSave} onAdd={onAdd} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} selectedNodes={selectedNodes} onLayout={onLayout} setNodes={setNodes} setEdges={setEdges} fitView={fitView} fileChange={fileChange} setFileChange={setFileChange} />
 
                 <ReactFlow
                     nodes={nodes}

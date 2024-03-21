@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Button, Select, IconButton, Input } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, ModalFooter, Button, Select, IconButton, Input } from '@chakra-ui/react';
 import { DeleteIcon, ArrowRightIcon, ViewIcon, DownloadIcon, EditIcon } from '@chakra-ui/icons';
 import { useDropzone } from 'react-dropzone';
 
@@ -11,7 +11,7 @@ import { useAudioUsage } from '../../../../layoutDrawer/LayoutDrawerFunctions';
 import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../../../tasks/playerTasks/PlayerLogic';
 import FetchAudio from '../../../../../tasks/editorTasks/FetchAudio';
 
-const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTitle, nodes, setNodes }) => {
+const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTitle, nodes, setNodes, setFileChange }) => {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [projectFiles, setProjectFiles] = useState([]);
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -27,6 +27,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
     const [editedName, setEditedName] = useState('');
     const [oldEditedName, setOldEditedName] = useState('');
     const [editMode, setEditMode] = useState({});
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const audioUsage = useAudioUsage(audioPaths);
 
@@ -119,7 +120,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                     reader.readAsArrayBuffer(file);
                 });
             };
-
+            
             checkFiles();
         },
         onDropRejected: () => setUploadSuccess(false),
@@ -137,6 +138,8 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             errors: [{ code: "duplicate", message: `The file "${file.name}" already exists in the project.` }]
         }));
         setLocalFileRejections(rejectedFiles);
+        
+        setFileChange(true);
     }
 
     const handleFileClick = async (file) => {
@@ -148,14 +151,41 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
     }
 
     const handleDeleteSelectedFiles = () => {
-        selectedFiles.forEach(file => {
-            handleFileDelete(file, audiobookTitle, setProjectFiles);
+        const linkedFiles = selectedFiles.filter(file => audioUsage[file.name]);
+        if (linkedFiles.length > 0) {
+            setShowDeleteModal(true);
+        } else {
+            deleteFiles(selectedFiles);
+        }
+    }
+
+    const deleteFiles = (filesToDelete) => {
+        filesToDelete.forEach(file => {
+            handleFileDelete(file.name, audiobookTitle, setProjectFiles);
         });
         setSelectedFiles([]);
         setAudioUrls([]);
         setShowAudio(false);
         setShowGraphic(false);
-    }
+        setShowDeleteModal(false);
+    
+        deleteFileFromNodes(filesToDelete, nodes);
+        setNodes([...nodes]);
+        setFileChange(true);
+    };
+    
+    const deleteFileFromNodes = (filesToDelete, nodes) => {
+        const fileNamesToDelete = filesToDelete.map(file => file.name);
+        
+        nodes.forEach(node => {
+            Object.keys(node.data).forEach(key => {
+                if (typeof node.data[key] === 'string' && fileNamesToDelete.includes(node.data[key])) {
+                    node.data[key] = '';
+                }
+            });
+        });
+    };
+       
 
     const handlePlayClick = () => {
         if (showAudio) {
@@ -277,6 +307,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             }
         };
         fetchData();
+
     }, [audiobookTitle, uploadSuccess, category, acceptedFiles]);
 
     useEffect(() => {
@@ -294,168 +325,185 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
     }, [sortBy]);
 
     return (
-        <Modal isOpen={isModalUploadOpen} size='5xl' onClose={() => setModalsState(prevState => ({ ...prevState, isUploadModalOpen: false }))}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Media Manager</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <div className="layout-menu-modal-upload-wrapper">
-                        <div className="layout-menu-modal-upload-left">
-                            <div {...getRootProps({ className: 'dropzone' })}>
-                                <input {...getInputProps()} />
-                                <div className='layout-menu-modal-upload-dropzone'>
-                                    <p>Drag some files here, or click to select files.</p>
-                                    <DownloadIcon style={{ fontSize: 64, color: 'white', marginLeft: '10px' }} />
-                                </div>
-                            </div>
-                            {uploadSuccess ? (
-                                <p style={{ color: 'black', fontWeight: 'bold', marginTop: '20px' }}>Your files have been successfully uploaded to the server!</p>
-                            ) :
-                                <aside>
-                                    <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Files</p>
-                                    <ul>
-                                        {acceptedFiles.map((file, index) => (
-                                            <li key={index}>
-                                                <span style={{ color: 'black', marginRight: '10px' }}>{file.name}</span>
-                                                <span style={{ color: 'black' }}>{file.size} bytes</span>
-                                                <Select size="sm" value={file?.category} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons">
-                                                    <option value="universal">Universal</option>
-                                                    <option value="question">Question Audio</option>
-                                                    <option value="story">Story Audio</option>
-                                                    <option value="interaction">Interaction Signal Audio</option>
-                                                    <option value="background">Background Audio</option>
-                                                    <option value="answer">Answer Audio</option>
-                                                </Select>
-                                                {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    {localFileRejections.length > 0 && <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</p>}
-                                    <ul style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
-                                        {localFileRejections.map(({ file, errors }) => (
-                                            <li key={file.path}>
-                                                <span style={{ color: 'black', marginRight: '10px', marginTop: '10px' }}>{file.path}</span>
-                                                <span style={{ color: 'black' }}>{file.path} - {file.size} bytes</span>
-                                                <ul>
-                                                    {errors.map(e => (
-                                                        <p key={e.code} style={{ color: '#E53E3E', marginLeft: '25px', marginTop: '5px' }}>{e.message}</p>
-                                                    ))}
-                                                </ul>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                </aside>
-                            }
-                            {acceptedFiles.length !== 0 && !uploadSuccess && localFileRejections.length <= 0 && (<Button colorScheme='highlightColor' onClick={handleButtonClick}>Upload</Button>)}
-                        </div>
-
-                        <div className="layout-menu-modal-upload-right-wrapper">
-                            <div className="layout-menu-modal-upload-right">
-                                <div className="layout-menu-modal-upload-right-buttons">
-                                    <div className="layout-menu-modal-upload-right-buttons-left">
-                                        <Button size='sm' colorScheme='darkButtons' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
-                                        {showAudio && (
-                                            <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
-                                                Hide Audio
-                                            </Button>
-                                        )}
-                                        {!showAudio && (
-                                            <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
-                                                Play Audio
-                                            </Button>
-                                        )}
-                                        {showGraphic && (<Button size='sm' colorScheme='darkButtons' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
-                                            Hide Graphic
-                                        </Button>)}
-                                        {!showGraphic && (<Button size='sm' colorScheme='darkButtons' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
-                                            Show Graphic
-                                        </Button>)}
-                                    </div>
-                                    <div className="layout-menu-modal-upload-right-buttons-right">
-                                        <Select size='sm' value={sortBy} onChange={(e) => setSortBy(e.target.value)} focusBorderColor='darkButtons'>
-                                            <option value='byName'>Sort by name</option>
-                                            <option value='byDataType'>Sort by data type</option>
-                                            <option value='byCategory'>Sort by category</option>
-                                            <option value='byLength'>Sort by length</option>
-                                            <option value='byUsed'>Sort by used files</option>
-                                            <option value='byDate'>Sort by uploaddate</option>
-                                        </Select>
-                                        <Select size='sm' value={category} onChange={(e) => setCategory(e.target.value)} focusBorderColor='darkButtons'>
-                                            <option value="universal">Universal</option>
-                                            <option value="question">Question Audio</option>
-                                            <option value="story">Story Audio</option>
-                                            <option value="interaction">Interaction Signal Audio</option>
-                                            <option value="background">Background Audio</option>
-                                            <option value="answer">Answer Audio</option>
-                                        </Select>
+        <>
+            <Modal isOpen={isModalUploadOpen} size='5xl' onClose={() => setModalsState(prevState => ({ ...prevState, isUploadModalOpen: false }))}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Media Manager</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <div className="layout-menu-modal-upload-wrapper">
+                            <div className="layout-menu-modal-upload-left">
+                                <div {...getRootProps({ className: 'dropzone' })}>
+                                    <input {...getInputProps()} />
+                                    <div className='layout-menu-modal-upload-dropzone'>
+                                        <p>Drag some files here, or click to select files.</p>
+                                        <DownloadIcon style={{ fontSize: 64, color: 'white', marginLeft: '10px' }} />
                                     </div>
                                 </div>
-                                <hr />
-                                <div className="layout-menu-modal-upload-right-content">
-                                    {projectFiles
-                                        .filter(file => category === 'universal' || file.category === category)
-                                        .map((file, index) => (
-                                            <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : (audioUsage[file.name] ? '#C6F6D5' : 'transparent'), display: 'flex', alignItems: 'center' }}>
-                                                <IconButton icon={<EditIcon />} onClick={() => handleEditClick(file)} colorScheme='highlightColor' size='xs' margin='5px' />
-                                                {!editMode[file.name] && (
-                                                    <p onClick={() => handleFileClick(file)} style={{ marginRight: '10px', flex: '1' }}>
-                                                        {file.name}
-                                                        {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
-                                                    </p>
-                                                )}
-                                                {editMode[file.name] && (
-                                                    <input type="text" colorScheme='darkButtons' value={editedName} onChange={(e) => handleNameChange(e, file)} style={{ paddingLeft: '5px' }} />
-                                                )}
-                                                {audioLengths[file.name] && !editMode[file.name] && (
-                                                    <span style={{ color: 'black', marginRight: '10px' }}>Length: {audioLengths[file.name]}</span>
-                                                )}
-                                                {!editMode[file.name] && (
-                                                    <div style={{ width: '150px' }}>
-                                                        <Select size="sm" value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons" style={{ justifyContent: 'flex-end', flex: '1', alignItems: 'center' }}>
-                                                            <option value="question">Question Audio</option>
-                                                            <option value="story">Story Audio</option>
-                                                            <option value="interaction">Interaction Signal Audio</option>
-                                                            <option value="background">Background Audio</option>
-                                                            <option value="answer">Answer Audio</option>
-                                                            <option value="universal">Universal</option>
-                                                            <option value="answerProcessAudio">Answer Process Audio</option>
-                                                        </Select>
-                                                    </div>
-                                                )}
-                                                {editMode[file.name] && (
-                                                    <div style={{ display: 'flex', justifyContent: 'flex-end', flex: '1' }}>
-                                                        <Button size='sm' colorScheme='highlightColor' style={{ marginRight: '8px' }} onClick={() => handleNameConfirmation(file)}>Confirm</Button>
-                                                        <Button size='sm' colorScheme='darkButtons' onClick={() => setEditMode(prevState => ({ ...prevState, [file.name]: false }))}>Cancel</Button>
-                                                    </div>
-                                                )}
-                                            </div>
+                                {uploadSuccess ? (
+                                    <p style={{ color: 'black', fontWeight: 'bold', marginTop: '20px' }}>Your files have been successfully uploaded to the server!</p>
+                                ) :
+                                    <aside>
+                                        <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Files</p>
+                                        <ul>
+                                            {acceptedFiles.map((file, index) => (
+                                                <li key={index}>
+                                                    <span style={{ color: 'black', marginRight: '10px' }}>{file.name}</span>
+                                                    <span style={{ color: 'black' }}>{file.size} bytes</span>
+                                                    <Select size="sm" value={file?.category} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons">
+                                                        <option value="universal">Universal</option>
+                                                        <option value="question">Question Audio</option>
+                                                        <option value="story">Story Audio</option>
+                                                        <option value="interaction">Interaction Signal Audio</option>
+                                                        <option value="background">Background Audio</option>
+                                                        <option value="answer">Answer Audio</option>
+                                                    </Select>
+                                                    {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        {localFileRejections.length > 0 && <p style={{ color: 'black', fontSize: '18px', marginTop: '10px', textDecoration: 'underline' }}>Rejected files:</p>}
+                                        <ul style={{ maxWidth: '300px', wordWrap: 'break-word' }}>
+                                            {localFileRejections.map(({ file, errors }) => (
+                                                <li key={file.path}>
+                                                    <span style={{ color: 'black', marginRight: '10px', marginTop: '10px' }}>{file.path}</span>
+                                                    <span style={{ color: 'black' }}>{file.path} - {file.size} bytes</span>
+                                                    <ul>
+                                                        {errors.map(e => (
+                                                            <p key={e.code} style={{ color: '#E53E3E', marginLeft: '25px', marginTop: '5px' }}>{e.message}</p>
+                                                        ))}
+                                                    </ul>
+                                                </li>
+                                            ))}
+                                        </ul>
 
-                                        ))}
+                                    </aside>
+                                }
+                                {acceptedFiles.length !== 0 && !uploadSuccess && localFileRejections.length <= 0 && (<Button colorScheme='highlightColor' style={{ marginTop: '10px'}} onClick={handleButtonClick}>Upload</Button>)}
+                            </div>
+
+                            <div className="layout-menu-modal-upload-right-wrapper">
+                                <div className="layout-menu-modal-upload-right">
+                                    <div className="layout-menu-modal-upload-right-buttons">
+                                        <div className="layout-menu-modal-upload-right-buttons-left">
+                                            <Button size='sm' colorScheme='darkButtons' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
+                                            {showAudio && (
+                                                <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
+                                                    Hide Audio
+                                                </Button>
+                                            )}
+                                            {!showAudio && (
+                                                <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
+                                                    Play Audio
+                                                </Button>
+                                            )}
+                                            {showGraphic && (<Button size='sm' colorScheme='darkButtons' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
+                                                Hide Graphic
+                                            </Button>)}
+                                            {!showGraphic && (<Button size='sm' colorScheme='darkButtons' leftIcon={<ViewIcon />} onClick={handleShowGraphic}>
+                                                Show Graphic
+                                            </Button>)}
+                                        </div>
+                                        <div className="layout-menu-modal-upload-right-buttons-right">
+                                            <Select size='sm' value={sortBy} onChange={(e) => setSortBy(e.target.value)} focusBorderColor='darkButtons'>
+                                                <option value='byName'>Sort by name</option>
+                                                <option value='byDataType'>Sort by data type</option>
+                                                <option value='byCategory'>Sort by category</option>
+                                                <option value='byLength'>Sort by length</option>
+                                                <option value='byUsed'>Sort by used files</option>
+                                                <option value='byDate'>Sort by uploaddate</option>
+                                            </Select>
+                                            <Select size='sm' value={category} onChange={(e) => setCategory(e.target.value)} focusBorderColor='darkButtons'>
+                                                <option value="universal">Universal</option>
+                                                <option value="question">Question Audio</option>
+                                                <option value="story">Story Audio</option>
+                                                <option value="interaction">Interaction Signal Audio</option>
+                                                <option value="background">Background Audio</option>
+                                                <option value="answer">Answer Audio</option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="layout-menu-modal-upload-right-content">
+                                        {projectFiles
+                                            .filter(file => category === 'universal' || file.category === category)
+                                            .map((file, index) => (
+                                                <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : (audioUsage[file.name] ? '#C6F6D5' : 'transparent'), display: 'flex', alignItems: 'center' }}>
+                                                    <IconButton icon={<EditIcon />} onClick={() => handleEditClick(file)} colorScheme='highlightColor' size='xs' margin='5px' />
+                                                    {!editMode[file.name] && (
+                                                        <p onClick={() => handleFileClick(file)} style={{ marginRight: '10px', flex: '1' }}>
+                                                            {file.name}
+                                                            {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
+                                                        </p>
+                                                    )}
+                                                    {editMode[file.name] && (
+                                                        <input type="text" colorScheme='darkButtons' value={editedName} onChange={(e) => handleNameChange(e, file)} style={{ paddingLeft: '5px' }} />
+                                                    )}
+                                                    {audioLengths[file.name] && !editMode[file.name] && (
+                                                        <span style={{ color: 'black', marginRight: '10px' }}>Length: {audioLengths[file.name]}</span>
+                                                    )}
+                                                    {!editMode[file.name] && (
+                                                        <div style={{ width: '150px' }}>
+                                                            <Select size="sm" value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons" style={{ justifyContent: 'flex-end', flex: '1', alignItems: 'center' }}>
+                                                                <option value="question">Question Audio</option>
+                                                                <option value="story">Story Audio</option>
+                                                                <option value="interaction">Interaction Signal Audio</option>
+                                                                <option value="background">Background Audio</option>
+                                                                <option value="answer">Answer Audio</option>
+                                                                <option value="universal">Universal</option>
+                                                                <option value="answerProcessAudio">Answer Process Audio</option>
+                                                            </Select>
+                                                        </div>
+                                                    )}
+                                                    {editMode[file.name] && (
+                                                        <div style={{ display: 'flex', justifyContent: 'flex-end', flex: '1' }}>
+                                                            <Button size='sm' colorScheme='highlightColor' style={{ marginRight: '8px' }} onClick={() => handleNameConfirmation(file)}>Confirm</Button>
+                                                            <Button size='sm' colorScheme='darkButtons' onClick={() => setEditMode(prevState => ({ ...prevState, [file.name]: false }))}>Cancel</Button>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                            ))}
+                                    </div>
+                                </div>
+                                <div className="layout-menu-modal-upload-right-player">
+                                    {showAudio && audioUrls.map((audioUrl, index) => (
+                                        audioUrl && (
+                                            <audio key={index} controls>
+                                                <source src={audioUrl} type="audio/mpeg" />
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        )
+                                    ))}
+
+                                    {showGraphic && graphicUrls.map((graphicUrl, index) => (
+                                        graphicUrl && (
+                                            <img key={index} src={graphicUrl} alt="Graphic" />
+                                        )
+                                    ))}
                                 </div>
                             </div>
-                            <div className="layout-menu-modal-upload-right-player">
-                                {showAudio && audioUrls.map((audioUrl, index) => (
-                                    audioUrl && (
-                                        <audio key={index} controls>
-                                            <source src={audioUrl} type="audio/mpeg" />
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                    )
-                                ))}
-
-                                {showGraphic && graphicUrls.map((graphicUrl, index) => (
-                                    graphicUrl && (
-                                        <img key={index} src={graphicUrl} alt="Graphic" />
-                                    )
-                                ))}
-                            </div>
                         </div>
-                    </div>
-                </ModalBody>
-            </ModalContent>
-        </Modal>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+
+            <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Confirm Deletion</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <p>One or more selected files are used in your project. Are you sure you want to delete them? </p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button colorScheme='highlightColor' style={{marginRight: '10px'}} onClick={() => deleteFiles(selectedFiles)}>Yes, Delete</Button>
+                        <Button colorScheme='darkButtons' md='5px' onClick={() => setShowDeleteModal(false)}>Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </>
     );
 };
 

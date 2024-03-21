@@ -12,7 +12,7 @@ import LayoutMenuModalPublish from '../../layoutCommon/layoutMenu/layoutMenuModa
 
 import { useModalsState } from '../../layoutCommon/layoutMenu/ModalsStateContext';
 
-const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfInstance, selectedNodes, onLayout, setNodes, setEdges, fitView }) => {
+const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfInstance, selectedNodes, onLayout, setNodes, setEdges, fitView, fileChange, setFileChange }) => {
     const { modalsState, setModalsState } = useModalsState();
 
     const toggleModal = (modalName) => {
@@ -52,9 +52,9 @@ const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfIn
             </div>
 
             <LayoutMenuModalSetup isModalSetupOpen={modalsState.isSetupModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
-            <LayoutMenuModalUpload isModalUploadOpen={modalsState.isUploadModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} setNodes={setNodes}/>
+            <LayoutMenuModalUpload isModalUploadOpen={modalsState.isUploadModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} setNodes={setNodes} setFileChange={setFileChange} />
             <LayoutMenuModalPreview isPreviewModalOpen={modalsState.isPreviewModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} selectedNodes={selectedNodes} />
-            <LayoutMenuModalPublish isPublishModalOpen={modalsState.isPublishModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} />
+            <LayoutMenuModalPublish isPublishModalOpen={modalsState.isPublishModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} edges={edges} rfInstance={rfInstance} fileChange={fileChange} setFileChange={setFileChange} />
 
         </div>
     );

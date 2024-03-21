@@ -83,10 +83,26 @@ const handleFetchFlows = async () => {
     }
 }
 
+const handleChangeDetailsThumbnail = async (audiobookTitle, thumbnail, oldThumbnailName) => {
+    console.log("handleChangeDetailsThumbnail", thumbnail, oldThumbnailName);
+    try {
+        const response = await axios.post('http://localhost:3005/changeDetailsGraphicName', {audiobookTitle: audiobookTitle, audioName: oldThumbnailName, newAudioName: thumbnail})
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            console.error('Error changing details thumbnail');
+        }
+    } catch (error) {
+        console.error('Error in handleChangeDetailsThumbnail:', error);
+        throw error;
+    }
+}
+
 export {
     handleUploadDetails,
     handleGetDetails,
     handleChangeDetails,
     handleIsNewTitle,
     handleFetchFlows,
+    handleChangeDetailsThumbnail,
 }

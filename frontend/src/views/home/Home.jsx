@@ -35,8 +35,8 @@ const Home = () => {
           if (thumbnail) {
             try {
               const paths = await fetchThumbnail(flow.flowKey);
-              if (paths && paths.length > 0) {
-                const imageData = await fetchThumbnailImage(paths[0].audioPath);
+              if (paths) {
+                const imageData = await fetchThumbnailImage(paths);
                 images[flow.id] = imageData;
               }
             } catch (error) {

@@ -7,7 +7,6 @@ const router = new Router();
 const db = new Database();
 
 router.post('/upload', async (ctx) => {
-    console.log('Upload route hit');
     console.log('Uploaded files:', ctx.request.files);
     console.log('Audiobook Name in Backend: ', ctx.request.body.audiobookTitle)
     console.log('Category in Backend: ', ctx.request.body.category)
@@ -158,12 +157,10 @@ router.post('/deleteFiles', async (ctx) => {
     console.log("Audiobook Title to delete files:", audiobookTitle);
     try {
         const filePaths = await db.getFilePathsByTitle(audiobookTitle);
-
+        console.log("FILE PATHS", filePaths)
         for (const filePath of filePaths) {
-            const fileName = path.basename(filePath);
-            const fullPath = path.join(__dirname, 'uploads', fileName);
-            fs.unlinkSync(fullPath);
-            console.log(`Deleted file: ${fullPath}`);
+            fs.unlinkSync(filePath);
+            console.log(`Deleted file: ${filePath}`);
         }
 
         ctx.status = 200;
@@ -234,10 +231,11 @@ router.post('/saveAudiobookDetails', async (ctx) => {
 
 router.post('/deleteFile', async (ctx) => {
     const { file, audiobookTitle } = ctx.request.body;
-    console.log("Deleting file:", file.name, "for audiobookTitle:", audiobookTitle);
+    console.log("File: ", file)
+    console.log("Deleting file:", file, "for audiobookTitle:", audiobookTitle);
 
     try {
-        const filePath = await db.getFilePath(file.name, audiobookTitle);
+        const filePath = await db.getFilePath(file, audiobookTitle);
 
         if (!filePath) {
             console.error('File not found in the database:', file);
@@ -248,7 +246,7 @@ router.post('/deleteFile', async (ctx) => {
 
         fs.unlinkSync(filePath);
 
-        await db.deleteFilePath(file.name, audiobookTitle);
+        await db.deleteFilePath(file, audiobookTitle);
 
         console.log('File deleted successfully:', file);
         ctx.status = 200;
@@ -290,7 +288,8 @@ router.get('/audioPaths', async (ctx) => {
 router.get('/graficPaths', async (ctx) => {
     const { audiobookTitle } = ctx.request.query;
     try {
-        const allFilePaths = await db.getAllFilePaths(audiobookTitle);
+        const allFilePaths = await db.getAllFileNames(audiobookTitle);
+        console.log("allFilePath"), allFilePaths
 
         const graficFilePaths = allFilePaths.filter(file => {
             const fileName = file.audioName.toLowerCase();
@@ -307,6 +306,53 @@ router.get('/graficPaths', async (ctx) => {
         console.error('Error getting grafic paths:', error);
         ctx.status = 500;
         ctx.body = 'Internal Server Error, paths';
+    }
+})
+
+//Get all graphic names
+router.get('/getAllGraficNames', async (ctx) => {
+    const { audiobookTitle } = ctx.request.query;
+    console.log("AUDIOBOOKTITLE IN GETALLGRAFICNAMES", audiobookTitle)
+    try {
+        const allFileNames = await db.getAllGraficFileNames(audiobookTitle);
+        console.log("allFileNames", allFileNames);
+
+        const graficFileNames = allFileNames.filter(file => {
+            const fileName = file.audioName.toLowerCase(); 
+            return(
+                fileName.endsWith('.png') ||
+                fileName.endsWith('.jpeg') ||
+                fileName.endsWith('.jpg')
+            );
+        });
+
+        ctx.status = 200;
+        ctx.body = graficFileNames;
+    } catch (error) {
+        console.error('Error getting all grafic names:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error, allGraficNames';
+    }
+})
+
+// Get thumbnail path
+router.get('/graficThumbnail', async (ctx) => {
+    const { audiobookTitle } = ctx.request.query;
+    try {
+        const thumbnailName = await db.getThumbnailName(audiobookTitle);
+        if (thumbnailName) {
+            const thumbnailPath = await db.getFilePath(thumbnailName, audiobookTitle);
+            ctx.status = 200;
+            ctx.body = thumbnailPath;
+        } else {
+            ctx.status = 404;
+            ctx.body = 'No Thumbnail found in the database';
+        }
+        
+    } catch (error) {
+        console.error('Error gettin thumbnail path:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error, path';
     }
 })
 
@@ -482,7 +528,7 @@ router.post('/changeDetails', async (ctx) => {
             ctx.body = 'No details found for audiobookTitle';
         }
     } catch (error) {
-        console.error('Error changing audiobook details from the database:', error);
+        console.error('Error changing audiobook details in the database:', error);
         ctx.status = 500;
         ctx.body = 'Internal Server Error';
     }
@@ -509,10 +555,11 @@ router.get('/getGraphicName', async (ctx) => {
 
 router.get('/getGraphic', async (ctx) => {
     const { graphicPath } = ctx.request.query;
+    console.log("graphicPath", graphicPath)
     try {
         const stat = fs.statSync(graphicPath);
         ctx.response.status = 200;
-        ctx.response.type = 'image/jpeg';
+        ctx.response.type = 'image/jpeg' || 'image/png';
         ctx.response.length = stat.size;
         ctx.body = fs.createReadStream(graphicPath);
     } catch (error) {

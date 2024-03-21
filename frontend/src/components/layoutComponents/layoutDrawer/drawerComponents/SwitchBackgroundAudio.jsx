@@ -6,7 +6,7 @@ import './drawer-components.css';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { useAudioUsage, updateBackgroundAudio } from '../LayoutDrawerFunctions';
 
-const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobookTitle }) => {
+const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [selectedAudio, setSelectedAudio] = useState('');
     const [showAudio, setShowAudio] = useState(false);
     const [audioPaths, setAudioPaths] = useState([]);
@@ -17,10 +17,11 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
         const fetchAudioPaths = async () => {
             const paths = await FetchAudio(audiobookTitle);
             setAudioPaths(paths);
+            setFileChange(false);
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle, nodeData]);
+    }, [audiobookTitle, nodeData, fileChange]);
 
     useEffect(() => {
         if (nodeData.data && Array.isArray(nodeData.data.backgroundAudio)) {

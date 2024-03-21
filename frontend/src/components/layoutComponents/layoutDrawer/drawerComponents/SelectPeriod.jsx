@@ -7,7 +7,7 @@ import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
-const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
+const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
   const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
@@ -19,10 +19,11 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
     const fetchAudioPaths = async () => {
       const paths = await FetchAudio(audiobookTitle);
       setAudioPaths(paths);
+      setFileChange(false);
     };
 
     fetchAudioPaths();
-  }, [audiobookTitle, nodeData]);
+  }, [audiobookTitle, nodeData, fileChange]);
 
   useEffect(() => {
     if (!arraysEqual(answerAudios, nodeData.data.answerAudios || [])) {
@@ -85,10 +86,10 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
     console.log("lastHandleId", lastHandleId)
     const lastEdge = edges.find(edge => edge.sourceHandle === lastHandleId);
     if (lastEdge) {
-        lastEdge.sourceHandle = `${nodeData.id}-handle-${lastHandleIndex + 1}`;
-        setEdges([...edges]);
+      lastEdge.sourceHandle = `${nodeData.id}-handle-${lastHandleIndex + 1}`;
+      setEdges([...edges]);
     }
-};
+  };
 
   const handlePeriodChange = (index, field, value) => {
     const updatedPeriods = [...periods];
@@ -203,6 +204,8 @@ const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) =
               audiobookTitle={audiobookTitle}
               isChecked={answerBackgroundAudio[index]}
               onToggle={() => handleToggleBackgroundAudio(index)}
+              fileChange={fileChange}
+              setFileChange={setFileChange}
             />
             <Spacer />
             <Input

@@ -41,10 +41,10 @@ const Player = ({ selectedNodes }) => {
   const answerProcessBackgroundAudioRef = useRef();
 
   const location = useLocation();
+  const flowKey = decodeURIComponent(location.pathname.split('/').pop()).replace(/%20/g, ' ').substring(0);
 
   // Set the flowkey to the query, and fetch the flow from the server.
   useEffect(() => {
-    const flowKey = decodeURIComponent(location.pathname.split('/').pop()).replace(/%20/g, ' ').substring(0);
     console.log("Flowkey im Player:", flowKey);
     FetchFlow(flowKey).then((flowData) => {
       setFlow(flowData);
@@ -55,7 +55,7 @@ const Player = ({ selectedNodes }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (flow != null && flow.nodes != null && flow.nodes.length > 1 && currentNode != null) {
-        const path = await getAudioPathFromName(flow.nodes[currentNode].data.audioStory);
+        const path = await getAudioPathFromName(flow.nodes[currentNode].data.audioStory, flowKey);
         const audioBlobResponse = await getAudioFromPath(path);
         setAudioBlob(audioBlobResponse);
         setCurrentNodeProps(flow.nodes[currentNode].data);
@@ -90,7 +90,7 @@ const Player = ({ selectedNodes }) => {
         const selectedNodeIndex = flow.nodes.findIndex(node => node.id === selectedNodes[0]);
         if (selectedNodeIndex !== -1) {
           setCurrentNode(selectedNodeIndex);
-          const path = await getAudioPathFromName(flow.nodes[selectedNodeIndex].data.audioStory);
+          const path = await getAudioPathFromName(flow.nodes[selectedNodeIndex].data.audioStory, flowKey);
           const audioBlobResponse = await getAudioFromPath(path);
           setAudioBlob(audioBlobResponse);
           setCurrentNodeProps(flow.nodes[selectedNodeIndex].data);
@@ -106,7 +106,7 @@ const Player = ({ selectedNodes }) => {
             if (connectedNode) {
               const connectedNodeIndex = flow.nodes.findIndex(node => node.id === connectedNode.id);
               setCurrentNode(connectedNodeIndex);
-              const path = await getAudioPathFromName(flow.nodes[connectedNodeIndex].data.audioStory);
+              const path = await getAudioPathFromName(flow.nodes[connectedNodeIndex].data.audioStory, flowKey);
               const audioBlobResponse = await getAudioFromPath(path);
               setAudioBlob(audioBlobResponse);
               setCurrentNodeProps(flow.nodes[connectedNodeIndex].data);
@@ -153,7 +153,7 @@ const Player = ({ selectedNodes }) => {
   // Play question Audio for and set answers visible after question audio played
   const playQuestionAudio = async () => {
     console.log("In Play Question");
-    const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio);
+    const questionAudioPath = await getAudioPathFromName(currentNodeProps.questionAudio, flowKey);
     const questionAudioBlob = await getAudioFromPath(questionAudioPath);
     await loadBackgroundAudio(flow.nodes[currentNode].data, 'questionAudio');
     console.log("REPEAT QUESTION !!!!!!!!!!!!!!!!!!", currentNodeProps.repeatQuestionAudio);
@@ -174,7 +174,7 @@ const Player = ({ selectedNodes }) => {
       setAnswerProcessAudio(null);
       setAnswerProcessBackgroundAudio(null);
 
-      const answerProcessAudioPath = await getAudioPathFromName(currentNodeProps.answerProcessAudio);
+      const answerProcessAudioPath = await getAudioPathFromName(currentNodeProps.answerProcessAudio, flowKey);
       const answerProcessAudioBlob = await getAudioFromPath(answerProcessAudioPath);
       await loadBackgroundAudio(flow.nodes[currentNode].data, 'answerProcessAudio');
       console.log("in playAnswerProcessAudio, currentTime", currentTime)
@@ -197,7 +197,7 @@ const Player = ({ selectedNodes }) => {
   // Play Interaction Signal if selected
   const playInteractionSignal = async () => {
     if (currentNodeProps.interactionSignal === "true" && currentNodeProps.interactionSignalAudio) {
-      const interactionSignalAudioPath = await getAudioPathFromName(currentNodeProps.interactionSignalAudio);
+      const interactionSignalAudioPath = await getAudioPathFromName(currentNodeProps.interactionSignalAudio, flowKey);
       const interactionSignalAudioBlob = await getAudioFromPath(interactionSignalAudioPath);
       await loadBackgroundAudio(flow.nodes[currentNode].data, 'interactionSignal')
 
@@ -212,7 +212,7 @@ const Player = ({ selectedNodes }) => {
   // Plays the answer audios in a queue
   const playAnswerAudio = async () => {
     if (currentNodeProps.answerAudios && (currentNodeProps.answerAudios.length > answerAudioIndex)) {
-      const answerAudioPath = await getAudioPathFromName(currentNodeProps.answerAudios[answerAudioIndex]);
+      const answerAudioPath = await getAudioPathFromName(currentNodeProps.answerAudios[answerAudioIndex], flowKey);
       const answerAudioBlob = await getAudioFromPath(answerAudioPath)
       console.log("answerAudioIndex", answerAudioIndex);
       await loadBackgroundAudio(flow.nodes[currentNode].data, `answer-${answerAudioIndex}`);
@@ -285,7 +285,7 @@ const Player = ({ selectedNodes }) => {
       })
       console.log("ReleavantBackgroundAudio", relevantBackgroundAudio);
       if (relevantBackgroundAudio) {
-        const backgroundAudioPath = await getAudioPathFromName(relevantBackgroundAudio.backgroundAudio);
+        const backgroundAudioPath = await getAudioPathFromName(relevantBackgroundAudio.backgroundAudio, flowKey);
         const backgroundAudioBlob = await getAudioFromPath(backgroundAudioPath);
         console.log("loadBackgroundAudio, backgroundAudioBlob", backgroundAudioBlob);
         // Checking for Time Node, to set answerBackgroundAudio
@@ -307,7 +307,7 @@ const Player = ({ selectedNodes }) => {
       })
       console.log("RelevantBackgroundAudio in lAPBA", relevantBackgroundAudio);
       if (relevantBackgroundAudio) {
-        const answerProcessBackgroundAudioPath = await getAudioPathFromName(relevantBackgroundAudio.backgroundAudio);
+        const answerProcessBackgroundAudioPath = await getAudioPathFromName(relevantBackgroundAudio.backgroundAudio, flowKey);
         const answerProcessBackgroundAudioBlob = await getAudioFromPath(answerProcessBackgroundAudioPath);
         if (answerProcessBackgroundAudioBlob) {
           setAnswerProcessBackgroundAudio(answerProcessBackgroundAudioBlob);
@@ -329,7 +329,7 @@ const Player = ({ selectedNodes }) => {
       const playNextAnswer = async () => {
         console.log("answerProcessAnswersAudioPlayed !!!!!!!!!!!!!!!!!!!!!!!!!!!!!", answerProcessAnswersAudioPlayed);
         if (index < answerAudios.length) {
-          const answerAudioPath = await getAudioPathFromName(answerAudios[index]);
+          const answerAudioPath = await getAudioPathFromName(answerAudios[index], flowKey);
           const answerAudioBlob = await getAudioFromPath(answerAudioPath);
 
           const loadedAnswerProcessBackgroundAudio = await loadAnswerProcessBackgroundAudio(flow.nodes[currentNode].data, `answer-${index}`);
@@ -378,7 +378,7 @@ const Player = ({ selectedNodes }) => {
 
       console.log("playing answer in playAnswerProcessAnswersReaction")
       if (index < answerAudios.length) {
-        const answerAudioPath = await getAudioPathFromName(answerAudios[index]);
+        const answerAudioPath = await getAudioPathFromName(answerAudios[index], flowKey);
         const answerAudioBlob = await getAudioFromPath(answerAudioPath);
 
         const loadedAnswerProcessBackgroundAudio = await loadAnswerProcessBackgroundAudio(flow.nodes[currentNode].data, `answer-${index}`);

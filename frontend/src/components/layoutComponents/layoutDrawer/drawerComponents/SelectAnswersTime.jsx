@@ -5,7 +5,7 @@ import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
-const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
+const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
     const [answers, setAnswers] = useState(nodeData.data.answers);
     const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
     const [answerBackgroundAudio, setAnswerBackgroundAudio] = useState([]);
@@ -17,10 +17,11 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         const fetchAudioPaths = async () => {
             const paths = await FetchAudio(audiobookTitle);
             setAudioPaths(paths);
+            setFileChange(false);
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle, nodeData]);
+    }, [audiobookTitle, nodeData, fileChange]);
 
     useEffect(() => {
         setAnswers(nodeData.data.answers);
@@ -194,6 +195,8 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             audiobookTitle={audiobookTitle}
                             isChecked={answerBackgroundAudio[index]}
                             onToggle={() => handleToggleBackgroundAudio(index)}
+                            fileChange={fileChange}
+                            setFileChange={setFileChange}
                         />
                         <Spacer />
                         <Input

@@ -29,7 +29,7 @@ const extendedTheme = extendTheme({
   components
 });
 
-const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, audiobookTitle }) => {
+const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
     const [activeTab, setActiveTab] = useState('general');
 
     const btnRef = React.useRef();
@@ -74,13 +74,13 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                                    <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                                 </TabPanel>
                                 <TabPanel>
                                     {(nodeData.type === 'muChoi' || nodeData.type === 'timeNode' || nodeData.type === 'muAns' || nodeData.type === 'reactNode' || nodeData.type === 'inputNode') ? (
-                                        <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} />
+                                        <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
                                     ) : (
-                                        <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>
+                                        <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
                                     )}
                                 </TabPanel>
                                 {nodeData.type === 'muAns' && 

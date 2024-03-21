@@ -6,7 +6,7 @@ import './drawer-components.css';
 import SelectInteractionSignalAudio from './SelectInteractionSignalAudio';
 import { updateNodeProperty } from '../LayoutDrawerFunctions';
 
-const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
   const [shouldShowAudio, setShouldShowAudio] = useState(nodeData.data.interactionSignal === 'true');
 
   const handleSwitchChange = (event) => {
@@ -28,7 +28,7 @@ const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle }) => {
         onChange={handleSwitchChange}
         colorScheme='darkButtons'
       />
-      {shouldShowAudio && <SelectInteractionSignalAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle}/>}
+      {shouldShowAudio && <SelectInteractionSignalAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>}
     </div>
   );
 }

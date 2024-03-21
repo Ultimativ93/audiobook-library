@@ -7,7 +7,7 @@ import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 
-const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
     const audioUsage = useAudioUsage(audioPaths);
     const [selectedAudio, setSelectedAudio] = useState(nodeData.data.interactionSignalAudio || '');
@@ -16,10 +16,11 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
         const fetchAudioPaths = async () => {
             const paths = await FetchAudio(audiobookTitle);
             setAudioPaths(paths);
+            setFileChange(false);
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle, nodeData]);
+    }, [audiobookTitle, nodeData, fileChange]);
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'interaction' || audio.audioCategory === 'universal');
 
@@ -50,7 +51,7 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle }) =>
                 </Select>
             </div>
             <div>
-                <SwitchBackgroundAudio backgroundAudioFor={'interactionSignal'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                <SwitchBackgroundAudio backgroundAudioFor={'interactionSignal'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
             </div>
         </div>
     )

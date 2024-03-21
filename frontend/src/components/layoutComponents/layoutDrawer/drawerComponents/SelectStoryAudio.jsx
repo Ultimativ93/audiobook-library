@@ -7,7 +7,7 @@ import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
-const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
     const [selectedStoryAudio, setSelectedAudioStory] = useState(nodeData.data.audioStory || '');
     const audioUsage = useAudioUsage(audioPaths);
@@ -16,10 +16,10 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         const fetchAudioPaths = async () => {
             const paths = await FetchAudio(audiobookTitle);
             setAudioPaths(paths);
+            setFileChange(false);
         };
-
         fetchAudioPaths();
-    }, [audiobookTitle, nodeData]);
+    }, [audiobookTitle, nodeData, fileChange]);
 
     useEffect(() => {
         setSelectedAudioStory(nodeData.data.audioStory || '');
@@ -57,7 +57,7 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                     </Select>
                 </div>
                 <div>
-                    <SwitchBackgroundAudio backgroundAudioFor={'audioStory'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                    <SwitchBackgroundAudio backgroundAudioFor={'audioStory'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
                 </div>
             </div>
         </div>

@@ -25,6 +25,7 @@ const UserProjectAddModal = ({ isModalAddOpen, setIsModalAddOpen }) => {
                 touchKeyboard: false,
                 shake: false
             },
+            thumbnail: '',
             id: uuid4(),
         }
         setNewAudiobook(audiobookFormat);

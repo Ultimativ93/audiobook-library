@@ -6,7 +6,7 @@ import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 import ShowAudioLength from './ShowAudioLength';
 
-const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
     
     const [selectedAnswerProcessAudio, setSelectedAnswerProcessAudio] = useState(nodeData.data.answerProcessAudio || '');
@@ -16,10 +16,11 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         const fetchAudioPaths = async () => {
             const paths = await FetchAudio(audiobookTitle);
             setAudioPaths(paths);
+            setFileChange(false);
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle, nodeData]);
+    }, [audiobookTitle, nodeData, fileChange]);
 
     useEffect(() => {
         setSelectedAnswerProcessAudio(nodeData.data.answerProcessAudio || '');
@@ -57,7 +58,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                     </Select>
                 </div>
                 <div>
-                    <SwitchBackgroundAudio backgroundAudioFor={'answerProcessAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                    <SwitchBackgroundAudio backgroundAudioFor={'answerProcessAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                 </div>
                 <div>
                     {selectedAnswerProcessAudio && (

@@ -57,12 +57,15 @@ const UserProjects = () => {
         const images = {};
         for (const detail of details) {
           const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
+          console.log("parsedDetailData", parsedDetailData);
           const thumbnailURL = parsedDetailData && parsedDetailData.thumbnail ? parsedDetailData.thumbnail : '';
+          console.log("thumbnailURL", thumbnailURL);
           if (thumbnailURL) {
             try {
               const paths = await fetchThumbnail(detail.audiobookTitle);
-              if (paths && paths.length > 0) {
-                const imageData = await fetchThumbnailImage(paths[0].audioPath);
+              if (paths) {
+                console.log("PATHS", paths)
+                const imageData = await fetchThumbnailImage(paths);
                 images[detail.id] = imageData;
               }
             } catch (error) {

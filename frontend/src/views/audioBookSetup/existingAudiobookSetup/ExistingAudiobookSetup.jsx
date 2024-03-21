@@ -13,7 +13,7 @@ import {
 } from '../../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 
 import { handleChangeDetails } from '../../../components/tasks/setupTasks/FetchDetails';
-import { fetchThumbnail, fetchThumbnailImage } from '../../../components/tasks/publishTasks/PublishFunctions';
+import { fetchThumbnail, fetchThumbnailImage, getThumbnailPath, fetchAllGraphicNames } from '../../../components/tasks/publishTasks/PublishFunctions';
 
 const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setModalsState, audiobookTitle }) => {
     const [graficPaths, setGraficPaths] = useState([]);
@@ -23,10 +23,12 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
         return field === 'string' && field.trim() === '';
     };
 
+    console.log("GRAPHICPATHS", graficPaths)
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const fetchedThumbnails = await fetchThumbnail(audiobookTitle);
+                const fetchedThumbnails = await fetchAllGraphicNames(audiobookTitle);
                 setGraficPaths(fetchedThumbnails);
             } catch (error) {
                 console.error('Error fetching thumbnails.', error);
@@ -42,7 +44,8 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
                 try {
                     const selectedGraphic = graficPaths.find(graphic => graphic.audioName === existingAudiobookDetails.thumbnail);
                     if (selectedGraphic) {
-                        const imageData = await fetchThumbnailImage(selectedGraphic.audioPath);
+                        const thumbnailPath = await getThumbnailPath(audiobookTitle, selectedGraphic.audioName);
+                        const imageData = await fetchThumbnailImage(thumbnailPath);
                         setThumbnailImage(imageData);
                     } else {
                         console.error('Selected graphic not found in graficPaths.');

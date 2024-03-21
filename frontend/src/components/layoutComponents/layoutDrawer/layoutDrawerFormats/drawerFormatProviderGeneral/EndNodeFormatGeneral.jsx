@@ -7,11 +7,11 @@ import SelectEnd from '../../drawerComponents/SelectEnd';
 import LinkUpload from '../../drawerComponents/LinkUpload';
 import SetNote from '../../drawerComponents/SetNote';
 
-const EndNodeFormatGeneral = ({ nodeData, setNodes, audiobookTitle }) => {
+const EndNodeFormatGeneral = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     return (
             <DrawerBody>
                 <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
-                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                 <SelectEnd nodeData={nodeData} setNodes={setNodes} />
                 <SetNote nodeData={nodeData} setNodes={setNodes} />
                 <LinkUpload />

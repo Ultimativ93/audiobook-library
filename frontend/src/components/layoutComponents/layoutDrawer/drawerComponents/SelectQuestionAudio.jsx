@@ -7,7 +7,7 @@ import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
 
-const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
+const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
     const audioUsage = useAudioUsage(audioPaths);
     const [selectedQuestionAudio, setSelectedQuestionAudio] = useState(nodeData.data.questionAudio || '');
@@ -16,10 +16,11 @@ const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
         const fetchAudioPaths = async () => {
             const paths = await FetchAudio(audiobookTitle);
             setAudioPaths(paths);
+            setFileChange(false);
         };
 
         fetchAudioPaths();
-    }, [audiobookTitle, nodeData]);
+    }, [audiobookTitle, nodeData, fileChange]);
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'question' || audio.audioCategory === 'universal');
 
@@ -53,7 +54,7 @@ const SelectQuestionAudio = ({ nodeData, setNodes, audiobookTitle }) => {
                     </Select>
                 </div>
                 <div>
-                    <SwitchBackgroundAudio backgroundAudioFor={'questionAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} />
+                    <SwitchBackgroundAudio backgroundAudioFor={'questionAudio'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
                 </div>
             </div>
         </div>

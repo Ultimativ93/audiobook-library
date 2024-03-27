@@ -35,6 +35,7 @@ function App() {
                 <Route path="/player" element={<Player />} />
                 <Route path="/user-projects" element={<UserProjects />} />
                 <Route path="/" element={<Home />} />
+                <Route path="/tutorials/:tutorialTitle" element={<Tutorials />} />
                 <Route path="/tutorials" element={<Tutorials />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/team" element={<Team />} />

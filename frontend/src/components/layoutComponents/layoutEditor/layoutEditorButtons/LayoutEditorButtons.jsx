@@ -37,7 +37,7 @@ const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfIn
                 <Button size='sm' colorScheme='choiceColor' onClick={() => onAdd('muChoi')}>Choice</Button>
                 <Button size='sm' colorScheme='bridgeColor' onClick={() => onAdd('bridgeNode')}>Bridge</Button>
                 <Button size='sm' colorScheme='timeColor' onClick={() => onAdd('timeNode')}>Time</Button>
-                <Button size='sm' colorScheme='muansColor' onClick={() => onAdd('muAns')}>Multiple</Button>
+                <Button size='sm' colorScheme='muansColor' onClick={() => onAdd('muAns')}>Combination</Button>
                 <Button size='sm' colorScheme='reactColor' onClick={() => onAdd('reactNode')}>Reaction</Button>
                 <Button size='sm' colorScheme='inputColor' onClick={() => onAdd('inputNode')}>Input</Button>
                 <Button size='sm' colorScheme='endColor' onClick={() => onAdd('endNode')}>End</Button>

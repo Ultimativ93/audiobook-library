@@ -31,10 +31,15 @@ const Home = () => {
         const images = {};
         for (const flow of validatedFlows) {
           const thumbnail = flow.thumbnail;
-          console.log("thumbnail", thumbnail)
+          console.log("thumbnail", thumbnail);
+          console.log("FLOW", flow);
           if (thumbnail) {
             try {
-              const paths = await fetchThumbnail(flow.flowKey);
+              let paths = await fetchThumbnail(flow.flowKey);
+              if (!paths) {
+                console.log("KEIN PATH")
+                paths = await fetchThumbnail(flow.title);
+              }
               if (paths) {
                 const imageData = await fetchThumbnailImage(paths);
                 images[flow.id] = imageData;
@@ -42,14 +47,15 @@ const Home = () => {
             } catch (error) {
               console.error('Error fetching thumbnail image: ', error);
             }
-          };
+          }
         }
         setThumbnailImages(images);
       }
     };
-
+  
     fetchThumbnails();
-  }, [validatedFlows])
+  }, [validatedFlows]);
+  
 
   console.log("Validated Flows:", validatedFlows);
 

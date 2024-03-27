@@ -30,7 +30,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle, fileChan
 
     return (
         <>
-            <h4>Setlect Answer Process Audio</h4>
+            <h4>Select Answer Process Audio</h4>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ marginRight: '20px' }}>
                     <Select

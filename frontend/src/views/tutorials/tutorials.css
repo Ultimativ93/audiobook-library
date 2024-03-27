@@ -1,3 +1,134 @@
+.tutorials-wrapper {
+    background-color: #f2f2f8;
+}
+
 .tutorials-container {
-    min-height: 75.6%;
+    height: 100%;
+    min-height: 80vh;
+    display: flex;
+}
+
+.tutorial-navigation {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #757575;
+    width: fit-content;
+    padding: 15px 40px;
+    color: white;
+    font-size: 16px;
+    font-weight: 450;
+    height: auto;
+}
+
+.tutorial-navigation a.selected {
+    color: #FF5A3D;
+    font-weight: bold;
+}
+
+
+.tutorial-navigation h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.tutorial-navigation p {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    text-decoration: underline;
+}
+
+.tutorial-navigation a:hover {
+    color: #cecece;
+}
+
+.tutorial-content {
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.tutorial-details {
+    margin-left: 10vw;
+    width: 50%;
+    text-align: left;
+}
+
+.tutorial-details h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.tutorial-details p {
+    margin: 10px 0;
+}
+
+.tutorial-details video {
+    width: 100%;
+}
+
+.loading-overlay {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.spinner {
+    border: 3px solid transparent;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+}
+
+.suggested-tutorials {
+    margin-top: 20px;
+  }
+  
+  .suggested-tutorials h3 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .tutorial-suggestions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    justify-content: center;
+}
+
+.tutorial-suggestions > div {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    max-width: 300px;
+    margin: 20px 40px;
+}
+
+  .tutorial-suggestions > div:hover {
+    background-color: #e2e2e2;
+  }
+  
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

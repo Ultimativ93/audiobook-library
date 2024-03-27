@@ -81,7 +81,7 @@ const NodeTypesDataFormat = (nodeType, ids, nodes) => {
                     position: { x: 100, y: 350 },
                     data: {
                         ...commonAttributes,
-                        label: `Multiple Response ${count++}`,
+                        label: `Combination ${count++}`,
                         answers: ["Insert Answer 1", "Insert Answer 2"],
                         answerAudios: [],
                         answerCombinations: [],
@@ -117,20 +117,6 @@ const NodeTypesDataFormat = (nodeType, ids, nodes) => {
                         correctAnswer: '',
                         id: String(asignId),
                     },
-                };
-            case 'dialogNode':
-                console.log('in dialogNode');
-                return {
-                    id: String(asignId),
-                    type: 'dialogNode',
-                    position: { x: 150, y: 300 },
-                    className: 'light',
-                    groupType: 'dialog',
-                    data: {
-                        ...commonAttributes,
-                        label: `Dialog ${count++}`,
-                        id: String(asignId),
-                    }
                 };
             case 'endNode':
                 console.log('in endNode');

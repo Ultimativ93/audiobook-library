@@ -53,11 +53,11 @@ router.post('/updateCategory', async (ctx) => {
         const { fileName, category, audiobookTitle } = ctx.request.body;
         const changedCategory = await db.changeCategory(fileName, category, audiobookTitle)
         ctx.status = 200;
-        ctx.body = { success: true, message: 'Category updated successfully.', changedCategory}
+        ctx.body = { success: true, message: 'Category updated successfully.', changedCategory }
     } catch (error) {
         console.error('Error updating category:', error);
         ctx.status = 500;
-        ctx.body = { success: false, message: 'Internal Server Error while updating category'};
+        ctx.body = { success: false, message: 'Internal Server Error while updating category' };
     }
 });
 
@@ -79,7 +79,7 @@ router.post('/saveValidatedFlow', async (ctx) => {
     try {
         const savedFlowId = await db.saveValidatedFlow(flow, flowKey, thumbnail, description, length, keywords, title);
         ctx.status = 200;
-        ctx.body = { success: true, message: 'Flow saved successfully', savedFlowId}
+        ctx.body = { success: true, message: 'Flow saved successfully', savedFlowId }
     } catch (error) {
         console.error('Error saving Validated Flow: ', error);
         ctx.status = 500;
@@ -105,11 +105,11 @@ router.get('/getValidatedFlow', async (ctx) => {
     try {
         const validatedFlow = await db.getValidatedFlow(title);
         ctx.status = 200;
-        ctx.body = { validatedFlow: validatedFlow}
+        ctx.body = { validatedFlow: validatedFlow }
     } catch (error) {
         console.error('Error fetching validated flow:', error)
         ctx.status = 500;
-        ctx.body = { error: 'Internal Server Error while validating flow title.'};
+        ctx.body = { error: 'Internal Server Error while validating flow title.' };
     }
 })
 
@@ -117,11 +117,11 @@ router.get('/getAllValidatedFlows', async (ctx) => {
     try {
         const allValidatedFlows = await db.getAllValidatedFlows();
         ctx.status = 200;
-        ctx.body = { allValidatedFlows: allValidatedFlows} 
+        ctx.body = { allValidatedFlows: allValidatedFlows }
     } catch (error) {
         console.error('Error fetchin all validated flows:', error);
         ctx.status = 500;
-        ctx.body = { error: 'Internal Server Error while fetching all validated flows.'}
+        ctx.body = { error: 'Internal Server Error while fetching all validated flows.' }
     }
 })
 
@@ -129,7 +129,7 @@ router.get('/getAllFlows', async (ctx) => {
     try {
         const allFlows = await db.getAllFlows();
         ctx.status = 200;
-        ctx.body = { allFlows: allFlows}
+        ctx.body = { allFlows: allFlows }
     } catch (error) {
         console.error('Error fetching all flows:', error);
         ctx.status = 500;
@@ -293,7 +293,7 @@ router.get('/graficPaths', async (ctx) => {
 
         const graficFilePaths = allFilePaths.filter(file => {
             const fileName = file.audioName.toLowerCase();
-            return(
+            return (
                 fileName.endsWith('.png') ||
                 fileName.endsWith('.jpeg') ||
                 fileName.endsWith('.jpg')
@@ -318,8 +318,8 @@ router.get('/getAllGraficNames', async (ctx) => {
         console.log("allFileNames", allFileNames);
 
         const graficFileNames = allFileNames.filter(file => {
-            const fileName = file.audioName.toLowerCase(); 
-            return(
+            const fileName = file.audioName.toLowerCase();
+            return (
                 fileName.endsWith('.png') ||
                 fileName.endsWith('.jpeg') ||
                 fileName.endsWith('.jpg')
@@ -348,7 +348,7 @@ router.get('/graficThumbnail', async (ctx) => {
             ctx.status = 404;
             ctx.body = 'No Thumbnail found in the database';
         }
-        
+
     } catch (error) {
         console.error('Error gettin thumbnail path:', error);
         ctx.status = 500;
@@ -363,7 +363,7 @@ router.get('/getDataFromFlow', async (ctx) => {
     try {
         const allFileData = await db.getAllFileNames(flowKey);
         ctx.status = 200;
-        ctx.body = allFileData; 
+        ctx.body = allFileData;
     } catch (error) {
         console.error('Error getting data from flow: ', error);
         ctx.status = 500;
@@ -442,7 +442,6 @@ router.get('/getAudio', async (ctx) => {
         ctx.response.type = 'audio/ogg';
         ctx.response.length = stat.size;
         ctx.body = fs.createReadStream(audioPath);
-
     } catch (error) {
         console.error(`Error getting audio with path ${audioPath} from the server`, error);
         ctx.status = 500;
@@ -504,7 +503,7 @@ router.post('/changeDetailsGraphicName', async (ctx) => {
         } else {
             console.warn('No graphic found for the audiobookTitle and audioName in details', audiobookTitle, audioName);
             ctx.status = 404;
-            ctx.body =  `No graphic found for the audiobookTitle and audioName in details ${audiobookTitle}, ${audioName}`;
+            ctx.body = `No graphic found for the audiobookTitle and audioName in details ${audiobookTitle}, ${audioName}`;
         }
     } catch (error) {
         console.error('Error changing graphic name in changeDetailsGraphicName', error);
@@ -568,6 +567,44 @@ router.get('/getGraphic', async (ctx) => {
         ctx.body = 'Internal Server Error';
     }
 });
+
+router.get('/getAllTutorials', async (ctx) => {
+    console.log('Getting allTutorial from the server');
+    try {
+        const allTutorials = await db.getAllTutorials();
+        if (allTutorials) {
+            ctx.status = 200;
+            ctx.body = allTutorials;
+        } else {
+            console.warn('No tutorials found in the database');
+            ctx.status = 404;
+            ctx.body = 'No tutorials found in the database';
+
+        }
+    } catch (error) {
+        console.error('Error getting allTutorials from the server', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+})
+
+router.get('/getVideo', async (ctx) => {
+    const { videoPath } = ctx.request.query;
+    console.log("Getting video from the backend with videoPath:", videoPath);
+    try {
+        const stat = await fs.promises.stat(videoPath);
+        if (stat) {
+            ctx.response.status = 200;
+            ctx.response.type = 'video/mp4';
+            ctx.response.length = stat.size;
+            ctx.body = fs.createReadStream(videoPath);
+        }
+    } catch (error) {
+        console.error(`Error getting video with path ${videoPath} from the server`, error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+})
 
 router.get('/', async (ctx) => {
     ctx.body = 'Hallo Welt von Koa';

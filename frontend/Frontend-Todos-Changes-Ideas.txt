@@ -177,64 +177,62 @@ Nach Priorität:
 
             - !!! (2):
                 - Tutorial Seite                                                                                                                                                        O
+                - Flow Publishen und gucken ob Thumbnail geladen wird wenn Title geändert wird                                                                                          O
+                - Overflow Hidden anpassen für Editor                                                                                                                                   O
+                - Seite nicht gefunden 404                                                                                                                                              O
+                - Seite einrücken. Nicht ganze Breite benutzen                                                                                                                          O
+                - Umbennnen von Multiple in Combination                                                                                                                                 O
+	            - Kategorien beim Upload funktionieren noch nicht                                                                                                                       O
+		        - Input Remove answer weiter nach unten                                                                                                                                 O
+                - Tutorial Background Audio, wofür?                                                                                                                                     O
+                - Grundsätzliches Tutorial zum Umgang mit der Seite                                                                                                                     O
+                - Thumbnails hinzufügen zu den Tutorials                                                                                                                                O
 
             - ! (3):
                 - RoutesController logs entfernen/anpassen                                                                                                                              O
                 - Node löschen Button                                                                                                                                                   O
                 - Drawer onClose ohne Transition.                                                                                                                                       O
-                - Undo/Redo Buttons                                                                                                                                                     O
-                - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
-                - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
-                - MuAns: hier könnten wir updateAnswerCombination, removeCombination noch zu updateNodeProperty ändern und das ändern der Funktionen in MuAnsFormatCombinations         O
-                    belassen.
-                - LayoutMenu wird nicht mehr benötigt, da wir die Modals direkt in LayoutEditorButtons ausgelagert haben, löschen                                                       O
                 - H4 von den DrawerComponents zu p umändern.                                                                                                                            O
-                - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        O
-                - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
-                - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
-                - Hinweis im Tutorial das Background audio gelooped wird.                                                                                                        O
-                - Startknoten stylen, wahrscheinlich doch noch als NodeType festlegen.                                                                                                  O
-                - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.                                                                                       O
+                - Hinweis im Tutorial das Background audio gelooped wird.                                                                                                               O
                 - Team + Contact erstellen und stylen                                                                                                                                   O
-                - UploadTasks: + Button hat noch keine Funktion, sollte eigentlich Ordner hinzufügen, dann brauchen wir aber auch eine Ordnerstruktur                                   O
                 - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                               O
-                - AudioBookSetup, gucken ob es noch benötigt wird. (NewAudiobookSetup, ExistingAudiobookSetup)                                                                          O
-                - ValidateFlow: sollte dann im Editor auch anzeigen, welche Nodes noch Fehlerhaft sind, und im Drawer welche Felder ausgewählt werden müssen.                           O
                 - Editor: Bei einem neuen Projekt, wird noch der flow direkt versucht zu fetchen, hier könnten wir erstmal saven und dann restoren, dann bekommen wir auch keinen       O
-                    Fehler
-                - Sicherheit: Im Upload, später noch eine antiviren library benutzen, oder anders absichern                                                                             O 
-                - StateVariablen in ModalStateContext auslagern wenn noch Zeit ist, diese Datei sollte dann auch nochmal umbenant werden zu StateLibrary oder StateContext              O
-                - Save Button laden lassen, wenn gespeichert wird.                                                                                                                      O
-                - Wenn Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab                  O
-                    und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
-                - Beim fetchen von details wird der useEffect noch zweimal ausgeführt und ebenso dadurch der Datenbank aufruf und die Anfrage an den Server, anpassen !!!               O
-                - Responsive für die meisten größen                                                                                                                                     O
-                - AudiobookSetup: User Id wurde schon hinzugefügt, muss später, wenn wir User erstellt haben angepasst werden.                                                          O
-                - LayoutMenuModalPublish: Stylen, sollte noch einen Bereich geben wo vom Admin geguckt wird, ob das Hörbuch und Thumbnail so in Ordnung ist. Wir werden aber die        O
-                    validierten Flows einfach erstmal auf einer Seite darstellen, von wo aus sich dann der Editor öffnet.             
-                - LayoutMenuModalPublish: Weiterleitung nach erfolgreichem hochladen zum Hörbuch.                                                                                       O
-                - Bewertungen, Hörbuchlänge, Keywords, Kommentare, User etc. muss noch zu validatedFlows hinzugefügt werden.                                                            O
+                    Fehler 
+                - Responsive für die meisten größen                                                                                                                                     O           
                 - StandardThumbnail: Neu erstellen, mit unseren Farben und passend zum Thema.                                                                                           O
-                - UserProjects: Status (Editing, Pending, Submitted), nach Länge und Namen sortieren und vielleicht nach Status wenn Zeit                                               O
                 - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                   O
-                - Im Player Insgesamte Spielzeit anzeigen, also wie lange man das Hörbuch schon hört.                                                                                   O
                 - PreviewModal: Buttons ob von Anfang an oder von selected Node abgespielt werden soll.                                                                                 O
-                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
-                - OnLayout/Sort: Sollte der viewport noch 20-30px nach unten verschoben werden.                                                                                         O
                 - Umbennungen der Nodes im Code (MuChoi -> Choice, Multiple Answer -> Multiple Response)                                                                                O
-                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
                 - Statt zwei Server (Backend Frontend) nur einen Server, server so konfigurieren das nur public sichtbar ist                                                            O
                 - Statt SQLite, MySql fürs veröffentlichen benutzen, da scallable und mulituser                                                                                         O
-                - Suchen nach Audio in den InputFields                                                                                                                                  O
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.                       O
 
             - Noch entfernen wenn keine Zeit:
                 - InputSelection: In AudiobookSetup, NodeTypeDataFormat, aus den Nodes                                                                                                  O
+                - LayoutMenu wird nicht mehr benötigt, da wir die Modals direkt in LayoutEditorButtons ausgelagert haben, löschen                                                       O
 
             - Überprüfen:
                 - Wenn PlayerAudio spielt, besonders in Time und Reaciton, gucken ob es fehler beim schließen von Preview gibt.                                                         O
+
+            - Ergänzungen:
+                - Undo/Redo Buttons                                                                                                                                                     O
+                - Bilder/Animationen hinzufügen, dafür dann im Player einen Auswahlbereich für den Knoten erschaffen.                                                                   O
+                - Audio suchen können, wenn sie im Select ausgewählt wird                                                                                                               O
+                - Möglichkeit Audio leiser und lauter zu machen                                                                                                                         O
+                - InputNode: Hinweis auf richtige Antwort geben? Dann brauchen wir ein weiteres Input feld in der InputNode und einen Button im Player, wenn man einen Hinweis will     O
+                - Sicherheit: Wir sollten die routes zum server noch mit einer uid verschlüsseln.                                                                                       O
+                - ValidateFlow: sollte dann im Editor auch anzeigen, welche Nodes noch Fehlerhaft sind, und im Drawer welche Felder ausgewählt werden müssen.                           O
+                - Sicherheit: Im Upload, später noch eine antiviren library benutzen, oder anders absichern                                                                             O
+                - Save Button laden lassen, wenn gespeichert wird.                                                                                                                      O
+                - LayoutMenuModalPublish: Stylen, sollte noch einen Bereich geben wo vom Admin geguckt wird, ob das Hörbuch und Thumbnail so in Ordnung ist. Wir werden aber die        O
+                    validierten Flows einfach erstmal auf einer Seite darstellen, von wo aus sich dann der Editor öffnet.  
+                - Bewertungen, Hörbuchlänge X, Keywords X, Kommentare, User etc. muss noch zu validatedFlows hinzugefügt werden.                                                        O
+                - UserProjects: Status (Editing, Pending, Submitted), nach Länge und Namen sortieren und vielleicht nach Status wenn Zeit                                               O
+                - Im Player Insgesamte Spielzeit anzeigen, also wie lange man das Hörbuch schon hört.                                                                                   O
+                - InputNode, wollen wir da wiedergeben lassen, dass es eine falsche/richtige/keine Antwort gab?   !!!                                                                   O
+                - CurrentNode speichern, also wenn wir das wollen, dass wir an dem Punkt weiterhöhren können, wenn wir was geändert haben                                               O
 __________________________________________________________________________________________________________________________________________________________________________________________
 
 Erledigt:
@@ -365,4 +363,10 @@ Erledigt:
                     dann auch angezeigt/abspielbar wird.
                 - Menü geht erst beim erneuten klicken auf das Menü zu, anpassen                                                                                                        X
                 - Sortieren der Nodes hinzufügen                                                                                                                                        X 
+                - ColorSelectedNodes erzeugt noch eine Dauerschleife, überprüfen                                                                                                        X
+                - AudioBookSetup, gucken ob es noch benötigt wird. (NewAudiobookSetup, ExistingAudiobookSetup)                                                                          X
+                - Wenn Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab                  X
+                    und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
+                - LayoutMenuModalPublish: Weiterleitung nach erfolgreichem hochladen zum Hörbuch.                                                                                       X
+
 

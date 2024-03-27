@@ -52,6 +52,14 @@ class Database {
                     console.log('Created table "validatedFlows" or it already exists');
                 }
             })
+
+            this.db.run('CREATE TABLE IF NOT EXISTS tutorials (id INTEGER PRIMARY KEY, tutorialName TEXT, tutorialData TEXT, tutorialVideoPath TEXT, tutorialThumbnailPath TEXT)', (err) => {
+                if (err) {
+                    console.log('Error while creating table tutorials: ', err);
+                } else {
+                    console.log('Created table "tutorials" or it already exists')
+                }
+            })
         });
     }
 
@@ -273,32 +281,31 @@ class Database {
     // Get thumbnail path from details.
     getThumbnailName(audiobookTitle) {
         console.log('Getting thumbnail path for audiobook title:', audiobookTitle);
-    
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT detailData FROM details WHERE audiobookTitle = ?', [audiobookTitle], (err, row) => {
                 if (err) {
                     reject(err.message);
                     return;
                 }
-    
+
                 if (!row || !row.detailData) {
                     reject(new Error(`No details found for audiobookTitle ${audiobookTitle}`));
                     return;
                 }
-    
+
                 const detailData = JSON.parse(row.detailData);
                 const thumbnailPath = detailData.thumbnail;
-    
+
                 if (!thumbnailPath) {
                     reject(new Error(`No thumbnail found for audiobookTitle ${audiobookTitle}`));
                     return;
                 }
-    
+
                 resolve(thumbnailPath);
             });
         });
     }
-    
 
     // Get single audioPath from audioPaths for a specific audiobookTitle
     getFilePath(audioName, audiobookTitle) {
@@ -536,7 +543,20 @@ class Database {
             });
         });
     }
-    
+
+    // Get all tutorials from the database
+    getAllTutorials() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT * FROM tutorials', (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
 
     // Closing database
     close() {

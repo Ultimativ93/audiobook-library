@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@chakra-ui/react';
 
-import "../../../views/player/player.css";
+import '../../../views/player/player.css';
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
+// "PlayerReaction.jsx" component, is accessed by the "Player" component in the "LayoutMenuModalPreview" and the "Audiobook" view.
+// It shows the question and answer of a Reaction node. The answer will be shown by the time the creator added to the noe properties.
+// When no answer is selected during the answer process, the no reaction handle will be used to transfer to the next node.
+// It is a child of "Player" component.
 const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, questionAudioPlayed, answerProcessAudioPlaying, onValidPeriodChange, visible }) => {
     const [currentTime, setCurrentTime] = useState(null);
     const [validPeriod, setValidPeriod] = useState(null);
@@ -46,7 +50,7 @@ const PlayerReaction = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, 
         return (
             <>
                 {visible && currentNodeProps.question  && (
-                    <p className="question">Question: {currentNodeProps.question}</p>
+                    <p className='question'>Question: {currentNodeProps.question}</p>
                 )}
                 {validPeriod && answerProcessAudioPlaying && (
                     <Button

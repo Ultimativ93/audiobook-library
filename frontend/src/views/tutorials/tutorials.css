@@ -92,14 +92,14 @@
 
 .suggested-tutorials {
     margin-top: 20px;
-  }
-  
-  .suggested-tutorials h3 {
+}
+
+.suggested-tutorials h3 {
     font-size: 18px;
     font-weight: bold;
-  }
-  
-  .tutorial-suggestions {
+}
+
+.tutorial-suggestions {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -108,7 +108,7 @@
     justify-content: center;
 }
 
-.tutorial-suggestions > div {
+.tutorial-suggestions>div {
     cursor: pointer;
     padding: 10px;
     border: 1px solid #ccc;
@@ -118,10 +118,9 @@
     margin: 20px 40px;
 }
 
-  .tutorial-suggestions > div:hover {
+.tutorial-suggestions>div:hover {
     background-color: #e2e2e2;
-  }
-  
+}
 
 @keyframes spin {
     0% {

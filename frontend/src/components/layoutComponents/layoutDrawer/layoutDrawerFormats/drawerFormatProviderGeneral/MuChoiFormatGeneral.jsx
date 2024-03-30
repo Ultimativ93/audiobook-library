@@ -7,16 +7,18 @@ import SelectInteraktionSignal from '../../drawerComponents/SelectInteractionSig
 import LinkUpload from '../../drawerComponents/LinkUpload';
 import SetNote from '../../drawerComponents/SetNote';
 
-const MuChoiFormatGeneral = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange  }) => {
-
+// "MuChoiFormatGeneral.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the components used for the general tab of the drawer for an Choice/MuChoi/Multiple Choice node.
+// Is a child of "DrawerFormatProviderGeneral" component.
+const MuChoiFormatGeneral = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     return (
-            <DrawerBody>
-                <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
-                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
-                <SelectInteraktionSignal nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
-                <SetNote nodeData={nodeData} setNodes={setNodes} />
-                <LinkUpload />
-            </DrawerBody> 
+        <DrawerBody>
+            <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
+            <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
+            <SelectInteraktionSignal nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
+            <SetNote nodeData={nodeData} setNodes={setNodes} />
+            <LinkUpload />
+        </DrawerBody>
     )
 }
 

@@ -8,6 +8,9 @@ import { fetchFlow } from '../../../../../tasks/editorTasks/FetchFlow';
 import { validateMuChoi, validateEndNode, validateBridgeNode, validateTimeNode, validateMuAns, validateReactNode, validateInputNode, validateEdgeMuChoi, validateEdgeEndNode, validateEdgeBridgeNode, validateEdgeTimeNode, validateEdgeMuAns, validateEdgeReactNode, validateEdgeInputNode, validateEdgeStart } from '../../../../../tasks/editorTasks/ValidateFlow';
 import LinkPublish from '../../layoutMenuComponents/LinkPublish';
 
+// "LayoutMenuModalPreview.jsx" gets accessed from the editor view. It handles the preview of the validation results of a flow, allows the creator to download the validation
+// result and shows the player when the flow is validated and playable.
+// Is a child of "LayoutEditorButtons" component
 const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookTitle, selectedNodes }) => {
     const [flowToCheck, setFlowToCheck] = useState();
     const [validationResults, setValidationResults] = useState({ nodes: [], edges: [] });
@@ -95,7 +98,7 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
         const edgeResultsText = validationResults.edges.join('\n');
         const textToDownload = `Node Validation Results:\n${nodeResultsText}\n\nEdge Validation Results:\n${edgeResultsText}`;
 
-        const element = document.createElement("a");
+        const element = document.createElement('a');
         const file = new Blob([textToDownload], { type: 'text/plain' });
         element.href = URL.createObjectURL(file);
         element.download = `${audiobookTitle}_validation_results.txt`;
@@ -104,12 +107,12 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
     };
 
     return (
-        <Modal isOpen={isPreviewModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPreviewModalOpen: false }))} size="5xl">
+        <Modal isOpen={isPreviewModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPreviewModalOpen: false }))} size='5xl'>
             <ModalOverlay />
-            <ModalContent className="modal-content">
+            <ModalContent className='modal-content'>
                 <ModalCloseButton />
                 <ModalHeader>Preview Audiobook</ModalHeader>
-                <ModalBody className="modal-body">
+                <ModalBody className='modal-body'>
                     <p>Node Validation Results:</p>
                     {validationResults.nodes && validationResults.nodes.length === 0 ? (
                         <p>No missing Data, everything looks good!</p>
@@ -133,13 +136,13 @@ const LayoutMenuModalPreview = ({ isPreviewModalOpen, setModalsState, audiobookT
                     )}
                     <Spacer />
                     {validationResults.nodes.length > 0 || validationResults.edges.length > 0 ? (
-                        <Button onClick={downloadValidationResults} colorScheme="darkButtons" mt="4">
+                        <Button onClick={downloadValidationResults} colorScheme='darkButtons' mt='4'>
                             Download Validation Results
                         </Button>
                     ) : null}
 
                     {playable && (
-                        <div className="player-container">
+                        <div className='player-container'>
                             <Player selectedNodes={selectedNodes} />
                             <LinkPublish />
                             <p style={{ textAlign: 'center' }}>The audiobook is now ready for publishing.</p>

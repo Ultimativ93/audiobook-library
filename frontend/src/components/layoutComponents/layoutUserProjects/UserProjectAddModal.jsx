@@ -3,9 +3,12 @@ import { Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFoo
 import { v4 as uuid4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 
-import { handleInputChange } from '../layoutAudiobookSetup/LayoutSetupFunctions';
+import { handleInputChange } from '../../tasks/setupTasks/SetupFunctions';
 import { handleUploadDetails, handleIsNewTitle } from '../../tasks/setupTasks/FetchDetails';
 
+// "UserProjectAddModal.jsx" component, is accessed by the "User Projects" view.
+// It starts a new project, by asking the creator to enter a new title/flowkey for the project. An audiobookFormat is also created and uploaded with the title als key, to the database.
+// It is a child of "UserProjects" component.
 const UserProjectAddModal = ({ isModalAddOpen, setIsModalAddOpen }) => {
     const [newAudiobook, setNewAudiobook] = useState();
     const navigate = useNavigate();
@@ -57,7 +60,6 @@ const UserProjectAddModal = ({ isModalAddOpen, setIsModalAddOpen }) => {
                         <ModalFooter>
                             <Button colorScheme='blue' onClick={async () => {
                                 const isNewAudiobookTitle = await handleIsNewTitle(newAudiobook);
-                                console.log("isNewAudiobooktitle onClick: ", isNewAudiobookTitle);
                                 if (isNewAudiobookTitle) {
                                     const detailsSaved = handleUploadDetails(newAudiobook);
                                     if (detailsSaved) {
@@ -65,7 +67,7 @@ const UserProjectAddModal = ({ isModalAddOpen, setIsModalAddOpen }) => {
                                     }
                                 } else {
                                     handleInputChange('', 'title', newAudiobook, setNewAudiobook);
-                                    alert("The title has to be unique, please enter a different title!")
+                                    alert('The title has to be unique, please enter a different title!')
                                 }
                             }}>
                                 Start Editing

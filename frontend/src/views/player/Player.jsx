@@ -13,6 +13,8 @@ import PlayerTime from '../../components/layoutComponents/layoutPlayer/playerTim
 
 import { getAudioPathFromName, getAudioFromPath, handleButtonClickLogic } from '../../components/tasks/playerTasks/PlayerLogic';
 
+// Player component, plays validated flow, also if a selectedNode gets passed to it, it starts with the selected node. Is used in "Audiobook.jsx", aswell as in "LayoutMenuModalPreview.jsx"
+// where it allows the creator to check the playable flow for errors or different mistakes.
 const Player = ({ selectedNodes }) => {
   const [flow, setFlow] = useState(null);
   const [audioBlob, setAudioBlob] = useState(null);

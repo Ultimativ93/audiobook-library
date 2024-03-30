@@ -8,15 +8,18 @@ import SelectInputSelections from '../../drawerComponents/SelectInputSelections'
 import SelectAnswers from '../../drawerComponents/SelectAnswers';
 import LinkUpload from '../../drawerComponents/LinkUpload';
 
+// "MuAnsFormatQuestions.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the components used for the questions tab of the drawer for an Combination/MuAns/Multiple Answer node.
+// It is a child of "DrawerFormatProviderQuestion" component.
 const MuAnsFormatQuestions = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
     return (
         <>
             <DrawerBody>
                 <SelectQuestion nodeData={nodeData} setNodes={setNodes} />
-                <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                <SelectQuestionAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                 <SelectRepeatQuestionAudio nodeData={nodeData} setNodes={setNodes} />
                 <SelectInputSelections nodeData={nodeData} setNodes={setNodes} />
-                <SelectAnswers nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                <SelectAnswers nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                 <LinkUpload />
             </DrawerBody>
         </>

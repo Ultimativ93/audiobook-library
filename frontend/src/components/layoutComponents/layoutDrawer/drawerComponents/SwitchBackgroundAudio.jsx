@@ -4,8 +4,12 @@ import { Switch, Select } from '@chakra-ui/react';
 import './drawer-components.css';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
-import { useAudioUsage, updateBackgroundAudio } from '../LayoutDrawerFunctions';
+import { useAudioUsage, updateBackgroundAudio } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
+// "SwitchBackgroundAudio.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the node property of background audio.
+// It is a child of "InputNodeFormatQuestions", "MuAnsFormatQuestions", "MuChoiFormatQuestion", "ReactNodeFormatQuestions" and "TimeNodeFormatQuestions",
+// "BridgeNodeFormatGeneral", "EndNodesFormatGeneral", "MuAnsFormatGeneral", "MuChoiFormatGeneral", "ReactNodeFormatGeneral" and "TimeNodeFormatGeneral" component.
 const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [selectedAudio, setSelectedAudio] = useState('');
     const [showAudio, setShowAudio] = useState(false);
@@ -57,7 +61,6 @@ const SwitchBackgroundAudio = ({ backgroundAudioFor, nodeData, setNodes, audiobo
         setShowAudio(isChecked);
         updateBackgroundAudio(setNodes, nodeData, backgroundAudioFor, selectedAudio, isChecked);
     };
-
 
     const filteredAudioPaths = audioPaths.filter(audio => audio.audioCategory === 'background' || audio.audioCategory === 'universal');
 

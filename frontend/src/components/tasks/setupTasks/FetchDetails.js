@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+// "FetchDetails.js" handles functions for the setup in "LayoutMenuModalSetup" component. It uses functions like: handle upload details,
+// handle get details, handle change details, handle is new title, handle fetch flows and handle change details thumbnail.
+// Its main use is for "LayoutMenuModalSetup" component.
+
 const handleUploadDetails = async (audiobookDetails) => {
     try {
         const response = await axios.post('http://localhost:3005/saveAudiobookDetails', {
@@ -84,7 +88,6 @@ const handleFetchFlows = async () => {
 }
 
 const handleChangeDetailsThumbnail = async (audiobookTitle, thumbnail, oldThumbnailName) => {
-    console.log("handleChangeDetailsThumbnail", thumbnail, oldThumbnailName);
     try {
         const response = await axios.post('http://localhost:3005/changeDetailsGraphicName', {audiobookTitle: audiobookTitle, audioName: oldThumbnailName, newAudioName: thumbnail})
         if (response.status === 200) {

@@ -1,5 +1,7 @@
 import axios from "axios"
 
+// "FetchFlow.js" is used to the a flow with an audiobook title from the backend server and database.
+// Its prior use is to fetch flows for the "Editor", "Player", "Audiobook" components.
 const fetchFlow = async (audiobookTitle) => {
     try {
         const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${audiobookTitle}`)

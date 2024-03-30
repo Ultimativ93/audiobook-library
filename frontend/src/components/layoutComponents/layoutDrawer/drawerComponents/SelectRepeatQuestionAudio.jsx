@@ -3,8 +3,11 @@ import { Switch } from '@chakra-ui/react';
 
 import './drawer-components.css';
 
-import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
+// "SelectRepeatQuestionAudio.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the node property of repeatQuestionAudio, to repeat the question process.
+// It is a child of "InputNodeFormatQuestions", "MuAnsFormatQuestions", "MuChoiFormatQuestion" component.
 const SelectRepeatQuestionAudio = ({ nodeData, setNodes }) => {
     const isRepeatQuestion = nodeData.data.repeatQuestionAudio === 'true';
 

@@ -4,11 +4,11 @@ import { Input, Button, Stack, Checkbox, Textarea, Select, Flex } from '@chakra-
 import { handleInputChange, handleCheckBoxChange, handleInputChangeSecondLevel, handleAddContributor, handleRemoveContributor, handleCheckSetup } from '../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
 import { handleUploadDetails } from '../../components/tasks/setupTasks/FetchDetails';
 
+// NewAudiobookSetup accesed from the userProjects, handles the input and submit of a new audiobook setup
 const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook, setIsModalSetupOpen }) => {
     const isFieldEmpty = (field) => {
         return field === 'string' && field.trim() === '';
     };
-
 
     return (
         <div className='audiobook-setup-contents'>
@@ -46,7 +46,7 @@ const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook, setIsModalSetupOpen 
                 />
 
                 <p>Choose Input Selection</p>
-                <Stack direction="row" flexWrap="wrap">
+                <Stack direction='row' flexWrap='wrap'>
                     {Object.keys(newAudiobook.inputSelections).map((key, index) => (
                         <Checkbox
                             key={index}
@@ -58,11 +58,11 @@ const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook, setIsModalSetupOpen 
                     ))}
                 </Stack>
 
-                <div className="audiobook-setup-contents-contributors">
+                <div className='audiobook-setup-contents-contributors'>
                     <p>Contributors</p>
                     {newAudiobook.contributors && newAudiobook.contributors.map((contributor, index) => (
                         <div key={index}>
-                            <Flex key={index} alignItems="center">
+                            <Flex key={index} alignItems='center'>
                                 <Select
                                     placeholder='Select Role ..'
                                     value={contributor.role}
@@ -129,7 +129,7 @@ const NewAudiobookSetup = ({ newAudiobook, setNewAudiobook, setIsModalSetupOpen 
                         if (detailsSaved) {
                            setIsModalSetupOpen(false);
                         } else {
-                            alert("Something went wrong. Try again please or contact support!")
+                            alert('Something went wrong. Try again please or contact support!')
                         }
                     }
                 }}>Start Editing</Button>

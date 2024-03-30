@@ -84,7 +84,6 @@ const handleCheckSetup = (newAudiobook) => {
         missingFields.push('Author');
     }
 
-    // Korrigieren Sie den Attributnamen auf inputSelections
     if (!newAudiobook.inputSelections || Object.keys(newAudiobook.inputSelections).length === 0) {
         missingFields.push('Select at least one input option');
     }

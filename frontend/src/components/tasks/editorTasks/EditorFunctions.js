@@ -2,6 +2,11 @@ import axios from 'axios';
 import isEqual from 'lodash/isEqual';
 import Dagre, { layout } from '@dagrejs/dagre';
 
+// "EditorFunctions.js" provides the editor with functions: Saves flows, restores flows, handle open and close drawer, handle node changes,
+// handle flow click, handle color change of nodes, changes in position of a node, handling node changes with a save,
+// handle a click on a node, arranges a flow with the help of dagrejs, layouting the flow.
+// The prior case of use is the "Editor" view component.
+
 export const saveFlow = async (rfInstance, audiobookTitle) => {
     if (!rfInstance) return;
 
@@ -122,30 +127,23 @@ export const handleNodeClick = (event, node, setIsDrawerOpen, setSelectedNodeDat
     if (node.id === '1' && node.data.label === 'Start') return;
 
     if (!isDrawerOpen) {
-        console.log("öffne Drawer")
         setIsDrawerOpen(true);
     }
 
     setSelectedNodes([node.id]);
-
     setSelectedNodeData(node);
 };
 
 // Function to layout the elements with Dagre
 export const getLayoutedElements = (nodes, edges, options) => {
     const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-
     g.setGraph({ rankdir: options.direction });
-
     edges.forEach((edge) => g.setEdge(edge.source, edge.target));
     nodes.forEach((node) => g.setNode(node.id, node));
-
     Dagre.layout(g);
-
     return {
         nodes: nodes.map((node) => {
             const { x, y} = g.node(node.id);
-
             return { ...node, position: { x, y }};
         }),
         edges,
@@ -153,16 +151,11 @@ export const getLayoutedElements = (nodes, edges, options) => {
 };
 
 export const onLayout = (nodes, edges, setNodes, setEdges, fitView, direction) => {
-    console.log("Layouting");
     const layouted = getLayoutedElements(nodes, edges, { direction });
-    
-    console.log("nodes in onLayout", nodes);
     
     setNodes(layouted.nodes);
     setEdges(layouted.edges);
 
-    console.log("layoutedNodes", layouted.nodes);
-    console.log("layoutedEdges", layouted.edges);
     window.requestAnimationFrame(() => {
         fitView();
     });

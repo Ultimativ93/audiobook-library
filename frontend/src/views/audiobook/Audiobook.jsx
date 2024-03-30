@@ -9,6 +9,7 @@ import { fetchValidatedFlow } from '../../components/tasks/audiobookTasks/Audiob
 import { handleGetDetails } from '../../components/tasks/setupTasks/FetchDetails';
 import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
 
+// Audiobook page, that shows the passed audiobook
 const Audiobook = () => {
     const [validatedFlow, setValidatedFlow] = useState({});
     const [flowDetails, setFlowDetails] = useState({});
@@ -46,7 +47,6 @@ const Audiobook = () => {
         const fetchedThumbnail = async () => {
             if (validatedFlow && validatedFlow.thumbnail) {
                 try {
-                    
                     const paths = await fetchThumbnail(validatedFlow.flowKey);
                     if (paths) {
                         const imageData = await fetchThumbnailImage(paths);
@@ -73,15 +73,15 @@ const Audiobook = () => {
 
     return (
         <div className='audiobook-wrapper'>
-            <div className="details-image-container">
-                <div className="image-container">
+            <div className='details-image-container'>
+                <div className='image-container'>
                     <Image
                         className='audiobook-image'
                         src={thumbnailImage}
                         alt={`Thumbnailimage-${validatedFlow.title || validatedFlow.flowKey}`}
                     />
                 </div>
-                <div className="details-container">
+                <div className='details-container'>
                     <h1>{validatedFlow.title || flowDetails.title} (2024)</h1>
                     <p><strong>Author:</strong> {flowDetails.author}</p>
                     <p><strong>Category:</strong> <Link to={`/category/${flowDetails.category}`}>{flowDetails.category}</Link></p>
@@ -98,7 +98,7 @@ const Audiobook = () => {
                     </div>
                 </div>
             </div>
-            <div className="player-container">
+            <div className='player-container'>
                 <Player />
             </div>
         </div>

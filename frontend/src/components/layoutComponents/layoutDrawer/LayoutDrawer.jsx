@@ -5,7 +5,7 @@ import './layout-drawer.css'
 
 import DrawerFormatProviderGeneral from './layoutDrawerFormats/drawerFormatProviderGeneral/DrawerFormatProviderGeneral';
 import DrawerFormatProviderQuestions from './layoutDrawerFormats/drawerFormatProviderQuestions/DrawerFormatProviderQuestions';
-import MuAnsFromatCombination from './layoutDrawerFormats/drawerFormatProviderCombination/MuAnsFromatCombination';
+import MuAnsFormatCombination from './layoutDrawerFormats/drawerFormatProviderCombination/MuAnsFormatCombination';
 import { customTheme } from '../../tasks/appTasks/AppTasks';
 
 const components = {
@@ -25,10 +25,13 @@ const components = {
 };
 
 const extendedTheme = extendTheme({
-  ...customTheme,
-  components
+    ...customTheme,
+    components
 });
 
+// "LayoutDrawer" component, is accessed by the "Editor" view, in the LayoutEditorDrawer.
+// Handles the node property changes of all values opens drawer with "DrawerFormatProviderGeneral", "DrawerFormatProviderQuestions" and "MuAnsFormatCombination". 
+// Is a child of "Editor" view component.
 const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
     const [activeTab, setActiveTab] = useState('general');
 
@@ -49,7 +52,7 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
     if (!nodeData || !nodeData.data) {
         return null;
     }
-    
+
     return (
         <ChakraProvider theme={extendedTheme}>
             <Drawer
@@ -57,14 +60,14 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                 placement='right'
                 onClose={onClose}
                 finalFocusRef={btnRef}
-                size="xl"
+                size='xl'
                 trapFocus={false}
-                variant="alwaysOpen"
+                variant='alwaysOpen'
             >
                 <DrawerOverlay display='none' />
                 <DrawerContent className={`drawer-content ${isOpen ? 'drawer-content-open' : 'drawer-content-closed'}`}>
                     <DrawerCloseButton />
-                    <DrawerHeader className="drawer-header" borderBottomWidth='1px'>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
+                    <DrawerHeader className='drawer-header' borderBottomWidth='1px'>{`Edit Node: ${nodeData.data.label}`}</DrawerHeader>
                     <DrawerBody>
                         <Tabs colorScheme='darkButtons' index={activeTab === 'general' ? 0 : activeTab === 'questions' ? 1 : 2} onChange={(index) => setActiveTab(index === 0 ? 'general' : index === 1 ? 'questions' : 'combination')}>
                             <TabList >
@@ -78,14 +81,14 @@ const LayoutDrawer = ({ isOpen, onClose, nodeData, setNodes, setEdges, edges, au
                                 </TabPanel>
                                 <TabPanel>
                                     {(nodeData.type === 'muChoi' || nodeData.type === 'timeNode' || nodeData.type === 'muAns' || nodeData.type === 'reactNode' || nodeData.type === 'inputNode') ? (
-                                        <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                                        <DrawerFormatProviderQuestions nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                                     ) : (
-                                        <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                                        <DrawerFormatProviderGeneral nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                                     )}
                                 </TabPanel>
-                                {nodeData.type === 'muAns' && 
+                                {nodeData.type === 'muAns' &&
                                     <TabPanel>
-                                        <MuAnsFromatCombination nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} /> 
+                                        <MuAnsFormatCombination nodeData={nodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} />
                                     </TabPanel>
                                 }
                             </TabPanels>

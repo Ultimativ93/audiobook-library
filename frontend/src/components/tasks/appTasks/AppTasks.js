@@ -1,5 +1,8 @@
 import { extendTheme } from '@chakra-ui/react';
 
+// "AppTasks.js" is used for the colorScheme colors, used for the Button, Select, Input a.s.o. of ChakraUI and provides the project with the same color schemes.
+// It is used in "App.js".
+
 export const customTheme = extendTheme({
     colors: {
       darkButtons: {

@@ -4,9 +4,13 @@ import { Select } from '@chakra-ui/react';
 import './drawer-components.css';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
+// "SelectStoryAudio.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It updates the node property of audioStory. Which will be the story audio in the player.
+// It is a child of "BridgeNodeFormatGeneral", "EndNodeFormatGeneral", "InputNodeFormatGeneral", "MuAnsFormatGeneral",
+// "MuChoiFormatGeneral", "ReactNodeFormatGeneral" and the "TimeNodeFormatGeneral" component.
 const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
     const [selectedStoryAudio, setSelectedAudioStory] = useState(nodeData.data.audioStory || '');
@@ -57,7 +61,7 @@ const SelectStoryAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setF
                     </Select>
                 </div>
                 <div>
-                    <SwitchBackgroundAudio backgroundAudioFor={'audioStory'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                    <SwitchBackgroundAudio backgroundAudioFor={'audioStory'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
                 </div>
             </div>
         </div>

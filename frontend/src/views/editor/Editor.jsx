@@ -36,6 +36,8 @@ const initialNodes = [
 
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
+// Editor, main component of the app. Handles creating, saving, restoring of the flow plus the handling of the nodes, has the links for the different modals like "LayoutMenuModalSetup",
+// "LayoutMenuModalUpload", "LayoutMenuModalPreview", "LayoutMenuModalPublish" and the buttons to create nodes. Also the drawer component is included and the handling of it. 
 const Editor = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -130,27 +132,20 @@ const Editor = () => {
 
     // Updates Nodes in Drawer
     useEffect(() => {
-        console.log("nodes haben sich verändert")
         if (selectedNodes.length > 0) {
             const selectedNodeId = selectedNodes[0];
             const selectedNode = nodes.find(node => node.id === selectedNodeId);
-            console.log("selectedNodeData !!!!!!!!!!!!", selectedNodeData);
             if (selectedNode) {
                 setSelectedNodeData(selectedNode);
-                console.log("nodeData aktualisiert")
-                //setIsDrawerOpen(true);
-            } else {
-                //setIsDrawerOpen(false);
-                //setSelectedNodeData(null);
-            }
-        } else {
-            //setIsDrawerOpen(false);
-            //setSelectedNodeData(null);
+            } 
         }
     }, [nodes, selectedNodes]);
 
-    console.log("Edges", edges);
-    console.log("Nodes", nodes);
+
+    // Handling that the Editor will not be cut off by "overflow: hidden" in the Header.jsx component.
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [audiobookTitleParam])
 
     return (
         <div className='editor-wrapper'>

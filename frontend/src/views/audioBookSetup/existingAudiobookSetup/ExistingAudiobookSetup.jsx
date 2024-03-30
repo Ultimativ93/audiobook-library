@@ -10,11 +10,12 @@ import {
     handleAddContributor,
     handleRemoveContributor,
     handleCheckSetup
-} from '../../../components/layoutComponents/layoutAudiobookSetup/LayoutSetupFunctions';
+} from '../../../components/tasks/setupTasks/SetupFunctions';
 
 import { handleChangeDetails } from '../../../components/tasks/setupTasks/FetchDetails';
-import { fetchThumbnail, fetchThumbnailImage, getThumbnailPath, fetchAllGraphicNames } from '../../../components/tasks/publishTasks/PublishFunctions';
+import { fetchThumbnailImage, getThumbnailPath, fetchAllGraphicNames } from '../../../components/tasks/publishTasks/PublishFunctions';
 
+// ExistingAudiobookSetup accessed from the user projects tab, will handle and existing audiobook setup, and allow the user to input information data for the preview in Audiobook.jsx
 const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobookDetails, setModalsState, audiobookTitle }) => {
     const [graficPaths, setGraficPaths] = useState([]);
     const [thumbnailImage, setThumbnailImage] = useState(null);
@@ -22,8 +23,6 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
     const isFieldEmpty = (field) => {
         return field === 'string' && field.trim() === '';
     };
-
-    console.log("GRAPHICPATHS", graficPaths)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,7 +33,7 @@ const ExistingAudiobookSetup = ({ existingAudiobookDetails, setExistingAudiobook
                 console.error('Error fetching thumbnails.', error);
             }
         };
-
+        
         fetchData();
     }, [audiobookTitle]);
 

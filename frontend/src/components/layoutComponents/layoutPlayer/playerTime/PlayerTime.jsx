@@ -6,6 +6,9 @@ import { handleButtonClickLogic } from '../../../tasks/playerTasks/PlayerLogic';
 import '../playerTime/player-time.css';
 import '../../../../views/player/player.css'
 
+// "PlayerTime.jsx" component, is accessed by the "Player" component in the "LayoutMenuModalPreview" and the "Audiobook" view.
+// It handles the Time Node in the player, showcases the answers when their time comes.
+// It is a child of "Player" component.
 const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visible, answerProcessAudioPlaying }) => {
     const [currentTime, setCurrentTime] = useState(null);
 
@@ -49,13 +52,12 @@ const PlayerTime = ({ currentNodeProps, flow, setCurrentNode, onTimeUpdate, visi
     return (
         <>
             {visible && currentNodeProps.question  && (
-                <p className="question">Question: {currentNodeProps.question}</p>
+                <p className='question'>Question: {currentNodeProps.question}</p>
             )}
             <div className='player-time'>
                 {visible && renderAnswers()}
             </div>
         </>
-
     );
 };
 

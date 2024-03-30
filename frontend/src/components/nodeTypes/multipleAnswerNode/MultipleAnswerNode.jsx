@@ -3,6 +3,9 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
 import '../multipleAnswerNode/multiple-answer-node.css';
 
+// "MultipleAnswerNode.jsx" component, is accessed by the "NodeTypeDataFormat" component.
+// It handles the layout of the Combination/MuAns/MultipleAnswerNode and the combinations, with the correct amount of handles in the Editor.
+// It is a child of "Editor" view component.
 const MultipleAnswerNode = ({ data, isConnectable }) => {
     const updateNodeInternals = useUpdateNodeInternals();
 
@@ -13,14 +16,14 @@ const MultipleAnswerNode = ({ data, isConnectable }) => {
     const totalWidth = 200;
 
     return (
-        <div className="multiple-answer-node">
-            <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+        <div className='multiple-answer-node'>
+            <Handle type='target' position={Position.Top} isConnectable={isConnectable} />
 
             <div>
-                <label htmlFor="text">{data.label}</label>
+                <label htmlFor='text'>{data.label}</label>
             </div>
 
-            <div className="multiple-choice-node-source-handles">
+            <div className='multiple-choice-node-source-handles'>
                 {data.answerCombinations.map((combination, index) => {
                     const handleId = `${data.id}-handle-${index}`;
                     const leftPosition = (index / (data.answerCombinations.length - 1)) * totalWidth;
@@ -30,13 +33,13 @@ const MultipleAnswerNode = ({ data, isConnectable }) => {
                     return (
                         <Handle
                             key={handleId}
-                            type="source"
+                            type='source'
                             position={Position.Bottom}
                             id={handleId}
                             isConnectable={isConnectable}
                             style={{ left: `${leftPosition}px` }}
                         >
-                            <div className="handle-label">{answersString}</div>
+                            <div className='handle-label'>{answersString}</div>
                         </Handle>
                     );
                 })}

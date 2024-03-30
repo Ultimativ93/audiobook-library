@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+// "PlayerLogic.js" handles the functions for the "Player" component and communicates with the backend: like getting audio paths from name, getting audio from path,
+// get current audio length, handle button click logic.
+// Its main use is in the "Player" component.
+
 const getAudioPathFromName = async (audioName, audiobookTitle) => {
     try {
         const response = await axios.get(`http://localhost:3005/getAudioName?audioName=${audioName}&audiobookTitle=${audiobookTitle}`)
@@ -54,26 +58,20 @@ const getCurrentAudioLength = async (audioBlob) => {
 
         return duration;
     } catch (error) {
-        console.error("Error getting audio duration", error);
+        console.error('Error getting audio duration', error);
         return null;
     } finally {
         audioContext.close();
     }
 };
 
-
 const handleButtonClickLogic = (index, flow, currentNodeProps, setCurrentNode) => {
     const outgoingEdges = flow.edges.filter((edge) => edge.source === currentNodeProps.id);
-    console.log("Outgoing Edges: ", outgoingEdges);
-
     const targetEdge = outgoingEdges.find((edge) => edge.sourceHandle === null || edge.sourceHandle === `${currentNodeProps.id}-handle-${index}`);
-    console.log("targetEdge: ", targetEdge);
-
     if (targetEdge) {
         const targetNodeIndex = flow.nodes.findIndex((node) => node.id === targetEdge.target);
 
         if (targetNodeIndex !== -1) {
-            console.log("TargetNode: ", targetNodeIndex);
             setCurrentNode(targetNodeIndex);
         }
     }

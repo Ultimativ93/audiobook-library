@@ -3,10 +3,13 @@ import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
 import './drawer-components.css';
 
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
+// "SelectPeriods.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the time based answers of a reaction node and is handled in the "DrawerFormatProviderQuestions" component.
+// Is a child of "ReactNodeFormatQuestions" component.
 const SelectPeriod = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
   const [periods, setPeriods] = useState(nodeData.data.answerPeriods);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);

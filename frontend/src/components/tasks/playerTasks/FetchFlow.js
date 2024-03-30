@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+//"FetchFlow.js" fetches the flow with a flowKey from the backend server and the database.
+// Its prior use is in the "Player" component.
 const fetchFlow = async (flowKey) => {
   try {
     const response = await axios.get(`http://localhost:3005/getFlow?flowKey=${flowKey}`);

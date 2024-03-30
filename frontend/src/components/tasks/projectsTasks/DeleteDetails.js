@@ -1,5 +1,9 @@
+// "DeleteDetails.js" handles the deletion of projects, details and files from the backend server and databse.
+// It contains functions to delete the project, delete paths of an audiobook, delete files of an audiobook,
+// deleting flows, deleting details
+// Its main use is in "UserProjekts"
+
 const handleDeleteProject = (audiobookTitle) => {
-    console.log("In Delete Details: ", audiobookTitle);
     handleDeleteFiles(audiobookTitle);
     handleDeletePaths(audiobookTitle);
     handleDeleteFlow(audiobookTitle);
@@ -8,18 +12,13 @@ const handleDeleteProject = (audiobookTitle) => {
 }
 
 const handleDeletePaths = async (audiobookTitle) => {
-    console.log("AudiobookTitle Frontend: ", audiobookTitle);
     try {
         const response = await fetch('http://localhost:3005/deletePaths', {
             method: 'POST',
             body: audiobookTitle,
         });
 
-        console.log('Response', response);
-
         const responseData = await response.json();
-        console.log('Response Data:', responseData);
-        console.log('Response.ok', response.ok)
 
         if (response.ok) {
             console.log('Deleted Paths from Audiobook successfully: ', responseData.message);
@@ -32,7 +31,6 @@ const handleDeletePaths = async (audiobookTitle) => {
 }
 
 const handleDeleteFiles = async (audiobookTitle) => {
-    console.log("AudiobookTitle Frontend: ", audiobookTitle);
     try {
         const response = await fetch('http://localhost:3005/deleteFiles', {
             method: 'POST',
@@ -40,8 +38,6 @@ const handleDeleteFiles = async (audiobookTitle) => {
         });
 
         const responseData = await response.json();
-        console.log('Response Data:', responseData);
-        console.log('Response.ok', response.ok)
 
         if (response.ok) {
             console.log('Deleted Files from Upload directory successfully: ', responseData.message);
@@ -54,7 +50,6 @@ const handleDeleteFiles = async (audiobookTitle) => {
 }
 
 const handleDeleteFlow = async (audiobookTitle) => {
-    console.log("AudiobookTitle Frontend: ", audiobookTitle);
     try {
         const response = await fetch('http://localhost:3005/deleteFlow', {
             method: 'POST',
@@ -76,7 +71,6 @@ const handleDeleteFlow = async (audiobookTitle) => {
 }
 
 const handleDeleteDetail = async (audiobookTitle) => {
-    console.log("AudiobookTitle Frontend: ", audiobookTitle);
     try {
         const response = await fetch('http://localhost:3005/deleteDetail', {
             method: 'POST',

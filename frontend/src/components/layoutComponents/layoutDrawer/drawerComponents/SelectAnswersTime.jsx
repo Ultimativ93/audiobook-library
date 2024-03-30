@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Input, Flex, Spacer, Select } from '@chakra-ui/react';
 
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
+// "SelectAnswersTime.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the time based answers and is handled in the "DrawerFormatProviderQuestions" component.
+// It is a child of "InputNodeFormatQuestion" component.
 const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
     const [answers, setAnswers] = useState(nodeData.data.answers);
     const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
@@ -48,22 +51,22 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         const newAnswers = [...answers];
         const newAnswerAudios = [...answerAudios];
         const newAnswerBackgroundAudio = [...nodeData.data.backgroundAudio];
-        
+
         newAnswers.splice(index, 1);
         newAnswerAudios.splice(index, 1);
         newAnswerBackgroundAudio.splice(index, 1);
 
         newAnswerBackgroundAudio.forEach(audio => {
             if (audio.audio.includes('answer-')) {
-              const parts = audio.audio.split('-');
-              const audioIndex = parseInt(parts[1]);
-              if (audioIndex > index) {
-                parts[1] = (audioIndex - 1).toString();
-                audio.audio = parts.join('-');
-              }
+                const parts = audio.audio.split('-');
+                const audioIndex = parseInt(parts[1]);
+                if (audioIndex > index) {
+                    parts[1] = (audioIndex - 1).toString();
+                    audio.audio = parts.join('-');
+                }
             }
-          });
-        
+        });
+
         const removedHandleId = `${nodeData.id}-handle-${index}`;
         const newEdges = edges.filter(edge => {
             if (edge.sourceHandle === removedHandleId) {
@@ -76,16 +79,16 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
             }
             return true;
         });
-        
+
         setAnswers(newAnswers);
         setAnswerAudios(newAnswerAudios);
         setAnswerBackgroundAudio(newAnswerBackgroundAudio);
         setEdges(newEdges);
-        
+
         updateNodeProperty(setNodes, nodeData, 'answers', newAnswers);
         updateNodeProperty(setNodes, nodeData, 'answerAudios', newAnswerAudios);
         updateNodeProperty(setNodes, nodeData, 'backgroundAudio', newAnswerBackgroundAudio);
-    }; 
+    };
 
     const handleInputChange = (index, value, type) => {
         const newAnswers = [...answers];
@@ -155,13 +158,13 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
         <div className='select-answers-time-container'>
             <h4 style={{ marginTop: '5px' }}>Timebased Answers</h4>
             {answers.map((answer, index) => (
-                <Flex key={index} direction="column" align="start">
-                    <Flex align="center">
+                <Flex key={index} direction='column' align='start'>
+                    <Flex align='center'>
                         <Input
-                            placeholder="Answer .."
+                            placeholder='Answer ..'
                             value={answer.answer || `Answer ${index + 1}`}
                             onChange={(e) => handleAnswerChange(index, 'answer', e.target.value)}
-                            flex="5"
+                            flex='5'
                             style={{ marginTop: '5px' }}
                             focusBorderColor='darkButtons'
                         />
@@ -170,7 +173,7 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                             placeholder='Answer Audio ..'
                             value={answerAudios[index] || 'Answer'}
                             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
-                            flex="4"
+                            flex='4'
                             focusBorderColor='darkButtons'
                         >
                             {filteredAudioPaths.map((audio, idx) => {
@@ -200,16 +203,16 @@ const SelectAnswersTime = ({ nodeData, setNodes, setEdges, edges, audiobookTitle
                         />
                         <Spacer />
                         <Input
-                            placeholder="00:01"
+                            placeholder='00:01'
                             value={answer.time}
                             onChange={(e) => handleAnswerChange(index, 'time', e.target.value)}
-                            flex="2"
+                            flex='2'
                             focusBorderColor='darkButtons'
                         />
                     </Flex>
                     <Button
-                        colorScheme="red"
-                        size="sm"
+                        colorScheme='red'
+                        size='sm'
                         onClick={() => handleRemoveAnswer(index)}
                         style={{ marginTop: '5px' }}
                     >

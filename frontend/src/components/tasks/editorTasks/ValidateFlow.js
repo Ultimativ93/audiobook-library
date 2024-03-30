@@ -1,3 +1,5 @@
+// "ValidateFlow.js" validates the different node types in "LayoutMenuModalPreview" and before the publish in "LayoutMenuModalPublish". 
+// Its prior use is in the "LayoutMenuModalPreview" and "LayoutMenuModalPublish" components.
 const validateMuChoi = (node) => {
     let missingData = [];
 

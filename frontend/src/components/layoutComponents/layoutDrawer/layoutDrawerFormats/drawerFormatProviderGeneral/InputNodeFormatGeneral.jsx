@@ -7,6 +7,9 @@ import SelectInteraktionSignal from '../../drawerComponents/SelectInteractionSig
 import LinkUpload from '../../drawerComponents/LinkUpload';
 import SetNote from '../../drawerComponents/SetNote';
 
+// "InputNodeFormatGeneral.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the components used for the general tab of the drawer for an Input node.
+// Is a child of "DrawerFormatProviderGeneral" component.
 const InputNodeFormatGeneral = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     return (
             <DrawerBody>

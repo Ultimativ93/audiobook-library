@@ -3,6 +3,9 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
 import '../multipleChoiceNode/multiple-choice-node.css';
 
+// "MultipleChoiceNode.jsx" component, is accessed by the "NodeTypeDataFormat" component.
+// It handles the layout of the Choice/MuChoi/Multiple Choice node in the Editor.
+// It is a child of "Editor" view component.
 const MultipleChoiceNode = ({ data, isConnectable }) => {
   const updateNodeInternals = useUpdateNodeInternals();
   const nodeRef = useRef();

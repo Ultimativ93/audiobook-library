@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Input, Flex, Select, Spacer } from '@chakra-ui/react';
 
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
 
+// "SelectAnswerProcess.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It manages the input and removal of answers and gets handled by the DrawerFormatProviderQuestions.
+// It is a child of "MuAnsFormatQuestion", "MuChoiFormatQuestion" component.
 const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fileChange, setFileChange }) => {
   const [answers, setAnswers] = useState(nodeData.data.answers || []);
   const [answerAudios, setAnswerAudios] = useState(nodeData.data.answerAudios || []);
@@ -89,18 +92,13 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fi
       const newAnswers = [...answers];
       const newAnswerAudios = [...answerAudios];
       const newAnswerBackgroundAudio = [...nodeData.data.backgroundAudio];
-      console.log("newAnswerBackgroundAudio", newAnswerBackgroundAudio);
-
       const deletedBackgroundAudio = newAnswerBackgroundAudio[index];
-      console.log("deletedBackgroundAudio", deletedBackgroundAudio);
 
       newAnswers.splice(index, 1);
       newAnswerAudios.splice(index, 1);
 
       if (deletedBackgroundAudio && deletedBackgroundAudio.audio.includes('answer-')) {
         newAnswerBackgroundAudio.splice(index, 1);
-        console.log("newAnswerBackgroundAudio", newAnswerBackgroundAudio);
-
         for (let i = index; i < newAnswerBackgroundAudio.length; i++) {
           if (newAnswerBackgroundAudio[i] && newAnswerBackgroundAudio[i].audio.includes('answer-')) {
             const parts = newAnswerBackgroundAudio[i].audio.split('-');
@@ -149,13 +147,10 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fi
       if (nodeData.data.answerCombinations.length > 0) {
         removedHandles = nodeData.data.answerCombinations.flatMap((combination, idx) => {
           if (combination.answers.includes(removedAnswer)) {
-            console.log("Combination with Removed Answer at Index", idx);
             return `${nodeData.id}-handle-${idx}`;
           }
           return [];
         });
-
-        console.log("Indexes of Combinations with Removed Answer:", removedHandles);
       }
 
       const newEdges = edges.filter(edge => !removedHandles.includes(edge.sourceHandle));
@@ -219,13 +214,13 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fi
     <div className='select-answer-container'>
       <h4>Answers</h4>
       {answers.map((answer, index) => (
-        <Flex key={index} alignItems="center">
+        <Flex key={index} alignItems='center'>
           <Input
             placeholder='Answer .. '
             value={answer}
             onChange={(e) => handleInputChange(index, e.target.value, 'answer')}
             focusBorderColor='darkButtons'
-            flex="5"
+            flex='5'
           />
           <Spacer />
           <Select
@@ -234,7 +229,7 @@ const SelectAnswers = ({ nodeData, setNodes, setEdges, edges, audiobookTitle, fi
             value={answerAudios[index] || ''}
             onChange={(e) => handleInputChange(index, e.target.value, 'answerAudio')}
             focusBorderColor='darkButtons'
-            flex="5"
+            flex='5'
           >
             {filteredAudioPaths.map((audio, idx) => {
               const color = audioUsage[audio.audioName] ? '#C6F6D5' : 'inherit';

@@ -4,8 +4,11 @@ import { Switch } from '@chakra-ui/react';
 import './drawer-components.css';
 
 import SelectInteractionSignalAudio from './SelectInteractionSignalAudio';
-import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
+// "SelectInteraktionSignal.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the activation an interaction signal, if selected. And shows, if selected, the "SelectInteractionSignalAudio" component.
+// It is a child of "MuAnsFormatGeneral", "MuChoiFormatGeneral", "ReactNodeFormatGeneral" and "TimeNodeFormatGeneral" component.
 const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
   const [shouldShowAudio, setShouldShowAudio] = useState(nodeData.data.interactionSignal === 'true');
 
@@ -16,7 +19,6 @@ const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle, fileChang
 
     if (!isChecked) {
       updateNodeProperty(setNodes, nodeData, 'interactionSignalAudio', '');
-      console.log("nodeData", nodeData);
     }
   };
 
@@ -28,9 +30,9 @@ const SelectInteraktionSignal = ({ nodeData, setNodes, audiobookTitle, fileChang
         onChange={handleSwitchChange}
         colorScheme='darkButtons'
       />
-      {shouldShowAudio && <SelectInteractionSignalAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>}
+      {shouldShowAudio && <SelectInteractionSignalAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />}
     </div>
   );
-}
+};
 
 export default SelectInteraktionSignal;

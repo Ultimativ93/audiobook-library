@@ -4,6 +4,9 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseBu
 import ExistingAudiobookSetup from '../../../../../views/audioBookSetup/existingAudiobookSetup/ExistingAudiobookSetup';
 import { handleGetDetails } from '../../../../tasks/setupTasks/FetchDetails';
 
+//"LayoutMenuModalSetup.jsx" component is accessed by the "Editor" view. It handles the information like long description, thumbnail, author, input selections,
+//contributors and category of an audiobook.
+// Is a child of "LayoutEditorButtons" component
 const LayoutMenuModalSetup = ({ isModalSetupOpen, setModalsState, audiobookTitle }) => {
     const [existingAudiobookDetails, setExistingAudiobookDetails] = useState();
 
@@ -23,7 +26,7 @@ const LayoutMenuModalSetup = ({ isModalSetupOpen, setModalsState, audiobookTitle
     }, []);
 
     return (
-        <Modal isOpen={isModalSetupOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isSetupModalOpen: false }))} size="5xl">
+        <Modal isOpen={isModalSetupOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isSetupModalOpen: false }))} size='5xl'>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Setup Audiobook</ModalHeader>

@@ -3,12 +3,14 @@ import { Select } from '@chakra-ui/react';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 import ShowAudioLength from './ShowAudioLength';
 
+// "SelectAnswerProcessAudio.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the audio changes for the AnswerProcessAudio and gets handled by the "DrawerFormatProviderQuestion" component.
+// It is a child of "ReactNodeFormatQuestion" and "TimeNodeFormatQuestion" component.
 const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
-    
     const [selectedAnswerProcessAudio, setSelectedAnswerProcessAudio] = useState(nodeData.data.answerProcessAudio || '');
     const audioUsage = useAudioUsage(audioPaths);
 
@@ -62,7 +64,7 @@ const SelectAnswerProcessAudio = ({ nodeData, setNodes, audiobookTitle, fileChan
                 </div>
                 <div>
                     {selectedAnswerProcessAudio && (
-                        <ShowAudioLength nodeData={nodeData} setNodes={setNodes} audioName={selectedAnswerProcessAudio} audiobookTitle={audiobookTitle}/>
+                        <ShowAudioLength nodeData={nodeData} setNodes={setNodes} audioName={selectedAnswerProcessAudio} audiobookTitle={audiobookTitle} />
                     )}
                 </div>
             </div>

@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { Checkbox, Stack } from '@chakra-ui/react';
-import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
 import './drawer-components.css';
 
+// "SelectInputSelections.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the input selections a user can check, to access different modes of playing thorugh the "Player" component.
+// It is a child of "MuAnsFormatQuestions", "MuChoiFormatQuestions", "ReactNodeFormatQuestions", "InputNodeFormatQuestions" and "TimeNodeFormatQuestion" component.
 const SelectInputSelections = ({ nodeData, setNodes }) => {
     const inputSelectionsRef = useRef(nodeData.data.inputSelections || {
         mouse: false,
@@ -40,7 +43,7 @@ const SelectInputSelections = ({ nodeData, setNodes }) => {
 
     return (
         <div className='select-input-selections-container'>
-            <h4 style={{ marginTop:'5px'}}>Select Input Selections</h4>
+            <h4 style={{ marginTop: '5px' }}>Select Input Selections</h4>
             <Stack direction='row' flexWrap='wrap'>
                 {Object.keys(inputSelectionsRef.current).map((key, index) => (
                     <Checkbox

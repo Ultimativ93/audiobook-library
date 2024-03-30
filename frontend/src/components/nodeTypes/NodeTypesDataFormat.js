@@ -1,10 +1,13 @@
+// "NodeTypesDataFormat.js" is accessed by the "Editor" component.
+// It provides the different nodes with the data formats needes aswell with an individual id.
+// It is a child of "Editor" view component.
 const NodeTypesDataFormat = (nodeType, ids, nodes) => {
     const inputSelections = {
         mouse: '', touch: '', speak: '', keyboard: '', shake: ''
     };
 
     const commonAttributes = {
-        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudio: [], note: '', 
+        label: '', audioStory: '', isEnd: '', interactionSignal: '', interactionSignalAudio: '', question: '', questionAudio: '', randomAudio: '', repeatQuestionAudio: '', backgroundAudio: [], note: '',
     };
 
     const getLastCount = () => {

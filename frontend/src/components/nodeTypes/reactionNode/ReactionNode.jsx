@@ -3,6 +3,9 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
 import '../reactionNode/reaction-node.css';
 
+// "ReactionNode.jsx" component, is accessed by the "NodeTypeDataFormat" component.
+// It handles the layout of the Reaction node in the Editor.
+// It is a child of "Editor" view component.
 const ReactionNode = ({ data, isConnectable }) => {
     const updateNodeInternals = useUpdateNodeInternals();
     const nodeRef = useRef();
@@ -13,18 +16,17 @@ const ReactionNode = ({ data, isConnectable }) => {
 
     const nonEmptyAnswers = data.answerPeriods.filter(answer => answer !== '');
     const handleNoReaction = { start: '', end: '', answer: 'NoReaction' };
-
     nonEmptyAnswers.push(handleNoReaction);
 
     return (
-        <div className="reaction-node" ref={nodeRef}>
-            <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
+        <div className='reaction-node' ref={nodeRef}>
+            <Handle type='target' position={Position.Top} isConnectable={isConnectable} />
 
-            <div className="label">
-                <label htmlFor="text">{data.label}</label>
+            <div className='label'>
+                <label htmlFor='text'>{data.label}</label>
             </div>
 
-            <div className="reaction-node-source-handles">
+            <div className='reaction-node-source-handles'>
                 {nonEmptyAnswers.map((answer, index) => {
                     const handleId = `${data.id}-handle-${index}`;
                     const totalWidth = 200;
@@ -38,14 +40,14 @@ const ReactionNode = ({ data, isConnectable }) => {
                     return (
                         <Handle
                             key={handleId}
-                            type="source"
+                            type='source'
                             position={Position.Bottom}
                             id={handleId}
                             isConnectable={isConnectable}
                             style={handleStyle}
-                            className="react-flow__handle"
+                            className='react-flow__handle'
                         >
-                            <div className="handle-label">{answer.answer}</div>
+                            <div className='handle-label'>{answer.answer}</div>
                         </Handle>
                     );
                 })}

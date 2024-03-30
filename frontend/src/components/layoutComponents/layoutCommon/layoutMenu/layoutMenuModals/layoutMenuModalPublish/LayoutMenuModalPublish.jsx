@@ -12,8 +12,11 @@ import FetchAudio from '../../../../../tasks/editorTasks/FetchAudio';
 
 import { handleGetDetails, handleChangeDetailsThumbnail } from '../../../../../tasks/setupTasks/FetchDetails';
 import { fetchAllGraphicNames, fetchThumbnailImage, validateNodesAndEdges, uploadValidatedFlow, getValidatedFlowTitle, deleteUnusedAudio, getThumbnailPath } from '../../../../../tasks/publishTasks/PublishFunctions';
-import { useAudioUsage } from '../../../../layoutDrawer/LayoutDrawerFunctions';
+import { useAudioUsage } from '../../../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
+// "LayoutMenuModalPublis.jsx" allows the creator to publish the modal and fill in needed information for the "Audiobook.jsx" component.
+// Gets accessed from the "Editor" view.
+// Is a child of "LayoutEditorButtons" component
 const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookTitle, nodes, edges, rfInstance, fileChange, setFileChange }) => {
     const [publishData, setPublishData] = useState({ thumbnail: '', description: '' });
     const [graficPaths, setGraficPaths] = useState([]);
@@ -43,7 +46,6 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                 console.error('Error fetching thumbnails or details.', error);
             }
         };
-        console.log("FETCHING")
         fetchData();
         setFileChange(false);
     }, [audiobookTitle, fileChange]);
@@ -162,7 +164,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                     </ModalBody>
                     <ModalFooter>
                         <Link to={`/audiobook/${audiobookTitle}`}>
-                            <Button colorScheme="highlightColor" mr={3} onClick={() => {
+                            <Button colorScheme='highlightColor' mr={3} onClick={() => {
                                 uploadValidatedFlow(audiobookTitle, rfInstance, publishData.thumbnail, publishData.description, publishData.length, publishData.keywords, publishData.title);
                                 deleteUnusedAudio(audiobookTitle, audioUsage);
                                 onConfirmationModalClose();
@@ -170,21 +172,21 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                                 Yes, proceed
                             </Button>
                         </Link>
-                        <Button variant="ghost" onClick={onConfirmationModalClose}>Cancel</Button>
+                        <Button variant='ghost' onClick={onConfirmationModalClose}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
 
-            <Modal isOpen={isPublishModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPublishModalOpen: false }))} size="5xl">
+            <Modal isOpen={isPublishModalOpen} onClose={() => setModalsState(prevState => ({ ...prevState, isPublishModalOpen: false }))} size='5xl'>
                 <ModalOverlay />
-                <ModalContent className="modal-content">
+                <ModalContent className='modal-content'>
                     <ModalCloseButton />
                     <ModalHeader>Publish Audiobook: {publishData.title ? publishData.title : audiobookTitle}</ModalHeader>
-                    <ModalBody className="modal-body">
-                        <div className="modal-publish-title">
+                    <ModalBody className='modal-body'>
+                        <div className='modal-publish-title'>
                             <p>Set a title if you want a different title than your project title:</p>
                             <Input
-                                type="text"
+                                type='text'
                                 placeholder='Set Audiobook Title..'
                                 value={publishData.title}
                                 onChange={(e) => handleInputChange(e, 'title')}
@@ -195,7 +197,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                             {isWrongTitle && <p style={{ color: 'red' }}>The title is already used, or it has the wrong format.</p>}
                         </div>
 
-                        <div className="modal-publish-thumbnail-container">
+                        <div className='modal-publish-thumbnail-container'>
                             <p>Select Thumbnail:</p>
                             <Select
                                 placeholder='Select Thumbnail..'
@@ -212,11 +214,11 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                             </Select>
                         </div>
 
-                        <div className="modal-publish-description">
+                        <div className='modal-publish-description'>
                             <p>Set Short Description:</p>
                             <Input
-                                type="text"
-                                placeholder="Description.."
+                                type='text'
+                                placeholder='Description..'
                                 value={publishData.description}
                                 onChange={(e) => handleInputChange(e, 'description')}
                                 borderColor={isDescriptionTooLong ? 'red' : 'inherit'}
@@ -226,11 +228,11 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                             {isDescriptionTooLong && <p style={{ color: 'red' }}>Description is too long (max 80 characters)</p>}
                         </div>
 
-                        <div className="modal-publish-keywords">
+                        <div className='modal-publish-keywords'>
                             <p>Set keywords for your audiobook:</p>
                             <Input
-                                type="text"
-                                placeholder="Keywords.."
+                                type='text'
+                                placeholder='Keywords..'
                                 value={publishData.keywords}
                                 onChange={(e) => handleInputChange(e, 'keywords')}
                                 width='80%'
@@ -239,11 +241,11 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                             {keywordValidation && <p style={{ color: 'red' }}>Enter at least 5 keywords (separated with ",").</p>}
                         </div>
 
-                        <div className="modal-publish-audiobook-length">
+                        <div className='modal-publish-audiobook-length'>
                             <p>Set approximate length of audiobook:</p>
                             <Input
-                                type="number"
-                                placeholder="Approximate length in minutes.."
+                                type='number'
+                                placeholder='Approximate length in minutes..'
                                 value={publishData.length}
                                 onChange={(e) => handleInputChange(e, 'length')}
                                 width='50%'
@@ -251,17 +253,17 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                             />
                         </div>
 
-                        <div className="modal-publish-container">
-                            <div className="modal-publish-preview">
-                                {thumbnailImage && <img src={thumbnailImage} alt="Thumbnail" />}
-                                <div className="audiobook-info">
+                        <div className='modal-publish-container'>
+                            <div className='modal-publish-preview'>
+                                {thumbnailImage && <img src={thumbnailImage} alt='Thumbnail' />}
+                                <div className='audiobook-info'>
                                     <h5>Title: {publishData.title ? publishData.title : audiobookTitle}</h5>
                                     <p>{publishData.description}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="modal-publish-links">
+                        <div className='modal-publish-links'>
                             <LinkUpload />
                             <LinkSetup />
                             {!validationResults && (
@@ -272,7 +274,7 @@ const LayoutMenuModalPublish = ({ isPublishModalOpen, setModalsState, audiobookT
                             )}
                         </div>
 
-                        <div className="modal-publish-submit">
+                        <div className='modal-publish-submit'>
                             <Button colorScheme={!validationResults ? 'gray' : 'highlightColor'} onClick={() => handleSubmit()} isDisabled={!validationResults}>Submit</Button>
                             <Button colorScheme='darkButtons'>Cancel</Button>
                         </div>

@@ -174,22 +174,15 @@ ________________________________________________________________________________
 
 Nach Priorität:
             - !!!!! (1):   
+                - Player aufräumen als letzte Maßnahme. Erst gucken ob alles noch funktioniert                                                                                          O
 
             - !!! (2):
-                - Tutorial Seite                                                                                                                                                        O
-                - Flow Publishen und gucken ob Thumbnail geladen wird wenn Title geändert wird                                                                                          O
-                - Overflow Hidden anpassen für Editor                                                                                                                                   O
-                - Seite nicht gefunden 404                                                                                                                                              O
-                - Seite einrücken. Nicht ganze Breite benutzen                                                                                                                          O
-                - Umbennnen von Multiple in Combination                                                                                                                                 O
-	            - Kategorien beim Upload funktionieren noch nicht                                                                                                                       O
-		        - Input Remove answer weiter nach unten                                                                                                                                 O
                 - Tutorial Background Audio, wofür?                                                                                                                                     O
                 - Grundsätzliches Tutorial zum Umgang mit der Seite                                                                                                                     O
-                - Thumbnails hinzufügen zu den Tutorials                                                                                                                                O
+                - RoutesController logs entfernen/anpassen                                                                                                                              O
 
             - ! (3):
-                - RoutesController logs entfernen/anpassen                                                                                                                              O
+
                 - Node löschen Button                                                                                                                                                   O
                 - Drawer onClose ohne Transition.                                                                                                                                       O
                 - H4 von den DrawerComponents zu p umändern.                                                                                                                            O
@@ -205,6 +198,8 @@ Nach Priorität:
                 - Umbennungen der Nodes im Code (MuChoi -> Choice, Multiple Answer -> Multiple Response)                                                                                O
                 - Statt zwei Server (Backend Frontend) nur einen Server, server so konfigurieren das nur public sichtbar ist                                                            O
                 - Statt SQLite, MySql fürs veröffentlichen benutzen, da scallable und mulituser                                                                                         O
+                - Seite nicht gefunden 404                                                                                                                                              O
+                - Seite einrücken. Nicht ganze Breite benutzen                                                                                                                          O
 
             - Für Erklärungen:
                 - TimeNode: hier müssen wir sagen, dass wenn keine Antwort ausgewählt wurde, dass wir die letzte Antwort auswählen, wenn die Zeit abgelaufen ist.                       O
@@ -353,6 +348,11 @@ Erledigt:
                 - Player funktioniert nicht mehr.                                                                                                                                       X
                 - Bilder werden nicht richtig aktualisiert in Audiobook                                                                                                                 X
                 - Publish Daten werden nicht gespeichert, Daten werden nicht angezeigt wenn hochgeladen                                                                                 X
+                - Tutorial Seite                                                                                                                                                        X
+                - Umbennnen von Multiple in Combination                                                                                                                                 X
+                - Thumbnails hinzufügen zu den Tutorials                                                                                                                                X
+		        - Input Remove answer weiter nach unten                                                                                                                                 X
+                - Overflow Hidden anpassen für Editor                                                                                                                                   X
 
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X

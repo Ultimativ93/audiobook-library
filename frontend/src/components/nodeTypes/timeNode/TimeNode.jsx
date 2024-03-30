@@ -3,6 +3,9 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 
 import '../timeNode/time-node.css';
 
+// "TimeNode.jsx" component, is accessed by the "NodeTypeDataFormat" component.
+// It handles the layout of the Time node in the Editor.
+// It is a child of "Editor" view component.
 const TimeNode = ({ data, isConnectable }) => {
     const updateNodeInternals = useUpdateNodeInternals();
     const nodeRef = useRef();
@@ -14,11 +17,11 @@ const TimeNode = ({ data, isConnectable }) => {
     const nonEmptyAnswers = data.answers.filter(answer => answer.answer !== '');
 
     return (
-        <div className="time-node" ref={nodeRef}>
+        <div className='time-node' ref={nodeRef}>
             <Handle type='target' position={Position.Top} isConnectable={isConnectable} />
 
             <div>
-                <label htmlFor="text">{data.label}</label>
+                <label htmlFor='text'>{data.label}</label>
             </div>
 
             <div className='time-node-source-handles'>
@@ -26,17 +29,16 @@ const TimeNode = ({ data, isConnectable }) => {
                     const handleId = `${data.id}-handle-${index}`;
                     const totalWidth = 200;
                     const leftPosition = (index / (nonEmptyAnswers.length - 1)) * totalWidth;
-
                     return (
                         <Handle
                             key={handleId}
-                            type="source"
+                            type='source'
                             position={Position.Bottom}
                             id={handleId}
                             isConnectable={isConnectable}
                             style={{ left: `${leftPosition}px` }}
                         >
-                            <div className="handle-label">{answerData.answer}</div>
+                            <div className='handle-label'>{answerData.answer}</div>
                         </Handle>
                     );
                 })}

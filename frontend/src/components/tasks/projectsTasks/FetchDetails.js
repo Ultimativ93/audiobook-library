@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// Here we have to get user.id later, to get the flows for the user.id
-const FetchFlows = async () => {
+// "FetchDetails" fetches all details from the backend and provides it to the "UserProjects" view component.
+// Its main use is in "UserProjects", to showcase the data for the creator.
+const FetchDetails = async () => {
     try {
         const response = await axios.get('http://localhost:3005/getAllDetails');
         if (response.status === 200) {
@@ -16,4 +17,4 @@ const FetchFlows = async () => {
     }
 };
 
-export default FetchFlows;
+export default FetchDetails;

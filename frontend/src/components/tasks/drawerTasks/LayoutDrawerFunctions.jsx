@@ -1,6 +1,9 @@
-import { fetchFlow } from '../../tasks/editorTasks/FetchFlow';
+import { fetchFlow } from '../editorTasks/FetchFlow';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
+// "LayoutDrawerFunctions.jsx" gets used for removing answers of nodes, update background audio, remove combinations of Combination/MuAns/Multiple Answer Node,
+// Update Edges of a MuAns node after combination deletion, update node properties. And gets used in "LayoutDrawer" but mostly in its child components.
 
 // Remove answer from node and update related edges
 const removeAnswer = (setNodes, setEdges, edges, nodeData, index, setAnswers) => {
@@ -135,11 +138,8 @@ const removeCombination = (setNodes, setEdges, prevEdges, nodeData, combinationI
 // Update Edges of a MuAns node after combination deletion
 const updateEdgesAfterCombinationRemoval = (setEdges, prevEdges, nodeData, combinationId) => {
     let removedHandles = [];
-
-    console.log("Combination Id", combinationId)
     prevEdges.forEach((edge) => {
         if (edge.sourceHandle && edge.sourceHandle.split('-').pop() === (combinationId - 1).toString()) {
-            console.log("hier drin!!!")
             removedHandles.push(edge.sourceHandle);
         }
     });
@@ -187,6 +187,7 @@ const updateNodeProperty = (setNodes, nodeData, property, value) => {
     });
 };
 
+// Show audioUsage of an audio file
 const useAudioUsage = (audioPaths) => {
     const [audioUsage, setAudioUsage] = useState({});
     const params = useParams();
@@ -207,6 +208,7 @@ const useAudioUsage = (audioPaths) => {
     return audioUsage;
 }
 
+// Check if audio isUsed
 const isAudioUsed = async (audioName, params) => {
     const flow = await fetchFlow(params)
     for (const node of flow.nodes) {
@@ -233,6 +235,7 @@ const isAudioUsed = async (audioName, params) => {
     return false;
 };
 
+// Update Background Audio of a node
 const updateBackgroundAudio = (setNodes, nodeData, backgroundAudioFor, selectedAudio, showAudio) => {
     setNodes((prevNodes) => {
         return prevNodes.map((node) => {
@@ -263,7 +266,6 @@ const updateBackgroundAudio = (setNodes, nodeData, backgroundAudioFor, selectedA
         });
     });
 };
-
 
 export {
     updateNodeProperty,

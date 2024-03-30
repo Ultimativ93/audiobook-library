@@ -1,5 +1,0 @@
-TODOS:
-
-20.01.2024 - Server aufsetzen, Datenbank aufsetzen + Verbindung herstellen, Datenbank mit DataUpload verbinden.                                                                 X
-
-19.02.2024  - Ordnerstruktur für den Upload Ordner festlegen, je nach Flow einen Ordner machen, und dann später je nach User                                                    O

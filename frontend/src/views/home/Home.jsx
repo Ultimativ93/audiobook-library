@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Stack, CardBody, CardFooter, Heading, Text, Image, Flex, Icon } from '@chakra-ui/react';
+import { Card, Stack, CardFooter, Heading, Text, Image, Flex, Icon } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
-import { AiOutlineQuestionCircle, AiFillHeart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
 import "../home/home.css";
@@ -9,6 +8,7 @@ import "../home/home.css";
 import { handleGetAllValidatedFlows } from '../../components/tasks/homeTasks/HomeFunctions';
 import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
 
+// Home component, accessed of the route "/" from App.js. Handles the view of the validated audiobooks.
 const Home = () => {
   const [validatedFlows, setValidatedFlows] = useState([]);
   const [thumbnailImages, setThumbnailImages] = useState({});
@@ -31,13 +31,10 @@ const Home = () => {
         const images = {};
         for (const flow of validatedFlows) {
           const thumbnail = flow.thumbnail;
-          console.log("thumbnail", thumbnail);
-          console.log("FLOW", flow);
           if (thumbnail) {
             try {
               let paths = await fetchThumbnail(flow.flowKey);
               if (!paths) {
-                console.log("KEIN PATH")
                 paths = await fetchThumbnail(flow.title);
               }
               if (paths) {
@@ -55,22 +52,19 @@ const Home = () => {
   
     fetchThumbnails();
   }, [validatedFlows]);
-  
-
-  console.log("Validated Flows:", validatedFlows);
 
   return (
     <div className='home-wrapper'>
       <div className='home-container'>
-        <div className="logo-container">
-          <img src={process.env.PUBLIC_URL + '/graphics/Earcade-Logo.png'} alt="Earcade Logo" className="earcade-logo" />
-          <div className="svg-background" />
-          <p className="earcade-slogan">Your Gateway to Interactive Audiobooks</p>
+        <div className='logo-container'>
+          <img src={process.env.PUBLIC_URL + '/graphics/Earcade-Logo.png'} alt='Earcade Logo' className='earcade-logo' />
+          <div className='svg-background'/>
+          <p className='earcade-slogan'>Your Gateway to Interactive Audiobooks</p>
         </div>
         
         <h3>Audiobooks</h3>
 
-        <div className="audiobooks-container">
+        <div className='audiobooks-container'>
           {validatedFlows && validatedFlows.length > 0 && validatedFlows.map((flow, index) => (
             <Link to={`/audiobook/${flow.flowKey}`} key={index}>
               <Card className='home-audiobook-card' m={2} maxW='300px'>
@@ -94,7 +88,7 @@ const Home = () => {
                   >
                     <Heading size='md' className='heading'>{flow.title ? flow.title : flow.flowKey}</Heading>
                     <Text fontSize='sm' className='description'>
-                      {flow.description ? flow.description.split(" ").slice(0, 20).join(" ") : ''}
+                      {flow.description ? flow.description.split(' ').slice(0, 20).join(' ') : ''}
                     </Text>
                   </Stack>
                 </Flex>
@@ -120,24 +114,3 @@ const Home = () => {
 }
 
 export default Home;
-
-
-/* <div className="banner">
-          <Link to="/tutorials">
-            <p>You are new to interactive audiobooks? Go find out what it is all about</p>
-          </Link>
-          <div className="banner-icons">
-            <Icon className="banner-icon" as={AiOutlineQuestionCircle} />
-            <Icon className="banner-icon" as={AiFillHeart} />
-          </div>
-        </div>
-        <div className="banner">
-          <Link to="/feedback">
-            <p>You have ideas how we could improve the editor? Send us feedback</p>
-          </Link>
-        </div>
-        <div className="banner">
-          <Link to="/user-projects">
-            <p>We created an interactive audio editor, that will cover all your needs</p>
-          </Link>
-        </div> */

@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+// "TutorialsFunctions.js" handles functions for the "Tutorials" view component. It handle getting all the tutorials, aswell as get the tutorial video and fetches the thumbnail,
+// Its main use is for the "Tutorials" view component.
+
 export const handleGetAllTutorials = async () => {
   try {
     const response = await axios.get('http://localhost:3005/getAllTutorials');
@@ -20,7 +23,6 @@ export const handleGetAllTutorials = async () => {
     return [];
   }
 }
-
 
 export const handleGetTutorialVideo = async (videoPath) => {
   try {

@@ -5,8 +5,12 @@ import './drawer-components.css';
 
 import FetchAudio from '../../../tasks/editorTasks/FetchAudio';
 import SwitchBackgroundAudio from './SwitchBackgroundAudio';
-import { updateNodeProperty, useAudioUsage } from '../LayoutDrawerFunctions';
+import { updateNodeProperty, useAudioUsage } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
+// "SelectInteractionSignalAudio.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the input and deselection of the audio for SelectInteractionSignalAudio
+// Its parent is the "SelectInteractioNSignal" component.
+// It is a child of "MuAnsFormatQuestions", "MuChoiFormatQuestions", "ReactNodeFormatQuestions" and "TimeNodeFormatQuestions" component.
 const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     const [audioPaths, setAudioPaths] = useState([]);
     const audioUsage = useAudioUsage(audioPaths);
@@ -51,7 +55,7 @@ const SelectInteractionSignalAudio = ({ nodeData, setNodes, audiobookTitle, file
                 </Select>
             </div>
             <div>
-                <SwitchBackgroundAudio backgroundAudioFor={'interactionSignal'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
+                <SwitchBackgroundAudio backgroundAudioFor={'interactionSignal'} nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
             </div>
         </div>
     )

@@ -61,7 +61,7 @@
 .player audio::-webkit-media-controls-play-button {
     background-color: #00A5C2 !important;
     filter: invert(100%);
-    border-radius: 50%; 
+    border-radius: 50%;
     margin-right: 10px;
 }
 

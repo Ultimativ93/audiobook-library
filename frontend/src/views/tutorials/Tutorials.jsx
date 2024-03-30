@@ -4,6 +4,8 @@ import { handleGetAllTutorials, handleGetTutorialVideo, handleGetThumbnail } fro
 
 import './tutorials.css';
 
+// "Tutorials.jsx" component handles the tutorials. It loads all available tutorials from the server, and loads the first one. Also it provides a
+// tutorial exclusive sidebar to access all the other tutorials.
 const Tutorials = () => {
   const [tutorialNames, setTutorialNames] = useState([]);
   const [tutorials, setTutorials] = useState([]);
@@ -44,8 +46,6 @@ const Tutorials = () => {
 
     fetchData();
   }, []);
-
-  console.log("Tutorials", tutorials);
 
   // Function to get random indexes
   const getRandomIndexes = (max, count) => {
@@ -93,17 +93,17 @@ const Tutorials = () => {
         <div className='tutorial-content'>
           <h2>Tutorials</h2>
           {selectedTutorial && (
-            <div className="tutorial-details">
+            <div className='tutorial-details'>
               <h3>{selectedTutorial.name}</h3>
               <p>{selectedTutorial.shortDescription}</p>
               {tutorialVideo ? (
                 <video key={videoKey} controls>
-                  <source src={tutorialVideo} type="video/mp4" />
+                  <source src={tutorialVideo} type='video/mp4' />
                   Your browser does not support the video tag.
                 </video>
               ) : (
-                <div className="loading-overlay">
-                  <div className="spinner"></div>
+                <div className='loading-overlay'>
+                  <div className='spinner'></div>
                 </div>
               )}
               <p>{selectedTutorial.longDescription}</p>

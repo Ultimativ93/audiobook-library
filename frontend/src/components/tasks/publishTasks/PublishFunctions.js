@@ -17,6 +17,11 @@ import {
     validateEdgeStart,
 } from '../editorTasks/ValidateFlow';
 
+// "PublishFunctions.js" handles the functione to publish an audiobook. For example we use fetch all graphic names,
+// fetch thumbnails, fetchThumbnail image, validated nodes and edges, upload validated flow, get validated flow title,
+// get thumbnail path, delete unused audio files and paths and handle file delete.
+// Its main use is in "LayoutMenuModalPublish" component.
+
 export const fetchAllGraphicNames = async (audiobookTitle) => {
     try {
         const fetchedPaths = await axios.get(`http://localhost:3005/getAllGraficNames?audiobookTitle=${audiobookTitle}`);
@@ -141,7 +146,6 @@ export const validateNodesAndEdges = (nodes, edges) => {
     if (invalidNodes.size > 0 || invalidEdges.length > 0) {
         return false;
     } else {
-        console.log("Validation successful.");
         return true;
     }
 };
@@ -153,7 +157,7 @@ export const uploadValidatedFlow = async (audiobookTitle, rfInstance, thumbnail,
     try {
         const response = await axios.post('http://localhost:3005/saveValidatedFlow', {
             flow,
-            flowKey : audiobookTitle,
+            flowKey: audiobookTitle,
             thumbnail: thumbnail,
             description: description,
             length: length,
@@ -200,7 +204,6 @@ export const getThumbnailPath = async (audiobookTitle, graficName) => {
 }
 
 export const deleteUnusedAudio = async (audiobookTitle, audioUsage) => {
-    console.log("AudiobookTitle, audioUsage", audiobookTitle, audioUsage);
     try {
         for (const audioFile in audioUsage) {
             if (!audioUsage[audioFile]) {
@@ -214,7 +217,6 @@ export const deleteUnusedAudio = async (audiobookTitle, audioUsage) => {
 
 const handleFileDelete = async (file, audiobookTitle) => {
     try {
-        console.log("file to delete", file, audiobookTitle)
         const response = await axios.post('http://localhost:3005/deleteFile', { file, audiobookTitle });
         console.log('File deleted successfully:', response.data);
     } catch (error) {

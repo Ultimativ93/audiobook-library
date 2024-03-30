@@ -7,15 +7,18 @@ import SelectInteraktionSignal from '../../drawerComponents/SelectInteractionSig
 import LinkUpload from '../../drawerComponents/LinkUpload';
 import SetNote from '../../drawerComponents/SetNote';
 
+// "ReactNodeFormatGeneral.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the components used for the general tab of the drawer for an Reaction node.
+// Is a child of "DrawerFormatProviderGeneral" component.
 const ReactNodeFormatGeneral = ({ nodeData, setNodes, audiobookTitle, fileChange, setFileChange }) => {
     return (
-            <DrawerBody>
-                <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
-                <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
-                <SelectInteraktionSignal nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange}/>
-                <SetNote nodeData={nodeData} setNodes={setNodes} />
-                <LinkUpload />
-            </DrawerBody>
+        <DrawerBody>
+            <SelectNodeLabel nodeData={nodeData} setNodes={setNodes} />
+            <SelectStoryAudio nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
+            <SelectInteraktionSignal nodeData={nodeData} setNodes={setNodes} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />
+            <SetNote nodeData={nodeData} setNodes={setNodes} />
+            <LinkUpload />
+        </DrawerBody>
     )
 }
 

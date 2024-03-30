@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 
-import "./drawer-components.css";
+import './drawer-components.css';
 
 import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../tasks/playerTasks/PlayerLogic';
-import { updateNodeProperty } from '../LayoutDrawerFunctions';
+import { updateNodeProperty } from '../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
+// "ShowAudioLength.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// It handles the length of an audio and returns a div with the audio length.
+// It is a child of "ReactNodeFormatQuestions", "TimeNodeFormatQuestion" component.
 const ShowAudioLength = ({ nodeData, setNodes, audioName, audiobookTitle }) => {
     const [audioLength, setAudioLength] = useState();
 
     const fetchData = async () => {
         const audioPath = await getAudioPathFromName(audioName, audiobookTitle);
         const audioBlob = await getAudioFromPath(audioPath);
-        console.log("audioBlob in here", audioBlob)
+        console.log('audioBlob in here', audioBlob)
         const newAudioLength = await getCurrentAudioLength(audioBlob);
-        console.log("newAudioLength", newAudioLength)
+        console.log('newAudioLength', newAudioLength)
         if (newAudioLength !== null) {
             convertToTime(newAudioLength);
         }

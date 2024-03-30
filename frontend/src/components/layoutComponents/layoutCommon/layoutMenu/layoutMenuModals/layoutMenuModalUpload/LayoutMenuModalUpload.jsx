@@ -6,11 +6,15 @@ import { useDropzone } from 'react-dropzone';
 
 import '../layoutMenuModalUpload/layout-menu-modal-upload.css';
 
-import { handleUpload, handleFileDelete, fetchAudioUrl, fetchGraphicUrl, changeCategory, sortFiles, handleChangeName, handleChangeNameInDetails } from "../../../../../tasks/uploadTasks/UploadTasks";
-import { useAudioUsage } from '../../../../layoutDrawer/LayoutDrawerFunctions';
+import { handleUpload, handleFileDelete, fetchAudioUrl, fetchGraphicUrl, changeCategory, sortFiles, handleChangeName, handleChangeNameInDetails } from '../../../../../tasks/uploadTasks/UploadTasks';
+import { useAudioUsage } from '../../../../../tasks/drawerTasks/LayoutDrawerFunctions';
 import { getAudioPathFromName, getAudioFromPath, getCurrentAudioLength } from '../../../../../tasks/playerTasks/PlayerLogic';
 import FetchAudio from '../../../../../tasks/editorTasks/FetchAudio';
 
+// "LayoutMenuModalUpload.jsx" component is accessed by the editor. It handles the upload of data with validated and unvalidated files, arrangement of categorys, 
+// plays audio if the user wants to check his audio files, shows graphics if the user wants to check the graphics, sorts the files, shows used files, can change names of files,
+// shows length of audio files and handles the deletion of files.
+// Is a child of "LayoutEditorButtons" component
 const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTitle, nodes, setNodes, setFileChange }) => {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [projectFiles, setProjectFiles] = useState([]);
@@ -96,7 +100,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             const checkFiles = async () => {
                 for (const file of acceptedFiles) {
                     if (file.type.startsWith('audio/') && (await checkAudioChannels(file))) {
-                        setLocalFileRejections(prevRejections => [...prevRejections, { file, errors: [{ code: "stereo", message: "Bitte laden Sie nur Mono-Audio-Dateien hoch." }] }]);
+                        setLocalFileRejections(prevRejections => [...prevRejections, { file, errors: [{ code: 'stereo', message: 'Bitte laden Sie nur Mono-Audio-Dateien hoch.' }] }]);
                         setUploadSuccess(false);
                         return;
                     }
@@ -120,7 +124,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                     reader.readAsArrayBuffer(file);
                 });
             };
-            
+
             checkFiles();
         },
         onDropRejected: () => setUploadSuccess(false),
@@ -135,10 +139,10 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
 
         const rejectedFiles = duplicateFiles.map(file => ({
             file,
-            errors: [{ code: "duplicate", message: `The file "${file.name}" already exists in the project.` }]
+            errors: [{ code: 'duplicate', message: `The file "${file.name}" already exists in the project.` }]
         }));
         setLocalFileRejections(rejectedFiles);
-        
+
         setFileChange(true);
     }
 
@@ -168,15 +172,15 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
         setShowAudio(false);
         setShowGraphic(false);
         setShowDeleteModal(false);
-    
+
         deleteFileFromNodes(filesToDelete, nodes);
         setNodes([...nodes]);
         setFileChange(true);
     };
-    
+
     const deleteFileFromNodes = (filesToDelete, nodes) => {
         const fileNamesToDelete = filesToDelete.map(file => file.name);
-        
+
         nodes.forEach(node => {
             Object.keys(node.data).forEach(key => {
                 if (typeof node.data[key] === 'string' && fileNamesToDelete.includes(node.data[key])) {
@@ -185,7 +189,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
             });
         });
     };
-       
+
 
     const handlePlayClick = () => {
         if (showAudio) {
@@ -204,9 +208,9 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                 setShowGraphic(false);
                 fetchAudioUrl(audioFiles[0].name, audiobookTitle, (audioUrl) => setAudioUrls([audioUrl]));
             } else if (audioFiles.length === 0) {
-                alert("Please select an audio file to play.");
+                alert('Please select an audio file to play.');
             } else {
-                alert("Please select only one audio file to play.");
+                alert('Please select only one audio file to play.');
             }
         }
     }
@@ -221,9 +225,9 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                 setShowAudio(false);
                 fetchGraphicUrl(graphicFiles[0].name, audiobookTitle, (graphicUrl) => setGraphicUrls([graphicUrl]));
             } else if (graphicFiles.length === 0) {
-                alert("Please select a graphic file to display.");
+                alert('Please select a graphic file to display.');
             } else {
-                alert("Please select only one graphic file to display.");
+                alert('Please select only one graphic file to display.');
             }
         }
 
@@ -286,7 +290,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                 });
                 setProjectFiles(updatedProjectFiles);
             } else {
-                console.error("Error while changing Name on the Server.");
+                console.error('Error while changing Name on the Server.');
             }
             setEditMode(prevState => ({ ...prevState, [file.name]: false }));
         }
@@ -332,8 +336,8 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                     <ModalHeader>Media Manager</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <div className="layout-menu-modal-upload-wrapper">
-                            <div className="layout-menu-modal-upload-left">
+                        <div className='layout-menu-modal-upload-wrapper'>
+                            <div className='layout-menu-modal-upload-left'>
                                 <div {...getRootProps({ className: 'dropzone' })}>
                                     <input {...getInputProps()} />
                                     <div className='layout-menu-modal-upload-dropzone'>
@@ -351,14 +355,6 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                 <li key={index}>
                                                     <span style={{ color: 'black', marginRight: '10px' }}>{file.name}</span>
                                                     <span style={{ color: 'black' }}>{file.size} bytes</span>
-                                                    <Select size="sm" value={file?.category} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons">
-                                                        <option value="universal">Universal</option>
-                                                        <option value="question">Question Audio</option>
-                                                        <option value="story">Story Audio</option>
-                                                        <option value="interaction">Interaction Signal Audio</option>
-                                                        <option value="background">Background Audio</option>
-                                                        <option value="answer">Answer Audio</option>
-                                                    </Select>
                                                     {audioUsage[file.name] ? <span style={{ color: 'green', marginLeft: '10px' }}>✓</span> : null}
                                                 </li>
                                             ))}
@@ -380,13 +376,13 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
 
                                     </aside>
                                 }
-                                {acceptedFiles.length !== 0 && !uploadSuccess && localFileRejections.length <= 0 && (<Button colorScheme='highlightColor' style={{ marginTop: '10px'}} onClick={handleButtonClick}>Upload</Button>)}
+                                {acceptedFiles.length !== 0 && !uploadSuccess && localFileRejections.length <= 0 && (<Button colorScheme='highlightColor' style={{ marginTop: '10px' }} onClick={handleButtonClick}>Upload</Button>)}
                             </div>
 
-                            <div className="layout-menu-modal-upload-right-wrapper">
-                                <div className="layout-menu-modal-upload-right">
-                                    <div className="layout-menu-modal-upload-right-buttons">
-                                        <div className="layout-menu-modal-upload-right-buttons-left">
+                            <div className='layout-menu-modal-upload-right-wrapper'>
+                                <div className='layout-menu-modal-upload-right'>
+                                    <div className='layout-menu-modal-upload-right-buttons'>
+                                        <div className='layout-menu-modal-upload-right-buttons-left'>
                                             <Button size='sm' colorScheme='darkButtons' leftIcon={<DeleteIcon />} onClick={handleDeleteSelectedFiles} />
                                             {showAudio && (
                                                 <Button size='sm' colorScheme='darkButtons' leftIcon={<ArrowRightIcon />} onClick={handlePlayClick}>
@@ -405,7 +401,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                 Show Graphic
                                             </Button>)}
                                         </div>
-                                        <div className="layout-menu-modal-upload-right-buttons-right">
+                                        <div className='layout-menu-modal-upload-right-buttons-right'>
                                             <Select size='sm' value={sortBy} onChange={(e) => setSortBy(e.target.value)} focusBorderColor='darkButtons'>
                                                 <option value='byName'>Sort by name</option>
                                                 <option value='byDataType'>Sort by data type</option>
@@ -415,21 +411,21 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                 <option value='byDate'>Sort by uploaddate</option>
                                             </Select>
                                             <Select size='sm' value={category} onChange={(e) => setCategory(e.target.value)} focusBorderColor='darkButtons'>
-                                                <option value="universal">Universal</option>
-                                                <option value="question">Question Audio</option>
-                                                <option value="story">Story Audio</option>
-                                                <option value="interaction">Interaction Signal Audio</option>
-                                                <option value="background">Background Audio</option>
-                                                <option value="answer">Answer Audio</option>
+                                                <option value='universal'>Universal</option>
+                                                <option value='question'>Question Audio</option>
+                                                <option value='story'>Story Audio</option>
+                                                <option value='interaction'>Interaction Signal Audio</option>
+                                                <option value='background'>Background Audio</option>
+                                                <option value='answer'>Answer Audio</option>
                                             </Select>
                                         </div>
                                     </div>
                                     <hr />
-                                    <div className="layout-menu-modal-upload-right-content">
+                                    <div className='layout-menu-modal-upload-right-content'>
                                         {projectFiles
                                             .filter(file => category === 'universal' || file.category === category)
                                             .map((file, index) => (
-                                                <div key={index} className="file-item" style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : (audioUsage[file.name] ? '#C6F6D5' : 'transparent'), display: 'flex', alignItems: 'center' }}>
+                                                <div key={index} className='file-item' style={{ backgroundColor: selectedFiles.includes(file) ? '#bfbfbf' : (audioUsage[file.name] ? '#C6F6D5' : 'transparent'), display: 'flex', alignItems: 'center' }}>
                                                     <IconButton icon={<EditIcon />} onClick={() => handleEditClick(file)} colorScheme='highlightColor' size='xs' margin='5px' />
                                                     {!editMode[file.name] && (
                                                         <p onClick={() => handleFileClick(file)} style={{ marginRight: '10px', flex: '1' }}>
@@ -438,21 +434,21 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                                         </p>
                                                     )}
                                                     {editMode[file.name] && (
-                                                        <input type="text" colorScheme='darkButtons' value={editedName} onChange={(e) => handleNameChange(e, file)} style={{ paddingLeft: '5px' }} />
+                                                        <input type='text' colorScheme='darkButtons' value={editedName} onChange={(e) => handleNameChange(e, file)} style={{ paddingLeft: '5px' }} />
                                                     )}
                                                     {audioLengths[file.name] && !editMode[file.name] && (
                                                         <span style={{ color: 'black', marginRight: '10px' }}>Length: {audioLengths[file.name]}</span>
                                                     )}
                                                     {!editMode[file.name] && (
                                                         <div style={{ width: '150px' }}>
-                                                            <Select size="sm" value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor="darkButtons" style={{ justifyContent: 'flex-end', flex: '1', alignItems: 'center' }}>
-                                                                <option value="question">Question Audio</option>
-                                                                <option value="story">Story Audio</option>
-                                                                <option value="interaction">Interaction Signal Audio</option>
-                                                                <option value="background">Background Audio</option>
-                                                                <option value="answer">Answer Audio</option>
-                                                                <option value="universal">Universal</option>
-                                                                <option value="answerProcessAudio">Answer Process Audio</option>
+                                                            <Select size='sm' value={file.category || 'universal'} onChange={(e) => handleCategoryChange(file, e.target.value)} focusBorderColor='darkButtons' style={{ justifyContent: 'flex-end', flex: '1', alignItems: 'center' }}>
+                                                                <option value='question'>Question Audio</option>
+                                                                <option value='story'>Story Audio</option>
+                                                                <option value='interaction'>Interaction Signal Audio</option>
+                                                                <option value='background'>Background Audio</option>
+                                                                <option value='answer'>Answer Audio</option>
+                                                                <option value='universal'>Universal</option>
+                                                                <option value='answerProcessAudio'>Answer Process Audio</option>
                                                             </Select>
                                                         </div>
                                                     )}
@@ -467,11 +463,11 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                                             ))}
                                     </div>
                                 </div>
-                                <div className="layout-menu-modal-upload-right-player">
+                                <div className='layout-menu-modal-upload-right-player'>
                                     {showAudio && audioUrls.map((audioUrl, index) => (
                                         audioUrl && (
                                             <audio key={index} controls>
-                                                <source src={audioUrl} type="audio/mpeg" />
+                                                <source src={audioUrl} type='audio/mpeg' />
                                                 Your browser does not support the audio element.
                                             </audio>
                                         )
@@ -479,7 +475,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
 
                                     {showGraphic && graphicUrls.map((graphicUrl, index) => (
                                         graphicUrl && (
-                                            <img key={index} src={graphicUrl} alt="Graphic" />
+                                            <img key={index} src={graphicUrl} alt='Graphic' />
                                         )
                                     ))}
                                 </div>
@@ -498,7 +494,7 @@ const LayoutMenuModalUpload = ({ isModalUploadOpen, setModalsState, audiobookTit
                         <p>One or more selected files are used in your project. Are you sure you want to delete them? </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='highlightColor' style={{marginRight: '10px'}} onClick={() => deleteFiles(selectedFiles)}>Yes, Delete</Button>
+                        <Button colorScheme='highlightColor' style={{ marginRight: '10px' }} onClick={() => deleteFiles(selectedFiles)}>Yes, Delete</Button>
                         <Button colorScheme='darkButtons' md='5px' onClick={() => setShowDeleteModal(false)}>Cancel</Button>
                     </ModalFooter>
                 </ModalContent>

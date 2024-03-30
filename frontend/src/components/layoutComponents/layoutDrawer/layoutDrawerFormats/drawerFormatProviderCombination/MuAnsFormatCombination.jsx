@@ -4,9 +4,12 @@ import { DrawerBody } from '@chakra-ui/react';
 
 import '../../drawerComponents/drawer-components.css';
 
-import { updateAnswerCombination, removeCombination } from '../../LayoutDrawerFunctions';
+import { updateAnswerCombination, removeCombination } from '../../../../tasks/drawerTasks/LayoutDrawerFunctions';
 
-const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
+// "MuAnsFormatCombination.jsx" component, is accessed by the "Editor" view, in the "LayoutDrawer" component.
+// Handles the node property of answerCombinations of a Combination/MuAns Node.
+// Is a child of "LayoutDrawer" component.
+const MuAnsFormatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [answerCombinations, setAnswerCombinations] = useState([]);
 
@@ -39,7 +42,6 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
 
         const combinationId = (existingCombinations ? existingCombinations.length : 0) + 1;
         const newCombination = { id: combinationId.toString(), answers: selectedAnswers };
-
         const isCombinationExist = existingCombinations.some((combination) => (
             combination.answers.length === newCombination.answers.length &&
             combination.answers.every((answer) => newCombination.answers.includes(answer))
@@ -51,7 +53,6 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
                 newCombination,
             ]);
             setSelectedAnswers([]);
-
             updateAnswerCombination(setNodes, nodeData, newCombination);
         } else {
             alert('Combination already exists.');
@@ -62,7 +63,6 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
         setAnswerCombinations((prevAnswerCombinations) =>
             prevAnswerCombinations.filter((combination) => combination.id !== combinationId)
         );
-
         removeCombination(setNodes, setEdges, edges, nodeData, combinationId);
     };
 
@@ -113,4 +113,4 @@ const MuAnsFromatCombination = ({ nodeData, setNodes, setEdges, edges }) => {
     );
 };
 
-export default MuAnsFromatCombination;
+export default MuAnsFormatCombination;

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Button } from '@chakra-ui/react';
 
-import "../../../views/player/player.css";
+import '../../../views/player/player.css';
 
 import { handleButtonClickLogic } from '../../tasks/playerTasks/PlayerLogic';
 
+// "PlayerMuAns.jsx" component, is accessed by the "Player" component in the "LayoutMenuModalPreview" and the "Audiobook" view.
+// It shows the answer and the question of Combination/MuAns/Multiple Answer node in the player.
+// It is a child of "Player" component.
 const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
     const [selectedAnswers, setSelectedAnswers] = useState([]);
     const [clickedAnswers, setClickedAnswers] = useState([]);
@@ -31,10 +34,10 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
           if (matchingCombinationIndex !== -1) {
             handleButtonClickLogic(matchingCombinationIndex, flow, currentNodeProps, setCurrentNode);
           } else {
-            alert('This combination doest work! Bad!');
+            alert('This combination doest work! Try again.');
           }
         } else {
-          alert('No Combinations found! Bad!.');
+          alert('No Combinations found! Try again.');
         }
       };
       
@@ -42,7 +45,7 @@ const PlayerMuAns = ({ currentNodeProps, flow, setCurrentNode, visible }) => {
         <>
             {visible && currentNodeProps && currentNodeProps.answers && currentNodeProps.answers.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <p className="question">Question: {currentNodeProps.question}</p>
+                    <p className='question'>Question: {currentNodeProps.question}</p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
                         {currentNodeProps.answers.map((answer, index) => (
                             <Button

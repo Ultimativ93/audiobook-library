@@ -1,5 +1,4 @@
 const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
 const path = require('path');
 
 class Database {
@@ -65,17 +64,14 @@ class Database {
 
     // Adding an audioPath and audioName into audioPaths in the database
     addFilePath(filePath, audioName, audiobookTitle, category, uploadDate) {
-        console.log('Adding file path to database:', filePath);
-        console.log('Adding audio name to database:', audioName);
-        console.log('Adding category to database:', category);
+        console.log('Adding file path to database:', filePath, ' with audioName: ', audioName, ' and category: ', category, 'and uploadData: ', uploadDate);
 
         return new Promise((resolve, reject) => {
             this.db.run('INSERT INTO audioPaths (audioPath, audioName, audiobookTitle, audioCategory, uploadDate) VALUES (?, ?, ?, ?, ?)', [filePath, audioName, audiobookTitle, category, uploadDate], function (err) {
                 if (err) {
                     reject(err.message);
                 } else {
-                    console.log('File path successfully added to the database:', filePath);
-                    console.log('Audio name successfully added to the database:', audioName);
+                    console.log('File path successfully added to the database:', filePath, ' with audioName: ', audioName);
                     resolve(this.lastID);
                 }
             });
@@ -133,10 +129,7 @@ class Database {
                 }
 
                 const detailData = JSON.parse(row.detailData);
-                console.log("DETAIL DATA", detailData)
-                console.log("DETAILDATA.THUMBNAIL", detailData.thumbnail);
                 if (detailData.thumbnail || detailData.thumbnail !== '' || detailData.thumbnail === '') {
-                    console.log("HIER DRIN")
                     detailData.thumbnail = newAudioName;
 
                     const updatedDetailData = JSON.stringify(detailData);
@@ -236,8 +229,7 @@ class Database {
 
     // Adding audiobook details into details
     addDetails(audiobookDetails, audiobookTitle) {
-        console.log('Adding audiobook details to database', audiobookDetails);
-        console.log('Adding audiobook title to database', audiobookDetails);
+        console.log('Adding audiobook details to database', audiobookDetails, ' with audiobookTitle: ', audiobookTitle);
 
         return new Promise((resolve, reject) => {
             this.db.run('INSERT INTO details (detailData, audiobookTitle) VALUES (?, ?)', [JSON.stringify(audiobookDetails), audiobookTitle], function (err) {
@@ -251,8 +243,10 @@ class Database {
         });
     }
 
-    // Removing all audioPath in audioPaths into the database
+    // Removing all audioPath in audioPaths from the database
     removeAllFilePaths() {
+        console.log('Deleting all file paths');
+
         return new Promise((resolve, reject) => {
             this.db.run('DELETE FROM audioPaths', function (err) {
                 if (err) {
@@ -267,11 +261,14 @@ class Database {
 
     // Get all audioPath from audioPaths
     getAllFilePaths(audiobookTitle) {
+        console.log('Getting all file paths with audiobookTitle', audiobookTitle);
+
         return new Promise((resolve, reject) => {
             this.db.all('SELECT audioPath, audioName, audioCategory FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
                 if (err) {
                     reject(err.message);
                 } else {
+                    console.log('All filePaths with the audiobookTitle: ', audiobookTitle)
                     resolve(rows);
                 }
             });
@@ -309,13 +306,14 @@ class Database {
 
     // Get single audioPath from audioPaths for a specific audiobookTitle
     getFilePath(audioName, audiobookTitle) {
-        console.log("audioName in getFilePath", audioName, audiobookTitle)
+        console.log('audioName in getFilePath, with audiobookTitle: ', audioName, audiobookTitle)
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT audioPath FROM audioPaths WHERE audioName = ? AND audiobookTitle = ?', [audioName, audiobookTitle], (err, row) => {
                 if (err) {
                     reject(err.message);
                 } else {
-                    console.log("row in getFilePath", row)
+                    console.log('Row in getFilePath: ', row)
                     const audioPath = row ? row.audioPath : null;
                     resolve(audioPath);
                 }
@@ -414,6 +412,8 @@ class Database {
 
     // Get validatedFlow from the table validatedFlows
     getValidatedFlow(title) {
+        console.log('Get validatedFlow with audiobookTitle: ', title);
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT id, flowData, flowKey, thumbnail, description, length, keywords, title FROM validatedFlows WHERE flowKey = ?', [title], (err, row) => {
                 if (err) {
@@ -428,6 +428,8 @@ class Database {
 
     // Gets flow with from the table flow
     getFlow(flowKey) {
+        console.log('Get flow with flowkey: ', flowKey);
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT flowData FROM flows WHERE flowKey = ?', [flowKey], (err, row) => {
                 if (err) {
@@ -442,6 +444,8 @@ class Database {
 
     // Get all flows from the flows table
     getAllFlows() {
+        console.log('Get all flows');
+
         return new Promise((resolve, reject) => {
             this.db.all('SELECT id, flowData, flowKey FROM flows', [], (err, rows) => {
                 if (err) {
@@ -455,6 +459,8 @@ class Database {
 
     // Get all validated Flows from the validatedFlows table
     getAllValidatedFlows() {
+        console.log('Get all validated flows')
+        
         return new Promise((resolve, reject) => {
             this.db.all('SELECT id, flowData, flowKey, thumbnail, description, length, keywords, title FROM validatedFlows', [], (err, rows) => {
                 if (err) {
@@ -468,6 +474,8 @@ class Database {
 
     // Get all details from details
     getAllDetails() {
+        console.log('Get all details');
+
         return new Promise((resolve, reject) => {
             this.db.all('SELECT id, detailData, audiobookTitle FROM details', [], (err, rows) => {
                 if (err) {
@@ -481,7 +489,8 @@ class Database {
 
     // Get details by title from details
     getDetailsByTitle(audiobookTitle) {
-        console.log("AudiobookTitle in getDetailsByTitle", audiobookTitle)
+        console.log('AudiobookTitle in getDetailsByTitle: ', audiobookTitle)
+
         return new Promise((resolve, reject) => {
             this.db.get('SELECT detailData FROM details WHERE audiobookTitle = ?', [audiobookTitle], (err, row) => {
                 if (err) {
@@ -496,8 +505,7 @@ class Database {
 
     // Change details of exisiting details by title
     changeDetailsByTitle(audiobookDetails, audiobookTitle) {
-        console.log("AudiobookTitle in changeDetailsByTitle", audiobookTitle);
-        console.log("Details in changeDetailsByTitle", audiobookDetails);
+        console.log('AudiobookTitle in changeDetailsByTitle: ', audiobookTitle, ' details: ', audiobookDetails);
 
         return new Promise((resolve, reject) => {
             this.db.run(
@@ -516,9 +524,9 @@ class Database {
         });
     }
 
-    // Get All File names and category
+    // Get all file names and category from the database
     getAllFileNames(audiobookTitle) {
-        console.log("AudiobookTitle", audiobookTitle);
+        console.log('Get all filenames with audiobookTitle: ', audiobookTitle);
 
         return new Promise((resolve, reject) => {
             this.db.all('SELECT audioName, audioCategory, uploadDate FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
@@ -532,7 +540,11 @@ class Database {
         });
     }
 
+
+    // Get all grafic names from the database
     getAllGraficFileNames(audiobookTitle) {
+        console.log('Get all grafic names with the audiobookTitle: ', audiobookTitle)
+
         return new Promise((resolve, reject) => {
             this.db.all('SELECT audioName FROM audioPaths WHERE audiobookTitle = ?', [audiobookTitle], (err, rows) => {
                 if (err) {
@@ -546,6 +558,8 @@ class Database {
 
     // Get all tutorials from the database
     getAllTutorials() {
+        console.log('Get all tutorials')
+
         return new Promise((resolve, reject) => {
             this.db.all('SELECT * FROM tutorials', (err, rows) => {
                 if (err) {
@@ -560,6 +574,8 @@ class Database {
 
     // Closing database
     close() {
+        console.log('Closing the database')
+
         this.db.close((err) => {
             if (err) {
                 console.error(`Error while closing database: ${err.message}`);

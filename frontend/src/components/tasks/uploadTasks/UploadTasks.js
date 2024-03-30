@@ -1,9 +1,14 @@
 import axios from 'axios';
 
+// "UploadTasks.js" handle functions of the "LayoutMenuModalUpload" component, for example it handles the upload, 
+// checks if the files allready exists on the server, handles the file delete, fetches data from the server,
+// fetches audio url, fetches graphic url, change categorys, sort files, formats time to seconds, 
+// handles change name fow different tabelles in the database.
+// Its main use is in the "LayoutMenuModalUpload" component.
+
 const handleUpload = async (selectedFiles, audiobookTitle, category, setUploadSuccess) => {
     try {
         const existingFiles = await checkExistingFiles(selectedFiles, audiobookTitle);
-
         const newFiles = selectedFiles.filter(file => !existingFiles.includes(file.name));
         const uploadDate = new Date();
 
@@ -31,7 +36,7 @@ const handleUpload = async (selectedFiles, audiobookTitle, category, setUploadSu
         console.log('Response.ok: ', response.ok);
 
         if (response.ok) {
-            console.log('Nice! Files uploaded successfully:', responseData.message);
+            console.log('Files uploaded successfully:', responseData.message);
             setUploadSuccess(true);
         } else {
             console.error('Error uploading files');
@@ -46,11 +51,9 @@ const handleUpload = async (selectedFiles, audiobookTitle, category, setUploadSu
 
 const checkExistingFiles = async (files, audiobookTitle) => {
     const existingFiles = [];
-
     try {
         const response = await axios.get(`http://localhost:3005/getDataFromFlow?flowKey=${audiobookTitle}`);
         const fileNames = response.data;
-
         files.forEach(file => {
             if (fileNames.includes(file.name)) {
                 existingFiles.push(file.name);
@@ -77,7 +80,6 @@ const handleFileDelete = async (file, audiobookTitle, setProjectFiles) => {
 const fetchDataFromServer = async (audiobookTitle) => {
     try {
         const response = await axios.get(`http://localhost:3005/getDataFromFlow?flowKey=${audiobookTitle}`);
-        console.log("Response DATA in fetchDataFromServer: ", response.data)
         return response.data;
     } catch (error) {
         console.error('Error fetching data with flowkey:', error);
@@ -93,10 +95,8 @@ const fetchAudioUrl = async (fileName, audiobookTitle, setAudioUrl) => {
         const audioBlobResponse = await axios.get(`http://localhost:3005/getAudio?audioPath=${encodeURIComponent(audioPath)}`, {
             responseType: 'blob'
         });
-
         const audioBlob = new Blob([audioBlobResponse.data], { type: 'audio/ogg' });
         const audioUrl = URL.createObjectURL(audioBlob);
-
         setAudioUrl(audioUrl);
     } catch (error) {
         console.error('Error fetching audio URL:', error);
@@ -203,7 +203,6 @@ const formatTimeInSeconds = (time) => {
 };
 
 const handleChangeName = async (audiobookTitle, audioName, newAudioName) => {
-    console.log("audioName in handleChange and newAudioName", audioName, newAudioName)
     try {
         const response = await axios.post('http://localhost:3005/changeAudioName', { audiobookTitle, audioName, newAudioName })
         console.log("Response in handleChangeName", response.data);
@@ -214,7 +213,6 @@ const handleChangeName = async (audiobookTitle, audioName, newAudioName) => {
 }
 
 const handleChangeNameInDetails = async (audiobookTitle, audioName, newAudioName) => {
-    console.log("audioName in handleChangeNameInDetails and newAudioName", audioName, newAudioName);
     try {
         const response = await axios.post('http://localhost:3005/changeDetailsGraphicName', { audiobookTitle, audioName, newAudioName })
         console.log("Response in handleChangeNameInDetails", response.data);

@@ -12,6 +12,8 @@ import UserProjectsAddModal from '../../components/layoutComponents/layoutUserPr
 import { fetchThumbnail, fetchThumbnailImage } from '../../components/tasks/publishTasks/PublishFunctions';
 import { handleFetchFlows } from '../../components/tasks/setupTasks/FetchDetails';
 
+// "UserProjects.jsx" component handles the projects of a user. It loads all the projects available and allows access to that project in the editor.
+// Also the creator/user is able to create a new project or delete allready existing projects.
 const UserProjects = () => {
   const [details, setDetails] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -27,7 +29,6 @@ const UserProjects = () => {
     const fetchFlows = async () => {
       try {
         const flowsData = await handleFetchFlows();
-        console.log("FlowData: ", flowsData.allFlows)
         setFlows(flowsData.allFlows);
       } catch (error) {
         console.error('Error fetching flows:', error);
@@ -57,14 +58,11 @@ const UserProjects = () => {
         const images = {};
         for (const detail of details) {
           const parsedDetailData = detail.detailData ? JSON.parse(detail.detailData) : null;
-          console.log("parsedDetailData", parsedDetailData);
           const thumbnailURL = parsedDetailData && parsedDetailData.thumbnail ? parsedDetailData.thumbnail : '';
-          console.log("thumbnailURL", thumbnailURL);
           if (thumbnailURL) {
             try {
               const paths = await fetchThumbnail(detail.audiobookTitle);
               if (paths) {
-                console.log("PATHS", paths)
                 const imageData = await fetchThumbnailImage(paths);
                 images[detail.id] = imageData;
               }
@@ -109,12 +107,12 @@ const UserProjects = () => {
 
           <Card>
             <CardBody>
-              <Stack className='user-projects-create-project' spacing={4} direction="column" align="center" justifyContent='center'>
+              <Stack className='user-projects-create-project' spacing={4} direction='column' align='center' justifyContent='center'>
                 <Button colorScheme='highlightColor' leftIcon={<AddIcon />} onClick={() => handleAddProject()}>
                   Create New Audiobook
                 </Button>
-                <Tooltip bg='darkButtons' label="New? Get some information about the Editor!" placement="bottom" width="220px" textAlign='center'>
-                  <Link to="/tutorials">
+                <Tooltip bg='darkButtons' label='New? Get some information about the Editor!' placement='bottom' width='220px' textAlign='center'>
+                  <Link to='/tutorials'>
                     <Button colorScheme='lightButtons' rightIcon={<QuestionIcon />}>
                       Tutorials
                     </Button>
@@ -142,7 +140,7 @@ const UserProjects = () => {
                   <Stack>
                     <Heading size='md'>{detail.audiobookTitle}</Heading>
                     <Text>
-                      {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(" ").slice(0, 20).join(" ") : ''}
+                      {parsedDetailData && parsedDetailData.description ? parsedDetailData.description.split(' ').slice(0, 20).join(' ') : ''}
                     </Text>
                     <Text>
                       {flow ? `Number of nodes: ${JSON.parse(flow.flowData).nodes.length}` : 'Fetching flow...'}

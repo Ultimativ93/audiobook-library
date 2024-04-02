@@ -174,27 +174,18 @@ ________________________________________________________________________________
 
 Nach Priorität:
             - !!!!! (1):   
-                - Player aufräumen als letzte Maßnahme. Erst gucken ob alles noch funktioniert                                                                                          O
 
             - !!! (2):
-                - Tutorial Background Audio, wofür?                                                                                                                                     O
-                - Grundsätzliches Tutorial zum Umgang mit der Seite                                                                                                                     O
-                - RoutesController logs entfernen/anpassen                                                                                                                              O
 
             - ! (3):
 
                 - Node löschen Button                                                                                                                                                   O
-                - Drawer onClose ohne Transition.                                                                                                                                       O
-                - H4 von den DrawerComponents zu p umändern.                                                                                                                            O
-                - Hinweis im Tutorial das Background audio gelooped wird.                                                                                                               O
                 - Team + Contact erstellen und stylen                                                                                                                                   O
-                - Benennungen sind noch falsch, FetchAudio fetched nicht das Audio, sondern nur den Namen des Audios etc.                                                               O
                 - Editor: Bei einem neuen Projekt, wird noch der flow direkt versucht zu fetchen, hier könnten wir erstmal saven und dann restoren, dann bekommen wir auch keinen       O
                     Fehler 
                 - Responsive für die meisten größen                                                                                                                                     O           
                 - StandardThumbnail: Neu erstellen, mit unseren Farben und passend zum Thema.                                                                                           O
                 - Nodes: Beim hinzufügen, von zuvielen Handlen, sollten wir gucken, dass wir die Node-width anpassen, da sich die Handles sonst überschneiden werden.                   O
-                - PreviewModal: Buttons ob von Anfang an oder von selected Node abgespielt werden soll.                                                                                 O
                 - Umbennungen der Nodes im Code (MuChoi -> Choice, Multiple Answer -> Multiple Response)                                                                                O
                 - Statt zwei Server (Backend Frontend) nur einen Server, server so konfigurieren das nur public sichtbar ist                                                            O
                 - Statt SQLite, MySql fürs veröffentlichen benutzen, da scallable und mulituser                                                                                         O
@@ -259,6 +250,7 @@ Erledigt:
                     - Name X, Typ X, Länge X, Uploaddatum, mono/stereo (Stereo ausschließen) X, verknüpft oder nicht X, Audio Dateien umbennenen X                                      X
                     - Grafik Datein umbennen, dafür dann auch Detail ändern, damit alles stimmt.                                                                                        X
                 - Loop Background Audio,                                                                                                                                                X 
+                - Player aufräumen als letzte Maßnahme. Erst gucken ob alles noch funktioniert                                                                                          X
 
             -!!!:
                 - FetchDetails: in handleIsNewTitle abfangen das keine Leerzeichen, ,.!/ gesetzt werden könnne.                                                                         X
@@ -353,7 +345,9 @@ Erledigt:
                 - Thumbnails hinzufügen zu den Tutorials                                                                                                                                X
 		        - Input Remove answer weiter nach unten                                                                                                                                 X
                 - Overflow Hidden anpassen für Editor                                                                                                                                   X
-
+                - RoutesController logs entfernen/anpassen                                                                                                                              X
+                - Starten des Projektes mit Visual Studio Code                                                                                                                          X
+                - Grundsätzliches Tutorial zum Umgang mit der Seite                                                                                                                     X
             -!:
                 - Farben aus App.js rausholen und importieren lassen                                                                                                                    X
                 - Bei Playable Flows, bei upload in der Datenbank als spielbar abspeichern und diese auf einer Seite sammeln (erstmal alle die abspielbar sind)                         X
@@ -368,5 +362,5 @@ Erledigt:
                 - Wenn Edges gesetzt sind und eine neue Period hinzugefügt wird, wird die alte Edge, zur neuen Period hinzugefügt. (Wenn es vorher nur eine Period gab                  X
                     und "No Reaction", wird die Edge von No Reaction die Edge von der neuen Period)
                 - LayoutMenuModalPublish: Weiterleitung nach erfolgreichem hochladen zum Hörbuch.                                                                                       X
-
+                - Hinweis im Tutorial das Background audio gelooped wird.                                                                                                               X
 

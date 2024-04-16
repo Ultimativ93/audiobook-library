@@ -6,6 +6,9 @@ const Database = require('../tasks/Database');
 const router = new Router();
 const db = new Database();
 
+// The routes controller manages backend routes and enables communication between the frontend and backend.
+// It processes the provided data, storing it in the database, and manages files on the server.
+
 router.post('/upload', async (ctx) => {
     console.log('Uploaded files:', ctx.request.files, ' Audiobook Name in Backend: ', ctx.request.body.audiobookTitle, ' Category in Backend: ', ctx.request.body.category, ' Upload Date: ', ctx.request.body.uploadDate);
     const files = ctx.request.files && (Array.isArray(ctx.request.files.files) ? ctx.request.files.files : [ctx.request.files.files]);
@@ -18,7 +21,8 @@ router.post('/upload', async (ctx) => {
             for (const file of files) {
                 console.log('File:', file);
                 const fileName = file.originalFilename;
-                const databaseResponse = await db.addFilePath(file.filepath, fileName, audiobookTitle, category, uploadDate);
+                const relativePath = 'uploads/' + file.filepath.replace(/^.*uploads[\\/]/, '');
+                const databaseResponse = await db.addFilePath(relativePath, fileName, audiobookTitle, category, uploadDate);
                 databaseResponses.push(databaseResponse);
             }
             console.log('Files successfully uploaded and paths saved in the database.');

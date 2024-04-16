@@ -14,6 +14,7 @@ const Tutorials = () => {
   const [videoKey, setVideoKey] = useState(0);
   const [selectedTutorialIndex, setSelectedTutorialIndex] = useState(0);
   const [selectedTutorial, setSelectedTutorial] = useState({});
+  const [videoChanged, setVideoChanged] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,37 +30,28 @@ const Tutorials = () => {
           const randomTutorials = randomIndexes.map(index => fetchedTutorials[index]);
 
           // Fetching thumbnails for suggested tutorials
-          const suggestedTutorialsWithThumbnails = await Promise.all(
-            randomTutorials.map(async (tutorial) => {
-              const thumbnail = await handleGetThumbnail(tutorial.tutorialThumbnailPath);
-              return { ...tutorial, thumbnail };
-            })
-          );
+          const suggestedTutorialsWithThumbnails = await fetchThumbnailsForTutorials(randomTutorials);
 
           setSuggestedTutorials(suggestedTutorialsWithThumbnails);
           loadTutorialVideo(fetchedTutorials[0]);
         }
       } catch (error) {
-        console.error('Fehler beim Laden der Tutorials:', error);
+        console.error('Error loading tutorial videos:', error);
       }
     };
 
     fetchData();
   }, []);
 
-  // Function to get random indexes
-  const getRandomIndexes = (max, count) => {
-    const indexes = [];
-    while (indexes.length < count) {
-      const randomIndex = Math.floor(Math.random() * max);
-      if (!indexes.includes(randomIndex)) {
-        indexes.push(randomIndex);
-      }
-    }
-    return indexes;
-  };
+  const fetchThumbnailsForTutorials = useCallback(async (tutorials) => {
+    const thumbnailPromises = tutorials.map(async (tutorial) => {
+      const thumbnail = await handleGetThumbnail(tutorial.tutorialThumbnailPath);
+      return { ...tutorial, thumbnail };
+    });
 
-  // Function to load and display tutorial video
+    return Promise.all(thumbnailPromises);
+  }, []);
+
   const loadTutorialVideo = useCallback(async (tutorial) => {
     try {
       const videoData = await handleGetTutorialVideo(tutorial.tutorialVideoPath);
@@ -71,10 +63,36 @@ const Tutorials = () => {
       });
       setSelectedTutorialIndex(tutorialNames.indexOf(tutorial.tutorialName));
       setVideoKey(prevKey => prevKey + 1);
+      setVideoChanged(true);
     } catch (error) {
       console.error('Fehler beim Laden des Tutorial-Videos:', error);
     }
   }, [tutorialNames]);
+
+  useEffect(() => {
+    const updateSuggestedTutorials = async () => {
+      if (videoChanged) {
+        const randomIndexes = getRandomIndexes(tutorials.length, 3);
+        const randomTutorials = randomIndexes.map(index => tutorials[index]);
+        const suggestedTutorialsWithThumbnails = await fetchThumbnailsForTutorials(randomTutorials);
+        setSuggestedTutorials(suggestedTutorialsWithThumbnails);
+        setVideoChanged(false);
+      }
+    };
+
+    updateSuggestedTutorials();
+  }, [videoChanged, tutorials, fetchThumbnailsForTutorials]);
+
+  const getRandomIndexes = (max, count) => {
+    const indexes = [];
+    while (indexes.length < count) {
+      const randomIndex = Math.floor(Math.random() * max);
+      if (!indexes.includes(randomIndex)) {
+        indexes.push(randomIndex);
+      }
+    }
+    return indexes;
+  };
 
   return (
     <div className='tutorials-wrapper'>

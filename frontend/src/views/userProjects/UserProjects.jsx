@@ -133,7 +133,7 @@ const UserProjects = () => {
                 <Image
                   className='user-projects-card-image'
                   src={thumbnailImage ? thumbnailImage : process.env.PUBLIC_URL + '/graphics/Standard-Thumbnail-small.png'}
-                  alt='Thumbnail'
+                  alt='Thumbnail-Standard'
                   borderRadius='lg'
                 />
                 <CardBody>

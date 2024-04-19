@@ -424,11 +424,16 @@ router.get('/getAudio', async (ctx) => {
     const { audioPath } = ctx.request.query;
     console.log('Get audio with audioPath: ', audioPath);
     try {
-        const stat = fs.statSync(audioPath);
+        const normalizedPath = audioPath.replace(/\\/g, path.sep);
+        const relativePath = path.join('..', normalizedPath);
+        console.log("Relative Path getAudio: ", relativePath);
+        const absolutePath = path.resolve(__dirname, relativePath);
+        console.log("Absolute Path getAudio: ", absolutePath);
+        const stat = fs.statSync(absolutePath);
         ctx.response.status = 200;
         ctx.response.type = 'audio/ogg';
         ctx.response.length = stat.size;
-        ctx.body = fs.createReadStream(audioPath);
+        ctx.body = fs.createReadStream(absolutePath);
     } catch (error) {
         console.error(`Error getting audio with path ${audioPath} from the server`, error);
         ctx.status = 500;
@@ -544,13 +549,16 @@ router.get('/getGraphicName', async (ctx) => {
 // Get Graphic with graphicPath
 router.get('/getGraphic', async (ctx) => {
     const { graphicPath } = ctx.request.query;
-    console.log('Get graphic with graphicPath: ', graphicPath)
+    console.log('Get graphic with graphicPath: ', graphicPath);
     try {
-        const stat = fs.statSync(graphicPath);
+        const normalizedPath = graphicPath.replace(/\\/g, path.sep);
+        const relativePath = path.join(normalizedPath);
+        console.log("Relative Path getGraphic: ", relativePath);
+        const stat = fs.statSync(relativePath);
         ctx.response.status = 200;
         ctx.response.type = 'image/jpeg' || 'image/png';
         ctx.response.length = stat.size;
-        ctx.body = fs.createReadStream(graphicPath);
+        ctx.body = fs.createReadStream(relativePath);
     } catch (error) {
         console.error(`Error getting graphic with path ${graphicPath} from the server`, error);
         ctx.status = 500;
@@ -579,16 +587,23 @@ router.get('/getAllTutorials', async (ctx) => {
 })
 
 // Get video from the server
+
 router.get('/getVideo', async (ctx) => {
     const { videoPath } = ctx.request.query;
     console.log('Getting video from the backend with videoPath: ', videoPath);
     try {
-        const stat = await fs.promises.stat(videoPath);
+        const normalizedPath = videoPath.replace(/\\/g, path.sep);
+        const relativePath = path.join('..', normalizedPath);
+        console.log("Relative Path getVideo: ", relativePath);
+        const absolutePath = path.resolve(__dirname, relativePath);
+        console.log("Absolute Path getVideo: ", absolutePath);
+        
+        const stat = await fs.promises.stat(absolutePath);
         if (stat) {
             ctx.response.status = 200;
             ctx.response.type = 'video/mp4';
             ctx.response.length = stat.size;
-            ctx.body = fs.createReadStream(videoPath);
+            ctx.body = fs.createReadStream(absolutePath);
         }
     } catch (error) {
         console.error(`Error getting video with path ${videoPath} from the server`, error);

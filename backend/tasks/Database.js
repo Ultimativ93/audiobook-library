@@ -277,7 +277,7 @@ class Database {
 
     // Get thumbnail path from details.
     getThumbnailName(audiobookTitle) {
-        console.log('Getting thumbnail path for audiobook title:', audiobookTitle);
+        //console.log('Getting thumbnail path for audiobook title:', audiobookTitle);
 
         return new Promise((resolve, reject) => {
             this.db.get('SELECT detailData FROM details WHERE audiobookTitle = ?', [audiobookTitle], (err, row) => {
@@ -306,14 +306,11 @@ class Database {
 
     // Get single audioPath from audioPaths for a specific audiobookTitle
     getFilePath(audioName, audiobookTitle) {
-        console.log('audioName in getFilePath, with audiobookTitle: ', audioName, audiobookTitle)
-
         return new Promise((resolve, reject) => {
             this.db.get('SELECT audioPath FROM audioPaths WHERE audioName = ? AND audiobookTitle = ?', [audioName, audiobookTitle], (err, row) => {
                 if (err) {
                     reject(err.message);
                 } else {
-                    console.log('Row in getFilePath: ', row)
                     const audioPath = row ? row.audioPath : null;
                     resolve(audioPath);
                 }
@@ -571,6 +568,18 @@ class Database {
         });
     }
 
+    getAllCategories(title) {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT detailData FROM details WHERE audiobookTitle = ?', [title], (err, rows) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+    
 
     // Closing database
     close() {

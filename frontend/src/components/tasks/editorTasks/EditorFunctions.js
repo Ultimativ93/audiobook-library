@@ -160,3 +160,14 @@ export const onLayout = (nodes, edges, setNodes, setEdges, fitView, direction) =
         fitView();
     });
 };
+
+export const onDeleteNode = (selectedNodes, nodes, setNodes, edges, setEdges, onSave) => {
+    console.log("onDeleteNode", selectedNodes)
+    
+    const updatedNodes = nodes.filter(node => !selectedNodes.includes(node.id));
+    const updatedEdges = edges.filter(edge => !selectedNodes.includes(edge.source && !selectedNodes.includes(edge.target)));
+
+    setNodes(updatedNodes);
+    setEdges(updatedEdges);
+    onSave();
+}

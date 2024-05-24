@@ -14,6 +14,7 @@ import Tutorials from './views/tutorials/Tutorials';
 import Contact from './views/contact/Contact';
 import Team from './views/team/Team';
 import Audiobook from './views/audiobook/Audiobook';
+import NotFound from './views/notFound/NotFound';
 
 import { ModalsStateProvider } from '../src/components/layoutComponents/layoutCommon/layoutMenu/ModalsStateContext';
 import { customTheme } from '../src/components/tasks/appTasks/AppTasks';
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/team" element={<Team />} />
                 <Route path="/audiobook/:audiobookTitle" element={<Audiobook />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
               <Footer />
             </Router>

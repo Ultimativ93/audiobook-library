@@ -25,10 +25,11 @@ const Header = () => {
     };
 
     return (
-        <div className='header-container'>
+        <div className='header-wrapper'>
+            <div className='header-container'>
                 <div className='header-content'>
 
-                    <Button className='logo-button-container' colorScheme='highlightColor' borderRadius={'2px'} size='sm'>
+                    <Button className='logo-button-container' colorScheme='highlightColor' borderRadius={'2px'} size='lg'>
                         <Link to='/'>
                             <div>
                                 <img src={process.env.PUBLIC_URL + '/graphics/Earcade-Logo.png'} alt='Earcade Logo' style={{ width: '100%', height: 'auto' }} />
@@ -55,8 +56,9 @@ const Header = () => {
                     <Link className='header-tutorials' to='/tutorials'>
                         <Button className={isActiveRoute('/tutorials') ? 'active' : ''} colorScheme='transparent'>Tutorials</Button>
                     </Link>
-                    
+
                 </div>
+            </div>
         </div>
     );
 };

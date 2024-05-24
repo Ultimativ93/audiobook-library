@@ -147,6 +147,8 @@ const Editor = () => {
         window.scrollTo(0, 0);
     }, [audiobookTitleParam])
 
+    console.log("Nodes", nodes);
+
     return (
         <div className='editor-wrapper'>
                 <LayoutEditorDrawer isOpen={isDrawerOpen} onClose={() => handleCloseDrawer(setIsDrawerOpen, setSelectedNodeData, selectedNodes)} nodeData={selectedNodeData} setNodes={setNodes} setEdges={setEdges} edges={edges} audiobookTitle={audiobookTitle} fileChange={fileChange} setFileChange={setFileChange} />

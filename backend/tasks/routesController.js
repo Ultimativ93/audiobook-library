@@ -324,7 +324,6 @@ router.get('/getAllGraficNames', async (ctx) => {
 // Get thumbnail path
 router.get('/graficThumbnail', async (ctx) => {
     const { audiobookTitle } = ctx.request.query;
-    console.log('AudiobookTitle in graficThumbnail: ', audiobookTitle);
     try {
         const thumbnailName = await db.getThumbnailName(audiobookTitle);
         if (thumbnailName) {
@@ -549,11 +548,9 @@ router.get('/getGraphicName', async (ctx) => {
 // Get Graphic with graphicPath
 router.get('/getGraphic', async (ctx) => {
     const { graphicPath } = ctx.request.query;
-    console.log('Get graphic with graphicPath: ', graphicPath);
     try {
         const normalizedPath = graphicPath.replace(/\\/g, path.sep);
         const relativePath = path.join(normalizedPath);
-        console.log("Relative Path getGraphic: ", relativePath);
         const stat = fs.statSync(relativePath);
         ctx.response.status = 200;
         ctx.response.type = 'image/jpeg' || 'image/png';
@@ -597,7 +594,7 @@ router.get('/getVideo', async (ctx) => {
         console.log("Relative Path getVideo: ", relativePath);
         const absolutePath = path.resolve(__dirname, relativePath);
         console.log("Absolute Path getVideo: ", absolutePath);
-        
+
         const stat = await fs.promises.stat(absolutePath);
         if (stat) {
             ctx.response.status = 200;
@@ -607,6 +604,77 @@ router.get('/getVideo', async (ctx) => {
         }
     } catch (error) {
         console.error(`Error getting video with path ${videoPath} from the server`, error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+});
+
+router.post('/getValidatedFlowsCategories', async (ctx) => {
+    const { titlesAndFlowKeys } = ctx.request.body;
+    //console.log('Getting Details from validated flows with names: ', titlesAndFlowKeys);
+
+    try {
+        if (titlesAndFlowKeys && Array.isArray(titlesAndFlowKeys)) {
+            const categorySet = new Set();
+
+            for (const { title } of titlesAndFlowKeys) {
+                try {
+                    const detailDataArray = await db.getAllCategories(title);
+
+                    if (detailDataArray.length > 0) {
+                        const detailData = JSON.parse(detailDataArray[0].detailData);
+                        const category = detailData.category;
+                        if (category) {
+                            categorySet.add(category);
+                        } else {
+                            console.error(`No category found in detail data for title ${title}`);
+                        }
+                    } else {
+                        console.error(`No detail data found for title ${title}`);
+                    }
+                } catch (error) {
+                    console.error(`Error fetching validated flows categorie for title ${title}: `, error);
+                }
+            }
+
+            const categories = Array.from(categorySet);
+            ctx.body = categories;
+        } else {
+            console.error('No validatedFlowsAndKeys on the server', titlesAndFlowKeys);
+            ctx.status = 400;
+            ctx.body = 'Invalid request: no flows and flow keys provided';
+        }
+    } catch (error) {
+        console.error('Error getting validated flow categories with names:', titlesAndFlowKeys, 'Error: ', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+});
+
+router.post('/getValidatedFlowsDetails', async (ctx) => {
+    const { titlesAndFlowKeys } = ctx.request.body;
+    console.log("titlesAndFlowKeys in getValidatedFlowsDetails", titlesAndFlowKeys);
+    
+    try {
+        const details = [];
+
+        for (const { title } of titlesAndFlowKeys) {
+            try {
+                const detailsDataArray = await db.getDetailsByTitle(title);
+                if (detailsDataArray) {
+                    details.push(detailsDataArray);
+                } else {
+                    console.error(`No details found for ${title} in the database`);
+                }
+            } catch (error) {
+                console.error(`Error fetching details for ${title}:`, error);
+            }
+        }
+
+        ctx.body = details;
+        ctx.status = 200;
+    } catch (error) {
+        console.error('Error getting validated flow details with names:', titlesAndFlowKeys, 'Error:', error);
         ctx.status = 500;
         ctx.body = 'Internal Server Error';
     }

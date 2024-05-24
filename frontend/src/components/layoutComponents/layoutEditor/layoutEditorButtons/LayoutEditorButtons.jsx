@@ -11,6 +11,7 @@ import LayoutMenuModalPreview from '../../layoutCommon/layoutMenu/layoutMenuModa
 import LayoutMenuModalPublish from '../../layoutCommon/layoutMenu/layoutMenuModals/layoutMenuModalPublish/LayoutMenuModalPublish';
 
 import { useModalsState } from '../../layoutCommon/layoutMenu/ModalsStateContext';
+import { onDeleteNode } from '../../../tasks/editorTasks/EditorFunctions';
 
 // "LayoutEditorButtons.jsx" component, is accessed by the "Editor" view.
 // It handles the buttons and modals used in the editor.
@@ -53,6 +54,12 @@ const LayoutEditorButtons = ({ onSave, onAdd, audiobookTitle, nodes, edges, rfIn
                     </Link>
                 </Tooltip>
             </div>
+
+            {selectedNodes.length > 0 && (
+                <div className='deleteButton'>
+                    <Button size='sm' colorScheme='red' onClick={() => onDeleteNode(selectedNodes, nodes, setNodes, edges, setEdges, onSave)}>Delete</Button>
+                </div>
+            )}
 
             <LayoutMenuModalSetup isModalSetupOpen={modalsState.isSetupModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} />
             <LayoutMenuModalUpload isModalUploadOpen={modalsState.isUploadModalOpen} setModalsState={setModalsState} audiobookTitle={audiobookTitle} nodes={nodes} setNodes={setNodes} setFileChange={setFileChange} />

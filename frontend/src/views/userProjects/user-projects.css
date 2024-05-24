@@ -1,5 +1,6 @@
 .user-projects-wrapper {
     min-height: 75.6%;
+    margin: auto;
     background-color: #f2f2f8;
     position: relative;
 }

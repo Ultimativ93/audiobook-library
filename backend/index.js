@@ -32,17 +32,14 @@ app.use(serve('uploads'));
 // Middleware to restrict file system access to the allowed routes and within a specific directory
 // Middleware to restrict file system access to the allowed routes and within a specific directory
 app.use(async (ctx, next) => {
-    const allowedRoutes = ['/upload', '/updateCategory', '/saveFlow', '/saveValidatedFlow', '/getValidateFlowTitle', '/getValidatedFlow', '/getAllValidatedFlows', '/getAllFlows', '/deletePaths', '/deleteFiles', '/deleteFlow', '/deleteDetail', '/saveAudiobookDetails', '/deleteFile', '/audioPaths', '/graficPaths', '/getAllGraficNames', '/graficThumbnail', '/getDataFromFlow', '/getFlow', '/getAllDetails', '/getAudioName', '/getAudio', '/getAudiobookDetails', '/changeAudioName', '/changeDetailsGraphicName', '/changeDetails', '/getGraphicName', '/getGraphic', '/getAllTutorials', '/getVideo'];
+    const allowedRoutes = ['/upload', '/updateCategory', '/saveFlow', '/saveValidatedFlow', '/getValidateFlowTitle', '/getValidatedFlow', '/getAllValidatedFlows', '/getAllFlows', '/deletePaths', '/deleteFiles', '/deleteFlow', '/deleteDetail', '/saveAudiobookDetails', '/deleteFile', '/audioPaths', '/graficPaths', '/getAllGraficNames', '/graficThumbnail', '/getDataFromFlow', '/getFlow', '/getAllDetails', '/getAudioName', '/getAudio', '/getAudiobookDetails', '/changeAudioName', '/changeDetailsGraphicName', '/changeDetails', '/getGraphicName', '/getGraphic', '/getAllTutorials', '/getVideo', '/getValidatedFlowsDetails', '/getValidatedFlowsCategories'];
 
     const requestPath = ctx.path;
     const queryKeys = Object.keys(ctx.request.query);
     const allowedDirectory1 = 'uploads';
-    console.log("ALLOWED DIERETORY1: ", allowedDirectory1)
-
     const allowedDirectory2 = 'tutorials';
 
     if (!allowedRoutes.includes(requestPath)) {
-        console.log("in allowed routes")
         ctx.status = 403;
         ctx.body = 'Forbidden';
         return;

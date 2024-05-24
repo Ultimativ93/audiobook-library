@@ -1,0 +1,15 @@
+.not-found-wrapper {
+    min-height: 90vh;
+    margin: auto;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-found-background-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+}
